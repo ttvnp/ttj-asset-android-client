@@ -31,7 +31,7 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun realmDriver(context: Context): RealmDriver = RealmDriverImpl(context)
+    fun ormaHolder(context: Context): OrmaHolder = OrmaHolder(context)
 
     @Provides
     @Singleton

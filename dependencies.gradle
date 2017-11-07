@@ -25,6 +25,7 @@ ext {
     okhttpVersion = '3.9.0'
     retroitVersion = '2.3.0'
     moshiVersion = '1.5.0'
+    ormaVersion = '4.2.5'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -36,7 +37,8 @@ ext {
             daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
             daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${daggerVersion}",
             javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            javaxInject: "javax.inject:javax.inject:${javaxInjectVersion}"
+            javaxInject: "javax.inject:javax.inject:${javaxInjectVersion}",
+            ormaProcessor: "com.github.gfx.android.orma:orma-processor:${ormaVersion}",
     ]
 
     commonDependencies = [
@@ -59,6 +61,7 @@ ext {
             retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:${retroitVersion}",
             moshi: "com.squareup.moshi:moshi-kotlin:${moshiVersion}",
             moshiConverter: "com.squareup.retrofit2:converter-moshi:${retroitVersion}",
+            orma: "com.github.gfx.android.orma:orma:${ormaVersion}",
     ]
 
     domainDependencies = [

@@ -1,13 +1,30 @@
 package com.ttvnp.ttj_asset_android_client.data.entity
 
-import io.realm.RealmObject
+import com.github.gfx.android.orma.annotation.Column
+import com.github.gfx.android.orma.annotation.Setter
+import com.github.gfx.android.orma.annotation.Table
 
-open class UserEntity (
-    open var emailAddress: String = "",
-    open var profileImageId: Int = 0,
-    open var firstName: String = "",
-    open var middleName: String = "",
-    open var lastName: String = "",
-    open var address: String = "",
-    open var isIdentified: Boolean = false
-) : RealmObject()
+@Table
+class UserEntity (
+
+        @Column @Setter("emailAddress")
+        var emailAddress: String = "",
+
+        @Column @Setter("profileImageId")
+        var profileImageId: Int = 0,
+
+        @Column @Setter("firstName")
+        var firstName: String = "",
+
+        @Column @Setter("middleName")
+        var middleName: String = "",
+
+        @Column @Setter("lastName")
+        var lastName: String = "",
+
+        @Column @Setter("address")
+        var address: String = "",
+
+        @Column @Setter("isIdentified")
+        var isIdentified: Boolean = false
+)

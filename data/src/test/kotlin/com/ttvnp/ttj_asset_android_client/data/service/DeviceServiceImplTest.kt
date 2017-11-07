@@ -16,8 +16,7 @@ class ExampleUnitTest {
         val service = DeviceServiceImpl()
         val deviceCode = "test-device-code012345678901234567890123456789=="
         val credential = "test-credential-012345678901234567890123456789=="
-        val response = service.register(deviceCode, credential).execute().body()
-        response?.let {
+        val response = service.register(deviceCode, credential).doOnNext {
             assertEquals(0, it.exitCode)
             assertEquals("", it.message)
             assertNotEquals("", it.accessToken)

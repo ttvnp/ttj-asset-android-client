@@ -1,12 +1,24 @@
 package com.ttvnp.ttj_asset_android_client.data.entity
 
-import io.realm.RealmObject
+import com.github.gfx.android.orma.annotation.Column
+import com.github.gfx.android.orma.annotation.Setter
+import com.github.gfx.android.orma.annotation.Table
 import java.util.*
 
-open class DeviceEntity (
-        open var accessToken: String = "",
-        open var accessTokenExpiry: Date? = null,
-        open var deviceToken: String = "",
-        open var grantPushNotification: Boolean = false,
-        open var grantEmailNotification: Boolean = false
-) : RealmObject()
+@Table
+class DeviceEntity (
+        @Column @Setter("accessToken")
+        val accessToken: String = "",
+
+        @Column @Setter("accessTokenExpiry")
+        val accessTokenExpiry: Date? = null,
+
+        @Column @Setter("deviceToken")
+        val deviceToken: String = "",
+
+        @Column @Setter("grantPushNotification")
+        val grantPushNotification: Boolean = false,
+
+        @Column @Setter("grantEmailNotification")
+        val grantEmailNotification: Boolean = false
+)

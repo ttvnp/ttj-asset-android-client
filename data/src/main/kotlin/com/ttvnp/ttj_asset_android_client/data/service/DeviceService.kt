@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.data.service
 import com.squareup.moshi.Moshi
 import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterResponse
+import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -17,7 +18,7 @@ interface DeviceService {
     )
     @FormUrlEncoded
     @POST("devices")
-    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Call<DeviceRegisterResponse>
+    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Observable<DeviceRegisterResponse>
 
 }
 
@@ -42,7 +43,7 @@ class DeviceServiceImpl : BaseService(), DeviceService {
         service = builder.create(DeviceService::class.java)
     }
 
-    override fun register(deviceCode: String, credential: String): Call<DeviceRegisterResponse> {
+    override fun register(deviceCode: String, credential: String): Observable<DeviceRegisterResponse> {
         return service.register(deviceCode, credential)
     }
 }

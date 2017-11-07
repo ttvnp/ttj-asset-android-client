@@ -1,7 +1,8 @@
 package com.ttvnp.ttj_asset_android_client.data.store
 
-import com.ttvnp.ttj_asset_android_client.data.driver.RealmDriver
+import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
 import com.ttvnp.ttj_asset_android_client.data.entity.DeviceEntity
+import io.reactivex.Observable
 import javax.inject.Inject
 
 interface DeviceDataStore {
@@ -9,18 +10,17 @@ interface DeviceDataStore {
     fun update(entity: DeviceEntity): DeviceEntity
 }
 
-class DeviceDataStoreImpl @Inject constructor(val realmDriver: RealmDriver) : DeviceDataStore {
+class DeviceDataStoreImpl @Inject constructor(val ormaHolder: OrmaHolder) : DeviceDataStore {
 
     override fun get(): DeviceEntity? {
-        val realm = realmDriver.getRealm()
-        return realm.where(DeviceEntity::class.java).findAll().firstOrNull()
+        return ormaHolder.ormaDatabase.selectFromDeviceEntity().firstOrNull()
     }
 
     override fun update(entity: DeviceEntity): DeviceEntity {
-        val realm = realmDriver.getRealm()
-        realm.executeTransaction {
-            realm.where(DeviceEntity::class.java).findAll().deleteAllFromRealm()
-            realm.copyToRealm(entity)
+        val orma = ormaHolder.ormaDatabase
+        orma.transactionSync {
+            orma.deleteFromDeviceEntity().execute()
+            orma.insertIntoDeviceEntity(entity)
         }
         return entity
     }

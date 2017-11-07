@@ -13,7 +13,7 @@ interface DeviceUseCase {
     fun init() : Observable<DeviceModel>
 
     // get device info
-    fun get() : DeviceModel?
+    fun get() : Observable<DeviceModel>
 
     // register user by email address
     fun registerUserByEmail(emailAddress : String) : DeviceModel
@@ -28,14 +28,10 @@ class DeviceUseCaseImpl @Inject constructor(
 ) : DeviceUseCase {
 
     override fun init(): Observable<DeviceModel> {
-        val device = repository.register()
-        if (device == null) {
-            throw DeviceRegisterFailedException()
-        }
-        return Observable.just(device)
+        return repository.register()
     }
 
-    override fun get(): DeviceModel? {
+    override fun get(): Observable<DeviceModel> {
         return repository.get()
     }
 
@@ -45,7 +41,6 @@ class DeviceUseCaseImpl @Inject constructor(
 
     override fun activateUser(key: String, verificationCode: String): UserModel {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
     }
 
 }

@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
 import com.ttvnp.ttj_asset_android_client.data.driver.CryptDriver
-import com.ttvnp.ttj_asset_android_client.data.driver.RealmDriver
+import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
 import com.ttvnp.ttj_asset_android_client.data.driver.SharedPreferencesDriver
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceImpl
@@ -21,7 +21,7 @@ class DataModule {
 
     // DataStores
     @Provides
-    fun deviceDataStore(realmDriver: RealmDriver): DeviceDataStore = DeviceDataStoreImpl(realmDriver)
+    fun deviceDataStore(ormaHolder: OrmaHolder): DeviceDataStore = DeviceDataStoreImpl(ormaHolder)
 
     @Provides
     fun deviceInfoDataStore(

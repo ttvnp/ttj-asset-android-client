@@ -3,8 +3,10 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.TutorialPresenterTarget
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -23,15 +25,18 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
     }
 
     override fun start() {
-        deviceUseCase.init().subscribeWith(object : DisposableObserver<DeviceModel>() {
-            override fun onComplete() { }
-            override fun onNext(t: DeviceModel) {
-                target?.gotoFormPage()
-            }
-            override fun onError(e: Throwable) {
-                target?.showError(e)
-            }
-        }).addTo(this.disposables)
+        deviceUseCase.init()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<DeviceModel>() {
+                    override fun onComplete() { }
+                    override fun onNext(t: DeviceModel) {
+                        target?.gotoFormPage()
+                    }
+                    override fun onError(e: Throwable) {
+                        target?.showError(e)
+                    }
+                }).addTo(this.disposables)
     }
 
     override fun submitEmailAddress() {

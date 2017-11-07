@@ -8,7 +8,9 @@ class TokenUtil {
         fun generateToken68(len: Int): String {
             val randomBytes: ByteArray = ByteArray(len)
             SecureRandom().nextBytes(randomBytes)
-            return Base64.encodeToString(randomBytes, Base64.DEFAULT)
+            return Base64
+                    .encodeToString(randomBytes, Base64.DEFAULT)
+                    .replace("\n", "")
         }
     }
 }
