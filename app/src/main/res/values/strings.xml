@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TTJ Wallet</string>
+
+    <!-- tutorial -->
+    <string name="tutorial_welcome">Welcome</string>
+    <string name="tutorial_start">start</string>
+    <string name="tutorial_form_submit">send</string>
+    <string name="tutorial_form_desc">* Provide your email address to activate your account.\n* Once you submit this form, then we will send you a confirmation email.</string>
+
+    <!-- general -->
+    <string name="email_address">email address</string>
+    <string name="error_dialog_title">ERROR</string>
+    <string name="error_default_message">Error occurred due to network error.Please retry later.</string>
+    <string name="error_device_registration">Device registration was failed due to network error.Please retry later.</string>
+    <string name="default_positive_button_text">OK</string>
+</resources>
