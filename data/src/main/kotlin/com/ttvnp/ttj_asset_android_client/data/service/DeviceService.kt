@@ -6,6 +6,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterRe
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
@@ -34,6 +35,7 @@ class DeviceServiceImpl : BaseService(), DeviceService {
                 .build()
         val builder = Retrofit.Builder()
                 .client(okClient)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .baseUrl(getBaseURL())
                 .build()
