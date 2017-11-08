@@ -6,12 +6,14 @@ import com.github.gfx.android.orma.annotation.Table
 
 @Table
 class UserEntity (
-
         @Column @Setter("emailAddress")
         var emailAddress: String = "",
 
         @Column @Setter("profileImageId")
-        var profileImageId: Int = 0,
+        var profileImageID: Long = 0,
+
+        @Column @Setter("profileImageURL")
+        var profileImageURL: String = "",
 
         @Column @Setter("firstName")
         var firstName: String = "",
@@ -24,6 +26,9 @@ class UserEntity (
 
         @Column @Setter("address")
         var address: String = "",
+
+        @Column @Setter("isEmailVerified")
+        var isEmailVerified: Boolean = false,
 
         @Column @Setter("isIdentified")
         var isIdentified: Boolean = false

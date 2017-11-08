@@ -5,27 +5,36 @@ import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
 import com.ttvnp.ttj_asset_android_client.data.driver.SharedPreferencesDriver
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceImpl
-import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
-import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStoreImpl
-import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
-import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStoreImpl
+import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuth
+import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuthImpl
+import com.ttvnp.ttj_asset_android_client.data.store.*
 import dagger.Module
 import dagger.Provides
 
 @Module
 class DataModule {
 
-    // Services
-    @Provides
-    fun deviceService(): DeviceService = DeviceServiceImpl()
-
     // DataStores
     @Provides
     fun deviceDataStore(ormaHolder: OrmaHolder): DeviceDataStore = DeviceDataStoreImpl(ormaHolder)
+
+    @Provides
+    fun userDataStore(ormaHolder: OrmaHolder): UserDataStore = UserDataStoreImpl(ormaHolder)
 
     @Provides
     fun deviceInfoDataStore(
             cryptDriver: CryptDriver,
             sharedPreferencesDriver: SharedPreferencesDriver
     ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
+
+    // Services
+    @Provides
+    fun deviceServiceWithNoAuth(): DeviceServiceWithNoAuth = DeviceServiceWithNoAuthImpl()
+
+    @Provides
+    fun deviceService(
+            deviceInfoDataStore: DeviceInfoDataStore,
+            deviceDataStore: DeviceDataStore,
+            deviceServiceWithNoAuth: DeviceServiceWithNoAuth
+    ): DeviceService = DeviceServiceImpl(deviceInfoDataStore, deviceDataStore, deviceServiceWithNoAuth)
 }

@@ -8,5 +8,6 @@ class UserModel(
         val middleName : String = "",
         val lastName : String = "",
         val address : String = "",
+        val isEmailVerified : Boolean = false,
         val isIdentified : Boolean = false
 )

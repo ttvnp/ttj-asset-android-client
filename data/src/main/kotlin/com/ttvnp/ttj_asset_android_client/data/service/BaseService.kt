@@ -5,12 +5,16 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 abstract class BaseService {
 
+    companion object {
+        val lock = java.lang.Object()
+    }
+
     open protected fun getBaseURL(): String {
-        // TODO from settings
+        // TODO from build settings
         return "http://10.0.2.2:1324/api/v1/"
     }
 
-    open protected fun getLogginInterceptor(): Interceptor {
+    open protected fun getLoggingInterceptor(): Interceptor {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return interceptor
@@ -18,13 +22,13 @@ abstract class BaseService {
 
     open protected fun getRequestInterceptor(): Interceptor {
         return Interceptor { chain ->
-            // TODO retrieve token here
-            val token : String = "sample token string"
             chain.proceed(
-                    chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token)
+                    chain.request()
+                            .newBuilder()
                             .addHeader("User-Agent", "VNJCoinClient (Android)")
                             .build()
-            )}
+            )
+        }
     }
 }
+

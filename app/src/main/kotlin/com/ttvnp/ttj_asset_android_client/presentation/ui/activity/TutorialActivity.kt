@@ -6,12 +6,14 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
+import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialFirstFragment
-import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialFormFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.view.TutorialViewPager
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.TutorialViewPagerAdapter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialCodeFragment
+import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEmailFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.TutorialPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.TutorialPresenterTarget
 import dagger.android.AndroidInjection
@@ -51,8 +53,25 @@ class TutorialActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Tu
         }
     }
 
-    override fun gotoFormPage() {
+    override fun gotoRegisterEmailPage() {
         toPage(1)
+    }
+
+    override fun showValidationError(ve: ValidationException) {
+        AlertDialog
+                .Builder(this)
+                .setTitle(resources.getString(R.string.error_dialog_title))
+                .setMessage(resources.getString(R.string.error_validation_email_address))
+                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                .show()
+    }
+
+    override fun gotoVerifyEmailPage() {
+        toPage(2)
+    }
+
+    override fun gotoEndPage() {
+        toPage(3)
     }
 
     private fun toPage(page: Int = 0) {
@@ -75,8 +94,21 @@ class TutorialActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Tu
             }
             adapter.addFragment(firstFragment)
 
-            val formFragment = TutorialFormFragment.getInstance()
-            adapter.addFragment(formFragment)
+            val emailFragment = TutorialEmailFragment.getInstance()
+            emailFragment.submitButtonClickHandler = object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    tutorialPresenter.submitEmailAddress(emailFragment.getEmailAddressText())
+                }
+            }
+            adapter.addFragment(emailFragment)
+
+            val codeFragment = TutorialCodeFragment.getInstance()
+            codeFragment.submitButtonClickHandler = object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    tutorialPresenter.submitEmailAddress(codeFragment.getVerificationCode())
+                }
+            }
+            adapter.addFragment(codeFragment)
 
             val endFragment = TutorialEndFragment.getInstance()
             adapter.addFragment(endFragment)

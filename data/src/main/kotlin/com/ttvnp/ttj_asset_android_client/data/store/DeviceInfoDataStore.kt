@@ -20,6 +20,8 @@ class DeviceInfoDataStoreImpl @Inject constructor(
 
     override fun get(): DeviceInfoEntity? {
 
+        // TODO should use memory cache
+
         var deviceCode = sharedPreferencesDriver.getString(DEVICE_CODE_KEY)
         var credential = sharedPreferencesDriver.getString(CREDENTIAL_KEY)
 
@@ -42,5 +44,7 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         val credential = cryptDriver.encrypt(entity.credential)
         sharedPreferencesDriver.putString(DEVICE_CODE_KEY, deviceCode!!)
         sharedPreferencesDriver.putString(CREDENTIAL_KEY, credential!!)
+
+        // TODO should delete memory cache
     }
 }
