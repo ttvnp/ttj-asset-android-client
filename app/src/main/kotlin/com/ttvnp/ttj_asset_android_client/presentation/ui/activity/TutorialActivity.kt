@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.RelativeLayout
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.presentation.R
@@ -24,8 +25,9 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     @Inject
     lateinit var tutorialPresenter : TutorialPresenter
 
-    private var viewPager : TutorialViewPager? = null
-    private var floatingIndicatorView : View? = null
+    private var viewPager: TutorialViewPager? = null
+    private var floatingIndicatorView: View? = null
+    private var footer: RelativeLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -71,6 +73,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     override fun gotoEndPage() {
+        footer?.visibility = View.INVISIBLE
         toPage(3)
     }
 
@@ -121,6 +124,10 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     private fun setupIndicator() {
         findViewById<View>(R.id.view_floating_indicator).let {
             floatingIndicatorView = it
+        }
+        findViewById<RelativeLayout>(R.id.layout_footer).let {
+            footer = it
+            footer?.visibility = View.VISIBLE
         }
     }
 

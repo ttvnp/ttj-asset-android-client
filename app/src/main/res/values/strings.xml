@@ -7,6 +7,8 @@
     <string name="tutorial_form_submit">send</string>
     <string name="tutorial_form_desc">* Provide your email address to activate your account.\n* Once you submit this form, then we will send you a confirmation email.</string>
     <string name="tutorial_verification_code_desc">* Provide verification code which was sent by email.</string>
+    <string name="tutorial_end_desc">Your account has been activated.\nPlease enjoy!</string>
+    <string name="app_start">start</string>
 
     <!-- general -->
     <string name="email_address">email address</string>
