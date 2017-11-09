@@ -29,9 +29,7 @@ class TutorialCodeFragment : Fragment() {
             savedInstanceState: Bundle?
     ) : View {
         val view = inflater.inflate(R.layout.fragment_tutorial_code, container, false)
-        view.findViewById<Button>(R.id.button_tutorial_verification_code_submit).let {
-            it.setOnClickListener(submitButtonClickHandler)
-        }
+        view.findViewById<Button>(R.id.button_tutorial_verification_code_submit).setOnClickListener(submitButtonClickHandler)
         view.findViewById<TextInputLayout>(R.id.text_input_layout_tutorial_verification_code).let {
             textInputLayoutTutorialVerificationCode = it
         }
@@ -43,5 +41,10 @@ class TutorialCodeFragment : Fragment() {
 
     fun getVerificationCode(): String {
         return textTutorialVerificationCode.text?.toString()?:""
+    }
+
+    fun showValidationError(errorMessage: String) {
+        textInputLayoutTutorialVerificationCode.isErrorEnabled = true
+        textInputLayoutTutorialVerificationCode.error = errorMessage
     }
 }

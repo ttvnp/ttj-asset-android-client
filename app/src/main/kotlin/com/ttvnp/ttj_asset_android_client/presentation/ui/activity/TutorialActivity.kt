@@ -3,10 +3,10 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.RelativeLayout
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
+import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
@@ -59,15 +59,6 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
         toPage(1)
     }
 
-    override fun showValidationError(ve: ValidationException) {
-        AlertDialog
-                .Builder(this)
-                .setTitle(resources.getString(R.string.error_dialog_title))
-                .setMessage(resources.getString(R.string.error_validation_email_address))
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                .show()
-    }
-
     override fun gotoVerifyEmailPage() {
         toPage(2)
     }
@@ -78,15 +69,13 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     private fun toPage(page: Int = 0) {
-        viewPager?.let {
-            it.setCurrentItem(page, true)
-        }
+        viewPager?.setCurrentItem(page, true)
     }
 
     private fun initViewPager() {
         findViewById<TutorialViewPager>(R.id.view_pager).let {
             viewPager = it
-            it.scrollDirection = TutorialViewPager.SCROLL_PREV
+            it.scrollDirection = TutorialViewPager.SCROLL_NONE
             val fragmentManager = getSupportFragmentManager()
             val adapter = TutorialViewPagerAdapter(fragmentManager)
             val firstFragment = TutorialFirstFragment.getInstance()
@@ -100,7 +89,13 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
             val emailFragment = TutorialEmailFragment.getInstance()
             emailFragment.submitButtonClickHandler = object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    tutorialPresenter.submitEmailAddress(emailFragment.getEmailAddressText())
+                    tutorialPresenter.submitEmailAddress(emailFragment.getEmailAddressText(), { throwable ->
+                        when (throwable) {
+                            is ValidationException -> emailFragment.showValidationError(getString(R.string.error_validation_email_address))
+                            is ServiceFailedException -> emailFragment.showValidationError(getString(R.string.error_invalid_email_address))
+                            else -> showError(throwable)
+                        }
+                    })
                 }
             }
             adapter.addFragment(emailFragment)
@@ -108,7 +103,12 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
             val codeFragment = TutorialCodeFragment.getInstance()
             codeFragment.submitButtonClickHandler = object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    tutorialPresenter.verifyEmailAddress(codeFragment.getVerificationCode())
+                    tutorialPresenter.verifyEmailAddress(codeFragment.getVerificationCode(), { throwable ->
+                        when (throwable) {
+                            is ServiceFailedException -> codeFragment.showValidationError(getString(R.string.error_invalid_verification_code_address))
+                            else -> showError(throwable)
+                        }
+                    })
                 }
             }
             adapter.addFragment(codeFragment)

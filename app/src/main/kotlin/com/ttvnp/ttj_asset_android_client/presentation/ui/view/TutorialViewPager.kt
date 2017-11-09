@@ -10,7 +10,8 @@ class TutorialViewPager(context: Context, attrs: AttributeSet?) : ViewPager(cont
     constructor(context: Context) : this(context, null)
 
     companion object {
-        val SCROLL_PREV = 0b01 // LEFT
+        val SCROLL_NONE = 0b00 // None
+        val SCROLL_PREV = 0b01 // Left
         val SCROLL_NEXT = 0b10 // Right
         val SCROLL_BOTH = SCROLL_NEXT + SCROLL_PREV
     }
