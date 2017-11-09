@@ -11,6 +11,11 @@ abstract class BaseAuthService(
         private val deviceDataStore: DeviceDataStore,
         private val deviceServiceWithNoAuth: DeviceServiceWithNoAuth
 ) : BaseService() {
+
+    companion object {
+        val lock = java.lang.Object()
+    }
+
     open protected fun getAccessTokenInterceptor(): Interceptor {
         return Interceptor { chain ->
             var request = chain.request()

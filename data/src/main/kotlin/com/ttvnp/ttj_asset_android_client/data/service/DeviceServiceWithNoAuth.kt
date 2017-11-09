@@ -23,7 +23,7 @@ interface DeviceServiceWithNoAuth {
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
-    @POST("devices")
+    @POST("devices/access_token")
     fun issueAccessToken(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Call<DeviceRegisterResponse>
 }
 

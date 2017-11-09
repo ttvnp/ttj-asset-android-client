@@ -5,10 +5,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 abstract class BaseService {
 
-    companion object {
-        val lock = java.lang.Object()
-    }
-
     open protected fun getBaseURL(): String {
         // TODO from build settings
         return "http://10.0.2.2:1324/api/v1/"

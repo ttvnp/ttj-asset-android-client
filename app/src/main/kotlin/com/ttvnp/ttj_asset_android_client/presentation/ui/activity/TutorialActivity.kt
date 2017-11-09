@@ -105,7 +105,7 @@ class TutorialActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Tu
             val codeFragment = TutorialCodeFragment.getInstance()
             codeFragment.submitButtonClickHandler = object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    tutorialPresenter.submitEmailAddress(codeFragment.getVerificationCode())
+                    tutorialPresenter.verifyEmailAddress(codeFragment.getVerificationCode())
                 }
             }
             adapter.addFragment(codeFragment)
