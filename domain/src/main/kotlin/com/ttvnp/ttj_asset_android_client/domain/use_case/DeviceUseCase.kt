@@ -5,19 +5,19 @@ import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.isEmailValid
-import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 interface DeviceUseCase {
 
     // initialize device info & register to service
-    fun init() : Observable<DeviceModel>
+    fun init() : Single<DeviceModel>
 
     // register user by email address
-    fun registerEmail(emailAddress : String) : Observable<DeviceModel>
+    fun registerEmail(emailAddress : String) : Single<DeviceModel>
 
     // verify email address and activate user
-    fun verifyEmail(verificationCode : String) : Observable<UserModel>
+    fun verifyEmail(verificationCode : String) : Single<UserModel>
 
 }
 
@@ -25,11 +25,11 @@ class DeviceUseCaseImpl @Inject constructor(
         private val repository: DeviceRepository
 ) : DeviceUseCase {
 
-    override fun init(): Observable<DeviceModel> {
+    override fun init(): Single<DeviceModel> {
         return repository.register()
     }
 
-    override fun registerEmail(emailAddress: String): Observable<DeviceModel> {
+    override fun registerEmail(emailAddress: String): Single<DeviceModel> {
         val input = emailAddress.trim()
         if (!isEmailValid(input)) {
             throw ValidationException("emailAddress")
@@ -37,7 +37,7 @@ class DeviceUseCaseImpl @Inject constructor(
         return repository.registerEmail(input)
     }
 
-    override fun verifyEmail(verificationCode: String): Observable<UserModel> {
+    override fun verifyEmail(verificationCode: String): Single<UserModel> {
         val input = verificationCode.trim()
         return repository.verifyEmail(input)
     }

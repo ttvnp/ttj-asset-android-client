@@ -15,7 +15,7 @@ import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedExcepti
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
-import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
@@ -26,20 +26,19 @@ class DeviceRepositoryImpl @Inject constructor(
         private val userDataStore : UserDataStore
 ) : DeviceRepository {
 
-    override fun register(): Observable<DeviceModel> {
+    override fun register(): Single<DeviceModel> {
         // call api service to register this device and retrieve access token as well.
         val deviceInfo = deviceInfoDataStore.get()
         if (deviceInfo != null) {
             val deviceEntity = deviceDataStore.get()
             if (deviceEntity != null) {
-                return Observable.just(DeviceTranslator().translate(deviceEntity))
+                return Single.just(DeviceTranslator().translate(deviceEntity))
             }
         }
         // newly create device code and credential.
         val initDeviceCode = TokenUtil.generateToken68(64)
         val initCredential = TokenUtil.generateToken68(64)
 
-        // TODO handle api error
         return deviceServiceWithNoAuth.register(initDeviceCode, initCredential).map {
             if (it.hasError()) {
                 throw ServiceFailedException()
@@ -57,7 +56,7 @@ class DeviceRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun registerEmail(emailAddress: String): Observable<DeviceModel> {
+    override fun registerEmail(emailAddress: String): Single<DeviceModel> {
         return deviceService.registerEmail(emailAddress).map {
             if (it.hasError()) {
                 throw ServiceFailedException()
@@ -67,7 +66,7 @@ class DeviceRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun verifyEmail(verificationCode: String): Observable<UserModel> {
+    override fun verifyEmail(verificationCode: String): Single<UserModel> {
         return deviceService.verifyEmail(verificationCode).map {
             if (it.hasError()) {
                 throw ServiceFailedException()

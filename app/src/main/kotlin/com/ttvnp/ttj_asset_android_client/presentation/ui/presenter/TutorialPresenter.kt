@@ -6,8 +6,10 @@ import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.TutorialPresenterTarget
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
+import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -32,9 +34,8 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
         deviceUseCase.init()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<DeviceModel>() {
-                    override fun onComplete() { }
-                    override fun onNext(t: DeviceModel) {
+                .subscribeWith(object : DisposableSingleObserver<DeviceModel>() {
+                    override fun onSuccess(t: DeviceModel) {
                         target?.dismissProgressDialog()
                         target?.gotoRegisterEmailPage()
                     }
@@ -51,9 +52,8 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
             deviceUseCase.registerEmail(emailAddress)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableObserver<DeviceModel>() {
-                        override fun onComplete() { }
-                        override fun onNext(t: DeviceModel) {
+                    .subscribeWith(object : DisposableSingleObserver<DeviceModel>() {
+                        override fun onSuccess(t: DeviceModel) {
                             target?.dismissProgressDialog()
                             target?.gotoVerifyEmailPage()
                         }
@@ -79,9 +79,8 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
         deviceUseCase.verifyEmail(verificationCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<UserModel>() {
-                    override fun onComplete() { }
-                    override fun onNext(t: UserModel) {
+                .subscribeWith(object : DisposableSingleObserver<UserModel>() {
+                    override fun onSuccess(t: UserModel) {
                         target?.dismissProgressDialog()
                         target?.gotoEndPage()
                     }
