@@ -2,7 +2,6 @@ package com.ttvnp.ttj_asset_android_client.data.store
 
 import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
 import com.ttvnp.ttj_asset_android_client.data.entity.DeviceEntity
-import io.reactivex.Observable
 import javax.inject.Inject
 
 interface DeviceDataStore {

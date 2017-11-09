@@ -2,7 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_tutorial_welcome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_done" />
 
     <TextView
         android:id="@+id/text_tutorial_welcome"
@@ -10,25 +21,23 @@
         android:layout_height="57dp"
         android:layout_above="@+id/button_tutorial_start"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="hoge"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="44sp"
+        android:text="@string/tutorial_end_desc"
+        android:textColor="@color/colorTextOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.41000003" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_tutorial_start"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="268dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:text="@string/tutorial_start"
+        android:background="@color/colorIcons"
+        android:text="@string/app_start"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

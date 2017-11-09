@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterResponse
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -19,7 +20,7 @@ interface DeviceServiceWithNoAuth {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices")
-    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Observable<DeviceRegisterResponse>
+    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Single<DeviceRegisterResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -48,7 +49,7 @@ class DeviceServiceWithNoAuthImpl : BaseService(), DeviceServiceWithNoAuth {
         service = builder.create(DeviceServiceWithNoAuth::class.java)
     }
 
-    override fun register(deviceCode: String, credential: String): Observable<DeviceRegisterResponse> {
+    override fun register(deviceCode: String, credential: String): Single<DeviceRegisterResponse> {
         return service.register(deviceCode, credential)
     }
 

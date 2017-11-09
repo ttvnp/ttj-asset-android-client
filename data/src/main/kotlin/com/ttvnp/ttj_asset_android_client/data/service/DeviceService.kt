@@ -6,7 +6,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterEm
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
-import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,12 +17,12 @@ interface DeviceService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/email")
-    fun registerEmail(@Field("emailAddress") emailAddress: String) : Observable<DeviceRegisterEmailResponse>
+    fun registerEmail(@Field("emailAddress") emailAddress: String) : Single<DeviceRegisterEmailResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/verify_email")
-    fun verifyEmail(@Field("verificationCode") verificationCode: String) : Observable<DeviceVerifyEmailResponse>
+    fun verifyEmail(@Field("verificationCode") verificationCode: String) : Single<DeviceVerifyEmailResponse>
 }
 
 class DeviceServiceImpl(
@@ -51,11 +51,11 @@ class DeviceServiceImpl(
         service = builder.create(DeviceService::class.java)
     }
 
-    override fun registerEmail(emailAddress: String): Observable<DeviceRegisterEmailResponse> {
+    override fun registerEmail(emailAddress: String): Single<DeviceRegisterEmailResponse> {
         return service.registerEmail(emailAddress)
     }
 
-    override fun verifyEmail(verificationCode: String): Observable<DeviceVerifyEmailResponse> {
+    override fun verifyEmail(verificationCode: String): Single<DeviceVerifyEmailResponse> {
         return service.verifyEmail(verificationCode)
     }
 }

@@ -29,9 +29,7 @@ class TutorialEmailFragment : Fragment() {
             savedInstanceState: Bundle?
     ) : View {
         val view = inflater.inflate(R.layout.fragment_tutorial_email, container, false)
-        view.findViewById<Button>(R.id.button_tutorial_submit).let {
-            it.setOnClickListener(submitButtonClickHandler)
-        }
+        view.findViewById<Button>(R.id.button_tutorial_submit).setOnClickListener(submitButtonClickHandler)
         view.findViewById<TextInputLayout>(R.id.text_input_layout_tutorial_email_address).let {
             textInputLayoutTutorialEmailAddress = it
         }
@@ -42,6 +40,11 @@ class TutorialEmailFragment : Fragment() {
     }
 
     fun getEmailAddressText(): String {
-        return if (textTutorialEmailAddress == null) "" else textTutorialEmailAddress.text.toString()
+        return textTutorialEmailAddress.text?.toString()?:""
+    }
+
+    fun showValidationError(errorMessage: String) {
+        textInputLayoutTutorialEmailAddress.isErrorEnabled = true
+        textInputLayoutTutorialEmailAddress.error = errorMessage
     }
 }
