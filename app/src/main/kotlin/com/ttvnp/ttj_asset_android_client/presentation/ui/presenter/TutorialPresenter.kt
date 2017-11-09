@@ -27,15 +27,18 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
     }
 
     override fun start() {
+        target?.showProgressDialog()
         deviceUseCase.init()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<DeviceModel>() {
                     override fun onComplete() { }
                     override fun onNext(t: DeviceModel) {
+                        target?.dismissProgressDialog()
                         target?.gotoRegisterEmailPage()
                     }
                     override fun onError(e: Throwable) {
+                        target?.dismissProgressDialog()
                         target?.showError(e)
                     }
                 }).addTo(this.disposables)
@@ -43,19 +46,23 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
 
     override fun submitEmailAddress(emailAddress: String) {
         try {
+            target?.showProgressDialog()
             deviceUseCase.registerEmail(emailAddress)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableObserver<DeviceModel>() {
                         override fun onComplete() { }
                         override fun onNext(t: DeviceModel) {
+                            target?.dismissProgressDialog()
                             target?.gotoVerifyEmailPage()
                         }
                         override fun onError(e: Throwable) {
+                            target?.dismissProgressDialog()
                             target?.showError(e)
                         }
                     }).addTo(this.disposables)
         } catch (t: Throwable) {
+            target?.dismissProgressDialog()
             when(t) {
                 is ValidationException -> target?.showValidationError(t)
                 else -> target?.showError(t)
@@ -64,15 +71,18 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
     }
 
     override fun verifyEmailAddress(verificationCode: String) {
+        target?.showProgressDialog()
         deviceUseCase.verifyEmail(verificationCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<UserModel>() {
                     override fun onComplete() { }
                     override fun onNext(t: UserModel) {
+                        target?.dismissProgressDialog()
                         target?.gotoEndPage()
                     }
                     override fun onError(e: Throwable) {
+                        target?.dismissProgressDialog()
                         target?.showError(e)
                     }
                 }).addTo(this.disposables)

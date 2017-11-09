@@ -19,7 +19,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.Tutor
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class TutorialActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, TutorialPresenterTarget {
+class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, TutorialPresenterTarget {
 
     @Inject
     lateinit var tutorialPresenter : TutorialPresenter
