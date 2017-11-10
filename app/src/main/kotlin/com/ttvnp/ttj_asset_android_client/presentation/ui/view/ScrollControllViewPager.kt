@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
 
-class TutorialViewPager(context: Context, attrs: AttributeSet?) : ViewPager(context, attrs) {
+class ScrollControllViewPager(context: Context, attrs: AttributeSet?) : ViewPager(context, attrs) {
 
     constructor(context: Context) : this(context, null)
 
