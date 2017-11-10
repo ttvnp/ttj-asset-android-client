@@ -11,7 +11,7 @@ import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialFirstFragment
-import com.ttvnp.ttj_asset_android_client.presentation.ui.view.TutorialViewPager
+import com.ttvnp.ttj_asset_android_client.presentation.ui.view.ScrollControllViewPager
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.TutorialViewPagerAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialCodeFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEmailFragment
@@ -25,7 +25,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     @Inject
     lateinit var tutorialPresenter : TutorialPresenter
 
-    private var viewPager: TutorialViewPager? = null
+    private var viewPager: ScrollControllViewPager? = null
     private var floatingIndicatorView: View? = null
     private var footer: RelativeLayout? = null
 
@@ -73,9 +73,9 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     private fun initViewPager() {
-        findViewById<TutorialViewPager>(R.id.view_pager).let {
+        findViewById<ScrollControllViewPager>(R.id.view_pager).let {
             viewPager = it
-            it.scrollDirection = TutorialViewPager.SCROLL_NONE
+            it.scrollDirection = ScrollControllViewPager.SCROLL_NONE
             val fragmentManager = getSupportFragmentManager()
             val adapter = TutorialViewPagerAdapter(fragmentManager)
             val firstFragment = TutorialFirstFragment.getInstance()

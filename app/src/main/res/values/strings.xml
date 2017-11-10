@@ -20,4 +20,10 @@
     <string name="error_invalid_email_address">This email address is not available.</string>
     <string name="error_invalid_verification_code_address">This code is invalid.Please check your email again.</string>
     <string name="default_positive_button_text">OK</string>
+
+    <!-- menu -->
+    <string name="menu_home">Home</string>
+    <string name="menu_receive">Receive</string>
+    <string name="menu_send">Send</string>
+    <string name="menu_settings">Settings</string>
 </resources>
