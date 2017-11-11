@@ -27,6 +27,7 @@ ext {
     moshiVersion = '1.5.0'
     ormaVersion = '4.2.5'
     circleimageviewVersion = '2.2.0'
+    picassoVersion = '2.5.2'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -74,6 +75,7 @@ ext {
             supportCardview: "com.android.support:cardview-v7:${supportLibraryVersion}",
             constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             circleimageview: "de.hdodenhof:circleimageview:${circleimageviewVersion}",
+            picasso: "com.squareup.picasso:picasso:${picassoVersion}",
     ]
 
     developmentDependencies = [
