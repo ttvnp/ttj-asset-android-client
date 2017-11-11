@@ -9,8 +9,6 @@ import android.text.Spannable
 import android.text.style.ImageSpan
 import android.text.SpannableString
 
-
-
 class MainViewPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     private val fragments: MutableList<BaseMainFragment> = mutableListOf()
