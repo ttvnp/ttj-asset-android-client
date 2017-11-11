@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
+import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenterImpl
 import dagger.Module
@@ -10,7 +11,7 @@ class FragmentModule {
 
     // presenters
     @Provides
-    fun mainHomePresenter(): MainHomePresenter {
-        return MainHomePresenterImpl()
+    fun mainHomePresenter(userUseCase: UserUseCase): MainHomePresenter {
+        return MainHomePresenterImpl(userUseCase)
     }
 }

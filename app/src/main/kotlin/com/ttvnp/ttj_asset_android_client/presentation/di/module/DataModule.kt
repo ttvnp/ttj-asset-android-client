@@ -3,10 +3,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.di.module
 import com.ttvnp.ttj_asset_android_client.data.driver.CryptDriver
 import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
 import com.ttvnp.ttj_asset_android_client.data.driver.SharedPreferencesDriver
-import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
-import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceImpl
-import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuth
-import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuthImpl
+import com.ttvnp.ttj_asset_android_client.data.service.*
 import com.ttvnp.ttj_asset_android_client.data.store.*
 import dagger.Module
 import dagger.Provides
@@ -37,4 +34,12 @@ class DataModule {
             deviceDataStore: DeviceDataStore,
             deviceServiceWithNoAuth: DeviceServiceWithNoAuth
     ): DeviceService = DeviceServiceImpl(deviceInfoDataStore, deviceDataStore, deviceServiceWithNoAuth)
+
+    @Provides
+    fun userService(
+            deviceInfoDataStore: DeviceInfoDataStore,
+            deviceDataStore: DeviceDataStore,
+            deviceServiceWithNoAuth: DeviceServiceWithNoAuth
+    ): UserService = UserServiceImpl(deviceInfoDataStore, deviceDataStore, deviceServiceWithNoAuth)
+
 }

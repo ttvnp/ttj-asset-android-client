@@ -1,17 +1,8 @@
 package com.ttvnp.ttj_asset_android_client.data.service.response
 
 import com.squareup.moshi.Json
-import java.util.Date
 
-class DeviceRegisterResponse(
-        @Json(name = "accessToken") val accessToken: String = "",
-        @Json(name = "accessTokenExpiry") val accessTokenExpiry: Date? = null
-) : BaseResponse()
-
-class DeviceRegisterEmailResponse(
-) : BaseResponse()
-
-class DeviceVerifyEmailResponse(
+class GetUserResponse(
         @Json(name = "emailAddress") val emailAddress: String = "",
         @Json(name = "profileImageID") val profileImageID: Long = 0L,
         @Json(name = "profileImageURL") val profileImageURL: String = "",
