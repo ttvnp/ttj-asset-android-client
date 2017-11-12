@@ -13,3 +13,12 @@ class GetUserResponse(
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false
 ) : BaseResponse()
+
+class GetBalancesResponse(
+        @Json(name = "balances") val balances: List<BalanceResponse>
+) : BaseResponse()
+
+class BalanceResponse(
+        @Json(name = "assetType") val assetType: String = "",
+        @Json(name = "amount") val amount: Long = 0L
+)

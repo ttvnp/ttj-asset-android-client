@@ -13,16 +13,19 @@ class DataModule {
 
     // DataStores
     @Provides
+    fun deviceInfoDataStore(
+            cryptDriver: CryptDriver,
+            sharedPreferencesDriver: SharedPreferencesDriver
+    ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
+
+    @Provides
     fun deviceDataStore(ormaHolder: OrmaHolder): DeviceDataStore = DeviceDataStoreImpl(ormaHolder)
 
     @Provides
     fun userDataStore(ormaHolder: OrmaHolder): UserDataStore = UserDataStoreImpl(ormaHolder)
 
     @Provides
-    fun deviceInfoDataStore(
-            cryptDriver: CryptDriver,
-            sharedPreferencesDriver: SharedPreferencesDriver
-    ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
+    fun balanceDataStore(ormaHolder: OrmaHolder): BalanceDataStore = BalanceDataStoreImpl(ormaHolder)
 
     // Services
     @Provides

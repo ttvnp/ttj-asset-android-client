@@ -5,6 +5,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
+import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserRepository
 import io.reactivex.Single

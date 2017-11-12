@@ -53,14 +53,14 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:gravity="right">
+                    android:gravity="end">
                     <TextView
+                        android:id="@+id/text_point_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:drawablePadding="4dp"
                         android:drawableStart="@drawable/ic_point"
-                        android:text="200"
                         android:textColor="@color/colorTextOnPrimary"
                         android:textSize="22sp" />
                 </RelativeLayout>
@@ -69,17 +69,16 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/text_coint_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:drawablePadding="4dp"
                         android:drawableStart="@drawable/ic_coin"
-                        android:text="4,000"
                         android:textColor="@color/colorTextOnPrimary"
                         android:textSize="22sp" />
                 </RelativeLayout>
             </LinearLayout>
-
 
         </LinearLayout>
 
