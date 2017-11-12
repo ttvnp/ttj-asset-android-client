@@ -46,8 +46,5 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         adapter.addFragment(settingsFragment, resources.getDrawable(R.drawable.ic_settings))
         viewPager?.adapter = adapter
         tabLayout?.setupWithViewPager(viewPager)
-
-        // viewPager?.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        // tabLayout?.setOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
     }
 }

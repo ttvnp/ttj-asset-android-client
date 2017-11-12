@@ -20,6 +20,7 @@
     <string name="error_invalid_email_address">This email address is not available.</string>
     <string name="error_invalid_verification_code_address">This code is invalid.Please check your email again.</string>
     <string name="default_positive_button_text">OK</string>
+    <string name="no_transaction_data">There is no transaction data.</string>
 
     <!-- menu -->
     <string name="menu_home">Home</string>

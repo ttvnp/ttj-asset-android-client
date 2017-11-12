@@ -2,6 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 import com.ttvnp.ttj_asset_android_client.domain.util.formatString
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.PaymentHistoryViewAdapter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.EndlessScrollListener
 
 class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
@@ -31,6 +33,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     private lateinit var textPointAmount: TextView
     private lateinit var textCoinAmount: TextView
     private lateinit var recyclerViewPaymentHistory: RecyclerView
+    private lateinit var emptyViewPaymentHistory: TextView
 
     companion object {
         fun getInstance() : MainHomeFragment {
@@ -55,9 +58,12 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         textPointAmount = view.findViewById<TextView>(R.id.text_point_amount)
         textCoinAmount = view.findViewById<TextView>(R.id.text_coint_amount)
         recyclerViewPaymentHistory = view.findViewById<RecyclerView>(R.id.recycler_view_payment_history)
+        emptyViewPaymentHistory = view.findViewById<TextView>(R.id.empty_view_payment_history)
 
         val layoutManager = LinearLayoutManager(this.context)
         recyclerViewPaymentHistory.layoutManager = layoutManager
+        val dividerItemDecoration = DividerItemDecoration(recyclerViewPaymentHistory.context, layoutManager.orientation)
+        recyclerViewPaymentHistory.addItemDecoration(dividerItemDecoration)
 
         mainHomePresenter.setupUserInfo()
         mainHomePresenter.setupBalanceInfo()
@@ -78,7 +84,31 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     }
 
     override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel) {
-        val adapter = PaymentHistoryViewAdapter(userTransactionsModel.userTransactions.toMutableList());
-        recyclerViewPaymentHistory.adapter = adapter
+        if (userTransactionsModel.userTransactions.size < 1) {
+            // case empty
+            recyclerViewPaymentHistory.visibility = View.GONE
+            emptyViewPaymentHistory.visibility = View.VISIBLE
+        } else {
+            // has data
+            val adapter = PaymentHistoryViewAdapter(userTransactionsModel.userTransactions.toMutableList());
+            recyclerViewPaymentHistory.adapter = adapter
+            recyclerViewPaymentHistory.visibility = View.VISIBLE
+            emptyViewPaymentHistory.visibility = View.GONE
+            if (userTransactionsModel.hasMore) {
+                recyclerViewPaymentHistory.addOnScrollListener(object : EndlessScrollListener(recyclerViewPaymentHistory.layoutManager as LinearLayoutManager) {
+                    override fun onLoadMore(currentPage: Int) {
+                        // get last item
+                        val lastUserTransactionID = userTransactionsModel.userTransactions.last().id
+                        val initialSize = userTransactionsModel.userTransactions.size
+                        mainHomePresenter.loadMoreUserTransactions(lastUserTransactionID, { loadedModel ->
+                            if (!loadedModel.hasMore) this.setFinished()
+                            adapter.addAllUserTransactionModel(loadedModel.userTransactions)
+                            val updatedSize = adapter.itemCount
+                            recyclerViewPaymentHistory.post { adapter.notifyItemRangeInserted(initialSize, updatedSize) }
+                        })
+                    }
+                })
+            }
+        }
     }
 }

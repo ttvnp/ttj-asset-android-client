@@ -16,7 +16,7 @@ import java.util.*
 
 
 class PaymentHistoryViewAdapter(
-        private val list: List<UserTransactionModel>
+        private val data: MutableList<UserTransactionModel>
 ) : RecyclerView.Adapter<PaymentHistoryViewHolder>() {
 
     private lateinit var context: Context
@@ -29,7 +29,7 @@ class PaymentHistoryViewAdapter(
     }
 
     override fun onBindViewHolder(holder: PaymentHistoryViewHolder, position: Int) {
-        val model = list.get(position)
+        val model = data.get(position)
         if (0 < model.targetUserProfileImageURL.length) {
             Picasso.with(context).load(model.targetUserProfileImageURL).into(holder.imageTargetUserProfile)
         }
@@ -53,19 +53,23 @@ class PaymentHistoryViewAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return data.size
+    }
+
+    fun addAllUserTransactionModel(models: Collection<UserTransactionModel>) {
+        data.addAll(models)
     }
 
     private fun buildTargetUserText(model: UserTransactionModel): String {
         var userName = ""
         if (!model.targetUserFirstName.isBlank()) {
-            userName += model.targetUserFirstName
+            userName += model.targetUserFirstName.prependIfNotBlank(" ")
         }
         if (!model.targetUserMiddleName.isBlank()) {
-            userName += userName.prependIfNotBlank(" ") + model.targetUserMiddleName
+            userName += model.targetUserMiddleName.prependIfNotBlank(" ")
         }
         if (!model.targetUserLastName.isBlank()) {
-            userName += userName.prependIfNotBlank(" ") + model.targetUserLastName
+            userName += model.targetUserLastName.prependIfNotBlank(" ")
         }
         return if (userName.isBlank()) model.targetUserEmailAddress else userName
     }
