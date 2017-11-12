@@ -67,11 +67,21 @@ class DeviceRepositoryImpl @Inject constructor(
     }
 
     override fun verifyEmail(verificationCode: String): Single<UserModel> {
-        return deviceService.verifyEmail(verificationCode).map {
-            if (it.hasError()) {
+        return deviceService.verifyEmail(verificationCode).map { response ->
+            if (response.hasError()) {
                 throw ServiceFailedException()
             }
-            var userEntity = UserEntity()
+            var userEntity = UserEntity(
+                    emailAddress = response.emailAddress,
+                    profileImageID = response.profileImageID,
+                    profileImageURL = response.profileImageURL,
+                    firstName = response.firstName,
+                    middleName =  response.middleName,
+                    lastName = response.lastName,
+                    address = response.address,
+                    isEmailVerified = response.isEmailVerified,
+                    isIdentified = response.isIdentified
+            )
             userEntity = userDataStore.update(userEntity)
             UserTranslator().translate(userEntity)!!
         }

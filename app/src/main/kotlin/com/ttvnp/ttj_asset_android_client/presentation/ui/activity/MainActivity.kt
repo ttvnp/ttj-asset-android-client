@@ -2,6 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
@@ -9,13 +10,23 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainHomeFragm
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainReceiveFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainSendFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainSettingsFragment
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), HasSupportFragmentInjector {
+
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     private var tabLayout: TabLayout? = null
     private var viewPager: ViewPager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
