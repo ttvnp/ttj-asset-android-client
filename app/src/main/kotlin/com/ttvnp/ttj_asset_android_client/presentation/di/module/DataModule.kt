@@ -27,6 +27,9 @@ class DataModule {
     @Provides
     fun balanceDataStore(ormaHolder: OrmaHolder): BalanceDataStore = BalanceDataStoreImpl(ormaHolder)
 
+    @Provides
+    fun userTransactionDataStore(ormaHolder: OrmaHolder): UserTransactionDataStore = UserTransactionDataStoreImpl(ormaHolder)
+
     // Services
     @Provides
     fun deviceServiceWithNoAuth(): DeviceServiceWithNoAuth = DeviceServiceWithNoAuthImpl()
