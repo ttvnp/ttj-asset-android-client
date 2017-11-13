@@ -28,6 +28,8 @@
     <string name="hint_send_amount">amount</string>
     <string name="error_message_empty">your input was empty.</string>
     <string name="error_message_invalid_long">your input was too large.</string>
+    <string name="send_by_qr">Scan Code</string>
+    <string name="send_by_email">By Email Address</string>
 
     <!-- menu -->
     <string name="menu_home">Home</string>
@@ -37,4 +39,5 @@
 
     <!-- function title -->
     <string name="title_set_amount">set amount</string>
+    <string name="title_send">send</string>
 </resources>

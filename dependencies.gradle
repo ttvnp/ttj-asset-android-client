@@ -29,6 +29,7 @@ ext {
     circleimageviewVersion = '2.2.0'
     picassoVersion = '2.5.2'
     zxingCoreVersion = '3.3.1'
+    zxingEmbeddedVersion = '3.5.0'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -79,6 +80,7 @@ ext {
             constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             circleimageview: "de.hdodenhof:circleimageview:${circleimageviewVersion}",
             picasso: "com.squareup.picasso:picasso:${picassoVersion}",
+            zxingEmbedded: "com.journeyapps:zxing-android-embedded:${zxingEmbeddedVersion}",
     ]
 
     developmentDependencies = [

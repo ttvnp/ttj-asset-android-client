@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.widget.Toast
+import com.google.zxing.integration.android.IntentIntegrator
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainHomeFragment
@@ -51,12 +53,22 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         tabLayout?.setupWithViewPager(viewPager)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        when (requestCode) {
-            MainReceiveFragment.SET_AMOUNT_ACTIVITY_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val qrCodeString = data.getStringExtra(ReceiveSetAmountActivity.INTENT_EXTRA_KEY)
-                    receiveFragment.setQRCode(qrCodeString)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
+            }
+        } else {
+            when (requestCode) {
+                MainReceiveFragment.SET_AMOUNT_ACTIVITY_REQUEST_CODE -> {
+                    if (resultCode == Activity.RESULT_OK) {
+                        data?.getStringExtra(ReceiveSetAmountActivity.INTENT_EXTRA_KEY)?.let {
+                            receiveFragment.setQRCode(it)
+                        }
+                    }
                 }
             }
         }
