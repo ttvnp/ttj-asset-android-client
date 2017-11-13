@@ -21,10 +21,16 @@
     <string name="error_invalid_verification_code_address">This code is invalid.Please check your email again.</string>
     <string name="default_positive_button_text">OK</string>
     <string name="no_transaction_data">There is no transaction data.</string>
+    <string name="set_amount_desc">set amount</string>
+    <string name="hint_receive_amount">amount</string>
+    <string name="hint_send_amount">amount</string>
 
     <!-- menu -->
     <string name="menu_home">Home</string>
     <string name="menu_receive">Receive</string>
     <string name="menu_send">Send</string>
     <string name="menu_settings">Settings</string>
+
+    <!-- function title -->
+    <string name="title_set_amount">set amount</string>
 </resources>

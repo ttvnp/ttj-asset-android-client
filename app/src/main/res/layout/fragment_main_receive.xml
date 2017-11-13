@@ -1,20 +1,24 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
 
     <TextView
+        android:id="@+id/text_set_amount"
         android:layout_width="wrap_content"
-        android:layout_height="57dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="@string/menu_receive"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="44sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.41000003" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/middle_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/set_amount_desc"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

@@ -1,0 +1,67 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_receive_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/large_margin"
+        android:gravity="center">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/middle_margin">
+            <RadioButton
+                android:id="@+id/radio_receive_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="point" />
+            <RadioButton
+                android:id="@+id/radio_receive_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_margin"
+                android:text="coin" />
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_receive_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_receive_amount"
+            app:errorEnabled="true"
+            app:hintEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/text_receive_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_receive_amount"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_tutorial_submit"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/middle_margin"
+            android:background="@color/colorPrimary"
+            android:text="@string/default_positive_button_text"
+            android:textColor="@color/colorTextOnPrimary" />
+
+    </LinearLayout>
+</LinearLayout>
