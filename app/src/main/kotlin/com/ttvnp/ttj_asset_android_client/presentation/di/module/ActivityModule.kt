@@ -1,6 +1,9 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
+import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.ReceiveSetAmountPresenter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.ReceiveSetAmountPresenterImpl
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.TutorialPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.TutorialPresenterImpl
 import dagger.Module
@@ -13,5 +16,10 @@ class ActivityModule {
     @Provides
     fun tutorialPresenter(deviceUseCase: DeviceUseCase): TutorialPresenter {
         return TutorialPresenterImpl(deviceUseCase)
+    }
+
+    @Provides
+    fun receiveSetAmountPresenter(userUseCase: UserUseCase): ReceiveSetAmountPresenter {
+        return ReceiveSetAmountPresenterImpl(userUseCase)
     }
 }
