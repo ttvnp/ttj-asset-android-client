@@ -73,6 +73,7 @@ ext {
             supportAppDesign: "com.android.support:design:${supportLibraryVersion}",
             supportAppCompat: "com.android.support:appcompat-v7:${supportLibraryVersion}",
             supportCardview: "com.android.support:cardview-v7:${supportLibraryVersion}",
+            supportRecyclerview: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
             constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             circleimageview: "de.hdodenhof:circleimageview:${circleimageviewVersion}",
             picasso: "com.squareup.picasso:picasso:${picassoVersion}",
