@@ -28,6 +28,7 @@ ext {
     ormaVersion = '4.2.5'
     circleimageviewVersion = '2.2.0'
     picassoVersion = '2.5.2'
+    zxingCoreVersion = '3.3.1'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -52,6 +53,7 @@ ext {
             dagger: "com.google.dagger:dagger:${daggerVersion}",
             daggerAndroid: "com.google.dagger:dagger-android:${daggerVersion}",
             daggerAndroidSupport: "com.google.dagger:dagger-android-support:${daggerVersion}",
+            zxingCore: "com.google.zxing:core:${zxingCoreVersion}",
     ]
 
     dataDependencies = [

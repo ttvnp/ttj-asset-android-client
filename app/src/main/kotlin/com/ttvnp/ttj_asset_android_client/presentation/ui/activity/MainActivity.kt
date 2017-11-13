@@ -1,5 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -24,6 +26,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
 
     private var tabLayout: TabLayout? = null
     private var viewPager: ViewPager? = null
+    private lateinit var receiveFragment: MainReceiveFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this);
@@ -38,7 +41,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         val adapter = MainViewPageAdapter(fragmentManager)
         val homeFragment = MainHomeFragment.getInstance()
         adapter.addFragment(homeFragment, resources.getDrawable(R.drawable.ic_home))
-        val receiveFragment = MainReceiveFragment.getInstance()
+        receiveFragment = MainReceiveFragment.getInstance()
         adapter.addFragment(receiveFragment, resources.getDrawable(R.drawable.ic_receive))
         val sendFragment = MainSendFragment.getInstance()
         adapter.addFragment(sendFragment, resources.getDrawable(R.drawable.ic_send))
@@ -46,5 +49,16 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         adapter.addFragment(settingsFragment, resources.getDrawable(R.drawable.ic_settings))
         viewPager?.adapter = adapter
         tabLayout?.setupWithViewPager(viewPager)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        when (requestCode) {
+            MainReceiveFragment.SET_AMOUNT_ACTIVITY_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val qrCodeString = data.getStringExtra(ReceiveSetAmountActivity.INTENT_EXTRA_KEY)
+                    receiveFragment.setQRCode(qrCodeString)
+                }
+            }
+        }
     }
 }

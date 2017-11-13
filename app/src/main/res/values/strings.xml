@@ -11,6 +11,8 @@
     <string name="app_start">start</string>
 
     <!-- general -->
+    <string name="point_name">POINT</string>
+    <string name="coin_name">COIN</string>
     <string name="email_address">email address</string>
     <string name="verification_code">code</string>
     <string name="error_dialog_title">ERROR</string>
@@ -24,6 +26,8 @@
     <string name="set_amount_desc">set amount</string>
     <string name="hint_receive_amount">amount</string>
     <string name="hint_send_amount">amount</string>
+    <string name="error_message_empty">your input was empty.</string>
+    <string name="error_message_invalid_long">your input was too large.</string>
 
     <!-- menu -->
     <string name="menu_home">Home</string>
