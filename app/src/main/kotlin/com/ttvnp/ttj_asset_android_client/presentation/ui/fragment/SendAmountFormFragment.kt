@@ -3,7 +3,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,12 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.util.isValidAmount
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
+import com.ttvnp.ttj_asset_android_client.domain.util.toAmount
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeDataTranslator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendAmountFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -36,19 +39,25 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
     private lateinit var textSendAmount: TextView
 
     private var qrCodeString: String? = null
+    private var sendInfoModel: SendInfoModel? = null
     var cancelButtonClickHandler: View.OnClickListener? = null
 
     companion object {
-        fun getInstance(qrCodeString: String) : SendAmountFormFragment {
-            return SendAmountFormFragment().apply {
-                this.qrCodeString = qrCodeString
-            }
+        val QR_STRING_ARG_KEY = "qr_string"
+        fun getInstance() : SendAmountFormFragment {
+            return SendAmountFormFragment()
         }
     }
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        qrCodeString = arguments.getString(QR_STRING_ARG_KEY)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putString(QR_STRING_ARG_KEY, qrCodeString)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,12 +76,42 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
         buttonSendAmountCancel.setOnClickListener(cancelButtonClickHandler)
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_amount_submit)
         buttonSendAmountSubmit.setOnClickListener {
-            Log.d("send_amount", textSendAmount.text.toString())
+            sendInfoModel?.let {
+                val selectedAssetType
+                        = if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
+                val amountString = textSendAmount.text.toString()
+                if (!amountString.isValidAmount()) {
+                    textInputLayoutSendAmount.isErrorEnabled = true
+                    textInputLayoutSendAmount.error = getString(R.string.error_message_invalid_long)
+                    return@let
+                }
+                val amount = amountString.toAmount()
+                val confirmFragment = SendAmountConfirmFragment.getInstance()
+                confirmFragment.arguments = Bundle().apply {
+                    val data = SendInfoBridgeData(
+                            targetUserID = it.targetUserID,
+                            targetUserEmailAddress = it.targetUserEmailAddress,
+                            targetUserProfileImageID = it.targetUserProfileImageID,
+                            targetUserProfileImageURL = it.targetUserProfileImageURL,
+                            targetUserFirstName = it.targetUserFirstName,
+                            targetUserMiddleName = it.targetUserMiddleName,
+                            targetUserLastName = it.targetUserLastName,
+                            assetType = selectedAssetType.rawValue,
+                            amount = amount
+                    )
+                    this.putSerializable(SendAmountConfirmFragment.SEND_INFO_KEY, data)
+                }
+                fragmentManager.beginTransaction()
+                        .addToBackStack("")
+                        .replace(R.id.send_activity_fragment_container, confirmFragment)
+                        .commit()
+            }
         }
         return view
     }
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
+        this.sendInfoModel = sendInfoModel
         if (0 < sendInfoModel.targetUserProfileImageURL.length) {
             Picasso.with(context).load(sendInfoModel.targetUserProfileImageURL).into(imageSendTargetUserProfile)
         }

@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.view.View
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormFragment
 import dagger.android.AndroidInjection
@@ -47,7 +45,10 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
         if (savedInstanceState != null) return
         val intent = getIntent()
         val qrString = intent.getStringExtra(INTENT_EXTRA_KEY)
-        val formFragment = SendAmountFormFragment.getInstance(qrString)
+        val formFragment = SendAmountFormFragment.getInstance()
+        formFragment.arguments = Bundle().apply {
+            this.putString(SendAmountFormFragment.QR_STRING_ARG_KEY, qrString)
+        }
         formFragment.cancelButtonClickHandler = object : View.OnClickListener {
             override fun onClick(v: View?) {
                 cancel()
