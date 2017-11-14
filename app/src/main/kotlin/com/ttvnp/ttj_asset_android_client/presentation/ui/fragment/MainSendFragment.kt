@@ -29,7 +29,7 @@ class MainSendFragment : BaseMainFragment() {
         buttonSendQR.setOnClickListener {
             // TODO for emulator debug
             val intent = Intent(activity, SendActivity::class.java)
-            intent.putExtra(SendActivity.INTENT_EXTRA_KEY, "hiroki.tanaka@ttvnp.com;SNC;300")
+            intent.putExtra(SendActivity.INTENT_EXTRA_KEY, "test@test.com;SNC;300")
             startActivity(intent)
             /*
             val integrator = IntentIntegrator(activity)

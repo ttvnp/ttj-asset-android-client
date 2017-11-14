@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.data.service
 import com.squareup.moshi.Moshi
 import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.GetBalancesResponse
+import com.ttvnp.ttj_asset_android_client.data.service.response.GetTargetUserResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.GetTransactionsResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.GetUserResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
@@ -18,6 +19,10 @@ interface UserService {
     @Headers("Accept: application/json")
     @GET("users")
     fun getUser() : Single<GetUserResponse>
+
+    @Headers("Accept: application/json")
+    @GET("users/targets")
+    fun getTargetUser(@Query("emailAddress") emailAddress: String) : Single<GetTargetUserResponse>
 
     @Headers("Accept: application/json")
     @GET("users/balances")
@@ -56,6 +61,10 @@ class UserServiceImpl(
 
     override fun getUser() : Single<GetUserResponse> {
         return service.getUser()
+    }
+
+    override fun getTargetUser(emailAddress: String) : Single<GetTargetUserResponse> {
+        return service.getTargetUser(emailAddress)
     }
 
     override fun getBalances() : Single<GetBalancesResponse> {

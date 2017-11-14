@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.domain.use_case
 
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
+import com.ttvnp.ttj_asset_android_client.domain.model.OtherUserModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionsModel
 import com.ttvnp.ttj_asset_android_client.domain.repository.BalanceRepository
@@ -12,6 +13,8 @@ import javax.inject.Inject
 interface UserUseCase {
 
     fun getUser(): Single<UserModel>
+
+    fun getTargetUser(emailAddress: String): Single<OtherUserModel>
 
     fun getBalances(): Single<BalancesModel>
 
@@ -26,6 +29,10 @@ class UserUseCaseImpl @Inject constructor(
 
     override fun getUser(): Single<UserModel> {
         return userRepository.getUser()
+    }
+
+    override fun getTargetUser(emailAddress: String): Single<OtherUserModel> {
+        return userRepository.getTargetUser(emailAddress)
     }
 
     override fun getBalances(): Single<BalancesModel> {

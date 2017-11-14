@@ -25,6 +25,9 @@ class DataModule {
     fun userDataStore(ormaHolder: OrmaHolder): UserDataStore = UserDataStoreImpl(ormaHolder)
 
     @Provides
+    fun otherUserDataStore(ormaHolder: OrmaHolder): OtherUserDataStore = OtherUserDataStoreImpl(ormaHolder)
+
+    @Provides
     fun balanceDataStore(ormaHolder: OrmaHolder): BalanceDataStore = BalanceDataStoreImpl(ormaHolder)
 
     @Provides
