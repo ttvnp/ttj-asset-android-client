@@ -1,10 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenter
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenterImpl
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainReceivePresenter
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainReceivePresenterImpl
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.*
 import dagger.Module
 import dagger.Provides
 
@@ -20,5 +17,10 @@ class FragmentModule {
     @Provides
     fun mainReceivePresenter(userUseCase: UserUseCase): MainReceivePresenter {
         return MainReceivePresenterImpl(userUseCase)
+    }
+
+    @Provides
+    fun sendAmountFormPresenter(userUseCase: UserUseCase): SendAmountFormPresenter {
+        return SendAmountFormPresenterImpl(userUseCase)
     }
 }

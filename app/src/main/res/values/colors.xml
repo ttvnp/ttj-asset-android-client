@@ -5,6 +5,7 @@
     <color name="colorPrimaryLight">@color/md_light_blue_100</color>
     <color name="colorAccent">@color/md_light_blue_500</color>
     <color name="colorAccentDark">@color/md_light_blue_900</color>
+    <color name="colorCancel">@color/md_grey_200</color>
     <color name="colorPrimaryText">@color/md_grey_900</color>
     <color name="colorSecondaryText">@color/md_grey_600</color>
     <color name="colorTextOnPrimary">@color/md_white_1000</color>
