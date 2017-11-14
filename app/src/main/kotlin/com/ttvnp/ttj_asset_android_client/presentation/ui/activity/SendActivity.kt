@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormFragment
+import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendEmailFormFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -44,19 +45,33 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
 
         if (savedInstanceState != null) return
         val intent = getIntent()
-        val qrString = intent.getStringExtra(INTENT_EXTRA_KEY)
-        val formFragment = SendAmountFormFragment.getInstance()
-        formFragment.arguments = Bundle().apply {
-            this.putString(SendAmountFormFragment.QR_STRING_ARG_KEY, qrString)
-        }
-        formFragment.cancelButtonClickHandler = object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                cancel()
+        val qrString: String? = intent.getStringExtra(INTENT_EXTRA_KEY)
+
+        if (qrString == null || qrString.isBlank()) {
+            val formFragment = SendEmailFormFragment.getInstance()
+            formFragment.cancelButtonClickHandler = object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    cancel()
+                }
             }
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.send_activity_fragment_container, formFragment)
+                    .commit()
+        } else {
+            val formFragment = SendAmountFormFragment.getInstance()
+            formFragment.arguments = Bundle().apply {
+                this.putString(SendAmountFormFragment.QR_STRING_ARG_KEY, qrString)
+            }
+            formFragment.cancelButtonClickHandler = object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    cancel()
+                }
+            }
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.send_activity_fragment_container, formFragment)
+                    .commit()
         }
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.send_activity_fragment_container, formFragment)
-                .commit()
     }
 }

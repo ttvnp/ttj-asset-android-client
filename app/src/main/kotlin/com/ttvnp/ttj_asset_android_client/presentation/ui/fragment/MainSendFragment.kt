@@ -39,6 +39,12 @@ class MainSendFragment : BaseMainFragment() {
             */
         }
 
+        val buttonSendEmail = view.findViewById<Button>(R.id.button_send_email)
+        buttonSendEmail.setOnClickListener {
+            val intent = Intent(activity, SendActivity::class.java)
+            startActivity(intent)
+        }
+
         return view
     }
 }

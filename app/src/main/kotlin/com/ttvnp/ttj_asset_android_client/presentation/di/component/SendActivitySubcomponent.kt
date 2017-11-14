@@ -9,6 +9,7 @@ import dagger.android.AndroidInjector
         ActivityModule::class,
         DataModule::class,
         DomainModule::class,
+        SendEmailFormFragmentModule::class,
         SendAmountFormFragmentModule::class,
         SendAmountConfirmFragmentModule::class
 ))
