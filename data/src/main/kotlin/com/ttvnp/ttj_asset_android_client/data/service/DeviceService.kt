@@ -15,6 +15,10 @@ import retrofit2.http.*
 
 interface DeviceService {
     @Headers("Accept: application/json")
+    @POST("devices")
+    fun get() : Single<DeviceRegisterEmailResponse>
+
+    @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/email")
     fun registerEmail(@Field("emailAddress") emailAddress: String) : Single<DeviceRegisterEmailResponse>
@@ -49,6 +53,10 @@ class DeviceServiceImpl(
                 .baseUrl(getBaseURL())
                 .build()
         service = builder.create(DeviceService::class.java)
+    }
+
+    override fun get(): Single<DeviceRegisterEmailResponse> {
+        return service.get()
     }
 
     override fun registerEmail(emailAddress: String): Single<DeviceRegisterEmailResponse> {

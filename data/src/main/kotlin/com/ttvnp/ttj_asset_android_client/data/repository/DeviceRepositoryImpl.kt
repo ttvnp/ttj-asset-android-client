@@ -13,6 +13,8 @@ import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
 import com.ttvnp.ttj_asset_android_client.data.util.TokenUtil
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
 import io.reactivex.Single
@@ -25,6 +27,38 @@ class DeviceRepositoryImpl @Inject constructor(
         private val deviceInfoDataStore : DeviceInfoDataStore,
         private val userDataStore : UserDataStore
 ) : DeviceRepository {
+
+    override fun getDevice(): Single<ModelWrapper<DeviceModel?>> {
+        return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
+            val deviceInfo = deviceInfoDataStore.get()
+            if (deviceInfo == null) {
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
+                return@create
+            }
+
+            // get from device info
+            var deviceEntity: DeviceEntity? = null
+            deviceEntity = deviceDataStore.get() // at first from local.
+            if (deviceEntity == null) {
+                deviceServiceWithNoAuth.issueAccessToken(deviceInfo.deviceCode, deviceInfo.credential).execute().body()?.let { response ->
+                    if (response.hasError()) {
+                        subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
+                        return@create
+                    }
+                    deviceEntity = DeviceEntity(
+                            accessToken = response.accessToken,
+                            accessTokenExpiry = response.accessTokenExpiry,
+                            isActivated = response.isActivated,
+                            deviceToken = response.deviceToken,
+                            grantPushNotification = response.grantPushNotification,
+                            grantEmailNotification = response.grantEmailNotification
+                    )
+                    deviceEntity = deviceDataStore.update(deviceEntity!!)
+                }
+            }
+            subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
+        }
+    }
 
     override fun register(): Single<DeviceModel> {
         // call api service to register this device and retrieve access token as well.
@@ -47,9 +81,10 @@ class DeviceRepositoryImpl @Inject constructor(
             var deviceEntity = DeviceEntity(
                     accessToken = it.accessToken,
                     accessTokenExpiry = it.accessTokenExpiry,
-                    deviceToken = "",
-                    grantPushNotification = false,
-                    grantEmailNotification = false
+                    isActivated = it.isActivated,
+                    deviceToken = it.deviceToken,
+                    grantPushNotification = it.grantPushNotification,
+                    grantEmailNotification = it.grantEmailNotification
             )
             deviceEntity = deviceDataStore.update(deviceEntity)
             DeviceTranslator().translate(deviceEntity)!!

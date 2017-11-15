@@ -16,4 +16,4 @@ class UserTransactionModel (
         val targetUserLastName: String = "",
         val assetType: AssetType = AssetType.ASSET_TYPE_POINT,
         val amount: Long = 0L
-)
+) : BaseModel()

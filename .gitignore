@@ -9,4 +9,4 @@
 .externalNativeBuild
 data/build/
 domain/build/
-
+.envrc

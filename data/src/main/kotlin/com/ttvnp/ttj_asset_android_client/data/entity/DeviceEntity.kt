@@ -13,6 +13,9 @@ class DeviceEntity (
         @Column @Setter("accessTokenExpiry")
         val accessTokenExpiry: Date? = null,
 
+        @Column @Setter("isActivated")
+        val isActivated: Boolean = false,
+
         @Column @Setter("deviceToken")
         val deviceToken: String = "",
 

@@ -7,7 +7,8 @@ abstract class BaseService {
 
     open protected fun getBaseURL(): String {
         // TODO from build settings
-        return "http://10.0.2.2:1324/api/v1/"
+        return "http://192.168.11.9:1324/api/v1/"
+        // return "http://10.0.2.2:1324/api/v1/"
     }
 
     open protected fun getLoggingInterceptor(): Interceptor {

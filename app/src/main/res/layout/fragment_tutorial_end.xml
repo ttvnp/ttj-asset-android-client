@@ -10,16 +10,16 @@
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_tutorial_welcome"
+        app:layout_constraintBottom_toTopOf="@+id/text_tutorial_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_done" />
 
     <TextView
-        android:id="@+id/text_tutorial_welcome"
+        android:id="@+id/text_tutorial_end"
         android:layout_width="wrap_content"
         android:layout_height="57dp"
-        android:layout_above="@+id/button_tutorial_start"
+        android:layout_above="@+id/button_tutorial_app_start"
         android:layout_centerHorizontal="true"
         android:text="@string/tutorial_end_desc"
         android:textColor="@color/colorTextOnPrimary"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_tutorial_start"
+        android:id="@+id/button_tutorial_app_start"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="268dp"
         android:layout_height="wrap_content"
@@ -41,6 +41,6 @@
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_tutorial_welcome" />
+        app:layout_constraintTop_toBottomOf="@+id/text_tutorial_end" />
 
 </android.support.constraint.ConstraintLayout>
