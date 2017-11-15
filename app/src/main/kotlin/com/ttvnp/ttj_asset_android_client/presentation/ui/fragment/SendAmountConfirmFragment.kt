@@ -2,10 +2,8 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
+import android.widget.PopupWindow
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
@@ -18,6 +16,9 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendA
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
+import android.util.TypedValue
+import android.view.*
+
 
 class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresenterTarget {
 
@@ -27,6 +28,7 @@ class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresent
     private lateinit var imageSendTargetUserProfile: CircleImageView
     private lateinit var textSendTargetUser: TextView
     private lateinit var textSendConfirmDesc: TextView
+    private var popup: PopupWindow? = null
 
     private var sendInfoModel: SendInfoModel? = null
 
@@ -62,6 +64,7 @@ class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresent
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
         buttonSendAmountSubmit.setOnClickListener {
+            sendAmountConfirmPresenter.createTransaction(sendInfoModel!!)
         }
         sendAmountConfirmPresenter.initialize(this, this.sendInfoModel!!)
         return view
@@ -93,5 +96,37 @@ class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresent
             userName += sendInfoModel.targetUserLastName.prependIfNotBlank(" ")
         }
         return if (userName.isBlank()) sendInfoModel.targetUserEmailAddress else userName
+    }
+
+    override fun onTransactionSuccess() {
+        popup = PopupWindow(activity)
+        popup?.apply {
+            val popupView = layoutInflater.inflate(R.layout.view_popup, null)
+            popupView.findViewById<Button>(R.id.button_popup_close).setOnClickListener {
+                if (this.isShowing) {
+                    this.dismiss()
+                    activity.finish()
+                }
+            }
+            popupView.findViewById<TextView>(R.id.text_popup_content).text = getString(R.string.send_successfully_executed)
+            this.contentView = popupView
+            this.isOutsideTouchable = true
+            this.isFocusable = true
+            val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics)
+            this.setWidth(width.toInt())
+            this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT)
+
+            this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0);
+        }
+
+    }
+
+    override fun onDestroy() {
+        popup?.let {
+            if (it.isShowing) {
+                it.dismiss()
+            }
+        }
+        super.onDestroy()
     }
 }

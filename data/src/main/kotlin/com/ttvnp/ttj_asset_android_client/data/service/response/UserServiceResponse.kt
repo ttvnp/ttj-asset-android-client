@@ -53,3 +53,8 @@ class TransactionResponse(
         @Json(name = "assetType") val assetType: String = "",
         @Json(name = "amount") val amount: Long = 0L
 )
+
+class CreateTransactionResponse(
+        @Json(name = "userTransaction") val userTransaction: TransactionResponse,
+        @Json(name = "balances") val balances: List<BalanceResponse>
+) : BaseResponse()

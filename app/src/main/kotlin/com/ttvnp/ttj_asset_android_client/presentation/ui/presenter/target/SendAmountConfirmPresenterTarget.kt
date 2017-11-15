@@ -4,4 +4,5 @@ import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 
 interface SendAmountConfirmPresenterTarget : BasePresenterTarget {
     fun setSendInfo(sendInfoModel: SendInfoModel)
+    fun onTransactionSuccess()
 }
