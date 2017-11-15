@@ -3,6 +3,8 @@
     package="com.ttvnp.ttj_asset_android_client.presentation">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <application
         android:name=".AndroidApplication"
@@ -26,8 +28,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.ReceiveSetAmountActivity">
-        </activity>
+            android:name=".ui.activity.ReceiveSetAmountActivity" />
+        <activity
+            android:name=".ui.activity.CaptureActivityAnyOrientation"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.activity.SendActivity" />
     </application>
 
 </manifest>

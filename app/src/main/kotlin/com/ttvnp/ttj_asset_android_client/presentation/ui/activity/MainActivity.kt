@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewPager
+import com.google.zxing.integration.android.IntentIntegrator
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainHomeFragment
@@ -40,23 +42,33 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         val fragmentManager = getSupportFragmentManager()
         val adapter = MainViewPageAdapter(fragmentManager)
         val homeFragment = MainHomeFragment.getInstance()
-        adapter.addFragment(homeFragment, resources.getDrawable(R.drawable.ic_home))
+        adapter.addFragment(homeFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_home, null)!!)
         receiveFragment = MainReceiveFragment.getInstance()
-        adapter.addFragment(receiveFragment, resources.getDrawable(R.drawable.ic_receive))
+        adapter.addFragment(receiveFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_receive, null)!!)
         val sendFragment = MainSendFragment.getInstance()
-        adapter.addFragment(sendFragment, resources.getDrawable(R.drawable.ic_send))
+        adapter.addFragment(sendFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_send, null)!!)
         val settingsFragment = MainSettingsFragment.getInstance()
-        adapter.addFragment(settingsFragment, resources.getDrawable(R.drawable.ic_settings))
+        adapter.addFragment(settingsFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_settings, null)!!)
         viewPager?.adapter = adapter
         tabLayout?.setupWithViewPager(viewPager)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        when (requestCode) {
-            MainReceiveFragment.SET_AMOUNT_ACTIVITY_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val qrCodeString = data.getStringExtra(ReceiveSetAmountActivity.INTENT_EXTRA_KEY)
-                    receiveFragment.setQRCode(qrCodeString)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents != null) {
+                val intent = Intent(this, SendActivity::class.java)
+                intent.putExtra(SendActivity.INTENT_EXTRA_KEY, result.contents)
+                startActivity(intent)
+            }
+        } else {
+            when (requestCode) {
+                MainReceiveFragment.SET_AMOUNT_ACTIVITY_REQUEST_CODE -> {
+                    if (resultCode == Activity.RESULT_OK) {
+                        data?.getStringExtra(ReceiveSetAmountActivity.INTENT_EXTRA_KEY)?.let {
+                            receiveFragment.setQRCode(it)
+                        }
+                    }
                 }
             }
         }

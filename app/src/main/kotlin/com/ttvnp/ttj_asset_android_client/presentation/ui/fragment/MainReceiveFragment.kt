@@ -48,8 +48,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         val view = inflater.inflate(R.layout.fragment_main_receive, container, false)
         buttonSetAmount = view.findViewById<Button>(R.id.button_set_amount)
         buttonSetAmount.setOnClickListener {
-            // val intent = Intent(this.context, ReceiveSetAmountActivity::class.java)
-            // startActivityForResult(intent, SET_AMOUNT_ACTIVITY_REQUEST_CODE)
             val intent = Intent(activity, ReceiveSetAmountActivity::class.java)
             activity.startActivityForResult(intent, SET_AMOUNT_ACTIVITY_REQUEST_CODE)
         }

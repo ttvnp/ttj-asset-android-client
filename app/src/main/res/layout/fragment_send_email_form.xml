@@ -1,0 +1,62 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/large_margin">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_layout_send_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_address"
+        app:errorEnabled="true"
+        app:hintEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/text_send_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email_address"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/text_send_email_form_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/middle_margin"
+        android:textColor="@color/colorSecondaryText"
+        android:text="@string/send_email_form_desc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/middle_margin"
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/button_send_email_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/middle_margin"
+            android:text="@string/default_cancel_button_text"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+            android:background="@color/colorCancel"
+            android:textColor="@color/colorPrimaryText" />
+        <Button
+            android:id="@+id/button_send_email_submit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/middle_margin"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+            android:text="@string/default_positive_button_text"
+            android:textColor="@color/colorTextOnPrimary" />
+    </LinearLayout>
+
+</LinearLayout>

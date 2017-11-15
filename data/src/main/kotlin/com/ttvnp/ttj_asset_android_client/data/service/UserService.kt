@@ -2,9 +2,7 @@ package com.ttvnp.ttj_asset_android_client.data.service
 
 import com.squareup.moshi.Moshi
 import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
-import com.ttvnp.ttj_asset_android_client.data.service.response.GetBalancesResponse
-import com.ttvnp.ttj_asset_android_client.data.service.response.GetTransactionsResponse
-import com.ttvnp.ttj_asset_android_client.data.service.response.GetUserResponse
+import com.ttvnp.ttj_asset_android_client.data.service.response.*
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import io.reactivex.Single
@@ -20,12 +18,21 @@ interface UserService {
     fun getUser() : Single<GetUserResponse>
 
     @Headers("Accept: application/json")
+    @GET("users/targets")
+    fun getTargetUser(@Query("emailAddress") emailAddress: String) : Single<GetTargetUserResponse>
+
+    @Headers("Accept: application/json")
     @GET("users/balances")
     fun getBalances() : Single<GetBalancesResponse>
 
     @Headers("Accept: application/json")
     @GET("users/transactions")
     fun getTransactions(@Query("upperUserTransactionID") upperUserTransactionID: Long) : Single<GetTransactionsResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @POST("users/transactions")
+    fun createTransaction(@Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long) : Single<CreateTransactionResponse>
 }
 
 class UserServiceImpl(
@@ -58,11 +65,19 @@ class UserServiceImpl(
         return service.getUser()
     }
 
+    override fun getTargetUser(emailAddress: String) : Single<GetTargetUserResponse> {
+        return service.getTargetUser(emailAddress)
+    }
+
     override fun getBalances() : Single<GetBalancesResponse> {
         return service.getBalances()
     }
 
     override fun getTransactions(upperUserTransactionID: Long): Single<GetTransactionsResponse> {
         return service.getTransactions(upperUserTransactionID)
+    }
+
+    override fun createTransaction(emailAddress: String, assetType: String, amount: Long): Single<CreateTransactionResponse> {
+        return service.createTransaction(emailAddress, assetType, amount)
     }
 }
