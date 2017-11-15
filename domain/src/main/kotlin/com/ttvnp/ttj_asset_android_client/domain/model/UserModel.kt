@@ -10,4 +10,4 @@ class UserModel(
         val address : String = "",
         val isEmailVerified : Boolean = false,
         val isIdentified : Boolean = false
-)
+) : BaseModel()

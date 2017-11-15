@@ -25,14 +25,14 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         var deviceCode = sharedPreferencesDriver.getString(DEVICE_CODE_KEY)
         var credential = sharedPreferencesDriver.getString(CREDENTIAL_KEY)
 
-        if (deviceCode == null || credential == null) return null
+        if (deviceCode.isNullOrBlank() || credential.isNullOrBlank()) return null
 
         // decrypt
-        val deviceCodePlainText = cryptDriver.decrypt(deviceCode)
+        val deviceCodePlainText = cryptDriver.decrypt(deviceCode!!)
         if (deviceCodePlainText == null) return null
         deviceCode = deviceCodePlainText
 
-        val credentialPlainText = cryptDriver.decrypt(credential)
+        val credentialPlainText = cryptDriver.decrypt(credential!!)
         if (credentialPlainText == null) return null
         credential = credentialPlainText
 

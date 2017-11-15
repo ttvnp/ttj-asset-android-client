@@ -8,4 +8,4 @@ class OtherUserModel(
         val firstName : String = "",
         val middleName : String = "",
         val lastName : String = ""
-)
+) : BaseModel()

@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
@@ -114,6 +115,13 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
             adapter.addFragment(codeFragment)
 
             val endFragment = TutorialEndFragment.getInstance()
+            endFragment.appStartButtonClickHandler = object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    val intent = Intent(this@TutorialActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
             adapter.addFragment(endFragment)
 
             it.adapter = adapter

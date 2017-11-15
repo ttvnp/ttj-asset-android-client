@@ -12,10 +12,10 @@ internal class DeviceTranslator: BaseTranslator<DeviceModel, DeviceEntity>() {
         return DeviceModel(
                 accessToken = entity.accessToken,
                 accessTokenExpiry = entity.accessTokenExpiry!!,
+                isActivated = entity.isActivated,
                 deviceToken = entity.deviceToken,
                 grantPushNotification = entity.grantPushNotification,
-                grantEmailNotification = entity.grantEmailNotification,
-                hasValidAccount = false
+                grantEmailNotification = entity.grantEmailNotification
         )
     }
 }
