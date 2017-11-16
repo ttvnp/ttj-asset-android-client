@@ -14,10 +14,8 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout_main"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_layout_height"
+            android:layout_height="wrap_content"
             android:layout_gravity="top"
-            app:tabPaddingTop="10dp"
-            app:tabPaddingBottom="10dp"
             app:tabMode="fixed"
             app:tabGravity="fill">
         </android.support.design.widget.TabLayout>

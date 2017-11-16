@@ -1,12 +1,15 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewPager
+import android.view.LayoutInflater
+import android.widget.ImageView
 import com.google.zxing.integration.android.IntentIntegrator
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
@@ -42,15 +45,37 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         val fragmentManager = getSupportFragmentManager()
         val adapter = MainViewPageAdapter(fragmentManager)
         val homeFragment = MainHomeFragment.getInstance()
-        adapter.addFragment(homeFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_home, null)!!)
+        adapter.addFragment(homeFragment)
         receiveFragment = MainReceiveFragment.getInstance()
-        adapter.addFragment(receiveFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_receive, null)!!)
+        adapter.addFragment(receiveFragment)
         val sendFragment = MainSendFragment.getInstance()
-        adapter.addFragment(sendFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_send, null)!!)
+        adapter.addFragment(sendFragment)
         val settingsFragment = MainSettingsFragment.getInstance()
-        adapter.addFragment(settingsFragment, ResourcesCompat.getDrawable(resources, R.drawable.ic_settings, null)!!)
+        adapter.addFragment(settingsFragment)
         viewPager?.adapter = adapter
         tabLayout?.setupWithViewPager(viewPager)
+
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val homeTabView = inflater.inflate(R.layout.view_main_tab, null)
+        tabLayout?.getTabAt(0)?.setCustomView(homeTabView)
+        homeTabView.findViewById<ImageView>(R.id.image_tab).let {
+            it.setImageResource(R.drawable.ic_home)
+        }
+        val receiveTabView = inflater.inflate(R.layout.view_main_tab, null)
+        tabLayout?.getTabAt(1)?.setCustomView(receiveTabView)
+        receiveTabView.findViewById<ImageView>(R.id.image_tab).let {
+            it.setImageResource(R.drawable.ic_receive)
+        }
+        val sendTabView = inflater.inflate(R.layout.view_main_tab, null)
+        tabLayout?.getTabAt(2)?.setCustomView(sendTabView)
+        sendTabView.findViewById<ImageView>(R.id.image_tab).let {
+            it.setImageResource(R.drawable.ic_send)
+        }
+        val settingsTabView = inflater.inflate(R.layout.view_main_tab, null)
+        tabLayout?.getTabAt(3)?.setCustomView(settingsTabView)
+        settingsTabView.findViewById<ImageView>(R.id.image_tab).let {
+            it.setImageResource(R.drawable.ic_settings)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
