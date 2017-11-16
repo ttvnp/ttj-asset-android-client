@@ -15,7 +15,7 @@ interface DeviceUseCase {
     fun getDevice(): Single<ModelWrapper<DeviceModel?>>
 
     // initialize device info & register to service
-    fun init() : Single<DeviceModel>
+    fun init() : Single<ModelWrapper<DeviceModel?>>
 
     // register user by email address
     fun registerEmail(emailAddress : String) : Single<DeviceModel>
@@ -33,7 +33,7 @@ class DeviceUseCaseImpl @Inject constructor(
         return repository.getDevice()
     }
 
-    override fun init(): Single<DeviceModel> {
+    override fun init(): Single<ModelWrapper<DeviceModel?>> {
         return repository.register()
     }
 

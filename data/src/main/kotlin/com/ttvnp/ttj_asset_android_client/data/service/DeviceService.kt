@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.data.service
 import com.squareup.moshi.Moshi
 import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterEmailResponse
+import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
@@ -15,8 +16,8 @@ import retrofit2.http.*
 
 interface DeviceService {
     @Headers("Accept: application/json")
-    @POST("devices")
-    fun get() : Single<DeviceRegisterEmailResponse>
+    @GET("devices")
+    fun get() : Single<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -55,7 +56,7 @@ class DeviceServiceImpl(
         service = builder.create(DeviceService::class.java)
     }
 
-    override fun get(): Single<DeviceRegisterEmailResponse> {
+    override fun get(): Single<DeviceResponse> {
         return service.get()
     }
 

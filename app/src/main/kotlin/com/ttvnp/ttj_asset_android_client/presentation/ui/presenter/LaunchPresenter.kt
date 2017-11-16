@@ -35,6 +35,7 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
                                     handleResult(wrapper.model!!.isActivated)
                                 }
                             }
+                            else -> handleResult(false)
                         }
                     }
                     override fun onError(e: Throwable) {
