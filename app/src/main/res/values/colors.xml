@@ -11,6 +11,7 @@
     <color name="colorTextOnPrimary">@color/md_white_1000</color>
     <color name="colorIcons">@color/md_white_1000</color>
     <color name="colorDivider">@color/md_grey_400</color>
+    <color name="colorRowSelected">@color/md_grey_400</color>
 
     <!-- google's material design colours from
          http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
