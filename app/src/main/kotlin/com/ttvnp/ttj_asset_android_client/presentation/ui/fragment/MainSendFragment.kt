@@ -27,16 +27,10 @@ class MainSendFragment : BaseMainFragment() {
 
         val buttonSendQR = view.findViewById<Button>(R.id.button_send_qr)
         buttonSendQR.setOnClickListener {
-            // TODO for emulator debug
-            val intent = Intent(activity, SendActivity::class.java)
-            intent.putExtra(SendActivity.INTENT_EXTRA_KEY, "test@test.com;SNC;300")
-            startActivity(intent)
-            /*
             val integrator = IntentIntegrator(activity)
             integrator.setCaptureActivity(CaptureActivityAnyOrientation::class.java)
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
-            */
         }
 
         val buttonSendEmail = view.findViewById<Button>(R.id.button_send_email)
