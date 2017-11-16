@@ -18,21 +18,40 @@
             android:showDividers="middle"
             android:gravity="center_vertical">
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/middle_margin"
-                android:gravity="center_horizontal">
+                android:layout_height="wrap_content">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:src="@drawable/ic_user_default_profile_grey"
-                    app:civ_border_color="@color/colorSecondaryText"
-                    app:civ_border_width="1dp" />
-            </LinearLayout>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/button_profile_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:fabSize="mini"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="parent"
+                    app:srcCompat="@drawable/ic_edit" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/middle_margin">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_user_default_profile_grey"
+                        app:civ_border_color="@color/colorSecondaryText"
+                        app:civ_border_width="1dp" />
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
                 android:orientation="vertical"

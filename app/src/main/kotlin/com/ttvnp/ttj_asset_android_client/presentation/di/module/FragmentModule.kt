@@ -38,4 +38,9 @@ class FragmentModule {
     fun settingsProfileDetailPresenter(userUseCase: UserUseCase): SettingsProfileDetailPresenter {
         return SettingsProfileDetailPresenterImpl(userUseCase)
     }
+
+    @Provides
+    fun settingsProfileEditPresenter(userUseCase: UserUseCase): SettingsProfileEditPresenter {
+        return SettingsProfileEditPresenterImpl(userUseCase)
+    }
 }
