@@ -42,7 +42,7 @@ class DeviceRepositoryImpl @Inject constructor(
             // get from device info
             var deviceEntity: DeviceEntity? = null
             deviceEntity = deviceDataStore.get() // at first from local.
-            if (deviceEntity != null) {
+            if (deviceEntity != null && deviceEntity.isActivated) {
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
                 return@create
             }
@@ -164,6 +164,20 @@ class DeviceRepositoryImpl @Inject constructor(
                     isIdentified = response.isIdentified
             )
             userEntity = userDataStore.update(userEntity)
+
+            // update device entity
+            deviceDataStore.get()?.let {
+                val newDeviceEntity = DeviceEntity(
+                        accessToken = it.accessToken,
+                        accessTokenExpiry = it.accessTokenExpiry,
+                        isActivated = true,
+                        deviceToken = it.deviceToken,
+                        grantPushNotification = it.grantPushNotification,
+                        grantEmailNotification = it.grantEmailNotification
+                )
+                deviceDataStore.update(newDeviceEntity)
+            }
+
             UserTranslator().translate(userEntity)!!
         }
     }
