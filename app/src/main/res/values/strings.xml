@@ -14,7 +14,12 @@
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
     <string name="email_address">email address</string>
+    <string name="first_name">first name</string>
+    <string name="middle_name">middle name</string>
+    <string name="last_name">last name</string>
+    <string name="address">address</string>
     <string name="verification_code">code</string>
+    <string name="not_set">Not set</string>
     <string name="error_dialog_title">ERROR</string>
     <string name="no_transaction_data">There is no transaction data.</string>
     <string name="set_amount_desc">set amount</string>
@@ -45,13 +50,14 @@
     <string name="menu_receive">Receive</string>
     <string name="menu_send">Send</string>
     <string name="menu_settings">Settings</string>
-
     <string name="menu_settings_profile">Your Profile</string>
     <string name="menu_settings_notifications">Notifications</string>
 
     <!-- function title -->
     <string name="title_set_amount">set amount</string>
     <string name="title_send">send</string>
+    <string name="title_settings_profile">Your Profile</string>
+    <string name="title_settings_notification">Notifications</string>
 
     <!-- format -->
     <string name="send_confirm_desc_format">Are you sure you want to send %d %s to %s?</string>

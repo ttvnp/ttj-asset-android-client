@@ -33,4 +33,9 @@ class FragmentModule {
     fun sendAmountConfirmPresenter(userUseCase: UserUseCase): SendAmountConfirmPresenter {
         return SendAmountConfirmPresenterImpl(userUseCase)
     }
+
+    @Provides
+    fun settingsProfileDetailPresenter(userUseCase: UserUseCase): SettingsProfileDetailPresenter {
+        return SettingsProfileDetailPresenterImpl(userUseCase)
+    }
 }

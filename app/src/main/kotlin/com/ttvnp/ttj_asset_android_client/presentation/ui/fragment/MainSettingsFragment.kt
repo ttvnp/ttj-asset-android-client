@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.SettingMenuViewAdapter
 
 class MainSettingsFragment : BaseMainFragment() {
@@ -42,7 +44,8 @@ class MainSettingsFragment : BaseMainFragment() {
                     when (it.getId()) {
                         0 -> {
                             // case profile clicked.
-                            Toast.makeText(activity, "profile", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(activity, SettingsProfileActivity::class.java)
+                            startActivity(intent)
                         }
                         1 -> {
                             // case notifications clicked.
