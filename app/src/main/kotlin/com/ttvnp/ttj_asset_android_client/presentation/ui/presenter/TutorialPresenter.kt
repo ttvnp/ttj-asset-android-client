@@ -1,14 +1,13 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.TutorialPresenterTarget
-import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -34,10 +33,17 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
         deviceUseCase.init()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<DeviceModel>() {
-                    override fun onSuccess(t: DeviceModel) {
+                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                    override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
-                        target?.gotoRegisterEmailPage()
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> {
+                                target?.gotoRegisterEmailPage()
+                            }
+                            else -> {
+                                // TODO
+                            }
+                        }
                     }
                     override fun onError(e: Throwable) {
                         target?.dismissProgressDialog()

@@ -9,7 +9,7 @@ interface DeviceRepository {
 
     fun getDevice(): Single<ModelWrapper<DeviceModel?>>
 
-    fun register(): Single<DeviceModel>
+    fun register(): Single<ModelWrapper<DeviceModel?>>
 
     fun registerEmail(emailAddress: String): Single<DeviceModel>
 
