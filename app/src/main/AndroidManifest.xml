@@ -45,6 +45,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.activity.SendActivity" />
+        <activity
+            android:name=".ui.activity.SettingsProfileActivity" />
     </application>
 
 </manifest>
