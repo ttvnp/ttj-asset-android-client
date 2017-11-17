@@ -1,4 +1,4 @@
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -6,145 +6,150 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/middle_margin">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ScrollView
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@drawable/divider"
-                android:showDividers="middle"
-                android:gravity="center_vertical">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/middle_margin">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image"
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        android:src="@drawable/ic_user_default_profile_grey"
-                        app:civ_border_color="@color/colorSecondaryText"
-                        app:civ_border_width="1dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/button_profile_image_edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="42dp"
-                        android:layout_marginStart="42dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:fabSize="mini"
-                        app:layout_constraintTop_toTopOf="@+id/profile_image"
-                        app:layout_constraintStart_toStartOf="@+id/profile_image"
-                        app:srcCompat="@drawable/ic_camera" />
-
-                </android.support.constraint.ConstraintLayout>
-
+                android:layout_height="match_parent">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/middle_margin">
+                    android:divider="@drawable/divider"
+                    android:showDividers="middle"
+                    android:gravity="center_vertical">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_profile_email_address"
+                    <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/email_address"
-                        app:errorEnabled="true"
-                        app:hintEnabled="true">
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_profile_email_address"
+                        android:padding="@dimen/middle_margin">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profile_image"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:src="@drawable/ic_user_default_profile_grey"
+                            app:civ_border_color="@color/colorSecondaryText"
+                            app:civ_border_width="1dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/button_profile_image_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="42dp"
+                            android:layout_marginStart="42dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:fabSize="mini"
+                            app:layout_constraintTop_toTopOf="@+id/profile_image"
+                            app:layout_constraintStart_toStartOf="@+id/profile_image"
+                            app:srcCompat="@drawable/ic_camera" />
+
+                    </android.support.constraint.ConstraintLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/middle_margin">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_layout_profile_email_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/email_address"
-                            android:inputType="textEmailAddress" />
-                    </android.support.design.widget.TextInputLayout>
+                            app:errorEnabled="true"
+                            app:hintEnabled="true">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/text_profile_email_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/email_address"
+                                android:inputType="textEmailAddress" />
+                        </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_profile_first_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/first_name"
-                        app:errorEnabled="true"
-                        app:hintEnabled="true">
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_profile_first_name"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_layout_profile_first_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/first_name"
-                            android:inputType="text" />
-                    </android.support.design.widget.TextInputLayout>
+                            app:errorEnabled="true"
+                            app:hintEnabled="true">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/text_profile_first_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/first_name"
+                                android:inputType="text" />
+                        </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_profile_middle_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/middle_name"
-                        app:errorEnabled="true"
-                        app:hintEnabled="true">
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_profile_middle_name"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_layout_profile_middle_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/middle_name"
-                            android:inputType="text" />
-                    </android.support.design.widget.TextInputLayout>
+                            app:errorEnabled="true"
+                            app:hintEnabled="true">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/text_profile_middle_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/middle_name"
+                                android:inputType="text" />
+                        </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_profile_last_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/last_name"
-                        app:errorEnabled="true"
-                        app:hintEnabled="true">
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_profile_last_name"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_layout_profile_last_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/last_name"
-                            android:inputType="text" />
-                    </android.support.design.widget.TextInputLayout>
+                            app:errorEnabled="true"
+                            app:hintEnabled="true">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/text_profile_last_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/last_name"
+                                android:inputType="text" />
+                        </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_profile_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/address"
-                        app:errorEnabled="true"
-                        app:hintEnabled="true">
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_profile_address"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_layout_profile_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/address"
-                            android:inputType="text" />
-                    </android.support.design.widget.TextInputLayout>
+                            app:errorEnabled="true"
+                            app:hintEnabled="true">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/text_profile_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/address"
+                                android:inputType="text" />
+                        </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/button_profile_save"
-                        style="@android:style/Widget.DeviceDefault.Button.Borderless"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/middle_margin"
-                        android:background="@color/colorPrimary"
-                        android:text="@string/save_button_text"
-                        android:textColor="@color/colorTextOnPrimary" />
+                        <Button
+                            android:id="@+id/button_profile_save"
+                            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/middle_margin"
+                            android:background="@color/colorPrimary"
+                            android:text="@string/save_button_text"
+                            android:textColor="@color/colorTextOnPrimary" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+            </ScrollView>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

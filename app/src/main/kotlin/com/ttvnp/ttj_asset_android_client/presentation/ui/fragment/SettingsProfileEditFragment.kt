@@ -2,20 +2,19 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.LinearLayout
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileDetailPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileDetailPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
@@ -69,7 +68,7 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
         textProfileLastName = view.findViewById(R.id.text_profile_last_name)
         textInputLayoutProfileAddress = view.findViewById(R.id.text_input_layout_profile_address)
         textProfileAddress = view.findViewById(R.id.text_profile_address)
-        settingsProfileEditPresenter.setupUserInfo()
+
         if (activity is SettingsProfileActivity) {
             val a = activity as SettingsProfileActivity
             a.toolbar.title = getString(R.string.title_settings_edit_profile)
@@ -80,6 +79,14 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
                 }
             }
         }
+
+        val bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
+        buttonProfileImageEdit.setOnClickListener {
+            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.getTag());
+        }
+
+        settingsProfileEditPresenter.setupUserInfo()
+
         return view
     }
 
