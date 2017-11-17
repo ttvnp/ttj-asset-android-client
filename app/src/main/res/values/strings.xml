@@ -30,6 +30,8 @@
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
     <string name="send_successfully_executed">The payment has been completed successfully.</string>
     <string name="profile_successfully_updated">Your profile has been updated successfully.</string>
+    <string name="push_notification">Push Notification</string>
+    <string name="email_notification">Email Notification</string>
 
     <!-- error message -->
     <string name="error_default_message">Error occurred due to network error.Please retry later.</string>

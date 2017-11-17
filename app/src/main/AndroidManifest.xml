@@ -48,6 +48,8 @@
             android:name=".ui.activity.SendActivity" />
         <activity
             android:name=".ui.activity.SettingsProfileActivity" />
+        <activity
+            android:name=".ui.activity.SettingsNotificationActivity" />
     </application>
 
 </manifest>
