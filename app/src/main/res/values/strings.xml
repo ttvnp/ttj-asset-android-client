@@ -45,6 +45,8 @@
     <string name="default_cancel_button_text">Cancel</string>
     <string name="send_button_text">Send</string>
     <string name="save_button_text">Save</string>
+    <string name="image_from_folder">Choose from Library</string>
+    <string name="image_from_camera">Take Photo</string>
 
     <!-- menu -->
     <string name="menu_home">Home</string>

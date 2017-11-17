@@ -3,18 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bobttom_sheet_profile_edit"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:background="@color/colorPrimaryLight"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/middle_margin"
+    android:background="@color/colorBottomSheet"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     app:layout_behavior="@string/bottom_sheet_behavior"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="100dp"
+    app:behavior_peekHeight="300dp"
     app:elevation="4dp">
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/text_from_folder"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BottomSheet"
-        android:textSize="30sp"
-        />
+        android:drawablePadding="@dimen/small_margin"
+        android:drawableStart="@drawable/ic_folder_alt_grey"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="20sp"
+        android:text="@string/image_from_folder"/>
+
+    <View
+        android:layout_marginTop="@dimen/middle_margin"
+        android:layout_marginBottom="@dimen/middle_margin"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layerType="software"
+        android:background="@drawable/divider_dot" />
+
+    <TextView
+        android:id="@+id/text_from_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/small_margin"
+        android:drawableStart="@drawable/ic_camera_alt_grey"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="20sp"
+        android:text="@string/image_from_camera"/>
+
 </LinearLayout>
