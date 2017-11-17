@@ -29,6 +29,7 @@
     <string name="send_by_email">By Email Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
     <string name="send_successfully_executed">The payment has been completed successfully.</string>
+    <string name="profile_successfully_updated">Your profile has been updated successfully.</string>
 
     <!-- error message -->
     <string name="error_default_message">Error occurred due to network error.Please retry later.</string>
@@ -39,6 +40,7 @@
     <string name="error_message_empty">your input was empty.</string>
     <string name="error_message_invalid_long">please input valid number of amount.</string>
     <string name="error_message_no_such_email_address_user">Sorry.No such user account related with the email address.</string>
+    <string name="error_permission_denied_on_launch_camera">Cannot activate camera. Please grant authorities to this app.</string>
 
     <!-- button -->
     <string name="default_positive_button_text">OK</string>

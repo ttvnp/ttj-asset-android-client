@@ -4,4 +4,5 @@ import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 
 interface SettingsProfileEditPresenterTarget : BasePresenterTarget {
     fun bindUserInfo(userModel: UserModel)
+    fun showMessageOnUpdateSuccessfullyCompleted()
 }

@@ -15,6 +15,18 @@ class GetUserResponse(
         @Json(name = "isIdentified") val isIdentified: Boolean = false
 ) : BaseResponse()
 
+class UpdateUserResponse(
+        @Json(name = "emailAddress") val emailAddress: String = "",
+        @Json(name = "profileImageID") val profileImageID: Long = 0L,
+        @Json(name = "profileImageURL") val profileImageURL: String = "",
+        @Json(name = "firstName") val firstName: String = "",
+        @Json(name = "middleName") val middleName: String = "",
+        @Json(name = "lastName") val lastName: String = "",
+        @Json(name = "address") val address: String = "",
+        @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
+        @Json(name = "isIdentified") val isIdentified: Boolean = false
+) : BaseResponse()
+
 class GetTargetUserResponse(
         @Json(name = "id") val id: Long = 0L,
         @Json(name = "emailAddress") val emailAddress: String = "",
