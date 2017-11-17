@@ -1,14 +1,11 @@
 package com.ttvnp.ttj_asset_android_client.data.repository
 
-import com.ttvnp.ttj_asset_android_client.data.entity.DeviceEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.OtherUserEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
-import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.UpdateUserResponse
 import com.ttvnp.ttj_asset_android_client.data.store.OtherUserDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
-import com.ttvnp.ttj_asset_android_client.data.translator.DeviceTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.OtherUserTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
