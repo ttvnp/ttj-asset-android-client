@@ -9,11 +9,14 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
+import java.io.File
 import javax.inject.Inject
 
 interface UserUseCase {
 
     fun getUser(): Single<UserModel>
+
+    fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>>
 
     fun getTargetUser(emailAddress: String): Single<OtherUserModel>
 
@@ -32,6 +35,10 @@ class UserUseCaseImpl @Inject constructor(
 
     override fun getUser(): Single<UserModel> {
         return userRepository.getUser()
+    }
+
+    override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>> {
+        return userRepository.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
     override fun getTargetUser(emailAddress: String): Single<OtherUserModel> {

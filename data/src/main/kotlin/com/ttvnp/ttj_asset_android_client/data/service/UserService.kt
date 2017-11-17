@@ -6,7 +6,9 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.*
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import io.reactivex.Single
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -16,6 +18,17 @@ interface UserService {
     @Headers("Accept: application/json")
     @GET("users")
     fun getUser() : Single<GetUserResponse>
+
+    @Headers("Accept: application/json")
+    @Multipart
+    @PATCH("users")
+    fun updateUser(
+            @Part profileImageFile: MultipartBody.Part,
+            @Part("firstName") firstName: RequestBody,
+            @Part("middleName") middleName: RequestBody,
+            @Part("lastName") lastName: RequestBody,
+            @Part("address") address: RequestBody
+    ) : Single<UpdateUserResponse>
 
     @Headers("Accept: application/json")
     @GET("users/targets")
@@ -63,6 +76,16 @@ class UserServiceImpl(
 
     override fun getUser() : Single<GetUserResponse> {
         return service.getUser()
+    }
+
+    override fun updateUser(
+            profileImageFile: MultipartBody.Part,
+            firstName: RequestBody,
+            middleName: RequestBody,
+            lastName: RequestBody,
+            address: RequestBody
+    ): Single<UpdateUserResponse> {
+        return service.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
     override fun getTargetUser(emailAddress: String) : Single<GetTargetUserResponse> {

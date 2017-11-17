@@ -1,6 +1,5 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
@@ -18,27 +17,19 @@ class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
+    lateinit var toolbar: Toolbar
+        get
+        private set
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_profile)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar_settings_profile)
-        toolbar.title = getString(R.string.title_settings_profile)
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-
-        val cancel: () -> Unit = {
-            val intent = Intent()
-            setResult(RESULT_CANCELED, intent);
-            finish()
-        }
-
-        toolbar.setNavigationOnClickListener {
-            cancel()
-        }
+        toolbar = findViewById<Toolbar>(R.id.toolbar_settings_profile)
 
         if (savedInstanceState != null) return
-
         val detailFragment = SettingsProfileDetailFragment.getInstance()
         supportFragmentManager
                 .beginTransaction()

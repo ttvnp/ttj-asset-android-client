@@ -2,6 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileDetailPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileDetailPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -51,6 +53,22 @@ class SettingsProfileDetailFragment() : BaseMainFragment(), SettingsProfileDetai
         textProfileMiddleName = view.findViewById<TextView>(R.id.text_profile_middle_name)
         textProfileLastName = view.findViewById<TextView>(R.id.text_profile_last_name)
         textProfileAddress = view.findViewById<TextView>(R.id.text_profile_address)
+        val buttonProfileEdit = view.findViewById<FloatingActionButton>(R.id.button_profile_edit)
+        buttonProfileEdit.setOnClickListener {
+            val editFragment = SettingsProfileEditFragment.getInstance()
+            fragmentManager.beginTransaction()
+                    .addToBackStack("")
+                    .replace(R.id.settings_profile_activity_fragment_container, editFragment)
+                    .commit()
+        }
+        if (activity is SettingsProfileActivity) {
+            val a = activity as SettingsProfileActivity
+            a.toolbar.title = getString(R.string.title_settings_profile)
+            a.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+            a.toolbar.setNavigationOnClickListener {
+                a.finish()
+            }
+        }
         settingsProfileDetailPresenter.setupUserInfo()
         return view
     }
