@@ -14,4 +14,8 @@ interface DeviceRepository {
     fun registerEmail(emailAddress: String): Single<DeviceModel>
 
     fun verifyEmail(verificationCode: String): Single<UserModel>
+
+    fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>>
+
+    fun updateNotificationSettings(grantPushNotification: Boolean?, grantEmailNotification: Boolean?): Single<ModelWrapper<DeviceModel?>>
 }

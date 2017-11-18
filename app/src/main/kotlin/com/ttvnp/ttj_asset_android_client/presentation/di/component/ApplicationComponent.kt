@@ -16,7 +16,8 @@ import javax.inject.Singleton
         ReceiveSetAmountActivityModule::class,
         SendActivityModule::class,
         SettingsProfileActivityModule::class,
-        SettingsNotificationActivityModule::class
+        SettingsNotificationActivityModule::class,
+        AndroidFirebaseInstanceIDServiceModule::class
 ))
 interface ApplicationComponent {
     fun inject(androidApplication: AndroidApplication)

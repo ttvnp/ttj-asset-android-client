@@ -26,7 +26,7 @@ class ActivityModule {
     }
 
     @Provides
-    fun settingsNotificationPresenter(userUseCase: UserUseCase): SettingsNotificationPresenter {
-        return SettingsNotificationPresenterImpl(userUseCase)
+    fun settingsNotificationPresenter(deviceUseCase: DeviceUseCase): SettingsNotificationPresenter {
+        return SettingsNotificationPresenterImpl(deviceUseCase)
     }
 }

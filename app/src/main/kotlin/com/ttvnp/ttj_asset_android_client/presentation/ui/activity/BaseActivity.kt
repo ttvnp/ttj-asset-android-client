@@ -4,9 +4,11 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
 import com.ttvnp.ttj_asset_android_client.presentation.R
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -36,5 +38,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun dismissProgressDialog() {
         progressDialog?.dismiss()
+    }
+
+    open fun showError(throwable: Throwable) {
+        AlertDialog
+                .Builder(this)
+                .setTitle(resources.getString(R.string.error_dialog_title))
+                .setMessage(resources.getString(R.string.error_default_message))
+                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                .show()
     }
 }
