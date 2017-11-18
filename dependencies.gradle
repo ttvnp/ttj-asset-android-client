@@ -56,7 +56,6 @@ ext {
             daggerAndroid: "com.google.dagger:dagger-android:${daggerVersion}",
             daggerAndroidSupport: "com.google.dagger:dagger-android-support:${daggerVersion}",
             zxingCore: "com.google.zxing:core:${zxingCoreVersion}",
-            firebaseCrash: "com.google.firebase:firebase-crash:${firebaseVersion}",
     ]
 
     dataDependencies = [
@@ -84,6 +83,7 @@ ext {
             picasso: "com.squareup.picasso:picasso:${picassoVersion}",
             zxingEmbedded: "com.journeyapps:zxing-android-embedded:${zxingEmbeddedVersion}",
             firebaseMessaging: "com.google.firebase:firebase-messaging:${firebaseVersion}",
+            firebaseCrash: "com.google.firebase:firebase-crash:${firebaseVersion}",
     ]
 
     developmentDependencies = [
