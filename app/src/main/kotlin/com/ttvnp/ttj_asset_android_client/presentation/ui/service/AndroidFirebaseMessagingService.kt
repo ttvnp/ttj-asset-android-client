@@ -78,7 +78,7 @@ class AndroidFirebaseMessagingService : FirebaseMessagingService() {
             builder = NotificationCompat.Builder(applicationContext)
         }
         builder = builder
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setColor(ContextCompat.getColor(applicationContext, R.color.colorPrimary))
                 .setContentTitle(title)
                 .setContentText(body)
