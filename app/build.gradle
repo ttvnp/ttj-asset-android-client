@@ -100,3 +100,5 @@ dependencies {
     implementation project(':domain')
     implementation project(':data')
 }
+
+apply plugin: 'com.google.gms.google-services'

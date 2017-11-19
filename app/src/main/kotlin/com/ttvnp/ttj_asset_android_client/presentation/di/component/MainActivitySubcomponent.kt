@@ -7,6 +7,7 @@ import dagger.android.AndroidInjector
 
 @Subcomponent(modules = arrayOf(
         ActivityModule::class,
+        ServiceModule::class,
         DataModule::class,
         DomainModule::class,
         MainHomeFragmentModule::class,

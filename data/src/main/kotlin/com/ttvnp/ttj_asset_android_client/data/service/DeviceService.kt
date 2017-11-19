@@ -21,6 +21,19 @@ interface DeviceService {
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
+    @PUT("devices/device_token")
+    fun updateDeviceToken(@Field("deviceToken") deviceToken: String) : Single<DeviceResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @PATCH("devices/notification_settings")
+    fun updateNotificationSettings(
+            @Field("grantPushNotification") grantPushNotification: Boolean,
+            @Field("grantEmailNotification") grantEmailNotification: Boolean
+    ) : Single<DeviceResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
     @POST("devices/email")
     fun registerEmail(@Field("emailAddress") emailAddress: String) : Single<DeviceRegisterEmailResponse>
 
@@ -58,6 +71,14 @@ class DeviceServiceImpl(
 
     override fun get(): Single<DeviceResponse> {
         return service.get()
+    }
+
+    override fun updateDeviceToken(deviceToken: String): Single<DeviceResponse> {
+        return service.updateDeviceToken(deviceToken)
+    }
+
+    override fun updateNotificationSettings(grantPushNotification: Boolean, grantEmailNotification: Boolean): Single<DeviceResponse> {
+        return service.updateNotificationSettings(grantPushNotification, grantEmailNotification)
     }
 
     override fun registerEmail(emailAddress: String): Single<DeviceRegisterEmailResponse> {

@@ -11,18 +11,19 @@ import javax.inject.Inject
 
 interface DeviceUseCase {
 
-    // get device
     fun getDevice(): Single<ModelWrapper<DeviceModel?>>
 
-    // initialize device info & register to service
     fun init() : Single<ModelWrapper<DeviceModel?>>
 
-    // register user by email address
     fun registerEmail(emailAddress : String) : Single<DeviceModel>
 
-    // verify email address and activate user
     fun verifyEmail(verificationCode : String) : Single<UserModel>
 
+    fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>>
+
+    fun updateGrantPushNotification(grantPushNotification: Boolean): Single<ModelWrapper<DeviceModel?>>
+
+    fun updateGrantEmailNotification(grantEmailNotification: Boolean): Single<ModelWrapper<DeviceModel?>>
 }
 
 class DeviceUseCaseImpl @Inject constructor(
@@ -49,4 +50,17 @@ class DeviceUseCaseImpl @Inject constructor(
         val input = verificationCode.trim()
         return repository.verifyEmail(input)
     }
+
+    override fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>> {
+        return repository.updateDeviceToken(deviceToken)
+    }
+
+    override fun updateGrantPushNotification(grantPushNotification: Boolean): Single<ModelWrapper<DeviceModel?>> {
+        return repository.updateNotificationSettings(grantPushNotification, null)
+    }
+
+    override fun updateGrantEmailNotification(grantEmailNotification: Boolean): Single<ModelWrapper<DeviceModel?>> {
+        return repository.updateNotificationSettings(null, grantEmailNotification)
+    }
 }
+

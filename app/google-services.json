@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "15192410320",
+    "firebase_url": "https://seventh-palace-183806.firebaseio.com",
+    "project_id": "seventh-palace-183806",
+    "storage_bucket": "seventh-palace-183806.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15192410320:android:8c2c569ccb1b2431",
+        "android_client_info": {
+          "package_name": "com.ttvnp.ttj_asset_android_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15192410320-84p2375j37r9ami8akrt387op2m50u8t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttvnp.ttj_asset_android_client",
+            "certificate_hash": "a77fedcdd8015db7fc921d6034a3fbcc6db014f9"
+          }
+        },
+        {
+          "client_id": "15192410320-8isllti6t9rnmfoleb2s13pga0torpc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu3WVHczl9fvAXx1dp6XcyYkTdYwErfpc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15192410320-8isllti6t9rnmfoleb2s13pga0torpc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

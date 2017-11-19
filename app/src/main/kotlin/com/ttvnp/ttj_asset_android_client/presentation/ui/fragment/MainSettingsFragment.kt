@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsNotificationActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.SettingMenuViewAdapter
 
@@ -49,7 +49,8 @@ class MainSettingsFragment : BaseMainFragment() {
                         }
                         1 -> {
                             // case notifications clicked.
-                            Toast.makeText(activity, "notifications", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(activity, SettingsNotificationActivity::class.java)
+                            startActivity(intent)
                         }
                         else -> { /* do nothing */ }
                     }

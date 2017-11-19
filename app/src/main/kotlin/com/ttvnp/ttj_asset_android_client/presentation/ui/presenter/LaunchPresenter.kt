@@ -17,8 +17,9 @@ interface LaunchPresenter {
 
 class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) : LaunchPresenter {
 
+    private val disposables = CompositeDisposable()
+
     override fun checkDeviceReady(handleResult: (Boolean) -> Unit) {
-        val disposables = CompositeDisposable()
         deviceUseCase.getDevice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

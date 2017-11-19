@@ -24,4 +24,9 @@ class ActivityModule {
     fun receiveSetAmountPresenter(userUseCase: UserUseCase): ReceiveSetAmountPresenter {
         return ReceiveSetAmountPresenterImpl(userUseCase)
     }
+
+    @Provides
+    fun settingsNotificationPresenter(deviceUseCase: DeviceUseCase): SettingsNotificationPresenter {
+        return SettingsNotificationPresenterImpl(deviceUseCase)
+    }
 }
