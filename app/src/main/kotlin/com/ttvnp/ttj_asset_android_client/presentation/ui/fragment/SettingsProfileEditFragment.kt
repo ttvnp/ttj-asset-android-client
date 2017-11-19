@@ -163,6 +163,9 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
                 getString(R.string.profile_successfully_updated),
                 Toast.LENGTH_SHORT
         ).show()
+        if (profileImageFile != null) {
+            firebaseAnalyticsHelper?.setHasSetProfileImageUserPropertyOn()
+        }
     }
 
     private fun launchCamera() {

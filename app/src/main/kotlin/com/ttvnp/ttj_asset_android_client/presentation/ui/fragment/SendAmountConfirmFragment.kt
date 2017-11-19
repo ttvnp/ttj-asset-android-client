@@ -98,10 +98,10 @@ class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresent
         return if (userName.isBlank()) sendInfoModel.targetUserEmailAddress else userName
     }
 
-    override fun onTransactionSuccess() {
+    override fun onTransactionSuccess(sendInfoModel: SendInfoModel) {
         popup = PopupWindow(activity)
         popup?.apply {
-            val popupView = layoutInflater.inflate(R.layout.view_popup, null)
+            val popupView = View.inflate(this@SendAmountConfirmFragment.context, R.layout.view_popup, null)
             popupView.findViewById<Button>(R.id.button_popup_close).setOnClickListener {
                 if (this.isShowing) {
                     this.dismiss()
@@ -115,10 +115,9 @@ class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresent
             val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics)
             this.setWidth(width.toInt())
             this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT)
-
             this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0);
         }
-
+        firebaseAnalyticsHelper?.logAssetSendEvent(sendInfoModel.assetType, sendInfoModel.amount)
     }
 
     override fun onDestroy() {

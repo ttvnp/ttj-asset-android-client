@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,12 +9,21 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.Window
 import android.view.WindowManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
 
 abstract class BaseMainFragment : Fragment() {
 
     protected var progressDialog: Dialog? = null
+
+    protected var firebaseAnalyticsHelper: FirebaseAnalyticsHelper? = null
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        firebaseAnalyticsHelper = FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this.context))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

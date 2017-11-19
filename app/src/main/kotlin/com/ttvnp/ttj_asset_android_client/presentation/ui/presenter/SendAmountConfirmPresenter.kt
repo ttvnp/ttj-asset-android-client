@@ -32,7 +32,7 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                 .subscribeWith(object : DisposableSingleObserver<UserTransactionModel>() {
                     override fun onSuccess(m: UserTransactionModel) {
                         target?.dismissProgressDialog()
-                        target?.onTransactionSuccess()
+                        target?.onTransactionSuccess(sendInfoModel)
                     }
                     override fun onError(e: Throwable) {
                         target?.dismissProgressDialog()

@@ -58,6 +58,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
 
     override fun gotoRegisterEmailPage() {
         toPage(1)
+        firebaseAnalyticsHelper?.logTutorialBeginEvent()
     }
 
     override fun gotoVerifyEmailPage() {
@@ -67,6 +68,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     override fun gotoEndPage() {
         footer?.visibility = View.INVISIBLE
         toPage(3)
+        firebaseAnalyticsHelper?.logTutorialCompleteEvent()
     }
 
     private fun toPage(page: Int = 0) {

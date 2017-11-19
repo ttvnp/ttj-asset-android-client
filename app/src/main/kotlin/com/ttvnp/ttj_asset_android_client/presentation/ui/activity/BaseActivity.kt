@@ -8,16 +8,20 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
 
 abstract class BaseActivity : AppCompatActivity() {
 
     protected var progressDialog: Dialog? = null
 
+    protected var firebaseAnalyticsHelper: FirebaseAnalyticsHelper? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initProgressDialog()
+        firebaseAnalyticsHelper = FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this))
     }
 
     protected fun initProgressDialog() {
