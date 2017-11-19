@@ -108,34 +108,37 @@ class DeviceRepositoryImpl @Inject constructor(
 
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             val deviceInfo = deviceInfoDataStore.get()
-            if (deviceInfo != null) {
-                val deviceEntity = deviceDataStore.get()
-                if (deviceEntity != null) {
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
-                    return@create
-                }
-                deviceService.get().subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
-                    override fun onSuccess(response: DeviceResponse) {
-                        if (response.hasError()) {
-                            register(subscriber)
-                            return
-                        }
-                        var deviceEntity2 = DeviceEntity(
-                                accessToken = response.accessToken,
-                                accessTokenExpiry = response.accessTokenExpiry,
-                                isActivated = response.isActivated,
-                                deviceToken = response.deviceToken,
-                                grantPushNotification = response.grantPushNotification,
-                                grantEmailNotification = response.grantEmailNotification
-                        )
-                        deviceEntity2 = deviceDataStore.update(deviceEntity2)
-                        subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity2), ErrorCode.NO_ERROR))
-                    }
-                    override fun onError(e: Throwable) {
-                        register(subscriber)
-                    }
-                })
+            if (deviceInfo == null) {
+                register(subscriber)
+                return@create
             }
+
+            val deviceEntity = deviceDataStore.get()
+            if (deviceEntity != null) {
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
+                return@create
+            }
+            deviceService.get().subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
+                override fun onSuccess(response: DeviceResponse) {
+                    if (response.hasError()) {
+                        register(subscriber)
+                        return
+                    }
+                    var deviceEntity2 = DeviceEntity(
+                            accessToken = response.accessToken,
+                            accessTokenExpiry = response.accessTokenExpiry,
+                            isActivated = response.isActivated,
+                            deviceToken = response.deviceToken,
+                            grantPushNotification = response.grantPushNotification,
+                            grantEmailNotification = response.grantEmailNotification
+                    )
+                    deviceEntity2 = deviceDataStore.update(deviceEntity2)
+                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity2), ErrorCode.NO_ERROR))
+                }
+                override fun onError(e: Throwable) {
+                    register(subscriber)
+                }
+            })
         }
     }
 

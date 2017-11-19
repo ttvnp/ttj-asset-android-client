@@ -1,11 +1,13 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.service
 
 import android.util.Log
+import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.DeviceTokenUpdater
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -16,7 +18,9 @@ import javax.inject.Inject
 class AndroidFirebaseInstanceIDService : FirebaseInstanceIdService() {
 
     @Inject
-    lateinit var deviceUseCase : DeviceUseCase
+    lateinit var deviceTokenUpdater : DeviceTokenUpdater
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreate() {
         AndroidInjection.inject(this)
@@ -25,19 +29,6 @@ class AndroidFirebaseInstanceIDService : FirebaseInstanceIdService() {
 
     override fun onTokenRefresh() {
         super.onTokenRefresh()
-        val refreshedToken = FirebaseInstanceId.getInstance().getToken()
-        refreshedToken?.let { deviceToken ->
-            val disposables = CompositeDisposable()
-            deviceUseCase.updateDeviceToken(deviceToken)
-                    .subscribeOn(Schedulers.io())
-                    .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
-                        override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
-                            Log.d(javaClass.name, "Refreshed token: " + deviceToken)
-                        }
-                        override fun onError(e: Throwable) {
-                            Log.e(javaClass.name, "Error on refreshing token: " + deviceToken)
-                        }
-                    }).addTo(disposables)
-        }
+        deviceTokenUpdater.updateDeviceToken()
     }
 }

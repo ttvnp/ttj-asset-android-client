@@ -13,6 +13,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.crash.FirebaseCrash
 import com.google.zxing.integration.android.IntentIntegrator
+import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
+import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
+import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
@@ -21,10 +24,15 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainHomeFragm
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainReceiveFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainSendFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainSettingsFragment
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.DeviceTokenUpdater
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), HasSupportFragmentInjector {
@@ -32,6 +40,9 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
+
+    @Inject
+    lateinit var deviceTokenUpdater : DeviceTokenUpdater
 
     private var tabLayout: TabLayout? = null
     private var viewPager: ViewPager? = null
@@ -74,6 +85,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         settingsTabView.findViewById<ImageView>(R.id.image_tab).setImageResource(R.drawable.ic_settings)
 
         handleNotified()
+        deviceTokenUpdater.updateDeviceTokenIfEmpty()
     }
 
     override fun onNewIntent(intent: Intent?) {
