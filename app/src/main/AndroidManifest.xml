@@ -50,7 +50,21 @@
             android:name=".ui.activity.SettingsProfileActivity" />
         <activity
             android:name=".ui.activity.SettingsNotificationActivity" />
-
+        <activity
+            android:name=".ui.activity.PushReceiveActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="push_notification" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".ui.service.AndroidFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <service
             android:name=".ui.service.AndroidFirebaseInstanceIDService"
             android:exported="false">

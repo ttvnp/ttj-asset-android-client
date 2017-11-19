@@ -34,6 +34,7 @@ import android.support.v4.app.ActivityCompat
 import android.widget.TextView
 import android.widget.Toast
 import com.squareup.picasso.Target
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -60,8 +61,6 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
     private var profileImageFile: File? = null
 
     companion object {
-        val IMAGE_SELECTER_ACTIVITY_REQUEST_CODE = 1000
-        val REQUEST_PERMISSIONS_REQUEST_CODE = 1000
         val TMP_FILE_NAME = "tmp_profile_image"
         fun getInstance() : SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
@@ -110,7 +109,7 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.setType("image/jpeg")
-                startActivityForResult(intent, IMAGE_SELECTER_ACTIVITY_REQUEST_CODE)
+                startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
             }
         })
         bottomSheetDialogFragment.setCameraOnClickListener(object : View.OnClickListener{
@@ -125,7 +124,7 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
                     if (!hasSelfPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     }
-                    requestPermissions(permissions.toTypedArray(), REQUEST_PERMISSIONS_REQUEST_CODE);
+                    requestPermissions(permissions.toTypedArray(), RequestCode.REQUEST_PERMISSIONS.rawValue);
                 }
             }
         })
@@ -174,7 +173,7 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
                 .contentResolver
                 .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-        startActivityForResult(intent, IMAGE_SELECTER_ACTIVITY_REQUEST_CODE)
+        startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
     }
 
     private fun hasSelfPermissions(vararg permissions: String): Boolean {
@@ -199,7 +198,7 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_PERMISSIONS_REQUEST_CODE -> {
+            RequestCode.REQUEST_PERMISSIONS.rawValue -> {
                 if (grantResults.size > 0) {
                     if (checkGrantResults(grantResults.toList())) {
                         launchCamera()
@@ -218,7 +217,7 @@ class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPre
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            IMAGE_SELECTER_ACTIVITY_REQUEST_CODE -> {
+            RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue -> {
                 if (resultCode != RESULT_OK) return
                 val resultUri: Uri?
                 if (data == null) {

@@ -67,6 +67,13 @@
     <string name="title_settings_edit_profile">Edit Profile</string>
     <string name="title_settings_notification">Notifications</string>
 
+    <!-- Notification -->
+    <string name="channel_name_default">Default Notification</string>
+
     <!-- format -->
+    <string name="any">%s</string>
     <string name="send_confirm_desc_format">Are you sure you want to send %d %s to %s?</string>
+    <!-- Push Notification -->
+    <string name="notification_title_receive_payment_notification">Receive Payment</string>
+    <string name="notification_body_receive_payment_notification">You received %s %s from %s.</string>
 </resources>

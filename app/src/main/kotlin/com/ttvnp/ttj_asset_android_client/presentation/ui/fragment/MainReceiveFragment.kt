@@ -18,6 +18,7 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import android.graphics.Color
 import android.widget.Button
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 
 class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
 
@@ -28,7 +29,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
     private lateinit var imageQRCode: ImageView
 
     companion object {
-        val SET_AMOUNT_ACTIVITY_REQUEST_CODE = 1000
         fun getInstance() : MainReceiveFragment {
             return MainReceiveFragment()
         }
@@ -49,7 +49,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         buttonSetAmount = view.findViewById<Button>(R.id.button_set_amount)
         buttonSetAmount.setOnClickListener {
             val intent = Intent(activity, ReceiveSetAmountActivity::class.java)
-            activity.startActivityForResult(intent, SET_AMOUNT_ACTIVITY_REQUEST_CODE)
+            activity.startActivityForResult(intent, RequestCode.SET_AMOUNT_ACTIVITY.rawValue)
         }
         imageQRCode = view.findViewById<ImageView>(R.id.image_qr_code)
         mainReceivePresenter.setupDefault()
