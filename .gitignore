@@ -9,4 +9,6 @@
 .externalNativeBuild
 data/build/
 domain/build/
-.envrc
+/.envrc
+/.java-version
+
