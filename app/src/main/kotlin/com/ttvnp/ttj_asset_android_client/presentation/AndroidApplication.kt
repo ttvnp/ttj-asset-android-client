@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import com.squareup.leakcanary.LeakCanary
+import com.ttvnp.ttj_asset_android_client.BuildConfig
 import com.ttvnp.ttj_asset_android_client.presentation.di.component.DaggerApplicationComponent
 import com.ttvnp.ttj_asset_android_client.presentation.di.module.ApplicationModule
 import dagger.android.AndroidInjector
@@ -11,6 +12,9 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
 import javax.inject.Inject
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 
 class AndroidApplication: Application(), HasActivityInjector, HasServiceInjector {
 
@@ -29,6 +33,7 @@ class AndroidApplication: Application(), HasActivityInjector, HasServiceInjector
                 .applicationModule(ApplicationModule(this))
                 .build()
                 .inject(this)
+        Fabric.with(this, Crashlytics())
     }
 
     private fun initializeLeakDetection() {

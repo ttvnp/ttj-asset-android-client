@@ -9,7 +9,7 @@ import android.widget.RelativeLayout
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialFirstFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.view.ScrollControllViewPager

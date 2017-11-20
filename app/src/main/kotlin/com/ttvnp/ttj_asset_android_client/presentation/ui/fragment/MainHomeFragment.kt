@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionsModel
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainHomePresenterTarget
 import dagger.android.support.AndroidSupportInjection

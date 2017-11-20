@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Switch
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsNotificationPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsNotificationPresenterTarget
 import dagger.android.AndroidInjection

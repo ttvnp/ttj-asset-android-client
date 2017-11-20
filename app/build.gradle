@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 
 android {
 
@@ -8,6 +9,10 @@ android {
 
     compileSdkVersion globalConfiguration.androidCompileSdkVersion
     buildToolsVersion globalConfiguration.androidBuildToolsVersion
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
     defaultConfig {
         applicationId globalConfiguration.androidApplicationId
         minSdkVersion globalConfiguration.androidMinSdkVersion
@@ -15,6 +20,7 @@ android {
         versionCode globalConfiguration.androidVersionCode
         versionName globalConfiguration.androidVersionName
         testInstrumentationRunner globalConfiguration.testInstrumentationRunner
+        manifestPlaceholders = [fabric_api_key:properties.getProperty("FABRIC_API_KEY", System.getenv("FABRIC_API_KEY"))]
     }
 
     buildTypes {
@@ -58,6 +64,10 @@ kapt {
     generateStubs = true
 }
 
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 dependencies {
 
     // Compile
@@ -99,6 +109,11 @@ dependencies {
     //Module Dependencies
     implementation project(':domain')
     implementation project(':data')
+
+    // for fabric crashlytics
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true;
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
