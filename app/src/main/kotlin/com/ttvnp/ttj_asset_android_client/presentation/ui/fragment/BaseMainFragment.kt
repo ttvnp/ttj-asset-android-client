@@ -11,7 +11,7 @@ import android.view.Window
 import android.view.WindowManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
 
 abstract class BaseMainFragment : Fragment() {

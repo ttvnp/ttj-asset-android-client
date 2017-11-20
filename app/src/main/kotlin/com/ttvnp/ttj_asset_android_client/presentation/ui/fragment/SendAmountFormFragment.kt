@@ -16,9 +16,8 @@ import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.util.isValidAmount
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.domain.util.toAmount
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeDataTranslator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendAmountFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
 import dagger.android.support.AndroidSupportInjection

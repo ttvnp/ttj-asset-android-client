@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ttvnp.ttj_asset_android_client.presentation">
+    package="com.ttvnp.ttj_asset_android_client">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".AndroidApplication"
+        android:name=".presentation.AndroidApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activity.LaunchActivity"
+            android:name=".presentation.ui.activity.LaunchActivity"
             android:launchMode="singleTop"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -25,30 +25,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.TutorialActivity"
+            android:name=".presentation.ui.activity.TutorialActivity"
             android:theme="@style/TutorialTheme">
         </activity>
         <activity
             android:launchMode="singleTop"
-            android:name=".ui.activity.MainActivity"
+            android:name=".presentation.ui.activity.MainActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".ui.activity.ReceiveSetAmountActivity" />
+            android:name=".presentation.ui.activity.ReceiveSetAmountActivity" />
         <activity
-            android:name=".ui.activity.CaptureActivityAnyOrientation"
+            android:name=".presentation.ui.activity.CaptureActivityAnyOrientation"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".ui.activity.SendActivity" />
+            android:name=".presentation.ui.activity.SendActivity" />
         <activity
-            android:name=".ui.activity.SettingsProfileActivity" />
+            android:name=".presentation.ui.activity.SettingsProfileActivity" />
         <activity
-            android:name=".ui.activity.SettingsNotificationActivity" />
+            android:name=".presentation.ui.activity.SettingsNotificationActivity" />
         <activity
-            android:name=".ui.activity.PushReceiveActivity"
+            android:name=".presentation.ui.activity.PushReceiveActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="push_notification" />
@@ -56,14 +56,14 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".ui.service.AndroidFirebaseMessagingService"
+            android:name=".presentation.ui.service.AndroidFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".ui.service.AndroidFirebaseInstanceIDService"
+            android:name=".presentation.ui.service.AndroidFirebaseInstanceIDService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

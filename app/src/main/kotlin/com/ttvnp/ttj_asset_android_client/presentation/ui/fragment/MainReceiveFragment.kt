@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.google.zxing.qrcode.encoder.Encoder
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.ReceiveSetAmountActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainReceivePresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainReceivePresenterTarget

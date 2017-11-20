@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsNotificationActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.SettingMenuViewAdapter
