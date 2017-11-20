@@ -11,7 +11,10 @@ android {
     buildToolsVersion globalConfiguration.androidBuildToolsVersion
 
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def localPropertyFile = project.rootProject.file('local.properties')
+    if (localPropertyFile.exists()) {
+        properties.load(localPropertyFile.newDataInputStream())
+    }
 
     defaultConfig {
         applicationId globalConfiguration.androidApplicationId
