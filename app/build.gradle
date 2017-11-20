@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-kapt'
 
+def static getCurrentCommitMessage() {
+    def gitLog = 'git log --oneline'.execute().text.split('\n')[0]
+    def date   = "date +%y-%m-%d_%H:%M:%S".execute().in.text.split('\n')[0]
+    return "$date $gitLog"
+}
+
 android {
 
     lintOptions {
@@ -37,10 +43,16 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ext.betaDistributionReleaseNotes = getCurrentCommitMessage()
+            ext.betaDistributionEmails = globalConfiguration.betaDistributionEmails
+            ext.betaDistributionGroupAliases = globalConfiguration.betaDistributionGroupAliases
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ext.betaDistributionReleaseNotes = globalConfiguration.betaDistributionReleaseNotes
+            ext.betaDistributionEmails = globalConfiguration.betaDistributionEmails
+            ext.betaDistributionGroupAliases = globalConfiguration.betaDistributionGroupAliases
         }
     }
 

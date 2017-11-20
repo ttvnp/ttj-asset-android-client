@@ -30,13 +30,16 @@ allprojects {
     ext {
         androidApplicationId = "com.ttvnp.ttj_asset_android_client"
         androidVersionCode = 1
-        androidVersionName = "1.0"
+        androidVersionName = "1.0.0"
+        betaDistributionReleaseNotes = ""
+        betaDistributionEmails = "hiroki.tanaka@ttvnp.com"
+        betaDistributionGroupAliases = "ttj-asset-android-client"
 
         dataLibraryVersionCode = 1
-        dataLibraryVersionName = "1.0"
+        dataLibraryVersionName = "1.0.0"
 
         domainLibraryVersionCode = 1
-        domainLibraryVersionName = "1.0"
+        domainLibraryVersionName = "1.0.0"
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
