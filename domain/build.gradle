@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     def globalConfiguration = rootProject.ext
@@ -52,19 +53,14 @@ android {
     }
 }
 
-// Required for annotation processing plugins like Dagger
-kapt {
-    generateStubs = true
-}
-
 dependencies {
 
     // Compile
     def compileTimeDependencies = rootProject.ext.compileTimeDependencies
     kapt compileTimeDependencies.daggerCompiler
     kapt compileTimeDependencies.daggerAndroidProcessor
-    provided compileTimeDependencies.javaxAnnotation
-    provided compileTimeDependencies.javaxInject
+    compileOnly compileTimeDependencies.javaxAnnotation
+    compileOnly compileTimeDependencies.javaxInject
 
     // Common
     def commonDependencies = rootProject.ext.commonDependencies

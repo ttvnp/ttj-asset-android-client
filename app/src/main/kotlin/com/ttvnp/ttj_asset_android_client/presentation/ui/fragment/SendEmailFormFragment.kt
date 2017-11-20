@@ -45,7 +45,7 @@ class SendEmailFormFragment() : BaseMainFragment(), SendEmailFormPresenterTarget
         val buttonSubmit = view.findViewById<Button>(R.id.button_send_email_submit)
         buttonSubmit.setOnClickListener {
             val emailAddress = textSendEmail.text.toString()
-            sendEmailFormPresenter.checkEmailAddress(emailAddress, { otherUserModel ->
+            sendEmailFormPresenter.checkEmailAddress(emailAddress, { _ ->
                 val formFragment = SendAmountFormFragment.getInstance()
                 formFragment.arguments = Bundle().apply {
                     this.putString(SendAmountFormFragment.QR_STRING_ARG_KEY, emailAddress)

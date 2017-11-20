@@ -1,8 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
+    lintOptions {
+        disable 'GradleCompatible'
+    }
     def globalConfiguration = rootProject.ext
 
     compileSdkVersion globalConfiguration.androidCompileSdkVersion
@@ -52,19 +56,14 @@ android {
     }
 }
 
-// Required for annotation processing plugins like Dagger
-kapt {
-    generateStubs = true
-}
-
 dependencies {
 
     // Compile
     def compileTimeDependencies = rootProject.ext.compileTimeDependencies
     kapt compileTimeDependencies.daggerCompiler
     kapt compileTimeDependencies.daggerAndroidProcessor
-    provided compileTimeDependencies.javaxAnnotation
-    provided compileTimeDependencies.javaxInject
+    compileOnly compileTimeDependencies.javaxAnnotation
+    compileOnly compileTimeDependencies.javaxInject
     kapt compileTimeDependencies.ormaProcessor
 
     // Common

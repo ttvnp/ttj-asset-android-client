@@ -5,7 +5,7 @@
     android:id="@+id/layout_indicator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.TutorialActivity">
+    tools:context=".presentation.ui.activity.TutorialActivity">
 
     <com.ttvnp.ttj_asset_android_client.presentation.ui.view.ScrollControllViewPager
         android:id="@+id/view_pager"

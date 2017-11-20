@@ -18,6 +18,9 @@
     <string name="middle_name">middle name</string>
     <string name="last_name">last name</string>
     <string name="address">address</string>
+    <string name="qr_code">QR Code</string>
+    <string name="complete">Complete</string>
+    <string name="tab">tab</string>
     <string name="verification_code">code</string>
     <string name="not_set">Not set</string>
     <string name="error_dialog_title">ERROR</string>

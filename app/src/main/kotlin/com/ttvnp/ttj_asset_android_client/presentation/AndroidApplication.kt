@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation
 
 import android.app.Activity
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 import android.app.Service
 import com.squareup.leakcanary.LeakCanary
 import com.ttvnp.ttj_asset_android_client.BuildConfig
@@ -16,7 +16,7 @@ import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
 
-class AndroidApplication: Application(), HasActivityInjector, HasServiceInjector {
+class AndroidApplication: MultiDexApplication(), HasActivityInjector, HasServiceInjector {
 
     @Inject
     lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>

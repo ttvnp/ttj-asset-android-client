@@ -10,5 +10,6 @@
         android:id="@+id/image_tab"
         android:layout_width="match_parent"
         android:layout_height="22dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:contentDescription="@string/tab" />
 </LinearLayout>
