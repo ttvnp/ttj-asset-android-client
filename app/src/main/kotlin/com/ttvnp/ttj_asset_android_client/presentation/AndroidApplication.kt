@@ -12,6 +12,9 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
 import javax.inject.Inject
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 
 class AndroidApplication: Application(), HasActivityInjector, HasServiceInjector {
 
@@ -30,6 +33,7 @@ class AndroidApplication: Application(), HasActivityInjector, HasServiceInjector
                 .applicationModule(ApplicationModule(this))
                 .build()
                 .inject(this)
+        Fabric.with(this, Crashlytics())
     }
 
     private fun initializeLeakDetection() {
