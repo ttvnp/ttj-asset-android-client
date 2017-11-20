@@ -8,7 +8,6 @@ internal abstract class BaseTranslator<Model, Entity> {
 
     internal fun translate(collection: Collection<Entity>): List<Model> {
         val list = ArrayList<Model>()
-        var model: Model?
         collection.forEach {
             translate(it)?.let {
                 list.add(it)

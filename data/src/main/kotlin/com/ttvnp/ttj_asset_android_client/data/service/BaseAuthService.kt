@@ -46,7 +46,7 @@ abstract class BaseAuthService(
         if (deviceEntity.accessTokenExpiry.before(Now())) {
             return retrieveAccessToken()
         }
-        return deviceEntity.accessToken?:""
+        return deviceEntity.accessToken
     }
 
     open protected fun retrieveAccessToken(): String {

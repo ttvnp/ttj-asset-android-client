@@ -70,7 +70,6 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         viewPager?.adapter = adapter
         tabLayout?.setupWithViewPager(viewPager)
 
-        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val homeTabView = View.inflate(this, R.layout.view_main_tab, null)
         tabLayout?.getTabAt(0)?.setCustomView(homeTabView)
         homeTabView.findViewById<ImageView>(R.id.image_tab).setImageResource(R.drawable.ic_home)

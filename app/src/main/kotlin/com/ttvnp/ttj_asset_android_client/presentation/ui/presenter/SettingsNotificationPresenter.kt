@@ -29,11 +29,11 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         wrapper.model?.let {
-                            target?.bindDeviceInfo(it)
+                            target.bindDeviceInfo(it)
                         }
                     }
                     override fun onError(e: Throwable) {
-                        target?.showError(e)
+                        target.showError(e)
                     }
                 }).addTo(this.disposables)
     }

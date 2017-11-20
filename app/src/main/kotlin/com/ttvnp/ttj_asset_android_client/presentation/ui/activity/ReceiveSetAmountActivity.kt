@@ -57,7 +57,7 @@ class ReceiveSetAmountActivity : BaseActivity() {
                     intent.putExtra(INTENT_EXTRA_KEY, qrCodeInfoModel.toQRString())
                     setResult(RESULT_OK, intent)
                     finish()
-                }, { throwable ->
+                }, {
                     // do nothing
                 })
             } catch (e: NumberFormatException) {
