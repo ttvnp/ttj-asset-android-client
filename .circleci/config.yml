@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  beta:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-26-alpha
@@ -8,6 +8,7 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
+      - run: bundle install
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
@@ -25,14 +26,48 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+      - run:
+          name: Deploy to Fabric Beta
+          command: fastlane beta
+  deploy:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run: bundle install
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run Tests
+          command: ./gradlew lint test
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+      - run:
+          name: Deploy to Google Play
+          command: echo "deploy"
 
 workflows:
   version: 2
-  build_and_test:
+  build-and-deploy:
     jobs:
-      - build:
-          requires:
-            - build
+      - beta:
           filters:
             branches:
               only: develop
+      - deploy:
+          filters:
+            branches:
+              only: master
