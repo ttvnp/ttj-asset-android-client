@@ -1,11 +1,12 @@
-package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
+package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -13,20 +14,24 @@ import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseFragment : Fragment() {
 
     protected var progressDialog: Dialog? = null
 
     protected var firebaseAnalyticsHelper: FirebaseAnalyticsHelper? = null
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        firebaseAnalyticsHelper = FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this.context))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initProgressDialog()
-        firebaseAnalyticsHelper = FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this))
     }
 
     protected fun initProgressDialog() {
-        val dialog = Dialog(this)
+        val dialog = Dialog(this.context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -37,17 +42,17 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog = dialog
     }
 
-    fun showProgressDialog() {
+    open fun showProgressDialog() {
         progressDialog?.show()
     }
 
-    fun dismissProgressDialog() {
+    open fun dismissProgressDialog() {
         progressDialog?.dismiss()
     }
 
     open fun showError(throwable: Throwable) {
         AlertDialog
-                .Builder(this)
+                .Builder(this.context)
                 .setTitle(resources.getString(R.string.error_dialog_title))
                 .setMessage(resources.getString(R.string.error_default_message))
                 .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
@@ -56,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     open fun showError(errorCode: ErrorCode, throwable: Throwable?) {
         AlertDialog
-                .Builder(this)
+                .Builder(this.context)
                 .setTitle(resources.getString(R.string.error_dialog_title))
                 .setMessage(resources.getString(R.string.error_default_message))
                 .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)

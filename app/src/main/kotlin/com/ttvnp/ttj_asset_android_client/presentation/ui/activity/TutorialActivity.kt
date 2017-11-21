@@ -6,10 +6,12 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.RelativeLayout
+import com.google.firebase.crash.FirebaseCrash
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialFirstFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.view.ScrollControllViewPager
@@ -40,19 +42,31 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     override fun showError(throwable: Throwable) {
-        when (throwable) {
-            is BaseException -> AlertDialog
-                    .Builder(this)
-                    .setTitle(resources.getString(R.string.error_dialog_title))
-                    .setMessage(resources.getString(R.string.error_device_registration))
-                    .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                    .show()
-            else -> AlertDialog
-                    .Builder(this)
-                    .setTitle(resources.getString(R.string.error_dialog_title))
-                    .setMessage(resources.getString(R.string.error_device_registration))
-                    .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                    .show()
+        AlertDialog.Builder(this)
+                .setTitle(resources.getString(R.string.error_dialog_title))
+                .setMessage(resources.getString(R.string.error_default_message))
+                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                .show()
+        FirebaseCrash.report(throwable)
+    }
+
+    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+        when (errorCode) {
+            ErrorCode.ERROR_CANNOT_REGISTER_DEVICE -> {
+                AlertDialog.Builder(this)
+                        .setTitle(resources.getString(R.string.error_dialog_title))
+                        .setMessage(resources.getString(R.string.error_device_registration))
+                        .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                        .show()
+                throwable?.let {
+                    FirebaseCrash.log(it.message)
+                }
+            }
+            else -> {
+                throwable?.let {
+                    this.showError(it)
+                }
+            }
         }
     }
 

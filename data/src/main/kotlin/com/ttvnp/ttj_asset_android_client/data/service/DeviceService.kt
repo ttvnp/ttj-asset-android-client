@@ -8,6 +8,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmai
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import io.reactivex.Single
+import retrofit2.Call
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,7 +18,7 @@ import retrofit2.http.*
 interface DeviceService {
     @Headers("Accept: application/json")
     @GET("devices")
-    fun get() : Single<DeviceResponse>
+    fun get(): Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -69,7 +70,7 @@ class DeviceServiceImpl(
         service = builder.create(DeviceService::class.java)
     }
 
-    override fun get(): Single<DeviceResponse> {
+    override fun get(): Call<DeviceResponse> {
         return service.get()
     }
 

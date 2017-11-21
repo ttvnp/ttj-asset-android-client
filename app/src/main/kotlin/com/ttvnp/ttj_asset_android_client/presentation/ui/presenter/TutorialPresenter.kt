@@ -41,7 +41,7 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                                 target?.gotoRegisterEmailPage()
                             }
                             else -> {
-                                // TODO
+                                target?.showError(wrapper.errorCode, wrapper.error)
                             }
                         }
                     }

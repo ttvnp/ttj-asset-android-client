@@ -54,19 +54,24 @@ abstract class BaseAuthService(
         if (deviceEntity == null) return ""
         val deviceInfoEntity = deviceInfoDataStore.get()
         deviceInfoEntity?.let {
-            deviceServiceWithNoAuth.issueAccessToken(it.deviceCode,it.credential).execute().body()?.let {
-                if (it.hasError()) {
-                    return ""
+            try {
+                val responseBody = deviceServiceWithNoAuth.issueAccessToken(it.deviceCode,it.credential).execute().body()
+                responseBody?.let {
+                    if (it.hasError()) {
+                        return ""
+                    }
+                    val newDeviceEntity = DeviceEntity(
+                            accessToken = it.accessToken,
+                            accessTokenExpiry = it.accessTokenExpiry,
+                            deviceToken = deviceEntity.deviceToken,
+                            grantPushNotification = deviceEntity.grantPushNotification,
+                            grantEmailNotification = deviceEntity.grantEmailNotification
+                    )
+                    deviceDataStore.update(newDeviceEntity)
+                    return newDeviceEntity.accessToken
                 }
-                val newDeviceEntity = DeviceEntity(
-                        accessToken = it.accessToken,
-                        accessTokenExpiry = it.accessTokenExpiry,
-                        deviceToken = deviceEntity.deviceToken,
-                        grantPushNotification = deviceEntity.grantPushNotification,
-                        grantEmailNotification = deviceEntity.grantEmailNotification
-                )
-                deviceDataStore.update(newDeviceEntity)
-                return newDeviceEntity.accessToken
+            } catch (t: Throwable) {
+                // do nothing...
             }
         }
         return ""

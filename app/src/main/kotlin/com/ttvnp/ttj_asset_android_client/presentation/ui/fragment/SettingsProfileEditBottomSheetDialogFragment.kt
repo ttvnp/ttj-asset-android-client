@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.ttvnp.ttj_asset_android_client.R
 
-
 class SettingsProfileEditBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private var folderOnClickListener: View.OnClickListener? = null

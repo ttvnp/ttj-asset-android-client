@@ -20,7 +20,7 @@ import android.util.TypedValue
 import android.view.*
 
 
-class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresenterTarget {
+class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTarget {
 
     @Inject
     lateinit var sendAmountConfirmPresenter: SendAmountConfirmPresenter

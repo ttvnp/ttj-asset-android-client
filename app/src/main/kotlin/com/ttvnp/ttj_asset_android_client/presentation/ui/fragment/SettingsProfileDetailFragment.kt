@@ -17,7 +17,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 
-class SettingsProfileDetailFragment() : BaseMainFragment(), SettingsProfileDetailPresenterTarget {
+class SettingsProfileDetailFragment() : BaseFragment(), SettingsProfileDetailPresenterTarget {
 
     @Inject
     lateinit var settingsProfileDetailPresenter: SettingsProfileDetailPresenter

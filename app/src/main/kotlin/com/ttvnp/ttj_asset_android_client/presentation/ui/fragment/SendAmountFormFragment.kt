@@ -24,7 +24,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 
-class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarget {
+class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
 
     @Inject
     lateinit var sendAmountFormPresenter: SendAmountFormPresenter

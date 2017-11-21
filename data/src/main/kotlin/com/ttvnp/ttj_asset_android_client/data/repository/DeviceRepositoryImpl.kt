@@ -23,6 +23,7 @@ import io.reactivex.SingleEmitter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
+import java.io.IOException
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
@@ -49,29 +50,28 @@ class DeviceRepositoryImpl @Inject constructor(
                 return@create
             }
 
-            deviceService.get().subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
-                override fun onSuccess(response: DeviceResponse) {
-                    val serviceResult: ModelWrapper<DeviceModel?>
-                    if (response.hasError()) {
-                        serviceResult = ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED)
-                    } else {
-                        var de = DeviceEntity(
-                                accessToken = response.accessToken,
-                                accessTokenExpiry = response.accessTokenExpiry,
-                                isActivated = response.isActivated,
-                                deviceToken = response.deviceToken,
-                                grantPushNotification = response.grantPushNotification,
-                                grantEmailNotification = response.grantEmailNotification
-                        )
-                        de = deviceDataStore.update(de)
-                        serviceResult = ModelWrapper<DeviceModel?>(DeviceTranslator().translate(de), ErrorCode.NO_ERROR)
-                    }
-                    subscriber.onSuccess(serviceResult)
+            val response: DeviceResponse
+            try {
+                response = deviceService.get().execute().body()!!
+                val serviceResult: ModelWrapper<DeviceModel?>
+                if (response.hasError()) {
+                    serviceResult = ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED)
+                } else {
+                    var de = DeviceEntity(
+                            accessToken = response.accessToken,
+                            accessTokenExpiry = response.accessTokenExpiry,
+                            isActivated = response.isActivated,
+                            deviceToken = response.deviceToken,
+                            grantPushNotification = response.grantPushNotification,
+                            grantEmailNotification = response.grantEmailNotification
+                    )
+                    de = deviceDataStore.update(de)
+                    serviceResult = ModelWrapper<DeviceModel?>(DeviceTranslator().translate(de), ErrorCode.NO_ERROR)
                 }
-                override fun onError(e: Throwable) {
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_UNKNOWN_SERVER_ERROR))
-                }
-            })
+                subscriber.onSuccess(serviceResult)
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
         }
     }
 
@@ -82,12 +82,12 @@ class DeviceRepositoryImpl @Inject constructor(
             // newly create device code and credential.
             val initDeviceCode = TokenUtil.generateToken68(64)
             val initCredential = TokenUtil.generateToken68(64)
-            deviceServiceWithNoAuth.register(initDeviceCode, initCredential).subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
-                override fun onSuccess(response: DeviceResponse) {
-                    if (response.hasError()) {
-                        subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_REGISTER_DEVICE))
-                        return
-                    }
+            val response: DeviceResponse
+            try {
+                response = deviceServiceWithNoAuth.register(initDeviceCode, initCredential).execute().body()!!
+                if (response.hasError()) {
+                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_REGISTER_DEVICE))
+                } else {
                     deviceInfoDataStore.save(DeviceInfoEntity(initDeviceCode, initCredential))
                     var deviceEntity = DeviceEntity(
                             accessToken = response.accessToken,
@@ -100,10 +100,9 @@ class DeviceRepositoryImpl @Inject constructor(
                     deviceEntity = deviceDataStore.update(deviceEntity)
                     subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
                 }
-                override fun onError(e: Throwable) {
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_UNKNOWN_SERVER_ERROR))
-                }
-            })
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
         }
 
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
@@ -118,27 +117,25 @@ class DeviceRepositoryImpl @Inject constructor(
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
                 return@create
             }
-            deviceService.get().subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
-                override fun onSuccess(response: DeviceResponse) {
-                    if (response.hasError()) {
-                        register(subscriber)
-                        return
-                    }
-                    var deviceEntity2 = DeviceEntity(
-                            accessToken = response.accessToken,
-                            accessTokenExpiry = response.accessTokenExpiry,
-                            isActivated = response.isActivated,
-                            deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
-                    )
-                    deviceEntity2 = deviceDataStore.update(deviceEntity2)
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity2), ErrorCode.NO_ERROR))
-                }
-                override fun onError(e: Throwable) {
+
+            val responseBody = deviceService.get().execute()?.body()
+            if (responseBody == null) {
+                register(subscriber)
+            } else {
+                if (responseBody.hasError()) {
                     register(subscriber)
                 }
-            })
+                var deviceEntity2 = DeviceEntity(
+                        accessToken = responseBody.accessToken,
+                        accessTokenExpiry = responseBody.accessTokenExpiry,
+                        isActivated = responseBody.isActivated,
+                        deviceToken = responseBody.deviceToken,
+                        grantPushNotification = responseBody.grantPushNotification,
+                        grantEmailNotification = responseBody.grantEmailNotification
+                )
+                deviceEntity2 = deviceDataStore.update(deviceEntity2)
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity2), ErrorCode.NO_ERROR))
+            }
         }
     }
 
