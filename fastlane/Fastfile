@@ -1,0 +1,37 @@
+fastlane_version "2.64.1"
+default_platform :android
+
+platform :android do
+  before_all do
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "assembleRelease")
+    crashlytics(
+      api_token: ENV['CRASHLYTICS_API_KEY'],
+      build_secret: ENV['CRASHLYTICS_SECRET']
+    )
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "assembleRelease")
+    supply
+  end
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+end

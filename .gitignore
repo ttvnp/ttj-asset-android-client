@@ -11,4 +11,6 @@ data/build/
 domain/build/
 /.envrc
 /.java-version
+fabric.properties
+/fastlane/report.xml
 
