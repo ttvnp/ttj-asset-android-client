@@ -4,12 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-kapt'
 
-def static getCurrentCommitMessage() {
-    def gitLog = 'git log --oneline'.execute().text.split('\n')[0]
-    def date   = "date +%y-%m-%d_%H:%M:%S".execute().in.text.split('\n')[0]
-    return "$date $gitLog"
-}
-
 android {
 
     lintOptions {
@@ -38,24 +32,6 @@ android {
         manifestPlaceholders = [fabric_api_key:properties.getProperty("FABRIC_API_KEY", System.getenv("FABRIC_API_KEY"))]
     }
 
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ext.betaDistributionReleaseNotes = getCurrentCommitMessage()
-            ext.betaDistributionEmails = globalConfiguration.betaDistributionEmails
-            ext.betaDistributionGroupAliases = globalConfiguration.betaDistributionGroupAliases
-        }
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ext.betaDistributionReleaseNotes = globalConfiguration.betaDistributionReleaseNotes
-            ext.betaDistributionEmails = globalConfiguration.betaDistributionEmails
-            ext.betaDistributionGroupAliases = globalConfiguration.betaDistributionGroupAliases
-        }
-    }
-
     signingConfigs {
         debug {
             storeFile file('../buildSystem/debug.keystore')
@@ -63,7 +39,28 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            // TODO must change
+            storeFile file('../buildSystem/release.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
 
     packagingOptions {
         exclude 'LICENSE.txt'

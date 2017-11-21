@@ -30,7 +30,7 @@ jobs:
     machine:
         enabled: true
     steps:
-      - run: echo "beta"
+      - run: fastlane beta
   deploy:
     working_directory: ~/code
     machine:
