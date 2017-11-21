@@ -25,14 +25,33 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+  beta:
+    working_directory: ~/code
+    machine:
+        enabled: true
+    steps:
+      - run: echo "beta"
+  deploy:
+    working_directory: ~/code
+    machine:
+        enabled: true
+    steps:
+      - run: echo "deploy"
 
 workflows:
   version: 2
-  build_and_test:
+  build-and-deploy:
     jobs:
-      - build:
+      - build
+      - beta:
           requires:
             - build
           filters:
             branches:
               only: develop
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
