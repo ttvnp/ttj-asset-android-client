@@ -3,6 +3,7 @@ default_platform :android
 
 platform :android do
   before_all do
+    # setup_circle_ci # <- only for iOS?
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"

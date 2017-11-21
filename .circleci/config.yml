@@ -30,6 +30,8 @@ jobs:
     machine:
         enabled: true
     steps:
+      - checkout
+      - run: bundle install
       - run: fastlane beta
   deploy:
     working_directory: ~/code
