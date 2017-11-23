@@ -9,6 +9,7 @@ import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -17,7 +18,7 @@ import retrofit2.http.*
 interface UserService {
     @Headers("Accept: application/json")
     @GET("users")
-    fun getUser() : Single<GetUserResponse>
+    fun getUser() : Call<GetUserResponse>
 
     @Headers("Accept: application/json")
     @Multipart
@@ -74,7 +75,7 @@ class UserServiceImpl(
         service = builder.create(UserService::class.java)
     }
 
-    override fun getUser() : Single<GetUserResponse> {
+    override fun getUser() : Call<GetUserResponse> {
         return service.getUser()
     }
 

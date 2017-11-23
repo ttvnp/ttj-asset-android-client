@@ -18,6 +18,7 @@ import com.ttvnp.ttj_asset_android_client.data.util.TokenUtil
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
+import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.disposables.CompositeDisposable
@@ -178,7 +179,8 @@ class DeviceRepositoryImpl @Inject constructor(
                         lastName = response.lastName,
                         address = response.address,
                         isEmailVerified = response.isEmailVerified,
-                        isIdentified = response.isIdentified
+                        isIdentified = response.isIdentified,
+                        updatedAt = Now()
                 )
                 userEntity = userDataStore.update(userEntity)
 

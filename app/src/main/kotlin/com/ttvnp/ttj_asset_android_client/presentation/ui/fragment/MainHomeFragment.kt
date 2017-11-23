@@ -65,7 +65,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         val dividerItemDecoration = DividerItemDecoration(recyclerViewPaymentHistory.context, layoutManager.orientation)
         recyclerViewPaymentHistory.addItemDecoration(dividerItemDecoration)
 
-        mainHomePresenter.setupUserInfo()
+        mainHomePresenter.setupUserInfo(false)
         mainHomePresenter.setupBalanceInfo()
         mainHomePresenter.setupUserTransactions()
         return view

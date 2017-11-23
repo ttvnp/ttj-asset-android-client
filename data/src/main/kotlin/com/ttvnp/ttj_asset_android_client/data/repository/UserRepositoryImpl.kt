@@ -11,12 +11,15 @@ import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserRepository
+import com.ttvnp.ttj_asset_android_client.domain.util.Now
+import com.ttvnp.ttj_asset_android_client.domain.util.addHour
 import io.reactivex.Single
 import io.reactivex.observers.DisposableSingleObserver
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -25,30 +28,48 @@ class UserRepositoryImpl @Inject constructor(
         private val otherUserDataStore: OtherUserDataStore
 ) : UserRepository {
 
-    override fun getUser(): Single<UserModel> {
-        return userService.getUser().map { response ->
-            if (response.hasError()) {
-                throw ServiceFailedException()
+    override fun getUser(forceRefresh: Boolean): Single<UserModel> {
+        return Single.create { subscriber ->
+            var userModel: UserModel? = null
+            var refresh = false
+            if (!forceRefresh) {
+                val userEntity = userDataStore.get()
+                if (userEntity == null) {
+                    refresh = true
+                } else {
+                    val localCacheExpiry = userEntity.updatedAt.addHour(24 * 7)
+                    refresh = Now().after(localCacheExpiry)
+                    if (!refresh) {
+                        userModel = UserTranslator().translate(userEntity)
+                    }
+                }
             }
-            var userEntity = UserEntity(
-                    emailAddress = response.emailAddress,
-                    profileImageID = response.profileImageID,
-                    profileImageURL = response.profileImageURL,
-                    firstName = response.firstName,
-                    middleName =  response.middleName,
-                    lastName = response.lastName,
-                    address = response.address,
-                    isEmailVerified = response.isEmailVerified,
-                    isIdentified = response.isIdentified
-            )
-            userEntity = userDataStore.update(userEntity)
-            UserTranslator().translate(userEntity)!!
-        }.onErrorReturn { e ->
-            val userEntity = userDataStore.get()
-            if (userEntity == null) {
-                throw e
+            if (refresh) {
+                try {
+                    userService.getUser().execute().body()?.let {
+                        if (it.hasError()) {
+                            return@let
+                        }
+                        var userEntity = UserEntity(
+                                emailAddress = it.emailAddress,
+                                profileImageID = it.profileImageID,
+                                profileImageURL = it.profileImageURL,
+                                firstName = it.firstName,
+                                middleName =  it.middleName,
+                                lastName = it.lastName,
+                                address = it.address,
+                                isEmailVerified = it.isEmailVerified,
+                                isIdentified = it.isIdentified,
+                                updatedAt = Now()
+                        )
+                        userEntity = userDataStore.update(userEntity)
+                        userModel = UserTranslator().translate(userEntity)!!
+                    }
+                } catch (e: IOException) {
+                    // ignore connection exception.
+                }
             }
-            UserTranslator().translate(userEntity)!!
+            subscriber.onSuccess(userModel!!)
         }
     }
 
@@ -87,7 +108,8 @@ class UserRepositoryImpl @Inject constructor(
                                 lastName = response.lastName,
                                 address = response.address,
                                 isEmailVerified = response.isEmailVerified,
-                                isIdentified = response.isIdentified
+                                isIdentified = response.isIdentified,
+                                updatedAt = Now()
                         )
                         ue = userDataStore.update(ue)
                         serviceResult = ModelWrapper<UserModel?>(UserTranslator().translate(ue), ErrorCode.NO_ERROR)

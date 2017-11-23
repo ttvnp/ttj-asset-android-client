@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 interface UserUseCase {
 
-    fun getUser(): Single<UserModel>
+    fun getUser(forceRefresh: Boolean): Single<UserModel>
 
     fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>>
 
@@ -33,8 +33,8 @@ class UserUseCaseImpl @Inject constructor(
         private val userTransactionRepository: UserTransactionRepository
 ) : UserUseCase {
 
-    override fun getUser(): Single<UserModel> {
-        return userRepository.getUser()
+    override fun getUser(forceRefresh: Boolean): Single<UserModel> {
+        return userRepository.getUser(forceRefresh)
     }
 
     override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>> {
