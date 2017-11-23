@@ -36,12 +36,12 @@ interface DeviceService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/email")
-    fun registerEmail(@Field("emailAddress") emailAddress: String) : Single<DeviceRegisterEmailResponse>
+    fun registerEmail(@Field("emailAddress") emailAddress: String): Call<DeviceRegisterEmailResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/verify_email")
-    fun verifyEmail(@Field("verificationCode") verificationCode: String) : Single<DeviceVerifyEmailResponse>
+    fun verifyEmail(@Field("verificationCode") verificationCode: String, @Field("passwordOnImport") passwordOnImport: String) : Call<DeviceVerifyEmailResponse>
 }
 
 class DeviceServiceImpl(
@@ -82,11 +82,11 @@ class DeviceServiceImpl(
         return service.updateNotificationSettings(grantPushNotification, grantEmailNotification)
     }
 
-    override fun registerEmail(emailAddress: String): Single<DeviceRegisterEmailResponse> {
+    override fun registerEmail(emailAddress: String): Call<DeviceRegisterEmailResponse> {
         return service.registerEmail(emailAddress)
     }
 
-    override fun verifyEmail(verificationCode: String): Single<DeviceVerifyEmailResponse> {
-        return service.verifyEmail(verificationCode)
+    override fun verifyEmail(verificationCode: String, passwordOnImport: String): Call<DeviceVerifyEmailResponse> {
+        return service.verifyEmail(verificationCode, passwordOnImport)
     }
 }

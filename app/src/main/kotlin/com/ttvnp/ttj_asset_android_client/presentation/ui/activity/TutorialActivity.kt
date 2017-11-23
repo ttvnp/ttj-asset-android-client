@@ -12,6 +12,7 @@ import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedExcepti
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.RegisterEmailResultModel
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialFirstFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.view.ScrollControllViewPager
@@ -27,6 +28,10 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
 
     @Inject
     lateinit var tutorialPresenter : TutorialPresenter
+
+    private var emailFragment: TutorialEmailFragment? = null
+    private var codeFragment: TutorialCodeFragment? = null
+    private var endFragment: TutorialEndFragment? = null
 
     private var viewPager: ScrollControllViewPager? = null
     private var floatingIndicatorView: View? = null
@@ -62,6 +67,15 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
                     FirebaseCrash.log(it.message)
                 }
             }
+            ErrorCode.ERROR_VALIDATION_EMAIL -> {
+                emailFragment?.showValidationError(getString(R.string.error_validation_email_address))
+            }
+            ErrorCode.ERROR_VALIDATION_VERIFICATION_CODE -> {
+                codeFragment?.showCodeValidationError(getString(R.string.error_invalid_verification_code))
+            }
+            ErrorCode.ERROR_VALIDATION_PASSWORD_ON_IMPORT -> {
+                codeFragment?.showPasswordValidationError(getString(R.string.error_invalid_password_on_import))
+            }
             else -> {
                 throwable?.let {
                     this.showError(it)
@@ -75,7 +89,8 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
         firebaseAnalyticsHelper?.logTutorialBeginEvent()
     }
 
-    override fun gotoVerifyEmailPage() {
+    override fun gotoVerifyEmailPage(model: RegisterEmailResultModel) {
+        this.codeFragment?.setModel(model)
         toPage(2)
     }
 
@@ -103,42 +118,37 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
             }
             adapter.addFragment(firstFragment)
 
-            val emailFragment = TutorialEmailFragment.getInstance()
-            emailFragment.submitButtonClickHandler = object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    tutorialPresenter.submitEmailAddress(emailFragment.getEmailAddressText(), { throwable ->
-                        when (throwable) {
-                            is ValidationException -> emailFragment.showValidationError(getString(R.string.error_validation_email_address))
-                            is ServiceFailedException -> emailFragment.showValidationError(getString(R.string.error_invalid_email_address))
-                            else -> showError(throwable)
-                        }
-                    })
+            emailFragment = TutorialEmailFragment.getInstance()
+            emailFragment?.let { fragment ->
+                fragment.submitButtonClickHandler = object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        tutorialPresenter.submitEmailAddress(fragment.getEmailAddressText())
+                    }
                 }
+                adapter.addFragment(fragment)
             }
-            adapter.addFragment(emailFragment)
 
-            val codeFragment = TutorialCodeFragment.getInstance()
-            codeFragment.submitButtonClickHandler = object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    tutorialPresenter.verifyEmailAddress(codeFragment.getVerificationCode(), { throwable ->
-                        when (throwable) {
-                            is ServiceFailedException -> codeFragment.showValidationError(getString(R.string.error_invalid_verification_code_address))
-                            else -> showError(throwable)
-                        }
-                    })
+            codeFragment = TutorialCodeFragment.getInstance()
+            codeFragment?.let { fragment ->
+                fragment.submitButtonClickHandler = object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        tutorialPresenter.verifyEmailAddress(fragment.getVerificationCode(), fragment.getPasswordOnImport())
+                    }
                 }
+                adapter.addFragment(fragment)
             }
-            adapter.addFragment(codeFragment)
 
-            val endFragment = TutorialEndFragment.getInstance()
-            endFragment.appStartButtonClickHandler = object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    val intent = Intent(this@TutorialActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+            endFragment = TutorialEndFragment.getInstance()
+            endFragment?.let { fragment ->
+                fragment.appStartButtonClickHandler = object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        val intent = Intent(this@TutorialActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 }
+                adapter.addFragment(fragment)
             }
-            adapter.addFragment(endFragment)
 
             it.adapter = adapter
             it.addOnPageChangeListener(this)

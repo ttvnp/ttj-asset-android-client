@@ -1,9 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.domain.use_case
 
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
-import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.isEmailValid
 import io.reactivex.Single
@@ -15,9 +13,9 @@ interface DeviceUseCase {
 
     fun init() : Single<ModelWrapper<DeviceModel?>>
 
-    fun registerEmail(emailAddress : String) : Single<DeviceModel>
+    fun registerEmail(emailAddress : String) : Single<ModelWrapper<RegisterEmailResultModel?>>
 
-    fun verifyEmail(verificationCode : String) : Single<UserModel>
+    fun verifyEmail(verificationCode : String, passwordOnImport: String) : Single<ModelWrapper<UserModel?>>
 
     fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>>
 
@@ -38,17 +36,18 @@ class DeviceUseCaseImpl @Inject constructor(
         return repository.register()
     }
 
-    override fun registerEmail(emailAddress: String): Single<DeviceModel> {
+    override fun registerEmail(emailAddress: String): Single<ModelWrapper<RegisterEmailResultModel?>> {
         val input = emailAddress.trim()
         if (!isEmailValid(input)) {
-            throw ValidationException("emailAddress")
+            return Single.create { subscriber ->
+                subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(null, ErrorCode.ERROR_VALIDATION_EMAIL))
+            }
         }
         return repository.registerEmail(input)
     }
 
-    override fun verifyEmail(verificationCode: String): Single<UserModel> {
-        val input = verificationCode.trim()
-        return repository.verifyEmail(input)
+    override fun verifyEmail(verificationCode: String, passwordOnImport: String): Single<ModelWrapper<UserModel?>> {
+        return repository.verifyEmail(verificationCode.trim(), passwordOnImport.trim())
     }
 
     override fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>> {

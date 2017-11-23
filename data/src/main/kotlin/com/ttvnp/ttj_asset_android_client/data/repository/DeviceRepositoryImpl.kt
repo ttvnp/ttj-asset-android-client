@@ -5,7 +5,10 @@ import com.ttvnp.ttj_asset_android_client.data.entity.DeviceInfoEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserEntity
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuth
+import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
+import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
+import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
@@ -13,10 +16,7 @@ import com.ttvnp.ttj_asset_android_client.data.translator.DeviceTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
 import com.ttvnp.ttj_asset_android_client.data.util.TokenUtil
 import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
-import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
-import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
@@ -55,20 +55,19 @@ class DeviceRepositoryImpl @Inject constructor(
                 response = deviceService.get().execute().body()!!
                 val serviceResult: ModelWrapper<DeviceModel?>
                 if (response.hasError()) {
-                    serviceResult = ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED)
-                } else {
-                    var de = DeviceEntity(
-                            accessToken = response.accessToken,
-                            accessTokenExpiry = response.accessTokenExpiry,
-                            isActivated = response.isActivated,
-                            deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
-                    )
-                    de = deviceDataStore.update(de)
-                    serviceResult = ModelWrapper<DeviceModel?>(DeviceTranslator().translate(de), ErrorCode.NO_ERROR)
+                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
+                    return@create
                 }
-                subscriber.onSuccess(serviceResult)
+                var de = DeviceEntity(
+                        accessToken = response.accessToken,
+                        accessTokenExpiry = response.accessTokenExpiry,
+                        isActivated = response.isActivated,
+                        deviceToken = response.deviceToken,
+                        grantPushNotification = response.grantPushNotification,
+                        grantEmailNotification = response.grantEmailNotification
+                )
+                de = deviceDataStore.update(de)
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(de), ErrorCode.NO_ERROR))
             } catch (e: IOException) {
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
             }
@@ -76,8 +75,6 @@ class DeviceRepositoryImpl @Inject constructor(
     }
 
     override fun register(): Single<ModelWrapper<DeviceModel?>> {
-        // call api service to register this device and retrieve access token as well.
-
         val register: (SingleEmitter<ModelWrapper<DeviceModel?>>) -> Unit = { subscriber ->
             // newly create device code and credential.
             val initDeviceCode = TokenUtil.generateToken68(64)
@@ -124,6 +121,7 @@ class DeviceRepositoryImpl @Inject constructor(
             } else {
                 if (responseBody.hasError()) {
                     register(subscriber)
+                    return@create
                 }
                 var deviceEntity2 = DeviceEntity(
                         accessToken = responseBody.accessToken,
@@ -139,48 +137,68 @@ class DeviceRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun registerEmail(emailAddress: String): Single<DeviceModel> {
-        return deviceService.registerEmail(emailAddress).map {
-            if (it.hasError()) {
-                throw ServiceFailedException()
+    override fun registerEmail(emailAddress: String): Single<ModelWrapper<RegisterEmailResultModel?>> {
+        return Single.create<ModelWrapper<RegisterEmailResultModel?>> { subscriber ->
+            val response: DeviceRegisterEmailResponse
+            try {
+                response = deviceService.registerEmail(emailAddress).execute().body()!!
+                if (response.hasError()) {
+                    subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(null, ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR))
+                    return@create
+                }
+                val model = RegisterEmailResultModel(response.isEmailInUse)
+                subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(model, ErrorCode.NO_ERROR))
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
             }
-            val deviceEntity = deviceDataStore.get()
-            DeviceTranslator().translate(deviceEntity)!!
         }
     }
 
-    override fun verifyEmail(verificationCode: String): Single<UserModel> {
-        return deviceService.verifyEmail(verificationCode).map { response ->
-            if (response.hasError()) {
-                throw ServiceFailedException()
-            }
-            var userEntity = UserEntity(
-                    emailAddress = response.emailAddress,
-                    profileImageID = response.profileImageID,
-                    profileImageURL = response.profileImageURL,
-                    firstName = response.firstName,
-                    middleName =  response.middleName,
-                    lastName = response.lastName,
-                    address = response.address,
-                    isEmailVerified = response.isEmailVerified,
-                    isIdentified = response.isIdentified
-            )
-            userEntity = userDataStore.update(userEntity)
-
-            // update device entity
-            deviceDataStore.get()?.let {
-                val newDeviceEntity = DeviceEntity(
-                        accessToken = it.accessToken,
-                        accessTokenExpiry = it.accessTokenExpiry,
-                        isActivated = true,
-                        deviceToken = it.deviceToken,
-                        grantPushNotification = it.grantPushNotification,
-                        grantEmailNotification = it.grantEmailNotification
+    override fun verifyEmail(verificationCode: String, passwordOnImport: String): Single<ModelWrapper<UserModel?>> {
+        return Single.create<ModelWrapper<UserModel?>> { subscriber ->
+            val response: DeviceVerifyEmailResponse
+            try {
+                response = deviceService.verifyEmail(verificationCode, passwordOnImport).execute().body()!!
+                if (response.hasError()) {
+                    val errorCode: ErrorCode
+                    when (response.errorCode) {
+                        ServiceErrorCode.ERROR_INVALID_VERIFICATION_CODE.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_VERIFICATION_CODE
+                        ServiceErrorCode.ERROR_INVALID_PASSWORD_ON_IMPORT.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_PASSWORD_ON_IMPORT
+                        else -> errorCode = ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR
+                    }
+                    subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
+                    return@create
+                }
+                var userEntity = UserEntity(
+                        emailAddress = response.emailAddress,
+                        profileImageID = response.profileImageID,
+                        profileImageURL = response.profileImageURL,
+                        firstName = response.firstName,
+                        middleName =  response.middleName,
+                        lastName = response.lastName,
+                        address = response.address,
+                        isEmailVerified = response.isEmailVerified,
+                        isIdentified = response.isIdentified
                 )
-                deviceDataStore.update(newDeviceEntity)
-            }
+                userEntity = userDataStore.update(userEntity)
 
-            UserTranslator().translate(userEntity)!!
+                // update device entity
+                deviceDataStore.get()?.let {
+                    val newDeviceEntity = DeviceEntity(
+                            accessToken = it.accessToken,
+                            accessTokenExpiry = it.accessTokenExpiry,
+                            isActivated = true,
+                            deviceToken = it.deviceToken,
+                            grantPushNotification = it.grantPushNotification,
+                            grantEmailNotification = it.grantEmailNotification
+                    )
+                    deviceDataStore.update(newDeviceEntity)
+                }
+                val model = UserTranslator().translate(userEntity)!!
+                subscriber.onSuccess(ModelWrapper<UserModel?>(model, ErrorCode.NO_ERROR))
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
         }
     }
 
