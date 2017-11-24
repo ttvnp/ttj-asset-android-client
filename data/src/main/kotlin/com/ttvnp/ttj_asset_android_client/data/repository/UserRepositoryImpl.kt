@@ -31,8 +31,8 @@ class UserRepositoryImpl @Inject constructor(
     override fun getUser(forceRefresh: Boolean): Single<UserModel> {
         return Single.create { subscriber ->
             var userModel: UserModel? = null
-            var refresh = false
-            if (!forceRefresh) {
+            var refresh = forceRefresh
+            if (!refresh) {
                 val userEntity = userDataStore.get()
                 if (userEntity == null) {
                     refresh = true
@@ -67,6 +67,10 @@ class UserRepositoryImpl @Inject constructor(
                     }
                 } catch (e: IOException) {
                     // ignore connection exception.
+                    if (userModel == null) {
+                        // get from local db
+                        userModel = UserTranslator().translate(userDataStore.get())
+                    }
                 }
             }
             subscriber.onSuccess(userModel!!)

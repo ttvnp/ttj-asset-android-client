@@ -37,7 +37,7 @@ interface UserService {
 
     @Headers("Accept: application/json")
     @GET("users/balances")
-    fun getBalances() : Single<GetBalancesResponse>
+    fun getBalances() : Call<GetBalancesResponse>
 
     @Headers("Accept: application/json")
     @GET("users/transactions")
@@ -93,7 +93,7 @@ class UserServiceImpl(
         return service.getTargetUser(emailAddress)
     }
 
-    override fun getBalances() : Single<GetBalancesResponse> {
+    override fun getBalances(): Call<GetBalancesResponse> {
         return service.getBalances()
     }
 

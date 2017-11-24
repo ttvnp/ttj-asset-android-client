@@ -66,7 +66,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         recyclerViewPaymentHistory.addItemDecoration(dividerItemDecoration)
 
         mainHomePresenter.setupUserInfo(false)
-        mainHomePresenter.setupBalanceInfo()
+        mainHomePresenter.setupBalanceInfo(false)
         mainHomePresenter.setupUserTransactions()
         return view
     }

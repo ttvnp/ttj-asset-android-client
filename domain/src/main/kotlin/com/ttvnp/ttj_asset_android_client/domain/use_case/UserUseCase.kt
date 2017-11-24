@@ -20,7 +20,7 @@ interface UserUseCase {
 
     fun getTargetUser(emailAddress: String): Single<OtherUserModel>
 
-    fun getBalances(): Single<BalancesModel>
+    fun getBalances(forceRefresh: Boolean): Single<BalancesModel>
 
     fun getTopTransactionsByUserID(upperID: Long, limit: Long): Single<UserTransactionsModel>
 
@@ -45,8 +45,8 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getTargetUser(emailAddress)
     }
 
-    override fun getBalances(): Single<BalancesModel> {
-        return balanceRepository.getBalances()
+    override fun getBalances(forceRefresh: Boolean): Single<BalancesModel> {
+        return balanceRepository.getBalances(forceRefresh)
     }
 
     override fun getTopTransactionsByUserID(upperID: Long, limit: Long): Single<UserTransactionsModel> {

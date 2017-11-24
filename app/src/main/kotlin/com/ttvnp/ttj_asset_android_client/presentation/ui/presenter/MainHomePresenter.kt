@@ -12,7 +12,7 @@ import javax.inject.Inject
 interface MainHomePresenter {
     fun init(target: MainHomePresenterTarget)
     fun setupUserInfo(forceRefresh: Boolean)
-    fun setupBalanceInfo()
+    fun setupBalanceInfo(forceRefresh: Boolean)
     fun setupUserTransactions()
     fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit)
 }
@@ -40,8 +40,8 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 }).addTo(this.disposables)
     }
 
-    override fun setupBalanceInfo() {
-        userUseCase.getBalances()
+    override fun setupBalanceInfo(forceRefresh: Boolean) {
+        userUseCase.getBalances(forceRefresh)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
