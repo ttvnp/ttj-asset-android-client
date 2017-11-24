@@ -63,6 +63,7 @@ abstract class BaseAuthService(
                     val newDeviceEntity = DeviceEntity(
                             accessToken = it.accessToken,
                             accessTokenExpiry = it.accessTokenExpiry,
+                            isActivated = deviceEntity.isActivated,
                             deviceToken = deviceEntity.deviceToken,
                             grantPushNotification = deviceEntity.grantPushNotification,
                             grantEmailNotification = deviceEntity.grantEmailNotification
