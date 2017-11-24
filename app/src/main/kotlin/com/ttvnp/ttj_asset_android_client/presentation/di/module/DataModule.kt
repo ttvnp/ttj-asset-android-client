@@ -11,13 +11,7 @@ import dagger.Provides
 @Module
 class DataModule {
 
-    // DataStores
-    @Provides
-    fun deviceInfoDataStore(
-            cryptDriver: CryptDriver,
-            sharedPreferencesDriver: SharedPreferencesDriver
-    ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
-
+    // DataStore except DeviceInfoDataStore(which you can find it in application module.)
     @Provides
     fun deviceDataStore(ormaHolder: OrmaHolder): DeviceDataStore = DeviceDataStoreImpl(ormaHolder)
 
