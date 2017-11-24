@@ -3,10 +3,10 @@ package com.ttvnp.ttj_asset_android_client.data.repository
 import com.ttvnp.ttj_asset_android_client.data.entity.BalanceEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserTransactionEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
+import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.UserTransactionDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.BalanceTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTransactionTranslator
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserTransactionRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.Now
@@ -36,7 +36,7 @@ class UserTransactionRepositoryImpl @Inject constructor(
                 try {
                     userService.getTransactions(upperID).execute().body()!!.let { response ->
                         if (response.hasError()) {
-                            throw ServiceFailedException()
+                            return@let
                         }
                         var entities: Collection<UserTransactionEntity> = arrayListOf()
                         entities = entities.toMutableList()
@@ -61,25 +61,35 @@ class UserTransactionRepositoryImpl @Inject constructor(
                     }
                 } catch (e: IOException) {
                     // ignore connection exception.
-                    userTransactionsModel = getModelFromLocalDatabase()
                 }
-            } else {
+            }
+            if (userTransactionsModel == null) {
                 userTransactionsModel = getModelFromLocalDatabase()
             }
             subscriber.onSuccess(userTransactionsModel!!)
         }
     }
 
-    override fun createTransaction(sendInfoModel: SendInfoModel, onReceiveBalances: (Collection<BalanceModel>) -> Unit): Single<UserTransactionModel> {
-        return userService.createTransaction(
-                sendInfoModel.targetUserEmailAddress,
-                sendInfoModel.assetType.rawValue,
-                sendInfoModel.amount
-        ).map { response ->
-            if (response.hasError()) {
-                throw ServiceFailedException()
-            }
+    override fun createTransaction(sendInfoModel: SendInfoModel, onReceiveBalances: (Collection<BalanceModel>) -> Unit): Single<ModelWrapper<UserTransactionModel?>> {
 
+        return Single.create { subscriber ->
+
+            val response = userService.createTransaction(
+                    sendInfoModel.targetUserEmailAddress,
+                    sendInfoModel.assetType.rawValue,
+                    sendInfoModel.amount
+            ).execute().body()!!
+
+            if (response.hasError()) {
+                val errorCode: ErrorCode
+                when (response.errorCode) {
+                    // TODO handle server error codes.
+                    ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> errorCode = ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
+                    else -> errorCode = ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR
+                }
+                subscriber.onSuccess(ModelWrapper(null, errorCode))
+                return@create
+            }
             // handle user transactions
             var userTransactionEntity = UserTransactionEntity(
                     id = response.userTransaction.id,
@@ -108,8 +118,8 @@ class UserTransactionRepositoryImpl @Inject constructor(
             }
             val balanceModels = BalanceTranslator().translate(balanceEntities)
             onReceiveBalances(balanceModels)
-
-            UserTransactionTranslator().translate(userTransactionEntity)!!
+            val model = UserTransactionTranslator().translate(userTransactionEntity)!!
+            subscriber.onSuccess(ModelWrapper(model, ErrorCode.NO_ERROR))
         }
     }
 }

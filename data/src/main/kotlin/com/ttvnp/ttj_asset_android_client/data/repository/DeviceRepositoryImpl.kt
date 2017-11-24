@@ -15,15 +15,12 @@ import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.DeviceTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
 import com.ttvnp.ttj_asset_android_client.data.util.TokenUtil
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.rxkotlin.addTo
 import java.io.IOException
 import javax.inject.Inject
 
@@ -211,28 +208,25 @@ class DeviceRepositoryImpl @Inject constructor(
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
                 return@create
             }
-            val disposables = CompositeDisposable()
-            deviceService.updateDeviceToken(deviceToken).subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
-                override fun onSuccess(response: DeviceResponse) {
-                    if (response.hasError()) {
-                        subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_UPDATE_DEVICE))
-                        return
-                    }
-                    deviceEntity = DeviceEntity(
-                            accessToken = response.accessToken,
-                            accessTokenExpiry = response.accessTokenExpiry,
-                            isActivated = response.isActivated,
-                            deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
-                    )
-                    deviceEntity = deviceDataStore.update(deviceEntity!!)
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
-                }
-                override fun onError(e: Throwable) {
+            try {
+                val response = deviceService.updateDeviceToken(deviceToken).execute().body()!!
+                if (response.hasError()) {
                     subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_UPDATE_DEVICE))
+                    return@create
                 }
-            }).addTo(disposables)
+                deviceEntity = DeviceEntity(
+                        accessToken = response.accessToken,
+                        accessTokenExpiry = response.accessTokenExpiry,
+                        isActivated = response.isActivated,
+                        deviceToken = response.deviceToken,
+                        grantPushNotification = response.grantPushNotification,
+                        grantEmailNotification = response.grantEmailNotification
+                )
+                deviceEntity = deviceDataStore.update(deviceEntity)
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
         }
     }
 
@@ -246,27 +240,26 @@ class DeviceRepositoryImpl @Inject constructor(
             val disposables = CompositeDisposable()
             val grantPushNotificationUpdateValue = grantPushNotification?:deviceEntity.grantPushNotification
             val grantEmailNotificationUpdateValue = grantEmailNotification?:deviceEntity.grantEmailNotification
-            deviceService.updateNotificationSettings(grantPushNotificationUpdateValue, grantEmailNotificationUpdateValue).subscribeWith(object : DisposableSingleObserver<DeviceResponse>() {
-                override fun onSuccess(response: DeviceResponse) {
-                    if (response.hasError()) {
-                        subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_UPDATE_DEVICE))
-                        return
-                    }
-                    deviceEntity = DeviceEntity(
-                            accessToken = response.accessToken,
-                            accessTokenExpiry = response.accessTokenExpiry,
-                            isActivated = response.isActivated,
-                            deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
-                    )
-                    deviceEntity = deviceDataStore.update(deviceEntity!!)
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
-                }
-                override fun onError(e: Throwable) {
+
+            try {
+                val response = deviceService.updateNotificationSettings(grantPushNotificationUpdateValue, grantEmailNotificationUpdateValue).execute().body()!!
+                if (response.hasError()) {
                     subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_UPDATE_DEVICE))
+                    return@create
                 }
-            }).addTo(disposables)
+                deviceEntity = DeviceEntity(
+                        accessToken = response.accessToken,
+                        accessTokenExpiry = response.accessTokenExpiry,
+                        isActivated = response.isActivated,
+                        deviceToken = response.deviceToken,
+                        grantPushNotification = response.grantPushNotification,
+                        grantEmailNotification = response.grantEmailNotification
+                )
+                deviceEntity = deviceDataStore.update(deviceEntity)
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
         }
     }
 }

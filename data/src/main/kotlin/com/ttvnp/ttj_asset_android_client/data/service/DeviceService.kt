@@ -23,7 +23,7 @@ interface DeviceService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @PUT("devices/device_token")
-    fun updateDeviceToken(@Field("deviceToken") deviceToken: String) : Single<DeviceResponse>
+    fun updateDeviceToken(@Field("deviceToken") deviceToken: String) : Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -31,7 +31,7 @@ interface DeviceService {
     fun updateNotificationSettings(
             @Field("grantPushNotification") grantPushNotification: Boolean,
             @Field("grantEmailNotification") grantEmailNotification: Boolean
-    ) : Single<DeviceResponse>
+    ): Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -41,7 +41,7 @@ interface DeviceService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/verify_email")
-    fun verifyEmail(@Field("verificationCode") verificationCode: String, @Field("passwordOnImport") passwordOnImport: String) : Call<DeviceVerifyEmailResponse>
+    fun verifyEmail(@Field("verificationCode") verificationCode: String, @Field("passwordOnImport") passwordOnImport: String): Call<DeviceVerifyEmailResponse>
 }
 
 class DeviceServiceImpl(
@@ -74,11 +74,11 @@ class DeviceServiceImpl(
         return service.get()
     }
 
-    override fun updateDeviceToken(deviceToken: String): Single<DeviceResponse> {
+    override fun updateDeviceToken(deviceToken: String): Call<DeviceResponse> {
         return service.updateDeviceToken(deviceToken)
     }
 
-    override fun updateNotificationSettings(grantPushNotification: Boolean, grantEmailNotification: Boolean): Single<DeviceResponse> {
+    override fun updateNotificationSettings(grantPushNotification: Boolean, grantEmailNotification: Boolean): Call<DeviceResponse> {
         return service.updateNotificationSettings(grantPushNotification, grantEmailNotification)
     }
 

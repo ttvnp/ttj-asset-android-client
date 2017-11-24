@@ -18,13 +18,13 @@ interface UserUseCase {
 
     fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>>
 
-    fun getTargetUser(emailAddress: String): Single<OtherUserModel>
+    fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>>
 
     fun getBalances(forceRefresh: Boolean): Single<BalancesModel>
 
     fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
 
-    fun createTransaction(sendInfoModel: SendInfoModel): Single<UserTransactionModel>
+    fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>>
 }
 
 class UserUseCaseImpl @Inject constructor(
@@ -41,7 +41,7 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
-    override fun getTargetUser(emailAddress: String): Single<OtherUserModel> {
+    override fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>> {
         return userRepository.getTargetUser(emailAddress)
     }
 
@@ -53,7 +53,7 @@ class UserUseCaseImpl @Inject constructor(
         return userTransactionRepository.getTopByUserID(upperID, limit, forceRefresh)
     }
 
-    override fun createTransaction(sendInfoModel: SendInfoModel): Single<UserTransactionModel> {
+    override fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>> {
         val disposables = CompositeDisposable()
         return userTransactionRepository.createTransaction(sendInfoModel, { balanceBodels ->
             this.balanceRepository.updateBalances(balanceBodels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {

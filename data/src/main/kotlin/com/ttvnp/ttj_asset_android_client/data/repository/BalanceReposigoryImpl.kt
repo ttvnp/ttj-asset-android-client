@@ -4,7 +4,6 @@ import com.ttvnp.ttj_asset_android_client.data.entity.BalanceEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.store.BalanceDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.BalanceTranslator
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
 import com.ttvnp.ttj_asset_android_client.domain.model.BalanceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
@@ -43,7 +42,7 @@ class BalanceRepositoryImpl @Inject constructor(
                 try {
                     userService.getBalances().execute().body()!!.let { response ->
                         if (response.hasError()) {
-                            throw ServiceFailedException()
+                            return@let
                         }
                         var balanceEntities: Collection<BalanceEntity> = arrayListOf()
                         balanceEntities = balanceEntities.toMutableList()
@@ -64,11 +63,11 @@ class BalanceRepositoryImpl @Inject constructor(
                     }
                 } catch (e: IOException) {
                     // ignore connection exception.
-                    if (balancesModel == null) {
-                        // get from local db
-                        balancesModel = BalanceTranslator().translateBalances(balanceDataStore.getAll())
-                    }
                 }
+            }
+            if (balancesModel == null) {
+                // get from local db
+                balancesModel = BalanceTranslator().translateBalances(balanceDataStore.getAll())
             }
             subscriber.onSuccess(balancesModel!!)
         }

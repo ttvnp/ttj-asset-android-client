@@ -8,7 +8,6 @@ import com.ttvnp.ttj_asset_android_client.data.store.OtherUserDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.OtherUserTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.Now
@@ -101,6 +100,7 @@ class UserRepositoryImpl @Inject constructor(
                 override fun onSuccess(response: UpdateUserResponse) {
                     val serviceResult: ModelWrapper<UserModel?>
                     if (response.hasError()) {
+                        // TODO handle server error codes.
                         serviceResult = ModelWrapper<UserModel?>(UserTranslator().translate(original), ErrorCode.ERROR_CANNOT_UPDATE_USER)
                     } else {
                         var ue = UserEntity(
@@ -127,28 +127,38 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getTargetUser(emailAddress: String): Single<OtherUserModel> {
-        return userService.getTargetUser(emailAddress).map { response ->
-            if (response.hasError()) {
-                throw ServiceFailedException()
-            }
-            var otherUserEntity = OtherUserEntity(
-                    id = response.id,
-                    emailAddress = response.emailAddress,
-                    profileImageID = response.profileImageID,
-                    profileImageURL = response.profileImageURL,
-                    firstName = response.firstName,
-                    middleName =  response.middleName,
-                    lastName = response.lastName
-            )
-            otherUserEntity = otherUserDataStore.update(otherUserEntity)
-            OtherUserTranslator().translate(otherUserEntity)!!
-        }.onErrorReturn { e ->
+    override fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>> {
+        val getModelFromLocal: () -> OtherUserModel? = {
             val otherUserEntity = otherUserDataStore.getByEmailAddress(emailAddress)
-            if (otherUserEntity == null) {
-                throw e
+            OtherUserTranslator().translate(otherUserEntity)
+        }
+        return Single.create { subscriber ->
+            var model = getModelFromLocal()
+            if (model == null) {
+                try {
+                    userService.getTargetUser(emailAddress).execute().body()?.let { response ->
+                        if (response.hasError()) return@let
+                        var otherUserEntity = OtherUserEntity(
+                                id = response.id,
+                                emailAddress = response.emailAddress,
+                                profileImageID = response.profileImageID,
+                                profileImageURL = response.profileImageURL,
+                                firstName = response.firstName,
+                                middleName =  response.middleName,
+                                lastName = response.lastName
+                        )
+                        otherUserEntity = otherUserDataStore.update(otherUserEntity)
+                        model = OtherUserTranslator().translate(otherUserEntity)!!
+                    }
+                } catch (e: IOException) {
+                    // ignore exception.
+                }
             }
-            OtherUserTranslator().translate(otherUserEntity)!!
+            if (model == null) {
+                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_CANNOT_FIND_TARGET_USER))
+            } else {
+                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(model, ErrorCode.NO_ERROR))
+            }
         }
     }
 }

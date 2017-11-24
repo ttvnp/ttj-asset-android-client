@@ -1,6 +1,5 @@
 package com.ttvnp.ttj_asset_android_client.domain.use_case
 
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.isEmailValid

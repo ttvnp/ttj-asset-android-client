@@ -7,9 +7,6 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.RelativeLayout
 import com.google.firebase.crash.FirebaseCrash
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.BaseException
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ValidationException
 import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.RegisterEmailResultModel

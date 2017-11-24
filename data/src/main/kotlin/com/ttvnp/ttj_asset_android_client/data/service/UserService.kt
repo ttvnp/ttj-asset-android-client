@@ -33,7 +33,7 @@ interface UserService {
 
     @Headers("Accept: application/json")
     @GET("users/targets")
-    fun getTargetUser(@Query("emailAddress") emailAddress: String): Single<GetTargetUserResponse>
+    fun getTargetUser(@Query("emailAddress") emailAddress: String): Call<GetTargetUserResponse>
 
     @Headers("Accept: application/json")
     @GET("users/balances")
@@ -46,7 +46,7 @@ interface UserService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("users/transactions")
-    fun createTransaction(@Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Single<CreateTransactionResponse>
+    fun createTransaction(@Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Call<CreateTransactionResponse>
 }
 
 class UserServiceImpl(
@@ -89,7 +89,7 @@ class UserServiceImpl(
         return service.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
-    override fun getTargetUser(emailAddress: String): Single<GetTargetUserResponse> {
+    override fun getTargetUser(emailAddress: String): Call<GetTargetUserResponse> {
         return service.getTargetUser(emailAddress)
     }
 
@@ -101,7 +101,7 @@ class UserServiceImpl(
         return service.getTransactions(upperUserTransactionID)
     }
 
-    override fun createTransaction(emailAddress: String, assetType: String, amount: Long): Single<CreateTransactionResponse> {
+    override fun createTransaction(emailAddress: String, assetType: String, amount: Long): Call<CreateTransactionResponse> {
         return service.createTransaction(emailAddress, assetType, amount)
     }
 }
