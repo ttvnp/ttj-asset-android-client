@@ -13,8 +13,8 @@ interface MainHomePresenter {
     fun init(target: MainHomePresenterTarget)
     fun setupUserInfo(forceRefresh: Boolean)
     fun setupBalanceInfo(forceRefresh: Boolean)
-    fun setupUserTransactions()
-    fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit)
+    fun setupUserTransactions(forceRefresh: Boolean)
+    fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit, forceRefresh: Boolean)
 }
 
 class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), MainHomePresenter {
@@ -54,13 +54,13 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 }).addTo(this.disposables)
     }
 
-    override fun setupUserTransactions() {
-        userUseCase.getTopTransactionsByUserID(0, historyPageSize)
+    override fun setupUserTransactions(forceRefresh: Boolean) {
+        userUseCase.getTopTransactionsByUserID(0, historyPageSize, forceRefresh)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserTransactionsModel>() {
-                    override fun onSuccess(t: UserTransactionsModel) {
-                        target?.bindUserTransactions(t)
+                    override fun onSuccess(model: UserTransactionsModel) {
+                        target?.bindUserTransactions(model, forceRefresh)
                     }
                     override fun onError(e: Throwable) {
                         target?.showError(e)
@@ -68,8 +68,8 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 }).addTo(this.disposables)
     }
 
-    override fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit) {
-        userUseCase.getTopTransactionsByUserID(lastUserTransactionID, historyPageSize)
+    override fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit, forceRefresh: Boolean) {
+        userUseCase.getTopTransactionsByUserID(lastUserTransactionID, historyPageSize, forceRefresh)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserTransactionsModel>() {

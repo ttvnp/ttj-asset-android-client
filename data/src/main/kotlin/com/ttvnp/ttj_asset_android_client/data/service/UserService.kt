@@ -18,7 +18,7 @@ import retrofit2.http.*
 interface UserService {
     @Headers("Accept: application/json")
     @GET("users")
-    fun getUser() : Call<GetUserResponse>
+    fun getUser(): Call<GetUserResponse>
 
     @Headers("Accept: application/json")
     @Multipart
@@ -29,24 +29,24 @@ interface UserService {
             @Part("middleName") middleName: RequestBody,
             @Part("lastName") lastName: RequestBody,
             @Part("address") address: RequestBody
-    ) : Single<UpdateUserResponse>
+    ): Single<UpdateUserResponse>
 
     @Headers("Accept: application/json")
     @GET("users/targets")
-    fun getTargetUser(@Query("emailAddress") emailAddress: String) : Single<GetTargetUserResponse>
+    fun getTargetUser(@Query("emailAddress") emailAddress: String): Single<GetTargetUserResponse>
 
     @Headers("Accept: application/json")
     @GET("users/balances")
-    fun getBalances() : Call<GetBalancesResponse>
+    fun getBalances(): Call<GetBalancesResponse>
 
     @Headers("Accept: application/json")
     @GET("users/transactions")
-    fun getTransactions(@Query("upperUserTransactionID") upperUserTransactionID: Long) : Single<GetTransactionsResponse>
+    fun getTransactions(@Query("upperUserTransactionID") upperUserTransactionID: Long): Call<GetTransactionsResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("users/transactions")
-    fun createTransaction(@Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long) : Single<CreateTransactionResponse>
+    fun createTransaction(@Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Single<CreateTransactionResponse>
 }
 
 class UserServiceImpl(
@@ -75,7 +75,7 @@ class UserServiceImpl(
         service = builder.create(UserService::class.java)
     }
 
-    override fun getUser() : Call<GetUserResponse> {
+    override fun getUser(): Call<GetUserResponse> {
         return service.getUser()
     }
 
@@ -89,7 +89,7 @@ class UserServiceImpl(
         return service.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
-    override fun getTargetUser(emailAddress: String) : Single<GetTargetUserResponse> {
+    override fun getTargetUser(emailAddress: String): Single<GetTargetUserResponse> {
         return service.getTargetUser(emailAddress)
     }
 
@@ -97,7 +97,7 @@ class UserServiceImpl(
         return service.getBalances()
     }
 
-    override fun getTransactions(upperUserTransactionID: Long): Single<GetTransactionsResponse> {
+    override fun getTransactions(upperUserTransactionID: Long): Call<GetTransactionsResponse> {
         return service.getTransactions(upperUserTransactionID)
     }
 

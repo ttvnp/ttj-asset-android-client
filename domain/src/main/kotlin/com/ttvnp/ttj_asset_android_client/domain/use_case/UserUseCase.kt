@@ -22,7 +22,7 @@ interface UserUseCase {
 
     fun getBalances(forceRefresh: Boolean): Single<BalancesModel>
 
-    fun getTopTransactionsByUserID(upperID: Long, limit: Long): Single<UserTransactionsModel>
+    fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
 
     fun createTransaction(sendInfoModel: SendInfoModel): Single<UserTransactionModel>
 }
@@ -49,8 +49,8 @@ class UserUseCaseImpl @Inject constructor(
         return balanceRepository.getBalances(forceRefresh)
     }
 
-    override fun getTopTransactionsByUserID(upperID: Long, limit: Long): Single<UserTransactionsModel> {
-        return userTransactionRepository.getTopByUserID(upperID, limit)
+    override fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel> {
+        return userTransactionRepository.getTopByUserID(upperID, limit, forceRefresh)
     }
 
     override fun createTransaction(sendInfoModel: SendInfoModel): Single<UserTransactionModel> {

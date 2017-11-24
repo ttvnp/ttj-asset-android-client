@@ -2,12 +2,14 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
@@ -32,8 +34,11 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     private lateinit var profileImage: CircleImageView
     private lateinit var textPointAmount: TextView
     private lateinit var textCoinAmount: TextView
+    private lateinit var swipeLayoutPaymentHistory: SwipeRefreshLayout
+    private lateinit var swipeLayoutEmptyPaymentHistory: SwipeRefreshLayout
     private lateinit var recyclerViewPaymentHistory: RecyclerView
-    private lateinit var emptyViewPaymentHistory: TextView
+    private lateinit var emptyViewPaymentHistory: ListView
+    private lateinit var emptyTextViewPaymentHistory: TextView
 
     companion object {
         fun getInstance() : MainHomeFragment {
@@ -53,12 +58,14 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
             savedInstanceState: Bundle?
     ) : View {
         val view = inflater.inflate(R.layout.fragment_main_home, container, false)
-        textEmailAddress = view.findViewById<TextView>(R.id.text_email_address)
-        profileImage = view.findViewById<CircleImageView>(R.id.profile_image)
-        textPointAmount = view.findViewById<TextView>(R.id.text_point_amount)
-        textCoinAmount = view.findViewById<TextView>(R.id.text_coint_amount)
-        recyclerViewPaymentHistory = view.findViewById<RecyclerView>(R.id.recycler_view_payment_history)
-        emptyViewPaymentHistory = view.findViewById<TextView>(R.id.empty_view_payment_history)
+        textEmailAddress = view.findViewById(R.id.text_email_address)
+        profileImage = view.findViewById(R.id.profile_image)
+        textPointAmount = view.findViewById(R.id.text_point_amount)
+        textCoinAmount = view.findViewById(R.id.text_coint_amount)
+        swipeLayoutPaymentHistory = view.findViewById(R.id.swipe_layout_payment_history)
+        swipeLayoutEmptyPaymentHistory = view.findViewById(R.id.swipe_layout_empty_payment_history)
+        recyclerViewPaymentHistory = view.findViewById(R.id.recycler_view_payment_history)
+        emptyViewPaymentHistory = view.findViewById(R.id.empty_view_payment_history)
 
         val layoutManager = LinearLayoutManager(this.context)
         recyclerViewPaymentHistory.layoutManager = layoutManager
@@ -67,7 +74,18 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
         mainHomePresenter.setupUserInfo(false)
         mainHomePresenter.setupBalanceInfo(false)
-        mainHomePresenter.setupUserTransactions()
+        mainHomePresenter.setupUserTransactions(false)
+
+        val swipeLayoutRefreshListener = object : SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                mainHomePresenter.setupUserTransactions(true)
+            }
+        }
+        swipeLayoutPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
+        swipeLayoutEmptyPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
+        emptyTextViewPaymentHistory = view.findViewById<TextView>(R.id.empty_text_view_payment_history)
+        emptyViewPaymentHistory.emptyView = emptyTextViewPaymentHistory
+
         return view
     }
 
@@ -83,17 +101,20 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         textCoinAmount.text = balancesModel.coinBalance.amount.formatString()
     }
 
-    override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel) {
+    override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean) {
+        stopSwipeLayoutRefreshing()
         if (userTransactionsModel.userTransactions.size < 1) {
             // case empty
-            recyclerViewPaymentHistory.visibility = View.GONE
-            emptyViewPaymentHistory.visibility = View.VISIBLE
+            swipeLayoutPaymentHistory.visibility = View.GONE
+            swipeLayoutEmptyPaymentHistory.visibility = View.VISIBLE
+            emptyTextViewPaymentHistory.visibility = View.VISIBLE
         } else {
             // has data
             val adapter = PaymentHistoryViewAdapter(userTransactionsModel.userTransactions.toMutableList());
             recyclerViewPaymentHistory.adapter = adapter
-            recyclerViewPaymentHistory.visibility = View.VISIBLE
-            emptyViewPaymentHistory.visibility = View.GONE
+            swipeLayoutPaymentHistory.visibility = View.VISIBLE
+            swipeLayoutEmptyPaymentHistory.visibility = View.GONE
+            emptyTextViewPaymentHistory.visibility = View.GONE
             if (userTransactionsModel.hasMore) {
                 recyclerViewPaymentHistory.addOnScrollListener(object : EndlessScrollListener(recyclerViewPaymentHistory.layoutManager as LinearLayoutManager) {
                     override fun onLoadMore(currentPage: Int) {
@@ -105,10 +126,20 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
                             adapter.addAllUserTransactionModel(loadedModel.userTransactions)
                             val updatedSize = adapter.itemCount
                             recyclerViewPaymentHistory.post { adapter.notifyItemRangeInserted(initialSize, updatedSize) }
-                        })
+                        }, forceRefresh)
                     }
                 })
             }
         }
+    }
+
+    override fun showError(throwable: Throwable) {
+        super.showError(throwable)
+        stopSwipeLayoutRefreshing()
+    }
+
+    private fun stopSwipeLayoutRefreshing() {
+        swipeLayoutPaymentHistory.isRefreshing = false
+        swipeLayoutEmptyPaymentHistory.isRefreshing = false
     }
 }
