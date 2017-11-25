@@ -7,7 +7,6 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
-import io.reactivex.Single
 import retrofit2.Call
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

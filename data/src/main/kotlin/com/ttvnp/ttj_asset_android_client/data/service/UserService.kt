@@ -5,7 +5,6 @@ import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.*
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
-import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -29,7 +28,7 @@ interface UserService {
             @Part("middleName") middleName: RequestBody,
             @Part("lastName") lastName: RequestBody,
             @Part("address") address: RequestBody
-    ): Single<UpdateUserResponse>
+    ): Call<UpdateUserResponse>
 
     @Headers("Accept: application/json")
     @GET("users/targets")
@@ -85,7 +84,7 @@ class UserServiceImpl(
             middleName: RequestBody,
             lastName: RequestBody,
             address: RequestBody
-    ): Single<UpdateUserResponse> {
+    ): Call<UpdateUserResponse> {
         return service.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
