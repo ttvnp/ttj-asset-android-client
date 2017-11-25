@@ -24,7 +24,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 
-class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarget {
+class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
 
     @Inject
     lateinit var sendAmountFormPresenter: SendAmountFormPresenter
@@ -123,7 +123,7 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
                 radioSendCoin.isChecked = true
             }
         }
-        textSendAmount.text = sendInfoModel.amount.toString()
+        textSendAmount.text = if (0 < sendInfoModel.amount) sendInfoModel.amount.toString() else ""
     }
 
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {

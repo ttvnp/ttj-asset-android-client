@@ -87,18 +87,34 @@
 
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_payment_history"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
-
-    <TextView
-        android:id="@+id/empty_view_payment_history"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="@string/no_transaction_data" />
-
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_layout_payment_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_payment_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_layout_empty_payment_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/empty_view_payment_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/empty_text_view_payment_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_transaction_data" />
+    </RelativeLayout>
 </LinearLayout>

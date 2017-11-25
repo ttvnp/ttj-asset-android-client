@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 open class BaseResponse(
         @Json(name = "exitCode") val exitCode: Int = 0,
-        @Json(name = "message") val message: String = ""
+        @Json(name = "errorCode") val errorCode: Int = 0
 ) {
     open fun hasError(): Boolean {
         return exitCode != 0

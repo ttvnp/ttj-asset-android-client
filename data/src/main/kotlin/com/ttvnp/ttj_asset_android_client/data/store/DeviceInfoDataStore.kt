@@ -18,9 +18,11 @@ class DeviceInfoDataStoreImpl @Inject constructor(
     private val DEVICE_CODE_KEY = "device.device_code"
     private val CREDENTIAL_KEY = "device.credential"
 
+    private var cached: DeviceInfoEntity? = null
+
     override fun get(): DeviceInfoEntity? {
 
-        // TODO should use memory cache
+        if (cached != null) return cached
 
         var deviceCode = sharedPreferencesDriver.getString(DEVICE_CODE_KEY)
         var credential = sharedPreferencesDriver.getString(CREDENTIAL_KEY)
@@ -36,7 +38,8 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         if (credentialPlainText == null) return null
         credential = credentialPlainText
 
-        return DeviceInfoEntity(deviceCode, credential)
+        cached = DeviceInfoEntity(deviceCode, credential)
+        return cached
     }
 
     override fun save(entity: DeviceInfoEntity) {
@@ -44,7 +47,6 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         val credential = cryptDriver.encrypt(entity.credential)
         sharedPreferencesDriver.putString(DEVICE_CODE_KEY, deviceCode!!)
         sharedPreferencesDriver.putString(CREDENTIAL_KEY, credential!!)
-
-        // TODO should delete memory cache
+        cached = entity
     }
 }

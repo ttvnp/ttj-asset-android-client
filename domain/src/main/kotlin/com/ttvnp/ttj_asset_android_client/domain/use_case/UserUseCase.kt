@@ -14,17 +14,17 @@ import javax.inject.Inject
 
 interface UserUseCase {
 
-    fun getUser(): Single<UserModel>
+    fun getUser(forceRefresh: Boolean): Single<UserModel>
 
     fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>>
 
-    fun getTargetUser(emailAddress: String): Single<OtherUserModel>
+    fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>>
 
-    fun getBalances(): Single<BalancesModel>
+    fun getBalances(forceRefresh: Boolean): Single<BalancesModel>
 
-    fun getTopTransactionsByUserID(upperID: Long, limit: Long): Single<UserTransactionsModel>
+    fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
 
-    fun createTransaction(sendInfoModel: SendInfoModel): Single<UserTransactionModel>
+    fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>>
 }
 
 class UserUseCaseImpl @Inject constructor(
@@ -33,27 +33,27 @@ class UserUseCaseImpl @Inject constructor(
         private val userTransactionRepository: UserTransactionRepository
 ) : UserUseCase {
 
-    override fun getUser(): Single<UserModel> {
-        return userRepository.getUser()
+    override fun getUser(forceRefresh: Boolean): Single<UserModel> {
+        return userRepository.getUser(forceRefresh)
     }
 
     override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>> {
         return userRepository.updateUser(profileImageFile, firstName, middleName, lastName, address)
     }
 
-    override fun getTargetUser(emailAddress: String): Single<OtherUserModel> {
+    override fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>> {
         return userRepository.getTargetUser(emailAddress)
     }
 
-    override fun getBalances(): Single<BalancesModel> {
-        return balanceRepository.getBalances()
+    override fun getBalances(forceRefresh: Boolean): Single<BalancesModel> {
+        return balanceRepository.getBalances(forceRefresh)
     }
 
-    override fun getTopTransactionsByUserID(upperID: Long, limit: Long): Single<UserTransactionsModel> {
-        return userTransactionRepository.getTopByUserID(upperID, limit)
+    override fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel> {
+        return userTransactionRepository.getTopByUserID(upperID, limit, forceRefresh)
     }
 
-    override fun createTransaction(sendInfoModel: SendInfoModel): Single<UserTransactionModel> {
+    override fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>> {
         val disposables = CompositeDisposable()
         return userTransactionRepository.createTransaction(sendInfoModel, { balanceBodels ->
             this.balanceRepository.updateBalances(balanceBodels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {

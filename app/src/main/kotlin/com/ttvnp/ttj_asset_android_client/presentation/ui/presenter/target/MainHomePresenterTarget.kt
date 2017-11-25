@@ -7,5 +7,5 @@ import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionsModel
 interface MainHomePresenterTarget : BasePresenterTarget {
     fun bindUserInfo(userModel: UserModel)
     fun bindBalanceInfo(balancesModel: BalancesModel)
-    fun bindUserTransactions(userTransactionsModel: UserTransactionsModel)
+    fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean)
 }
