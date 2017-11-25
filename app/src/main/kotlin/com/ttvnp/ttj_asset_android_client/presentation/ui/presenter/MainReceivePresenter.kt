@@ -24,7 +24,7 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
     }
 
     override fun setupDefault() {
-        userUseCase.getUser()
+        userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserModel>() {

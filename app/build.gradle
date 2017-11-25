@@ -60,7 +60,6 @@ android {
         }
     }
 
-
     packagingOptions {
         exclude 'LICENSE.txt'
         exclude 'META-INF/DEPENDENCIES'

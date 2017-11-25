@@ -7,6 +7,7 @@
     <string name="tutorial_form_submit">send</string>
     <string name="tutorial_form_desc">* Provide your email address to activate your account.\n* Once you submit this form, then we will send you a confirmation email.</string>
     <string name="tutorial_verification_code_desc">* Provide verification code which was sent by email.</string>
+    <string name="tutorial_password_on_import_desc">* Provide password which was sent  by email when you created an account on the first time.</string>
     <string name="tutorial_end_desc">Your account has been activated.\nPlease enjoy!</string>
     <string name="app_start">start</string>
 
@@ -22,6 +23,7 @@
     <string name="complete">Complete</string>
     <string name="tab">tab</string>
     <string name="verification_code">code</string>
+    <string name="password_on_import">password</string>
     <string name="not_set">Not set</string>
     <string name="error_dialog_title">ERROR</string>
     <string name="no_transaction_data">There is no transaction data.</string>
@@ -41,7 +43,8 @@
     <string name="error_device_registration">Device registration was failed due to network error.Please retry later.</string>
     <string name="error_validation_email_address">email address format is invalid.</string>
     <string name="error_invalid_email_address">This email address is not available.</string>
-    <string name="error_invalid_verification_code_address">This code is invalid.Please check your email again.</string>
+    <string name="error_invalid_verification_code">This code is invalid.Please check your email again.</string>
+    <string name="error_invalid_password_on_import">This password is invalid.Please check your email again sent when you first registered an account.</string>
     <string name="error_message_empty">your input was empty.</string>
     <string name="error_message_invalid_long">please input valid number of amount.</string>
     <string name="error_message_no_such_email_address_user">Sorry.No such user account related with the email address.</string>

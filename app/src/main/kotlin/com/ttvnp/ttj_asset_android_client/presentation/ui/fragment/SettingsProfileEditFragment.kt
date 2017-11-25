@@ -39,7 +39,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class SettingsProfileEditFragment() : BaseMainFragment(), SettingsProfileEditPresenterTarget {
+class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresenterTarget {
 
     @Inject
     lateinit var settingsProfileEditPresenter: SettingsProfileEditPresenter

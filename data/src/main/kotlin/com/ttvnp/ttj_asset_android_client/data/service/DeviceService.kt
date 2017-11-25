@@ -7,7 +7,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
-import io.reactivex.Single
+import retrofit2.Call
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,12 +17,12 @@ import retrofit2.http.*
 interface DeviceService {
     @Headers("Accept: application/json")
     @GET("devices")
-    fun get() : Single<DeviceResponse>
+    fun get(): Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @PUT("devices/device_token")
-    fun updateDeviceToken(@Field("deviceToken") deviceToken: String) : Single<DeviceResponse>
+    fun updateDeviceToken(@Field("deviceToken") deviceToken: String) : Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -30,17 +30,17 @@ interface DeviceService {
     fun updateNotificationSettings(
             @Field("grantPushNotification") grantPushNotification: Boolean,
             @Field("grantEmailNotification") grantEmailNotification: Boolean
-    ) : Single<DeviceResponse>
+    ): Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/email")
-    fun registerEmail(@Field("emailAddress") emailAddress: String) : Single<DeviceRegisterEmailResponse>
+    fun registerEmail(@Field("emailAddress") emailAddress: String): Call<DeviceRegisterEmailResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/verify_email")
-    fun verifyEmail(@Field("verificationCode") verificationCode: String) : Single<DeviceVerifyEmailResponse>
+    fun verifyEmail(@Field("verificationCode") verificationCode: String, @Field("passwordOnImport") passwordOnImport: String): Call<DeviceVerifyEmailResponse>
 }
 
 class DeviceServiceImpl(
@@ -69,23 +69,23 @@ class DeviceServiceImpl(
         service = builder.create(DeviceService::class.java)
     }
 
-    override fun get(): Single<DeviceResponse> {
+    override fun get(): Call<DeviceResponse> {
         return service.get()
     }
 
-    override fun updateDeviceToken(deviceToken: String): Single<DeviceResponse> {
+    override fun updateDeviceToken(deviceToken: String): Call<DeviceResponse> {
         return service.updateDeviceToken(deviceToken)
     }
 
-    override fun updateNotificationSettings(grantPushNotification: Boolean, grantEmailNotification: Boolean): Single<DeviceResponse> {
+    override fun updateNotificationSettings(grantPushNotification: Boolean, grantEmailNotification: Boolean): Call<DeviceResponse> {
         return service.updateNotificationSettings(grantPushNotification, grantEmailNotification)
     }
 
-    override fun registerEmail(emailAddress: String): Single<DeviceRegisterEmailResponse> {
+    override fun registerEmail(emailAddress: String): Call<DeviceRegisterEmailResponse> {
         return service.registerEmail(emailAddress)
     }
 
-    override fun verifyEmail(verificationCode: String): Single<DeviceVerifyEmailResponse> {
-        return service.verifyEmail(verificationCode)
+    override fun verifyEmail(verificationCode: String, passwordOnImport: String): Call<DeviceVerifyEmailResponse> {
+        return service.verifyEmail(verificationCode, passwordOnImport)
     }
 }
