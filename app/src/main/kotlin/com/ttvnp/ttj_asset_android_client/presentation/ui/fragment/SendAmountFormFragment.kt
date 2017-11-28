@@ -123,7 +123,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
                 radioSendCoin.isChecked = true
             }
         }
-        textSendAmount.text = sendInfoModel.amount.toString()
+        textSendAmount.text = if (0 < sendInfoModel.amount) sendInfoModel.amount.toString() else ""
     }
 
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {
