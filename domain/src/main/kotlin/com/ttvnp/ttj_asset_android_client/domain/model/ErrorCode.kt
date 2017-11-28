@@ -5,6 +5,7 @@ enum class ErrorCode(val rawValue: Int) {
 
     // system error
     ERROR_CANNOT_CONNECT_TO_SERVER(1),
+    ERROR_LOCKED_OUT(3),
 
     // service error
     ERROR_ILLEGAL_DATA_STATE_ERROR(101),
@@ -18,5 +19,6 @@ enum class ErrorCode(val rawValue: Int) {
     // validation error
     ERROR_VALIDATION_EMAIL(1001),
     ERROR_VALIDATION_VERIFICATION_CODE(1002),
-    ERROR_VALIDATION_PASSWORD_ON_IMPORT(1003)
+    ERROR_VALIDATION_PASSWORD_ON_IMPORT(1003),
+    ERROR_VALIDATION_TOO_MUCH_AMOUNT(1004),
 }

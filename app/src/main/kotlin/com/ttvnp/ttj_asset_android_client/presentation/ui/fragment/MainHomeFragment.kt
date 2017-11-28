@@ -76,10 +76,8 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         mainHomePresenter.setupBalanceInfo(false)
         mainHomePresenter.setupUserTransactions(false)
 
-        val swipeLayoutRefreshListener = object : SwipeRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                mainHomePresenter.setupUserTransactions(true)
-            }
+        val swipeLayoutRefreshListener: () -> Unit = fun() {
+            mainHomePresenter.setupUserTransactions(true)
         }
         swipeLayoutPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
         swipeLayoutEmptyPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
@@ -103,7 +101,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
     override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean) {
         stopSwipeLayoutRefreshing()
-        if (userTransactionsModel.userTransactions.size < 1) {
+        if (userTransactionsModel.userTransactions.isEmpty()) {
             // case empty
             swipeLayoutPaymentHistory.visibility = View.GONE
             swipeLayoutEmptyPaymentHistory.visibility = View.VISIBLE

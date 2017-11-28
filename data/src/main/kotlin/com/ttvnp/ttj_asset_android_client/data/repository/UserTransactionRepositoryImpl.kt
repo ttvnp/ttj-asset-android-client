@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.data.repository
 import com.ttvnp.ttj_asset_android_client.data.entity.BalanceEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserTransactionEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
+import com.ttvnp.ttj_asset_android_client.data.service.response.CreateTransactionResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.UserTransactionDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.BalanceTranslator
@@ -32,7 +33,17 @@ class UserTransactionRepositoryImpl @Inject constructor(
                 }
                 UserTransactionTranslator().translateUserTransactions(localEntities, hasMore)
             }
-            if (forceRefresh) {
+            var refresh = forceRefresh
+            if (!refresh) {
+                userTransactionsModel = getModelFromLocalDatabase()
+                val containsPending = userTransactionsModel.userTransactions.filter { mdl ->
+                    mdl.transactionStatus == TransactionStatus.Unprocessed
+                }.firstOrNull() != null
+                if (containsPending) {
+                    refresh = true
+                }
+            }
+            if (refresh) {
                 try {
                     userService.getTransactions(upperID).execute().body()!!.let { response ->
                         if (response.hasError()) {
@@ -73,18 +84,22 @@ class UserTransactionRepositoryImpl @Inject constructor(
     override fun createTransaction(sendInfoModel: SendInfoModel, onReceiveBalances: (Collection<BalanceModel>) -> Unit): Single<ModelWrapper<UserTransactionModel?>> {
 
         return Single.create { subscriber ->
-
-            val response = userService.createTransaction(
-                    sendInfoModel.targetUserEmailAddress,
-                    sendInfoModel.assetType.rawValue,
-                    sendInfoModel.amount
-            ).execute().body()!!
-
+            val response: CreateTransactionResponse
+            try {
+                response = userService.createTransaction(
+                        sendInfoModel.targetUserEmailAddress,
+                        sendInfoModel.assetType.rawValue,
+                        sendInfoModel.amount
+                ).execute().body()!!
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
+                return@create
+            }
             if (response.hasError()) {
                 val errorCode: ErrorCode
                 when (response.errorCode) {
-                    // TODO handle server error codes.
-                    ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> errorCode = ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
+                    ServiceErrorCode.ERROR_LOCKED_OUT.rawValue -> errorCode = ErrorCode.ERROR_LOCKED_OUT
+                    ServiceErrorCode.ERROR_TOO_MUCH_AMOUNT.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT
                     else -> errorCode = ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR
                 }
                 subscriber.onSuccess(ModelWrapper(null, errorCode))

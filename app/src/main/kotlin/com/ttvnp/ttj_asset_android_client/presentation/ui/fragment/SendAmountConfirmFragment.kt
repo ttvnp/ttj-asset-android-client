@@ -2,6 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -18,6 +19,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 import android.util.TypedValue
 import android.view.*
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 
 
 class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTarget {
@@ -118,6 +120,22 @@ class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTa
             this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0);
         }
         firebaseAnalyticsHelper?.logAssetSendEvent(sendInfoModel.assetType, sendInfoModel.amount)
+    }
+
+    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+        val msg: String
+        when (errorCode) {
+            ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER -> msg = resources.getString(R.string.error_cannot_connect_to_server)
+            ErrorCode.ERROR_LOCKED_OUT -> msg = resources.getString(R.string.error_lockout_message)
+            ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> msg = resources.getString(R.string.error_cannot_send_that_amount)
+            else -> msg = resources.getString(R.string.error_default_message)
+        }
+        AlertDialog
+                .Builder(this.context)
+                .setTitle(resources.getString(R.string.error_dialog_title))
+                .setMessage(msg)
+                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                .show()
     }
 
     override fun onDestroy() {

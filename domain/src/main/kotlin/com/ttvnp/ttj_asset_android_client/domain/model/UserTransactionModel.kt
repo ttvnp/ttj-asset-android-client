@@ -6,6 +6,7 @@ import java.util.*
 class UserTransactionModel (
         val id: Long = 0L,
         val loggedAt: Date = Now(),
+        val transactionStatus: TransactionStatus = TransactionStatus.Unprocessed,
         val transactionType: TransactionType = TransactionType.SEND,
         val targetUserID: Long = 0L,
         val targetUserEmailAddress: String = "",

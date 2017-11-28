@@ -33,13 +33,14 @@
     <string name="send_by_qr">Scan Code</string>
     <string name="send_by_email">By Email Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
-    <string name="send_successfully_executed">The payment has been completed successfully.</string>
+    <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed</string>
     <string name="profile_successfully_updated">Your profile has been updated successfully.</string>
     <string name="push_notification">Push Notification</string>
     <string name="email_notification">Email Notification</string>
 
     <!-- error message -->
-    <string name="error_default_message">Error occurred due to network error.Please retry later.</string>
+    <string name="error_default_message">Unknown error occurred.Please retry later.</string>
+    <string name="error_cannot_connect_to_server">Error occurred due to network error.Please retry later.</string>
     <string name="error_device_registration">Device registration was failed due to network error.Please retry later.</string>
     <string name="error_validation_email_address">email address format is invalid.</string>
     <string name="error_invalid_email_address">This email address is not available.</string>
@@ -49,6 +50,8 @@
     <string name="error_message_invalid_long">please input valid number of amount.</string>
     <string name="error_message_no_such_email_address_user">Sorry.No such user account related with the email address.</string>
     <string name="error_permission_denied_on_launch_camera">Cannot activate camera. Please grant authorities to this app.</string>
+    <string name="error_lockout_message">Sorry for inconvenience.The Server is busy.Please retry later.</string>
+    <string name="error_cannot_send_that_amount">You cannot send that much.</string>
 
     <!-- button -->
     <string name="default_positive_button_text">OK</string>
@@ -82,4 +85,6 @@
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">Receive Payment</string>
     <string name="notification_body_receive_payment_notification">You received %s %s from %s.</string>
+    <string name="notification_title_send_payment_notification">Payment Completed</string>
+    <string name="notification_body_send_payment_notification">The payment (%s %s to %s) has been completed successfully.</string>
 </resources>
