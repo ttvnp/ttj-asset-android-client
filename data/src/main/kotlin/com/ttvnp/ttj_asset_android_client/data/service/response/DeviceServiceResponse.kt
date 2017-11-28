@@ -13,6 +13,7 @@ class DeviceResponse(
 ) : BaseResponse()
 
 class DeviceRegisterEmailResponse(
+        @Json(name = "isEmailInUse") val isEmailInUse: Boolean = false
 ) : BaseResponse()
 
 class DeviceVerifyEmailResponse(

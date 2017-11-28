@@ -14,7 +14,11 @@ class UserTransactionDataStoreImpl @Inject constructor(val ormaHolder: OrmaHolde
 
     override fun getTopByUserID(upperID: Long, limit: Long): Collection<UserTransactionEntity> {
         val orma = ormaHolder.ormaDatabase
-        return orma.selectFromUserTransactionEntity().idLt(upperID).limit(limit).toList()
+        if (0 < upperID) {
+            return orma.selectFromUserTransactionEntity().idLt(upperID).orderBy("id desc").limit(limit).toList()
+        } else {
+            return orma.selectFromUserTransactionEntity().orderBy("id desc").limit(limit).toList()
+        }
     }
 
     override fun upsert(userTransaction: UserTransactionEntity): UserTransactionEntity {

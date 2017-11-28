@@ -1,5 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
@@ -29,10 +31,13 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
         userUseCase.createTransaction(sendInfoModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<UserTransactionModel>() {
-                    override fun onSuccess(m: UserTransactionModel) {
+                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserTransactionModel?>>() {
+                    override fun onSuccess(wrapper: ModelWrapper<UserTransactionModel?>) {
                         target?.dismissProgressDialog()
-                        target?.onTransactionSuccess(sendInfoModel)
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> target?.onTransactionSuccess(sendInfoModel)
+                            else -> target?.showError(wrapper.errorCode, wrapper.error)
+                        }
                     }
                     override fun onError(e: Throwable) {
                         target?.dismissProgressDialog()

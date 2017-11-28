@@ -27,7 +27,7 @@ class ReceiveSetAmountPresenterImpl @Inject constructor(val userUseCase: UserUse
             handleSuccess: (QRCodeInfoModel) -> Unit,
             handleValidationError: (Throwable) -> Unit
     ) {
-        userUseCase.getUser()
+        userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserModel>() {

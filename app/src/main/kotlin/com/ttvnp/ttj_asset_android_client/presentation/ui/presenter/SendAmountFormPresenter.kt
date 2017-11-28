@@ -1,8 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
-import com.ttvnp.ttj_asset_android_client.domain.model.OtherUserModel
-import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
-import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,24 +24,30 @@ class SendAmountFormPresenterImpl @Inject constructor(val userUseCase: UserUseCa
             userUseCase.getTargetUser(qrCodeInfo.emailAddress)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<OtherUserModel>() {
-                        override fun onSuccess(t: OtherUserModel) {
-                            // show info
-                            val sendInfoModel = SendInfoModel(
-                                    targetUserID = t.id,
-                                    targetUserEmailAddress = t.emailAddress,
-                                    targetUserProfileImageID = t.profileImageID,
-                                    targetUserProfileImageURL = t.profileImageURL,
-                                    targetUserFirstName = t.firstName,
-                                    targetUserMiddleName = t.middleName,
-                                    targetUserLastName = t.lastName,
-                                    assetType = qrCodeInfo.assetType,
-                                    amount = qrCodeInfo.amount
-                            )
-                            target.setSendInfo(sendInfoModel)
+                    .subscribeWith(object : DisposableSingleObserver<ModelWrapper<OtherUserModel?>>() {
+                        override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {
+                            when (wrapper.errorCode) {
+                                ErrorCode.NO_ERROR -> {
+                                    // show info
+                                    val model = wrapper.model!!
+                                    val sendInfoModel = SendInfoModel(
+                                            targetUserID = model.id,
+                                            targetUserEmailAddress = model.emailAddress,
+                                            targetUserProfileImageID = model.profileImageID,
+                                            targetUserProfileImageURL = model.profileImageURL,
+                                            targetUserFirstName = model.firstName,
+                                            targetUserMiddleName = model.middleName,
+                                            targetUserLastName = model.lastName,
+                                            assetType = qrCodeInfo.assetType,
+                                            amount = qrCodeInfo.amount
+                                    )
+                                    target.setSendInfo(sendInfoModel)
+                                }
+                                else -> target.showError(wrapper.errorCode, wrapper.error)
+                            }
                         }
                         override fun onError(e: Throwable) {
-                            // do nothing...
+                            target.showError(e)
                         }
                     }).addTo(this.disposables)
         } catch (t: Throwable) {

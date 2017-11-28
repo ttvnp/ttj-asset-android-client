@@ -14,7 +14,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendE
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class SendEmailFormFragment() : BaseMainFragment(), SendEmailFormPresenterTarget {
+class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
 
     @Inject
     lateinit var sendEmailFormPresenter: SendEmailFormPresenter
