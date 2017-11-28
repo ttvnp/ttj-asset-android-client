@@ -1,120 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:layout_height="wrap_content"
+            android:background="@color/md_white_1000">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="24dp"
-                android:src="@drawable/ic_user_default_profile"
-                app:civ_border_color="@color/colorIcons"
-                app:civ_border_width="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/text_email_address"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_profile"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:drawablePadding="4dp"
-                android:drawableStart="@drawable/ic_mini_mail"
-                android:textColor="@color/colorTextOnPrimary" />
+                android:layout_marginTop="6dp"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp"
-                android:gravity="center_horizontal"
-                android:baselineAligned="false">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:gravity="end">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="24dp"
+                        android:src="@drawable/ic_user_default_profile"
+                        app:civ_border_color="@color/colorIcons"
+                        app:civ_border_width="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
-                        android:id="@+id/text_point_amount"
+                        android:id="@+id/text_email_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="8dp"
                         android:drawablePadding="4dp"
-                        android:drawableStart="@drawable/ic_point"
-                        android:textColor="@color/colorTextOnPrimary"
-                        android:textSize="22sp" />
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/text_coint_amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:drawablePadding="4dp"
-                        android:drawableStart="@drawable/ic_coin"
-                        android:textColor="@color/colorTextOnPrimary"
-                        android:textSize="22sp" />
-                </RelativeLayout>
-            </LinearLayout>
+                        android:drawableStart="@drawable/ic_mini_mail"
+                        android:textColor="@color/colorTextOnPrimary" />
 
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="24dp"
+                        android:gravity="center_horizontal"
+                        android:baselineAligned="false">
 
-    </android.support.v7.widget.CardView>
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:gravity="end">
+                            <TextView
+                                android:id="@+id/text_point_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:drawablePadding="4dp"
+                                android:drawableStart="@drawable/ic_point"
+                                android:textColor="@color/colorTextOnPrimary"
+                                android:textSize="22sp" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/text_coint_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:drawablePadding="4dp"
+                                android:drawableStart="@drawable/ic_coin"
+                                android:textColor="@color/colorTextOnPrimary"
+                                android:textSize="22sp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_layout_payment_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_payment_history"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </android.support.v4.widget.SwipeRefreshLayout>
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_layout_empty_payment_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ListView
-                android:id="@+id/empty_view_payment_history"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
-        <TextView
-            android:id="@+id/empty_text_view_payment_history"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="gone"
-            android:text="@string/no_transaction_data" />
-    </RelativeLayout>
-</LinearLayout>
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_layout_payment_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_payment_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_layout_empty_payment_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ListView
+                    android:id="@+id/empty_view_payment_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </android.support.v4.widget.SwipeRefreshLayout>
+            <TextView
+                android:id="@+id/empty_text_view_payment_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/large_margin"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:text="@string/no_transaction_data" />
+        </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

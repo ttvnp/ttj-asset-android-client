@@ -77,6 +77,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         mainHomePresenter.setupUserTransactions(false)
 
         val swipeLayoutRefreshListener: () -> Unit = fun() {
+            mainHomePresenter.setupBalanceInfo(true)
             mainHomePresenter.setupUserTransactions(true)
         }
         swipeLayoutPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
