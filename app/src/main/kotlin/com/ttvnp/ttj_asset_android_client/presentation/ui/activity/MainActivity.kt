@@ -1,21 +1,16 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.crash.FirebaseCrash
 import com.google.zxing.integration.android.IntentIntegrator
-import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
@@ -29,10 +24,6 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), HasSupportFragmentInjector {
@@ -46,6 +37,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
 
     private var tabLayout: TabLayout? = null
     private var viewPager: ViewPager? = null
+    private lateinit var homeFragment: MainHomeFragment
     private lateinit var receiveFragment: MainReceiveFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +51,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         // set up view pager
         val fragmentManager = getSupportFragmentManager()
         val adapter = MainViewPageAdapter(fragmentManager)
-        val homeFragment = MainHomeFragment.getInstance()
+        homeFragment = MainHomeFragment.getInstance()
         adapter.addFragment(homeFragment)
         receiveFragment = MainReceiveFragment.getInstance()
         adapter.addFragment(receiveFragment)
@@ -121,6 +113,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
             val messageId = resources.getIdentifier(data.messageKey, "string", packageName)
             val message = getString(messageId, *data.getMessageArgs())
             // go to home fragment.
+            homeFragment.mainHomePresenter.setupUserTransactions(true)
             viewPager?.setCurrentItem(0, true)
             Toast.makeText(
                     this,

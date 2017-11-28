@@ -58,8 +58,6 @@ ext {
     ]
 
     dataDependencies = [
-            anko: "org.jetbrains.anko:anko:${ankoVersion}",
-            ankoSqlite: "org.jetbrains.anko:anko-sqlite:${ankoVersion}",
             okhttp: "com.squareup.okhttp3:okhttp:${okhttpVersion}",
             okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}",
             retroit: "com.squareup.retrofit2:retrofit:${retroitVersion}",

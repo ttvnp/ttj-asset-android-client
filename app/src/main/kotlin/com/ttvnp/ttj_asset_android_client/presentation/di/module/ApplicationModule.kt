@@ -8,6 +8,8 @@ import com.ttvnp.ttj_asset_android_client.data.crypto.CipherAlgorithm
 import com.ttvnp.ttj_asset_android_client.data.crypto.Cryptor
 import com.ttvnp.ttj_asset_android_client.data.crypto.CryptorFactory
 import com.ttvnp.ttj_asset_android_client.data.driver.*
+import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
+import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStoreImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -44,4 +46,11 @@ class ApplicationModule(private val application: Application) {
     @Provides
     @Singleton
     fun cryptDriver(cryptor: Cryptor): CryptDriver = CryptDriverImpl(cryptor)
+
+    @Provides
+    @Singleton
+    fun deviceInfoDataStore(
+            cryptDriver: CryptDriver,
+            sharedPreferencesDriver: SharedPreferencesDriver
+    ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
 }

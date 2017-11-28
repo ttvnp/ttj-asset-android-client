@@ -23,7 +23,7 @@ class DeviceTokenUpdater @Inject constructor(val deviceUseCase: DeviceUseCase) {
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         wrapper.model?.let {
-                            if (it.deviceToken.isBlank()) {
+                            if (it.deviceToken.isBlank() || it.deviceToken != FirebaseInstanceId.getInstance().getToken()) {
                                 updateDeviceToken()
                             }
                         }
