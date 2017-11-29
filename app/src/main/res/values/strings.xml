@@ -21,6 +21,8 @@
     <string name="address">address</string>
     <string name="qr_code">QR Code</string>
     <string name="complete">Complete</string>
+    <string name="transaction_type">send/receive</string>
+    <string name="transaction_status">status</string>
     <string name="tab">tab</string>
     <string name="verification_code">code</string>
     <string name="password_on_import">password</string>

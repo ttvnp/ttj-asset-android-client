@@ -54,6 +54,7 @@ class GetTransactionsResponse(
 class TransactionResponse(
         @Json(name = "id") val id: Long = 0L,
         @Json(name = "loggedAt") val loggedAt: Date? = null,
+        @Json(name = "transactionStatus") val transactionStatus: Int = 0,
         @Json(name = "transactionType") val transactionType: Int = 0,
         @Json(name = "targetUserID") val targetUserID: Long = 0L,
         @Json(name = "targetUserEmailAddress") val targetUserEmailAddress: String = "",

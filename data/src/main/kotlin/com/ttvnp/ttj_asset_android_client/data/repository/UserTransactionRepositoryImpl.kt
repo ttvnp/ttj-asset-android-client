@@ -55,6 +55,7 @@ class UserTransactionRepositoryImpl @Inject constructor(
                             entities.add(UserTransactionEntity(
                                     id = r.id,
                                     loggedAt = r.loggedAt?:Now(),
+                                    transactionStatus = r.transactionStatus,
                                     transactionType = r.transactionType,
                                     targetUserID = r.targetUserID,
                                     targetUserEmailAddress = r.targetUserEmailAddress,
@@ -109,6 +110,7 @@ class UserTransactionRepositoryImpl @Inject constructor(
             var userTransactionEntity = UserTransactionEntity(
                     id = response.userTransaction.id,
                     loggedAt = response.userTransaction.loggedAt?:Now(),
+                    transactionStatus = response.userTransaction.transactionStatus,
                     transactionType = response.userTransaction.transactionType,
                     targetUserID = response.userTransaction.targetUserID,
                     targetUserEmailAddress = response.userTransaction.targetUserEmailAddress,
