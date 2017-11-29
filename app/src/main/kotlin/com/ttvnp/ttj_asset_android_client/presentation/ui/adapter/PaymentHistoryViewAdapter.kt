@@ -1,8 +1,10 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.adapter
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.TransactionType
@@ -10,6 +12,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
 import com.ttvnp.ttj_asset_android_client.domain.util.formatString
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.domain.model.TransactionStatus
 import com.ttvnp.ttj_asset_android_client.presentation.ui.view.PaymentHistoryViewHolder
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,6 +35,8 @@ class PaymentHistoryViewAdapter(
         val model = data.get(position)
         if (0 < model.targetUserProfileImageURL.length) {
             Picasso.with(context).load(model.targetUserProfileImageURL).into(holder.imageTargetUserProfile)
+        } else {
+            holder.imageTargetUserProfile.setImageResource(R.drawable.ic_user_default_profile_grey)
         }
 
         val format = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault())
@@ -39,10 +44,10 @@ class PaymentHistoryViewAdapter(
 
         when (model.transactionType) {
             TransactionType.RECEIVE -> {
-                // holder.textHistoryDetail.setCompoundDrawablesWithIntrinsicBounds()
+                holder.imageTransactionType.setImageResource(R.drawable.ic_receive_arrow)
             }
             TransactionType.SEND -> {
-                // holder.textHistoryDetail.setCompoundDrawablesWithIntrinsicBounds()
+                holder.imageTransactionType.setImageResource(R.drawable.ic_send_arrow)
             }
         }
         holder.textHistoryTargetUser.text = buildTargetUserText(model)
@@ -50,6 +55,22 @@ class PaymentHistoryViewAdapter(
                 model.amount.formatString(),
                 model.assetType.rawValue
         )
+        when (model.transactionStatus) {
+            TransactionStatus.Unprocessed -> {
+                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(context, R.color.md_yellow_100))
+                holder.imageTransactionStatus.visibility = View.VISIBLE
+                holder.imageTransactionStatus.setImageResource(R.drawable.ic_pending)
+            }
+            TransactionStatus.Error -> {
+                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(context, R.color.md_grey_300))
+                holder.imageTransactionStatus.visibility = View.VISIBLE
+                holder.imageTransactionStatus.setImageResource(R.drawable.ic_error)
+            }
+            else -> {
+                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(context, R.color.md_white_1000))
+                holder.imageTransactionStatus.visibility = View.GONE
+            }
+        }
     }
 
     override fun getItemCount(): Int {
