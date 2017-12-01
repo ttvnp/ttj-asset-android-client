@@ -51,7 +51,6 @@ class DeviceRepositoryImpl @Inject constructor(
             val response: DeviceResponse
             try {
                 response = deviceService.get().execute().body()!!
-                val serviceResult: ModelWrapper<DeviceModel?>
                 if (response.hasError()) {
                     subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
                     return@create
@@ -141,7 +140,12 @@ class DeviceRepositoryImpl @Inject constructor(
             try {
                 response = deviceService.registerEmail(emailAddress).execute().body()!!
                 if (response.hasError()) {
-                    subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(null, ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR))
+                    val errorCode: ErrorCode
+                    when (response.errorCode) {
+                        ServiceErrorCode.ERROR_INVALID_EMAIL_ADDRESS_FORMAT.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_EMAIL
+                        else -> errorCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                    }
+                    subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(null, errorCode))
                     return@create
                 }
                 val model = RegisterEmailResultModel(response.isEmailInUse)
@@ -162,7 +166,8 @@ class DeviceRepositoryImpl @Inject constructor(
                     when (response.errorCode) {
                         ServiceErrorCode.ERROR_INVALID_VERIFICATION_CODE.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_VERIFICATION_CODE
                         ServiceErrorCode.ERROR_INVALID_PASSWORD_ON_IMPORT.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_PASSWORD_ON_IMPORT
-                        else -> errorCode = ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR
+                        ServiceErrorCode.ERROR_ILLEGAL_DATA_STATE.rawValue -> errorCode = ErrorCode.ERROR_DEVICE_ALREADY_SETUP
+                        else -> errorCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
                     }
                     subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
                     return@create
@@ -205,7 +210,7 @@ class DeviceRepositoryImpl @Inject constructor(
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             var deviceEntity = deviceDataStore.get()
             if (deviceEntity == null) {
-                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
             try {
@@ -234,7 +239,7 @@ class DeviceRepositoryImpl @Inject constructor(
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             var deviceEntity = deviceDataStore.get()
             if (deviceEntity == null) {
-                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
+                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
             val disposables = CompositeDisposable()

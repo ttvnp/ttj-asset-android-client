@@ -99,9 +99,10 @@ class UserTransactionRepositoryImpl @Inject constructor(
             if (response.hasError()) {
                 val errorCode: ErrorCode
                 when (response.errorCode) {
+                    ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> errorCode = ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
                     ServiceErrorCode.ERROR_LOCKED_OUT.rawValue -> errorCode = ErrorCode.ERROR_LOCKED_OUT
                     ServiceErrorCode.ERROR_TOO_MUCH_AMOUNT.rawValue -> errorCode = ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT
-                    else -> errorCode = ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR
+                    else -> errorCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
                 }
                 subscriber.onSuccess(ModelWrapper(null, errorCode))
                 return@create

@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendEmailFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendEmailFormPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -48,7 +50,8 @@ class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
             sendEmailFormPresenter.checkEmailAddress(emailAddress, { _ ->
                 val formFragment = SendAmountFormFragment.getInstance()
                 formFragment.arguments = Bundle().apply {
-                    this.putString(SendAmountFormFragment.QR_STRING_ARG_KEY, emailAddress)
+                    val data = QRCodeInfoBridgeData(emailAddress = emailAddress)
+                    this.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
                 }
                 formFragment.cancelButtonClickHandler = object : View.OnClickListener {
                     override fun onClick(v: View?) {
@@ -68,8 +71,18 @@ class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
         return view
     }
 
-    override fun showNoSuchUser() {
+    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+        val msg = errorMessageGenerator.generate(errorCode, throwable)
+        when (errorCode) {
+            ErrorCode.ERROR_VALIDATION_EMAIL -> showValidationError(msg)
+            ErrorCode.ERROR_CANNOT_FIND_TARGET_USER -> showValidationError(msg)
+            ErrorCode.ERROR_CANNOT_SELF_SEND -> showValidationError(msg)
+            else -> super.showError(errorCode, throwable)
+        }
+    }
+
+    fun showValidationError(msg: String) {
         textInputLayoutSendEmail.isErrorEnabled = true
-        textInputLayoutSendEmail.error = getString(R.string.error_message_no_such_email_address_user)
+        textInputLayoutSendEmail.error = msg
     }
 }

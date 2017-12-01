@@ -32,7 +32,6 @@ class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCas
                     override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> handleSuccess(wrapper.model!!)
-                            ErrorCode.ERROR_CANNOT_FIND_TARGET_USER -> target?.showNoSuchUser()
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
                         }
                     }

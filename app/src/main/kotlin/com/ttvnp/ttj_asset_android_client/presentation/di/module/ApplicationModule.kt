@@ -10,6 +10,7 @@ import com.ttvnp.ttj_asset_android_client.data.crypto.CryptorFactory
 import com.ttvnp.ttj_asset_android_client.data.driver.*
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStoreImpl
+import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -53,4 +54,9 @@ class ApplicationModule(private val application: Application) {
             cryptDriver: CryptDriver,
             sharedPreferencesDriver: SharedPreferencesDriver
     ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
+
+    @Provides
+    @Singleton
+    fun errorMessageGenerator(context: Context): ErrorMessageGenerator
+        = ErrorMessageGenerator(context)
 }

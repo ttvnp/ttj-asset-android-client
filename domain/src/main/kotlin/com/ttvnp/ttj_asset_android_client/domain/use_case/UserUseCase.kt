@@ -1,10 +1,12 @@
 package com.ttvnp.ttj_asset_android_client.domain.use_case
 
-import android.util.Log
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.BalanceRepository
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserRepository
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserTransactionRepository
+import com.ttvnp.ttj_asset_android_client.domain.util.isEmailValid
+import com.ttvnp.ttj_asset_android_client.domain.util.isValidAmount
+import com.ttvnp.ttj_asset_android_client.domain.util.toAmount
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -21,6 +23,8 @@ interface UserUseCase {
     fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>>
 
     fun getBalances(forceRefresh: Boolean): Single<BalancesModel>
+
+    fun checkSendAmount(assetType: AssetType, amountString: String): Single<ErrorCode>
 
     fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
 
@@ -42,6 +46,12 @@ class UserUseCaseImpl @Inject constructor(
     }
 
     override fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>> {
+        val input = emailAddress.trim()
+        if (!isEmailValid(input)) {
+            return Single.create { subscriber ->
+                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_VALIDATION_EMAIL))
+            }
+        }
         return userRepository.getTargetUser(emailAddress)
     }
 
@@ -49,19 +59,40 @@ class UserUseCaseImpl @Inject constructor(
         return balanceRepository.getBalances(forceRefresh)
     }
 
+    override fun checkSendAmount(assetType: AssetType, amountString: String): Single<ErrorCode> {
+        return Single.create { subscriber ->
+            if (!amountString.isValidAmount()) {
+                subscriber.onSuccess(ErrorCode.ERROR_VALIDATION_AMOUNT_LONG)
+                return@create
+            }
+            val disposables = CompositeDisposable()
+            balanceRepository.getBalances(true).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
+                override fun onSuccess(balances: BalancesModel) {
+                    val afordable = if (assetType == AssetType.ASSET_TYPE_COIN) balances.coinBalance.amount else balances.pointBalance.amount
+                    if (afordable < amountString.toAmount()) {
+                        subscriber.onSuccess(ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT)
+                    } else {
+                        subscriber.onSuccess(ErrorCode.NO_ERROR)
+                    }
+                }
+                override fun onError(e: Throwable) {
+                    subscriber.onError(e)
+                }
+            }).addTo(disposables)
+        }
+    }
+
     override fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel> {
         return userTransactionRepository.getTopByUserID(upperID, limit, forceRefresh)
     }
 
     override fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>> {
-        val disposables = CompositeDisposable()
-        return userTransactionRepository.createTransaction(sendInfoModel, { balanceBodels ->
-            this.balanceRepository.updateBalances(balanceBodels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
+        return userTransactionRepository.createTransaction(sendInfoModel, { balanceModels ->
+            val disposables = CompositeDisposable()
+            this.balanceRepository.updateBalances(balanceModels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
                 override fun onSuccess(t: BalancesModel) {
-                    Log.d("updateBalances", "balance update was successfully executed after transaction :)")
                 }
                 override fun onError(e: Throwable) {
-                    e.printStackTrace()
                 }
             }).addTo(disposables)
         })

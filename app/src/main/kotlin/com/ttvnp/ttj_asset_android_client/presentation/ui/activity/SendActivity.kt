@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendEmailFormFragment
 import dagger.android.AndroidInjection
@@ -61,7 +63,10 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
         } else {
             val formFragment = SendAmountFormFragment.getInstance()
             formFragment.arguments = Bundle().apply {
-                this.putString(SendAmountFormFragment.QR_STRING_ARG_KEY, qrString)
+                // load model from qrString
+                val model = QRCodeInfoModel.load(qrString)
+                val data = QRCodeInfoBridgeDataTranslator().translate(model)
+                this.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
             }
             formFragment.cancelButtonClickHandler = object : View.OnClickListener {
                 override fun onClick(v: View?) {

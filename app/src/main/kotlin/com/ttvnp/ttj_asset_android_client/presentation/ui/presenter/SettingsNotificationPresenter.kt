@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsNotificationPresenterTarget
@@ -46,8 +47,15 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
-                        wrapper.model?.let {
-                            target?.bindDeviceInfo(it)
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> {
+                                wrapper.model?.let {
+                                    target?.bindDeviceInfo(it)
+                                }
+                            }
+                            else -> {
+                                target?.showError(wrapper.errorCode, wrapper.error)
+                            }
                         }
                     }
                     override fun onError(e: Throwable) {
@@ -65,8 +73,15 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
-                        wrapper.model?.let {
-                            target?.bindDeviceInfo(it)
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> {
+                                wrapper.model?.let {
+                                    target?.bindDeviceInfo(it)
+                                }
+                            }
+                            else -> {
+                                target?.showError(wrapper.errorCode, wrapper.error)
+                            }
                         }
                     }
                     override fun onError(e: Throwable) {
