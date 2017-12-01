@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.data.repository
 import com.ttvnp.ttj_asset_android_client.data.entity.OtherUserEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
+import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.OtherUserDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.OtherUserTranslator
@@ -64,11 +65,11 @@ class UserRepositoryImpl @Inject constructor(
                     }
                 } catch (e: IOException) {
                     // ignore connection exception.
-                    if (userModel == null) {
-                        // get from local db
-                        userModel = UserTranslator().translate(userDataStore.get())
-                    }
                 }
+            }
+            if (userModel == null) {
+                // get from local db
+                userModel = UserTranslator().translate(userDataStore.get())
             }
             subscriber.onSuccess(userModel!!)
         }
@@ -78,7 +79,7 @@ class UserRepositoryImpl @Inject constructor(
         return Single.create<ModelWrapper<UserModel?>> { subscriber ->
             val original = userDataStore.get()
             if (original == null) {
-                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_ILLEGAL_DATA_STATE_ERROR))
+                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
             val profileImageFileBody: MultipartBody.Part
@@ -96,8 +97,12 @@ class UserRepositoryImpl @Inject constructor(
             try {
                 userService.updateUser(profileImageFileBody, firstNameBody, middleNameBody, lastNameBody, addressBody).execute().body()!!.let { response ->
                     if (response.hasError()) {
-                        // TODO handle server error codes.
-                        subscriber.onSuccess(ModelWrapper<UserModel?>(UserTranslator().translate(original), ErrorCode.ERROR_CANNOT_UPDATE_USER))
+                        val errorCode: ErrorCode
+                        when (response.errorCode) {
+                            ServiceErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE.rawValue -> errorCode = ErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE
+                            else -> errorCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        }
+                        subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
                         return@create
                     }
                     var ue = UserEntity(
@@ -127,29 +132,47 @@ class UserRepositoryImpl @Inject constructor(
             OtherUserTranslator().translate(otherUserEntity)
         }
         return Single.create { subscriber ->
-            var model = getModelFromLocal()
-            if (model == null) {
-                try {
-                    userService.getTargetUser(emailAddress).execute().body()?.let { response ->
-                        if (response.hasError()) return@let
-                        var otherUserEntity = OtherUserEntity(
-                                id = response.id,
-                                emailAddress = response.emailAddress,
-                                profileImageID = response.profileImageID,
-                                profileImageURL = response.profileImageURL,
-                                firstName = response.firstName,
-                                middleName =  response.middleName,
-                                lastName = response.lastName
-                        )
-                        otherUserEntity = otherUserDataStore.update(otherUserEntity)
-                        model = OtherUserTranslator().translate(otherUserEntity)!!
+
+            // self send check
+            val self = userDataStore.get()
+            if (self?.emailAddress?:"" == emailAddress) {
+                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_CANNOT_SELF_SEND))
+                return@create
+            }
+
+            var model: OtherUserModel? = null
+            var errCode = ErrorCode.ERROR_UNKNOWN
+            try {
+                userService.getTargetUser(emailAddress).execute().body()?.let { response ->
+                    if (response.hasError()) {
+                        when (response.errorCode) {
+                            ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> errCode = ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
+                            else -> errCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        }
+                        return@let
                     }
-                } catch (e: IOException) {
-                    // ignore exception.
+                    var otherUserEntity = OtherUserEntity(
+                            id = response.id,
+                            emailAddress = response.emailAddress,
+                            profileImageID = response.profileImageID,
+                            profileImageURL = response.profileImageURL,
+                            firstName = response.firstName,
+                            middleName =  response.middleName,
+                            lastName = response.lastName
+                    )
+                    otherUserEntity = otherUserDataStore.update(otherUserEntity)
+                    model = OtherUserTranslator().translate(otherUserEntity)!!
                 }
+            } catch (e: IOException) {
+                errCode = ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER
             }
             if (model == null) {
-                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_CANNOT_FIND_TARGET_USER))
+                model = getModelFromLocal()
+                if (model == null) {
+                    subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, errCode))
+                } else {
+                    subscriber.onSuccess(ModelWrapper<OtherUserModel?>(model, ErrorCode.NO_ERROR))
+                }
             } else {
                 subscriber.onSuccess(ModelWrapper<OtherUserModel?>(model, ErrorCode.NO_ERROR))
             }

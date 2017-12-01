@@ -9,11 +9,17 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crash.FirebaseCrash
 import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
+import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var errorMessageGenerator: ErrorMessageGenerator
 
     protected var progressDialog: Dialog? = null
 
@@ -45,21 +51,21 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog?.dismiss()
     }
 
-    open fun showError(throwable: Throwable) {
+    protected open fun showErrorDialog(errorMessage: String) {
         AlertDialog
                 .Builder(this)
                 .setTitle(resources.getString(R.string.error_dialog_title))
-                .setMessage(resources.getString(R.string.error_default_message))
+                .setMessage(errorMessage)
                 .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
                 .show()
     }
 
+    open fun showError(throwable: Throwable) {
+        showErrorDialog(errorMessageGenerator.default())
+        FirebaseCrash.report(throwable)
+    }
+
     open fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        AlertDialog
-                .Builder(this)
-                .setTitle(resources.getString(R.string.error_dialog_title))
-                .setMessage(resources.getString(R.string.error_default_message))
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                .show()
+        showErrorDialog(errorMessageGenerator.generate(errorCode, throwable))
     }
 }

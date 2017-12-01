@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 interface LaunchPresenter {
     fun initialize(target: LaunchPresenterTarget)
-    fun checkDeviceReady(handleResult: (Boolean) -> Unit)
+    fun checkDeviceReady()
 }
 
 class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) : LaunchPresenter {
@@ -26,7 +26,7 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
         this.target = target
     }
 
-    override fun checkDeviceReady(handleResult: (Boolean) -> Unit) {
+    override fun checkDeviceReady() {
         deviceUseCase.getDevice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,14 +34,10 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> {
-                                if (wrapper.model == null) {
-                                    handleResult(false)
-                                } else {
-                                    handleResult(wrapper.model!!.isActivated)
-                                }
+                                target?.startNextActivity(wrapper.model?.isActivated?:false)
                             }
                             ErrorCode.ERROR_DEVICE_NOT_REGISTERED -> {
-                                handleResult(false)
+                                target?.startNextActivity(false)
                             }
                             else -> {
                                 target?.showError(wrapper.errorCode, wrapper.error)

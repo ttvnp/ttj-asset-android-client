@@ -43,41 +43,13 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
         tutorialPresenter.onCreate(this)
     }
 
-    override fun showError(throwable: Throwable) {
-        AlertDialog.Builder(this)
-                .setTitle(resources.getString(R.string.error_dialog_title))
-                .setMessage(resources.getString(R.string.error_default_message))
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                .show()
-        FirebaseCrash.report(throwable)
-    }
-
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+        val errMsg = errorMessageGenerator.generate(errorCode, throwable)
         when (errorCode) {
-            ErrorCode.ERROR_CANNOT_REGISTER_DEVICE -> {
-                AlertDialog.Builder(this)
-                        .setTitle(resources.getString(R.string.error_dialog_title))
-                        .setMessage(resources.getString(R.string.error_device_registration))
-                        .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                        .show()
-                throwable?.let {
-                    FirebaseCrash.log(it.message)
-                }
-            }
-            ErrorCode.ERROR_VALIDATION_EMAIL -> {
-                emailFragment?.showValidationError(getString(R.string.error_validation_email_address))
-            }
-            ErrorCode.ERROR_VALIDATION_VERIFICATION_CODE -> {
-                codeFragment?.showCodeValidationError(getString(R.string.error_invalid_verification_code))
-            }
-            ErrorCode.ERROR_VALIDATION_PASSWORD_ON_IMPORT -> {
-                codeFragment?.showPasswordValidationError(getString(R.string.error_invalid_password_on_import))
-            }
-            else -> {
-                throwable?.let {
-                    this.showError(it)
-                }
-            }
+            ErrorCode.ERROR_VALIDATION_EMAIL -> emailFragment?.showValidationError(errMsg)
+            ErrorCode.ERROR_VALIDATION_VERIFICATION_CODE -> codeFragment?.showCodeValidationError(errMsg)
+            ErrorCode.ERROR_VALIDATION_PASSWORD_ON_IMPORT -> codeFragment?.showPasswordValidationError(errMsg)
+            else -> showErrorDialog(errMsg)
         }
     }
 
