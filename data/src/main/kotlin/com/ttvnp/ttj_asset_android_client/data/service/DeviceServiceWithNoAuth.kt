@@ -18,7 +18,7 @@ interface DeviceServiceWithNoAuth {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices")
-    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Call<DeviceResponse>
+    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String, @Field("recaptchaToken") recaptchaToken: String) : Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -47,8 +47,8 @@ class DeviceServiceWithNoAuthImpl : BaseService(), DeviceServiceWithNoAuth {
         service = builder.create(DeviceServiceWithNoAuth::class.java)
     }
 
-    override fun register(deviceCode: String, credential: String): Call<DeviceResponse> {
-        return service.register(deviceCode, credential)
+    override fun register(deviceCode: String, credential: String, recaptchaToken: String): Call<DeviceResponse> {
+        return service.register(deviceCode, credential, recaptchaToken)
     }
 
     override fun issueAccessToken(deviceCode: String, credential: String): Call<DeviceResponse> {

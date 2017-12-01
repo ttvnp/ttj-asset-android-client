@@ -18,6 +18,7 @@ android {
         versionCode globalConfiguration.dataLibraryVersionCode
         versionName globalConfiguration.dataLibraryVersionName
         testInstrumentationRunner globalConfiguration.testInstrumentationRunner
+        buildConfigField "String", "RECAPTCHA_API_SITE_KEY", '"6LcYNDsUAAAAAB9QdkDypQfgKhVIwqQlI4iShBaH"'
     }
 
     buildTypes {

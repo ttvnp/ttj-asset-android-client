@@ -1,10 +1,13 @@
 package com.ttvnp.ttj_asset_android_client.data.repository
 
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.safetynet.SafetyNetStatusCodes
 import com.ttvnp.ttj_asset_android_client.data.entity.DeviceEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.DeviceInfoEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserEntity
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuth
+import com.ttvnp.ttj_asset_android_client.data.service.RecaptchaService
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
@@ -21,6 +24,9 @@ import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import java.io.IOException
 import javax.inject.Inject
 
@@ -29,7 +35,8 @@ class DeviceRepositoryImpl @Inject constructor(
         private val deviceService : DeviceService,
         private val deviceDataStore : DeviceDataStore,
         private val deviceInfoDataStore : DeviceInfoDataStore,
-        private val userDataStore : UserDataStore
+        private val userDataStore : UserDataStore,
+        private val recaptchaService: RecaptchaService
 ) : DeviceRepository {
 
     override fun getDevice(): Single<ModelWrapper<DeviceModel?>> {
@@ -72,30 +79,59 @@ class DeviceRepositoryImpl @Inject constructor(
     }
 
     override fun register(): Single<ModelWrapper<DeviceModel?>> {
+
         val register: (SingleEmitter<ModelWrapper<DeviceModel?>>) -> Unit = { subscriber ->
-            // newly create device code and credential.
-            val initDeviceCode = TokenUtil.generateToken68(64)
-            val initCredential = TokenUtil.generateToken68(64)
-            val response: DeviceResponse
-            try {
-                response = deviceServiceWithNoAuth.register(initDeviceCode, initCredential).execute().body()!!
-                if (response.hasError()) {
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_REGISTER_DEVICE))
+
+            recaptchaService.verifyWithRecaptcha().addOnSuccessListener { recaptchaTokenResponse ->
+                val recaptchaToken = recaptchaTokenResponse.getTokenResult();
+                // note that this is in the main thread.
+                val disposables = CompositeDisposable()
+                Single.create<ModelWrapper<DeviceModel?>> { inner ->
+                    // newly create device code and credential.
+                    val initDeviceCode = TokenUtil.generateToken68(64)
+                    val initCredential = TokenUtil.generateToken68(64)
+                    val response: DeviceResponse
+                    try {
+                        response = deviceServiceWithNoAuth.register(initDeviceCode, initCredential, recaptchaToken).execute().body()!!
+                        if (response.hasError()) {
+                            inner.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_REGISTER_DEVICE))
+                        } else {
+                            deviceInfoDataStore.save(DeviceInfoEntity(initDeviceCode, initCredential))
+                            var deviceEntity = DeviceEntity(
+                                    accessToken = response.accessToken,
+                                    accessTokenExpiry = response.accessTokenExpiry,
+                                    isActivated = response.isActivated,
+                                    deviceToken = response.deviceToken,
+                                    grantPushNotification = response.grantPushNotification,
+                                    grantEmailNotification = response.grantEmailNotification
+                            )
+                            deviceEntity = deviceDataStore.update(deviceEntity)
+                            inner.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
+                        }
+                    } catch (e: IOException) {
+                        inner.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+                    }
+                }.subscribeOn(Schedulers.io())
+                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                    override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
+                        subscriber.onSuccess(wrapper)
+                    }
+                    override fun onError(e: Throwable) {
+                        subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_UNKNOWN, e))
+                    }
+                }).addTo(disposables)
+            }.addOnFailureListener{ e ->
+                if (e is ApiException) {
+                    val errCode: ErrorCode
+                    when (e.statusCode) {
+                        SafetyNetStatusCodes.API_NOT_CONNECTED -> errCode = ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER
+                        SafetyNetStatusCodes.TIMEOUT -> errCode = ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER
+                        else -> errCode = ErrorCode.ERROR_UNKNOWN
+                    }
+                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, errCode, e))
                 } else {
-                    deviceInfoDataStore.save(DeviceInfoEntity(initDeviceCode, initCredential))
-                    var deviceEntity = DeviceEntity(
-                            accessToken = response.accessToken,
-                            accessTokenExpiry = response.accessTokenExpiry,
-                            isActivated = response.isActivated,
-                            deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
-                    )
-                    deviceEntity = deviceDataStore.update(deviceEntity)
-                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
+                    subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_UNKNOWN, e))
                 }
-            } catch (e: IOException) {
-                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
             }
         }
 
