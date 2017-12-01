@@ -2,6 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
 import com.ttvnp.ttj_asset_android_client.data.driver.CryptDriver
 import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
+import com.ttvnp.ttj_asset_android_client.data.driver.SafetyNetClient
 import com.ttvnp.ttj_asset_android_client.data.driver.SharedPreferencesDriver
 import com.ttvnp.ttj_asset_android_client.data.service.*
 import com.ttvnp.ttj_asset_android_client.data.store.*
@@ -45,4 +46,6 @@ class DataModule {
             deviceServiceWithNoAuth: DeviceServiceWithNoAuth
     ): UserService = UserServiceImpl(deviceInfoDataStore, deviceDataStore, deviceServiceWithNoAuth)
 
+    @Provides
+    fun recaptchaService(safetyNetClient: SafetyNetClient): RecaptchaService = RecaptchaServiceImpl(safetyNetClient)
 }

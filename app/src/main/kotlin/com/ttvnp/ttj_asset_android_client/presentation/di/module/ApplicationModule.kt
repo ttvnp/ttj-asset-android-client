@@ -38,6 +38,10 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
+    fun safetyNetClient(context: Context): SafetyNetClient = SafetyNetClient(context)
+
+    @Provides
+    @Singleton
     fun cryptor(context: Context): Cryptor {
         val factory = CryptorFactory("ttj_asset_android_client_secure_data", CipherAlgorithm.RSA)
         factory.context = context
