@@ -26,7 +26,7 @@ android {
             buildConfigField "String", "SERVER_URL", '"http://192.168.11.9:1324"' // http://10.0.2.2:1324
         }
         release {
-            buildConfigField "String", "SERVER_URL", '"https://testnet.vnjcoin.com"'
+            buildConfigField "String", "SERVER_URL", '"http://testnet.vnjcoin.com"'
         }
     }
 
