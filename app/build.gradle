@@ -125,7 +125,7 @@ dependencies {
     implementation project(':data')
 
     // for fabric crashlytics
-    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;
     }
 }
