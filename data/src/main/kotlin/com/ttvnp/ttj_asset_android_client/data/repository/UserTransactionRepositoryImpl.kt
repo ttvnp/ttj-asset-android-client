@@ -5,6 +5,7 @@ import com.ttvnp.ttj_asset_android_client.data.entity.UserTransactionEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.service.response.CreateTransactionResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
+import com.ttvnp.ttj_asset_android_client.data.store.AppDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserTransactionDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.BalanceTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTransactionTranslator
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 class UserTransactionRepositoryImpl @Inject constructor(
         private val userService: UserService,
-        private val userTransactionDataStore : UserTransactionDataStore
+        private val userTransactionDataStore : UserTransactionDataStore,
+        private val appDataStore: AppDataStore
 ) : UserTransactionRepository {
 
     override fun getTopByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel> {
@@ -35,11 +37,16 @@ class UserTransactionRepositoryImpl @Inject constructor(
             }
             var refresh = forceRefresh
             if (!refresh) {
-                userTransactionsModel = getModelFromLocalDatabase()
-                val containsPending = userTransactionsModel.userTransactions.filter { mdl ->
-                    mdl.transactionStatus == TransactionStatus.Unprocessed
-                }.firstOrNull() != null
-                if (containsPending) {
+                val appEntity = appDataStore.get()
+                if (appEntity.loadPaymentHistory) {
+                    userTransactionsModel = getModelFromLocalDatabase()
+                    val containsPending = userTransactionsModel.userTransactions.filter { mdl ->
+                        mdl.transactionStatus == TransactionStatus.Unprocessed
+                    }.firstOrNull() != null
+                    if (containsPending) {
+                        refresh = true
+                    }
+                } else {
                     refresh = true
                 }
             }
@@ -69,6 +76,11 @@ class UserTransactionRepositoryImpl @Inject constructor(
                             ))
                         }
                         entities = userTransactionDataStore.updates(entities)
+                        appDataStore.get().let { app ->
+                            if (!app.loadPaymentHistory) {
+                                appDataStore.updateLoadPaymentHistory()
+                            }
+                        }
                         userTransactionsModel = UserTransactionTranslator().translateUserTransactions(entities, response.hasMore)
                     }
                 } catch (e: IOException) {

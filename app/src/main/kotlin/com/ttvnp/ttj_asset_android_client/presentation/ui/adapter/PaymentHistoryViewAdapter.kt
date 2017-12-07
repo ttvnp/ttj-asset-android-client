@@ -78,7 +78,15 @@ class PaymentHistoryViewAdapter(
     }
 
     fun addAllUserTransactionModel(models: Collection<UserTransactionModel>) {
-        data.addAll(models)
+        // merge
+        models.forEach { add ->
+            val target = data.firstOrNull { d -> d.id == add.id }
+            if (target == null) {
+                data.add(add)
+            } else {
+                data[data.indexOfFirst { d -> d.id == add.id }] = add
+            }
+        }
     }
 
     private fun buildTargetUserText(model: UserTransactionModel): String {

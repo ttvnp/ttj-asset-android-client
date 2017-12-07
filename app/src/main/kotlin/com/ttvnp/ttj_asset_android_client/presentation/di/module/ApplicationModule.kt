@@ -8,6 +8,8 @@ import com.ttvnp.ttj_asset_android_client.data.crypto.CipherAlgorithm
 import com.ttvnp.ttj_asset_android_client.data.crypto.Cryptor
 import com.ttvnp.ttj_asset_android_client.data.crypto.CryptorFactory
 import com.ttvnp.ttj_asset_android_client.data.driver.*
+import com.ttvnp.ttj_asset_android_client.data.store.AppDataStore
+import com.ttvnp.ttj_asset_android_client.data.store.AppDataStoreImpl
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStoreImpl
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
@@ -58,6 +60,10 @@ class ApplicationModule(private val application: Application) {
             cryptDriver: CryptDriver,
             sharedPreferencesDriver: SharedPreferencesDriver
     ): DeviceInfoDataStore = DeviceInfoDataStoreImpl(cryptDriver, sharedPreferencesDriver)
+
+    @Provides
+    @Singleton
+    fun appDataStore(ormaHolder: OrmaHolder): AppDataStore = AppDataStoreImpl(ormaHolder)
 
     @Provides
     @Singleton
