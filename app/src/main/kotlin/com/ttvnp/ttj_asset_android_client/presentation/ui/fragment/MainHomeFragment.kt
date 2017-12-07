@@ -109,7 +109,12 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
             emptyTextViewPaymentHistory.visibility = View.VISIBLE
         } else {
             // has data
-            val adapter = PaymentHistoryViewAdapter(userTransactionsModel.userTransactions.toMutableList());
+            var adapter = recyclerViewPaymentHistory.adapter
+            if (adapter != null && adapter is PaymentHistoryViewAdapter) {
+                adapter.addAllUserTransactionModel(userTransactionsModel.userTransactions)
+            } else {
+                adapter = PaymentHistoryViewAdapter(userTransactionsModel.userTransactions.toMutableList())
+            }
             recyclerViewPaymentHistory.adapter = adapter
             swipeLayoutPaymentHistory.visibility = View.VISIBLE
             swipeLayoutEmptyPaymentHistory.visibility = View.GONE

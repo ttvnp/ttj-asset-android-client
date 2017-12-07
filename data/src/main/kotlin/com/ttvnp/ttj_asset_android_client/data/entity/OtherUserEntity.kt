@@ -7,7 +7,8 @@ import com.github.gfx.android.orma.annotation.Table
 
 @Table
 class OtherUserEntity (
-        @PrimaryKey
+
+        @PrimaryKey(auto = false, autoincrement = false)
         @Setter("id")
         val id: Long = 0L,
 

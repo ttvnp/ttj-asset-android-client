@@ -10,7 +10,7 @@ import java.util.*
 @Table
 class UserTransactionEntity (
 
-        @PrimaryKey
+        @PrimaryKey(auto = false, autoincrement = false)
         @Setter("id")
         val id: Long = 0L,
 
