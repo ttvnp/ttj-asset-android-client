@@ -24,9 +24,27 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "SERVER_URL", '"http://192.168.11.9:1324"' // http://10.0.2.2:1324
+            buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
+                    '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
+                    '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +
+                    '"nIEBmBlKzKkv8zAh11LlDuMEW9QLW5MCCwxClJaG6kTjn5uzc5bDq+3xIPmiunpz\\n" +\n' +
+                    '"A52lJPZD8q8m9NYFotFEy0GoGyrwMucvwEzKw2kxW72ZymKU+DRaejc8oD8BTLL+\\n" +\n' +
+                    '"nsc9EXajZrVqcpb2gCx0tIzfCA+HlQq0abSuVchpEVWmA2Gt2Veej2RcEk/jJqUy\\n" +\n' +
+                    '"y3qbFBUTA/r5jOPX8E0aWQHAkjIreoxa5jmrWEFPeKySD3uPDy7vM35qNNTFR4QN\\n" +\n' +
+                    '"BQIDAQAB\\n" +\n' +
+                    '"-----END PUBLIC KEY-----"'
         }
         release {
             buildConfigField "String", "SERVER_URL", '"http://testnet.vnjcoin.com"'
+            buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
+                    '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
+                    '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +
+                    '"nIEBmBlKzKkv8zAh11LlDuMEW9QLW5MCCwxClJaG6kTjn5uzc5bDq+3xIPmiunpz\\n" +\n' +
+                    '"A52lJPZD8q8m9NYFotFEy0GoGyrwMucvwEzKw2kxW72ZymKU+DRaejc8oD8BTLL+\\n" +\n' +
+                    '"nsc9EXajZrVqcpb2gCx0tIzfCA+HlQq0abSuVchpEVWmA2Gt2Veej2RcEk/jJqUy\\n" +\n' +
+                    '"y3qbFBUTA/r5jOPX8E0aWQHAkjIreoxa5jmrWEFPeKySD3uPDy7vM35qNNTFR4QN\\n" +\n' +
+                    '"BQIDAQAB\\n" +\n' +
+                    '"-----END PUBLIC KEY-----"'
         }
     }
 
