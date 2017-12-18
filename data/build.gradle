@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "SERVER_URL", '"http://192.168.11.9:1324"' // http://10.0.2.2:1324
+            buildConfigField "String", "SERVER_URL", '"http://192.168.0.122:1324"' // http://10.0.2.2:1324
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
                     '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +

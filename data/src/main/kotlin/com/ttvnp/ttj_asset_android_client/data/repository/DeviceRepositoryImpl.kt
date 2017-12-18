@@ -209,31 +209,30 @@ class DeviceRepositoryImpl @Inject constructor(
                     return@create
                 }
                 var userEntity = UserEntity(
-                        emailAddress = response.emailAddress,
-                        profileImageID = response.profileImageID,
-                        profileImageURL = response.profileImageURL,
-                        firstName = response.firstName,
-                        middleName =  response.middleName,
-                        lastName = response.lastName,
-                        address = response.address,
-                        isEmailVerified = response.isEmailVerified,
-                        isIdentified = response.isIdentified,
+                        emailAddress = response.user.emailAddress,
+                        profileImageID = response.user.profileImageID,
+                        profileImageURL = response.user.profileImageURL,
+                        firstName = response.user.firstName,
+                        middleName =  response.user.middleName,
+                        lastName = response.user.lastName,
+                        address = response.user.address,
+                        isEmailVerified = response.user.isEmailVerified,
+                        isIdentified = response.user.isIdentified,
                         updatedAt = Now()
                 )
                 userEntity = userDataStore.update(userEntity)
 
                 // update device entity
-                deviceDataStore.get()?.let {
-                    val newDeviceEntity = DeviceEntity(
-                            accessToken = it.accessToken,
-                            accessTokenExpiry = it.accessTokenExpiry,
-                            isActivated = true,
-                            deviceToken = it.deviceToken,
-                            grantPushNotification = it.grantPushNotification,
-                            grantEmailNotification = it.grantEmailNotification
-                    )
-                    deviceDataStore.update(newDeviceEntity)
-                }
+                val deviceEntity = DeviceEntity(
+                        accessToken = response.device.accessToken,
+                        accessTokenExpiry = response.device.accessTokenExpiry,
+                        isActivated = response.device.isActivated,
+                        deviceToken = response.device.deviceToken,
+                        grantPushNotification = response.device.grantPushNotification,
+                        grantEmailNotification = response.device.grantEmailNotification
+                )
+                deviceDataStore.update(deviceEntity)
+
                 val model = UserTranslator().translate(userEntity)!!
                 subscriber.onSuccess(ModelWrapper<UserModel?>(model, ErrorCode.NO_ERROR))
             } catch (e: IOException) {
