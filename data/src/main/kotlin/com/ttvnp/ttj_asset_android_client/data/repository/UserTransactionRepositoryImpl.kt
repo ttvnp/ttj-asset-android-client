@@ -6,6 +6,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.service.response.CreateTransactionResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.AppDataStore
+import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserTransactionDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.BalanceTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTransactionTranslator
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class UserTransactionRepositoryImpl @Inject constructor(
         private val userService: UserService,
         private val userTransactionDataStore : UserTransactionDataStore,
-        private val appDataStore: AppDataStore
+        private val appDataStore: AppDataStore,
+        private val deviceInfoDataStore : DeviceInfoDataStore
 ) : UserTransactionRepository {
 
     override fun getTopByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel> {
@@ -99,7 +101,9 @@ class UserTransactionRepositoryImpl @Inject constructor(
         return Single.create { subscriber ->
             val response: CreateTransactionResponse
             try {
+                val deviceInfo = deviceInfoDataStore.get()
                 response = userService.createTransaction(
+                        deviceInfo!!.credential,
                         sendInfoModel.targetUserEmailAddress,
                         sendInfoModel.assetType.rawValue,
                         sendInfoModel.amount
