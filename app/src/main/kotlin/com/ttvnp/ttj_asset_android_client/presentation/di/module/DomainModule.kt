@@ -79,8 +79,9 @@ class DomainModule {
     fun userTransactionRepository(
             userService: UserService,
             userTransactionDataStore: UserTransactionDataStore,
-            appDataStore: AppDataStore
+            appDataStore: AppDataStore,
+            deviceInfoDataStore : DeviceInfoDataStore
     ): UserTransactionRepository {
-        return UserTransactionRepositoryImpl(userService, userTransactionDataStore, appDataStore)
+        return UserTransactionRepositoryImpl(userService, userTransactionDataStore, appDataStore, deviceInfoDataStore)
     }
 }

@@ -5,6 +5,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.*
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
+import com.ttvnp.ttj_asset_android_client.data.util.ServerCryptoUtil
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -45,7 +46,7 @@ interface UserService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("users/transactions")
-    fun createTransaction(@Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Call<CreateTransactionResponse>
+    fun createTransaction(@Header("credential") credential: String, @Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Call<CreateTransactionResponse>
 }
 
 class UserServiceImpl(
@@ -100,7 +101,7 @@ class UserServiceImpl(
         return service.getTransactions(upperUserTransactionID)
     }
 
-    override fun createTransaction(emailAddress: String, assetType: String, amount: Long): Call<CreateTransactionResponse> {
-        return service.createTransaction(emailAddress, assetType, amount)
+    override fun createTransaction(credential: String, emailAddress: String, assetType: String, amount: Long): Call<CreateTransactionResponse> {
+        return service.createTransaction(ServerCryptoUtil.encrypt(credential), emailAddress, assetType, amount)
     }
 }
