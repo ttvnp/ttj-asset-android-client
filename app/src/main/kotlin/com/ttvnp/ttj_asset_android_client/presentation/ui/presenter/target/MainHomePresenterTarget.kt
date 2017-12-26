@@ -8,4 +8,5 @@ interface MainHomePresenterTarget : BasePresenterTarget {
     fun bindUserInfo(userModel: UserModel)
     fun bindBalanceInfo(balancesModel: BalancesModel)
     fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean)
+    fun gotoProfileDetail()
 }

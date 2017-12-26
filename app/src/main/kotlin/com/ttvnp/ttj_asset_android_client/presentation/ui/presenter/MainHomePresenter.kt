@@ -15,6 +15,7 @@ interface MainHomePresenter {
     fun setupBalanceInfo(forceRefresh: Boolean)
     fun setupUserTransactions(forceRefresh: Boolean)
     fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit, forceRefresh: Boolean)
+    fun onProfileAreaClicked()
 }
 
 class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), MainHomePresenter {
@@ -80,5 +81,9 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                         target?.showError(e)
                     }
                 }).addTo(this.disposables)
+    }
+
+    override fun onProfileAreaClicked() {
+        target?.gotoProfileDetail()
     }
 }

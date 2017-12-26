@@ -12,48 +12,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
-        android:id="@+id/layout_footer"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize">
-
-        <View
-            android:id="@+id/view_indicator_1"
-            android:layout_toStartOf="@+id/view_indicator_2"
-            android:layout_marginTop="@dimen/large_margin"
-            android:background="@drawable/circle"
-            android:layout_width="@dimen/small_margin"
-            android:layout_height="@dimen/small_margin"/>
-
-        <View
-            android:id="@+id/view_indicator_2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/large_margin"
-            android:layout_marginStart="@dimen/small_margin"
-            android:background="@drawable/circle"
-            android:layout_width="@dimen/small_margin"
-            android:layout_height="@dimen/small_margin"/>
-        <View
-            android:id="@+id/view_indicator_3"
-            android:layout_toEndOf="@+id/view_indicator_2"
-            android:layout_marginTop="@dimen/large_margin"
-            android:layout_marginLeft="@dimen/small_margin"
-            android:layout_marginRight="@dimen/small_margin"
-            android:background="@drawable/circle"
-            android:layout_width="@dimen/small_margin"
-            android:layout_height="@dimen/small_margin"/>
-
-        <View
-            android:id="@+id/view_floating_indicator"
-            android:background="@drawable/circle_active"
-            android:layout_alignStart="@+id/view_indicator_1"
-            android:layout_alignEnd="@+id/view_indicator_1"
-            android:layout_alignTop="@+id/view_indicator_1"
-            android:layout_alignBottom="@+id/view_indicator_1"
-            android:layout_width="@dimen/small_margin"
-            android:layout_height="@dimen/small_margin"/>
-
-    </RelativeLayout>
-
 </RelativeLayout>
