@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
@@ -22,6 +23,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 import com.ttvnp.ttj_asset_android_client.domain.util.formatString
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.PaymentHistoryViewAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.EndlessScrollListener
 
@@ -30,15 +32,15 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     @Inject
     lateinit var mainHomePresenter: MainHomePresenter
 
-    private lateinit var textEmailAddress: TextView
-    private lateinit var profileImage: CircleImageView
-    private lateinit var textPointAmount: TextView
-    private lateinit var textCoinAmount: TextView
-    private lateinit var swipeLayoutPaymentHistory: SwipeRefreshLayout
-    private lateinit var swipeLayoutEmptyPaymentHistory: SwipeRefreshLayout
-    private lateinit var recyclerViewPaymentHistory: RecyclerView
-    private lateinit var emptyViewPaymentHistory: ListView
-    private lateinit var emptyTextViewPaymentHistory: TextView
+    private var textEmailAddress: TextView? = null
+    private var profileImage: CircleImageView? = null
+    private var textPointAmount: TextView? = null
+    private var textCoinAmount: TextView? = null
+    private var swipeLayoutPaymentHistory: SwipeRefreshLayout? = null
+    private var swipeLayoutEmptyPaymentHistory: SwipeRefreshLayout? = null
+    private var recyclerViewPaymentHistory: RecyclerView? = null
+    private var emptyViewPaymentHistory: ListView? = null
+    private var emptyTextViewPaymentHistory: TextView? = null
 
     companion object {
         fun getInstance() : MainHomeFragment {
@@ -68,59 +70,72 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         emptyViewPaymentHistory = view.findViewById(R.id.empty_view_payment_history)
 
         val layoutManager = LinearLayoutManager(this.context)
-        recyclerViewPaymentHistory.layoutManager = layoutManager
-        val dividerItemDecoration = DividerItemDecoration(recyclerViewPaymentHistory.context, layoutManager.orientation)
-        recyclerViewPaymentHistory.addItemDecoration(dividerItemDecoration)
+        recyclerViewPaymentHistory?.layoutManager = layoutManager
+        val dividerItemDecoration = DividerItemDecoration(recyclerViewPaymentHistory?.context, layoutManager.orientation)
+        recyclerViewPaymentHistory?.addItemDecoration(dividerItemDecoration)
 
         mainHomePresenter.setupUserInfo(false)
-        mainHomePresenter.setupBalanceInfo(false)
-        mainHomePresenter.setupUserTransactions(false)
+        mainHomePresenter.setupBalanceInfo(true)
+        mainHomePresenter.setupUserTransactions(true)
 
         val swipeLayoutRefreshListener: () -> Unit = fun() {
             mainHomePresenter.setupBalanceInfo(true)
             mainHomePresenter.setupUserTransactions(true)
         }
-        swipeLayoutPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
-        swipeLayoutEmptyPaymentHistory.setOnRefreshListener(swipeLayoutRefreshListener)
+        swipeLayoutPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
+        swipeLayoutEmptyPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
         emptyTextViewPaymentHistory = view.findViewById<TextView>(R.id.empty_text_view_payment_history)
-        emptyViewPaymentHistory.emptyView = emptyTextViewPaymentHistory
+        emptyViewPaymentHistory?.emptyView = emptyTextViewPaymentHistory
+
+        textEmailAddress?.setOnClickListener {
+            mainHomePresenter.onProfileAreaClicked()
+        }
+        profileImage?.setOnClickListener {
+            mainHomePresenter.onProfileAreaClicked()
+        }
+        textPointAmount?.setOnClickListener {
+            mainHomePresenter.onProfileAreaClicked()
+        }
+        textCoinAmount?.setOnClickListener {
+            mainHomePresenter.onProfileAreaClicked()
+        }
 
         return view
     }
 
     override fun bindUserInfo(userModel: UserModel) {
-        textEmailAddress.text = userModel.emailAddress
+        textEmailAddress?.text = userModel.emailAddress
         if (0 < userModel.profileImageURL.length) {
             Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
         }
     }
 
     override fun bindBalanceInfo(balancesModel: BalancesModel) {
-        textPointAmount.text = balancesModel.pointBalance.amount.formatString()
-        textCoinAmount.text = balancesModel.coinBalance.amount.formatString()
+        textPointAmount?.text = balancesModel.pointBalance.amount.formatString()
+        textCoinAmount?.text = balancesModel.coinBalance.amount.formatString()
     }
 
     override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean) {
         stopSwipeLayoutRefreshing()
         if (userTransactionsModel.userTransactions.isEmpty()) {
             // case empty
-            swipeLayoutPaymentHistory.visibility = View.GONE
-            swipeLayoutEmptyPaymentHistory.visibility = View.VISIBLE
-            emptyTextViewPaymentHistory.visibility = View.VISIBLE
+            swipeLayoutPaymentHistory?.visibility = View.GONE
+            swipeLayoutEmptyPaymentHistory?.visibility = View.VISIBLE
+            emptyTextViewPaymentHistory?.visibility = View.VISIBLE
         } else {
             // has data
-            var adapter = recyclerViewPaymentHistory.adapter
+            var adapter = recyclerViewPaymentHistory?.adapter
             if (adapter != null && adapter is PaymentHistoryViewAdapter) {
                 adapter.addAllUserTransactionModel(userTransactionsModel.userTransactions)
             } else {
                 adapter = PaymentHistoryViewAdapter(userTransactionsModel.userTransactions.toMutableList())
             }
-            recyclerViewPaymentHistory.adapter = adapter
-            swipeLayoutPaymentHistory.visibility = View.VISIBLE
-            swipeLayoutEmptyPaymentHistory.visibility = View.GONE
-            emptyTextViewPaymentHistory.visibility = View.GONE
+            recyclerViewPaymentHistory?.adapter = adapter
+            swipeLayoutPaymentHistory?.visibility = View.VISIBLE
+            swipeLayoutEmptyPaymentHistory?.visibility = View.GONE
+            emptyTextViewPaymentHistory?.visibility = View.GONE
             if (userTransactionsModel.hasMore) {
-                recyclerViewPaymentHistory.addOnScrollListener(object : EndlessScrollListener(recyclerViewPaymentHistory.layoutManager as LinearLayoutManager) {
+                recyclerViewPaymentHistory?.addOnScrollListener(object : EndlessScrollListener(recyclerViewPaymentHistory?.layoutManager as LinearLayoutManager) {
                     override fun onLoadMore(currentPage: Int) {
                         // get last item
                         val lastUserTransactionID = userTransactionsModel.userTransactions.last().id
@@ -129,7 +144,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
                             if (!loadedModel.hasMore) this.setFinished()
                             adapter.addAllUserTransactionModel(loadedModel.userTransactions)
                             val updatedSize = adapter.itemCount
-                            recyclerViewPaymentHistory.post { adapter.notifyItemRangeInserted(initialSize, updatedSize) }
+                            recyclerViewPaymentHistory?.post { adapter.notifyItemRangeInserted(initialSize, updatedSize) }
                         }, forceRefresh)
                     }
                 })
@@ -143,7 +158,13 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     }
 
     private fun stopSwipeLayoutRefreshing() {
-        swipeLayoutPaymentHistory.isRefreshing = false
-        swipeLayoutEmptyPaymentHistory.isRefreshing = false
+        swipeLayoutPaymentHistory?.isRefreshing = false
+        swipeLayoutEmptyPaymentHistory?.isRefreshing = false
+    }
+
+    override fun gotoProfileDetail() {
+        // case profile clicked.
+        val intent = Intent(activity, SettingsProfileActivity::class.java)
+        startActivity(intent)
     }
 }
