@@ -29,17 +29,13 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     private var emailFragment: TutorialEmailFragment? = null
     private var codeFragment: TutorialCodeFragment? = null
     private var endFragment: TutorialEndFragment? = null
-
     private var viewPager: ScrollControllViewPager? = null
-    private var floatingIndicatorView: View? = null
-    private var footer: RelativeLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
         initViewPager()
-        setupIndicator()
         tutorialPresenter.onCreate(this)
     }
 
@@ -64,7 +60,6 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     override fun gotoEndPage() {
-        footer?.visibility = View.INVISIBLE
         toPage(3)
         firebaseAnalyticsHelper?.logTutorialCompleteEvent()
     }
@@ -124,24 +119,10 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
         }
     }
 
-    private fun setupIndicator() {
-        findViewById<View>(R.id.view_floating_indicator).let {
-            floatingIndicatorView = it
-        }
-        findViewById<RelativeLayout>(R.id.layout_footer).let {
-            footer = it
-            footer?.visibility = View.VISIBLE
-        }
-    }
-
     override fun onPageScrollStateChanged(state: Int) {
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        floatingIndicatorView?.let {
-            val indicatorSpace = resources.getDimensionPixelSize(R.dimen.middle_margin).toFloat()
-            it.translationX = position * indicatorSpace + positionOffset * indicatorSpace
-        }
     }
 
     override fun onPageSelected(position: Int) {
