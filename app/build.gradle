@@ -51,7 +51,6 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            resValue "string", "app_name", "Debug TTJ Wallet"
             signingConfig signingConfigs.debug
         }
         release {
@@ -60,7 +59,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             shrinkResources true
             zipAlignEnabled true
-            resValue "string", "app_name", "TTJ Wallet"
             signingConfig signingConfigs.release
         }
     }
@@ -71,14 +69,17 @@ android {
             dimension "env"
             applicationIdSuffix ".testnet"
             versionNameSuffix "-testnet"
+            resValue "string", "app_name", "Local TTJ Wallet"
         }
         dev {
             dimension "env"
             applicationIdSuffix ".testnet"
             versionNameSuffix "-testnet"
+            resValue "string", "app_name", "Test TTJ Wallet"
         }
         prod {
             dimension "env"
+            resValue "string", "app_name", "TTJ Wallet"
         }
     }
 
@@ -92,7 +93,8 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        debug.java.srcDirs += "src/debug/kotlin"
+        local.java.srcDirs += 'src/local/kotlin'
+        dev.java.srcDirs += 'src/dev/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }

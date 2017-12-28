@@ -2,7 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation
 
 import com.squareup.leakcanary.LeakCanary
 
-class DebugAndroidApplication: AndroidApplication() {
+class DevAndroidApplication: AndroidApplication() {
     override fun onCreate() {
         super.onCreate()
         initializeLeakDetection()

@@ -4,6 +4,6 @@
     package="com.ttvnp.ttj_asset_android_client">
     <application
         tools:replace="android:name"
-        android:name=".presentation.DebugAndroidApplication">
+        android:name=".presentation.LocalAndroidApplication">
     </application>
 </manifest>

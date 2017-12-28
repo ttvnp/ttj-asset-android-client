@@ -18,7 +18,7 @@ android {
         versionCode globalConfiguration.dataLibraryVersionCode
         versionName globalConfiguration.dataLibraryVersionName
         testInstrumentationRunner globalConfiguration.testInstrumentationRunner
-        buildConfigField "String", "RECAPTCHA_API_SITE_KEY", '"6LcYNDsUAAAAAB9QdkDypQfgKhVIwqQlI4iShBaH"'
+        buildConfigField "String", "RECAPTCHA_API_SITE_KEY", '"6Lc0jz4UAAAAAA2dRVgm-7vGvy6VRJHPefg9hDlc"'
     }
 
     buildTypes {
@@ -32,7 +32,7 @@ android {
     productFlavors {
         local {
             dimension "env"
-            buildConfigField "String", "SERVER_URL", '"http://192.168.11.9:1324"' // http://10.0.2.2:1324
+            buildConfigField "String", "SERVER_URL", '"http://192.168.11.5:1324"' // http://10.0.2.2:1324
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
                     '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +
