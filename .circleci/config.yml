@@ -9,6 +9,16 @@ jobs:
     steps:
       - checkout
       - run: bundle install
+      - run:
+          name: Setup Gcloud Client
+          command: |
+            echo GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+            sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+            sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+      - run:
+          name: Download keystore
+          command: /opt/google-cloud-sdk/bin/gsutil cp gs://ttj-asset-app-credentials/android-client/release.keystore ./buildSystem/release.keystore
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
@@ -38,6 +48,16 @@ jobs:
     steps:
       - checkout
       - run: bundle install
+      - run:
+          name: Setup Gcloud Client
+          command: |
+            echo GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+            sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+            sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+      - run:
+          name: Download keystore
+          command: /opt/google-cloud-sdk/bin/gsutil cp gs://ttj-asset-app-credentials/android-client/release.keystore ./buildSystem/release.keystore
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:

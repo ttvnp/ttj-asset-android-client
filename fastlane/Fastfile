@@ -7,7 +7,7 @@ platform :android do
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
-    gradle(task: "assembleRelease")
+    gradle(task: "assembleDevRelease")
     crashlytics(
       api_token: ENV['CRASHLYTICS_API_KEY'],
       build_secret: ENV['CRASHLYTICS_SECRET'],
@@ -18,7 +18,7 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "assembleRelease")
+    gradle(task: "assembleProdRelease")
     supply
   end
 

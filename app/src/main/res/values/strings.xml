@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">TTJ Wallet</string>
-
     <!-- tutorial -->
     <string name="tutorial_welcome">Welcome</string>
     <string name="tutorial_start">start</string>
