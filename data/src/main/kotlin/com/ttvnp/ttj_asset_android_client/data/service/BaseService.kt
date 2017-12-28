@@ -22,7 +22,7 @@ abstract class BaseService {
             chain.proceed(
                     chain.request()
                             .newBuilder()
-                            .addHeader("User-Agent", "VNJCoinClient (Android)")
+                            .addHeader("User-Agent", "TTJAssetClient (Android)")
                             .build()
             )
         }

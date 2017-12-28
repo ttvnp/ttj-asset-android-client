@@ -23,6 +23,15 @@ android {
 
     buildTypes {
         debug {
+        }
+        release {
+        }
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        local {
+            dimension "env"
             buildConfigField "String", "SERVER_URL", '"http://192.168.11.9:1324"' // http://10.0.2.2:1324
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
@@ -34,8 +43,9 @@ android {
                     '"BQIDAQAB\\n" +\n' +
                     '"-----END PUBLIC KEY-----"'
         }
-        release {
-            buildConfigField "String", "SERVER_URL", '"http://testnet.vnjcoin.com"'
+        dev {
+            dimension "env"
+            buildConfigField "String", "SERVER_URL", '"http://api-testnet.sencoin.com"'
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
                     '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +
@@ -44,6 +54,19 @@ android {
                     '"nsc9EXajZrVqcpb2gCx0tIzfCA+HlQq0abSuVchpEVWmA2Gt2Veej2RcEk/jJqUy\\n" +\n' +
                     '"y3qbFBUTA/r5jOPX8E0aWQHAkjIreoxa5jmrWEFPeKySD3uPDy7vM35qNNTFR4QN\\n" +\n' +
                     '"BQIDAQAB\\n" +\n' +
+                    '"-----END PUBLIC KEY-----"'
+        }
+        prod {
+            dimension "env"
+            buildConfigField "String", "SERVER_URL", '"https://api.sencoin.com"'
+            buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
+                    '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2RHR14zkJbNTloI1YD9c\\n" +\n' +
+                    '"xqRFdmK2h5dw84fD+21Q1GYzlX+BltmsGWrn+rRmwqzuCMJiaObc+93vkXM9pUPU\\n" +\n' +
+                    '"1kuwnrhBRCD+zHFU9TYnOmL1TaD9fEp/leH1kHmbzO/HuP9KsSq8k6cjsUGSub3L\\n" +\n' +
+                    '"Jz890flOhBsArfmzOJx9O6AWgfZp5JKU8ylqztdSGqGZBg8JQjNtqcNYeI1sOUWh\\n" +\n' +
+                    '"pIa//W7L0s0BfbilxtsF/+H77FSw1g9kvwi/7Ulx9VPLmh+NQ00a4sZ36IDhSm5V\\n" +\n' +
+                    '"fcZT000CdrEd+I77HRgW1ADQeRUaxtEYf1YDRR8E5hrYs1EbZmUyvAOa6P7NwwME\\n" +\n' +
+                    '"KwIDAQAB\\n" +\n' +
                     '"-----END PUBLIC KEY-----"'
         }
     }
