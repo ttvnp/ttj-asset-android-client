@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Setup Gcloud Client
           command: |
-            echo GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            echo $GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             sudo apt-get update && sudo apt-get --only-upgrade install kubectl google-cloud-sdk google-cloud-sdk-datastore-emulator google-cloud-sdk-pubsub-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-app-engine-java google-cloud-sdk-app-engine-python google-cloud-sdk-cbt google-cloud-sdk-bigtable-emulator google-cloud-sdk-datalab
             gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT
@@ -51,8 +51,8 @@ jobs:
       - run:
           name: Setup Gcloud Client
           command: |
-            echo GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-            gcloud --quiet components update
+            echo $GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            sudo apt-get update && sudo apt-get --only-upgrade install kubectl google-cloud-sdk google-cloud-sdk-datastore-emulator google-cloud-sdk-pubsub-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-app-engine-java google-cloud-sdk-app-engine-python google-cloud-sdk-cbt google-cloud-sdk-bigtable-emulator google-cloud-sdk-datalab
             gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT
       - run:
