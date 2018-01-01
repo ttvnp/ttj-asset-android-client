@@ -3,7 +3,7 @@ package com.ttvnp.ttj_asset_android_client.data.service
 import com.squareup.moshi.Moshi
 import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
-import io.reactivex.Single
+import com.ttvnp.ttj_asset_android_client.data.util.ServerCryptoUtil
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -19,7 +19,7 @@ interface DeviceServiceWithNoAuth {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices")
-    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String) : Single<DeviceResponse>
+    fun register(@Field("deviceCode") deviceCode: String, @Field("credential") credential: String, @Field("recaptchaToken") recaptchaToken: String) : Call<DeviceResponse>
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
@@ -48,11 +48,11 @@ class DeviceServiceWithNoAuthImpl : BaseService(), DeviceServiceWithNoAuth {
         service = builder.create(DeviceServiceWithNoAuth::class.java)
     }
 
-    override fun register(deviceCode: String, credential: String): Single<DeviceResponse> {
-        return service.register(deviceCode, credential)
+    override fun register(deviceCode: String, credential: String, recaptchaToken: String): Call<DeviceResponse> {
+        return service.register(deviceCode, ServerCryptoUtil.encrypt(credential), recaptchaToken)
     }
 
     override fun issueAccessToken(deviceCode: String, credential: String): Call<DeviceResponse> {
-        return service.issueAccessToken(deviceCode, credential)
+        return service.issueAccessToken(deviceCode, ServerCryptoUtil.encrypt(credential))
     }
 }

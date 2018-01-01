@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.view.LayoutInflater
@@ -13,10 +14,12 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
-import com.ttvnp.ttj_asset_android_client.domain.util.isValidAmount
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
-import com.ttvnp.ttj_asset_android_client.domain.util.toAmount
 import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendAmountFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
@@ -24,7 +27,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 
-class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarget {
+class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
 
     @Inject
     lateinit var sendAmountFormPresenter: SendAmountFormPresenter
@@ -37,12 +40,12 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
     private lateinit var textInputLayoutSendAmount: TextInputLayout
     private lateinit var textSendAmount: TextView
 
-    private var qrCodeString: String? = null
+    private var qrCodeInfo: QRCodeInfoModel? = null
     private var sendInfoModel: SendInfoModel? = null
     var cancelButtonClickHandler: View.OnClickListener? = null
 
     companion object {
-        val QR_STRING_ARG_KEY = "qr_string"
+        val QR_CODE_INFO_ARG_KEY = "qr_code_info"
         fun getInstance() : SendAmountFormFragment {
             return SendAmountFormFragment()
         }
@@ -51,11 +54,17 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        qrCodeString = arguments.getString(QR_STRING_ARG_KEY)
+
+        val data = arguments.getSerializable(QR_CODE_INFO_ARG_KEY)
+        if (data is QRCodeInfoBridgeData) {
+            qrCodeInfo = QRCodeInfoBridgeDataTranslator().translate(data)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putString(QR_STRING_ARG_KEY, qrCodeString)
+        qrCodeInfo?.let {
+            outState?.putSerializable(QR_CODE_INFO_ARG_KEY, QRCodeInfoBridgeDataTranslator().translate(it))
+        }
         super.onSaveInstanceState(outState)
     }
 
@@ -68,7 +77,7 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
         radioSendCoin = view.findViewById(R.id.radio_send_coin)
         textInputLayoutSendAmount = view.findViewById(R.id.text_input_layout_send_amount)
         textSendAmount = view.findViewById(R.id.text_send_amount)
-        qrCodeString?.let {
+        qrCodeInfo?.let {
             sendAmountFormPresenter.initialize(this, it)
         }
         val buttonSendAmountCancel = view.findViewById<Button>(R.id.button_send_amount_cancel)
@@ -79,34 +88,34 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
                 val selectedAssetType
                         = if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
                 val amountString = textSendAmount.text.toString()
-                if (!amountString.isValidAmount()) {
-                    textInputLayoutSendAmount.isErrorEnabled = true
-                    textInputLayoutSendAmount.error = getString(R.string.error_message_invalid_long)
-                    return@let
-                }
-                val amount = amountString.toAmount()
-                val confirmFragment = SendAmountConfirmFragment.getInstance()
-                confirmFragment.arguments = Bundle().apply {
-                    val data = SendInfoBridgeData(
-                            targetUserID = it.targetUserID,
-                            targetUserEmailAddress = it.targetUserEmailAddress,
-                            targetUserProfileImageID = it.targetUserProfileImageID,
-                            targetUserProfileImageURL = it.targetUserProfileImageURL,
-                            targetUserFirstName = it.targetUserFirstName,
-                            targetUserMiddleName = it.targetUserMiddleName,
-                            targetUserLastName = it.targetUserLastName,
-                            assetType = selectedAssetType.rawValue,
-                            amount = amount
-                    )
-                    this.putSerializable(SendAmountConfirmFragment.SEND_INFO_KEY, data)
-                }
-                fragmentManager.beginTransaction()
-                        .addToBackStack("")
-                        .replace(R.id.send_activity_fragment_container, confirmFragment)
-                        .commit()
+                sendAmountFormPresenter.checkSendAmount(selectedAssetType, amountString)
             }
         }
         return view
+    }
+
+    override fun navigateToConfirm(assetType: AssetType, amount: Long) {
+        sendInfoModel?.let {
+            val confirmFragment = SendAmountConfirmFragment.getInstance()
+            confirmFragment.arguments = Bundle().apply {
+                val data = SendInfoBridgeData(
+                        targetUserID = it.targetUserID,
+                        targetUserEmailAddress = it.targetUserEmailAddress,
+                        targetUserProfileImageID = it.targetUserProfileImageID,
+                        targetUserProfileImageURL = it.targetUserProfileImageURL,
+                        targetUserFirstName = it.targetUserFirstName,
+                        targetUserMiddleName = it.targetUserMiddleName,
+                        targetUserLastName = it.targetUserLastName,
+                        assetType = assetType.rawValue,
+                        amount = amount
+                )
+                this.putSerializable(SendAmountConfirmFragment.SEND_INFO_KEY, data)
+            }
+            fragmentManager.beginTransaction()
+                    .addToBackStack("")
+                    .replace(R.id.send_activity_fragment_container, confirmFragment)
+                    .commit()
+        }
     }
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
@@ -123,7 +132,7 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
                 radioSendCoin.isChecked = true
             }
         }
-        textSendAmount.text = sendInfoModel.amount.toString()
+        textSendAmount.text = if (0 < sendInfoModel.amount) sendInfoModel.amount.toString() else ""
     }
 
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {
@@ -138,5 +147,25 @@ class SendAmountFormFragment() : BaseMainFragment(), SendAmountFormPresenterTarg
             userName += sendInfoModel.targetUserLastName.prependIfNotBlank(" ")
         }
         return if (userName.isBlank()) sendInfoModel.targetUserEmailAddress else userName
+    }
+
+    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+        val msg = errorMessageGenerator.generate(errorCode, throwable)
+        when (errorCode) {
+            ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
+            ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
+            else -> {
+                showErrorDialog(msg, onClick = { dialog, whichButton ->
+                    if (whichButton == DialogInterface.BUTTON_POSITIVE) {
+                        this.activity.finish()
+                    }
+                })
+            }
+        }
+    }
+
+    fun showAmountValidationError(msg: String) {
+        textInputLayoutSendAmount.isErrorEnabled = true
+        textInputLayoutSendAmount.error = msg
     }
 }

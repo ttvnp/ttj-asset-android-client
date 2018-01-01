@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
@@ -26,7 +27,7 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
     }
 
     override fun setupUserInfo() {
-        userUseCase.getUser()
+        userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserModel>() {
@@ -34,7 +35,7 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                         target?.bindUserInfo(t)
                     }
                     override fun onError(e: Throwable) {
-                        // do nothing...
+                        target?.showError(e)
                     }
                 }).addTo(this.disposables)
     }
@@ -47,13 +48,21 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target?.dismissProgressDialog()
-                        wrapper.model?.let {
-                            target?.showMessageOnUpdateSuccessfullyCompleted()
-                            target?.bindUserInfo(it)
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> {
+                                wrapper.model?.let {
+                                    target?.showMessageOnUpdateSuccessfullyCompleted()
+                                    target?.bindUserInfo(it)
+                                }
+                            }
+                            else -> {
+                                target?.showError(wrapper.errorCode, wrapper.error)
+                            }
                         }
                     }
                     override fun onError(e: Throwable) {
                         target?.dismissProgressDialog()
+                        target?.showError(e)
                     }
                 }).addTo(this.disposables)
     }

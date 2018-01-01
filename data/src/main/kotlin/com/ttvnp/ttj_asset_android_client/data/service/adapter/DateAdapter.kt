@@ -28,7 +28,7 @@ class DateAdapter : JsonAdapter<Date?>() {
         if (dateString == null) {
             return null
         }
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.UK)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.UK)
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         try {
             return dateFormat.parse(dateString)
@@ -41,7 +41,7 @@ class DateAdapter : JsonAdapter<Date?>() {
     override fun toJson(writer: JsonWriter, value: Date?) {
         var dateString = ""
         value?.let {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.UK)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.UK)
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             dateString = dateFormat.format(value)
         }

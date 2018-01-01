@@ -10,7 +10,7 @@ import java.util.*
 @Table
 class UserTransactionEntity (
 
-        @PrimaryKey
+        @PrimaryKey(auto = false, autoincrement = false)
         @Setter("id")
         val id: Long = 0L,
 
@@ -18,7 +18,11 @@ class UserTransactionEntity (
         @Setter("loggedAt")
         val loggedAt: Date = Now(),
 
-        @Column
+        @Column(defaultExpr = "0")
+        @Setter("transactionStatus")
+        val transactionStatus: Int = 0,
+
+        @Column(defaultExpr = "0")
         @Setter("transactionType")
         val transactionType: Int = 0,
 

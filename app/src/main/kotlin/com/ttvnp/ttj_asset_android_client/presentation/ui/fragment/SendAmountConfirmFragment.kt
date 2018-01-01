@@ -20,7 +20,7 @@ import android.util.TypedValue
 import android.view.*
 
 
-class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresenterTarget {
+class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTarget {
 
     @Inject
     lateinit var sendAmountConfirmPresenter: SendAmountConfirmPresenter
@@ -113,8 +113,8 @@ class SendAmountConfirmFragment() : BaseMainFragment(), SendAmountConfirmPresent
             this.isOutsideTouchable = true
             this.isFocusable = true
             val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics)
-            this.setWidth(width.toInt())
-            this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT)
+            this.width = width.toInt()
+            this.height = WindowManager.LayoutParams.WRAP_CONTENT
             this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0);
         }
         firebaseAnalyticsHelper?.logAssetSendEvent(sendInfoModel.assetType, sendInfoModel.amount)

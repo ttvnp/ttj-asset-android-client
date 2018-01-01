@@ -1,11 +1,11 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
-import com.ttvnp.ttj_asset_android_client.domain.exceptions.ServiceFailedException
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.OtherUserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendEmailFormPresenterTarget
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.exceptions.CompositeException
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -25,24 +25,19 @@ class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCas
     }
 
     override fun checkEmailAddress(emailAddress: String, handleSuccess: (OtherUserModel) -> Unit) {
-        try {
-            userUseCase.getTargetUser(emailAddress)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<OtherUserModel>() {
-                        override fun onSuccess(t: OtherUserModel) {
-                            handleSuccess(t)
+        userUseCase.getTargetUser(emailAddress)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<OtherUserModel?>>() {
+                    override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> handleSuccess(wrapper.model!!)
+                            else -> target?.showError(wrapper.errorCode, wrapper.error)
                         }
-                        override fun onError(e: Throwable) {
-                            val error = if (e is CompositeException && 0 < e.exceptions.size) e.exceptions.first() else e
-                            when (error) {
-                                is ServiceFailedException -> target?.showNoSuchUser()
-                                else -> target?.showError(e)
-                            }
-                        }
-                    }).addTo(this.disposables)
-        } catch (t: Throwable) {
-            target?.showError(t)
-        }
+                    }
+                    override fun onError(e: Throwable) {
+                        target?.showError(e)
+                    }
+                }).addTo(this.disposables)
     }
 }

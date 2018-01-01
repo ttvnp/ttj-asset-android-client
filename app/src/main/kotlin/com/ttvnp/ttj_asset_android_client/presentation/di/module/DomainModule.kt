@@ -6,6 +6,7 @@ import com.ttvnp.ttj_asset_android_client.data.repository.BalanceRepositoryImpl
 import com.ttvnp.ttj_asset_android_client.data.repository.UserTransactionRepositoryImpl
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
 import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuth
+import com.ttvnp.ttj_asset_android_client.data.service.RecaptchaService
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.store.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.BalanceRepository
@@ -41,24 +42,26 @@ class DomainModule {
     @Provides
     fun deviceRepository(
             deviceServiceWithNoAuth: DeviceServiceWithNoAuth,
-            deviceService : DeviceService,
-            deviceDataStore : DeviceDataStore,
-            deviceInfoDataStore : DeviceInfoDataStore,
-            userDataStore : UserDataStore
+            deviceService: DeviceService,
+            deviceDataStore: DeviceDataStore,
+            deviceInfoDataStore: DeviceInfoDataStore,
+            userDataStore: UserDataStore,
+            recaptchaService: RecaptchaService
     ): DeviceRepository {
         return DeviceRepositoryImpl(
                 deviceServiceWithNoAuth,
                 deviceService,
                 deviceDataStore,
                 deviceInfoDataStore,
-                userDataStore
+                userDataStore,
+                recaptchaService
         )
     }
 
     @Provides
     fun userRepository(
             userService: UserService,
-            userDataStore : UserDataStore,
+            userDataStore: UserDataStore,
             otherUserDataStore: OtherUserDataStore
     ): UserRepository {
         return UserRepositoryImpl(userService, userDataStore, otherUserDataStore)
@@ -75,8 +78,10 @@ class DomainModule {
     @Provides
     fun userTransactionRepository(
             userService: UserService,
-            userTransactionDataStore : UserTransactionDataStore
+            userTransactionDataStore: UserTransactionDataStore,
+            appDataStore: AppDataStore,
+            deviceInfoDataStore : DeviceInfoDataStore
     ): UserTransactionRepository {
-        return UserTransactionRepositoryImpl(userService, userTransactionDataStore)
+        return UserTransactionRepositoryImpl(userService, userTransactionDataStore, appDataStore, deviceInfoDataStore)
     }
 }

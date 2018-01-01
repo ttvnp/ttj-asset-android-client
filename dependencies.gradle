@@ -30,7 +30,7 @@ ext {
     picassoVersion = '2.5.2'
     zxingCoreVersion = '3.3.1'
     zxingEmbeddedVersion = '3.5.0'
-    firebaseVersion = '11.0.4'
+    googleServiceVersion = '11.0.4'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -58,8 +58,6 @@ ext {
     ]
 
     dataDependencies = [
-            anko: "org.jetbrains.anko:anko:${ankoVersion}",
-            ankoSqlite: "org.jetbrains.anko:anko-sqlite:${ankoVersion}",
             okhttp: "com.squareup.okhttp3:okhttp:${okhttpVersion}",
             okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}",
             retroit: "com.squareup.retrofit2:retrofit:${retroitVersion}",
@@ -67,6 +65,7 @@ ext {
             moshi: "com.squareup.moshi:moshi-kotlin:${moshiVersion}",
             moshiConverter: "com.squareup.retrofit2:converter-moshi:${retroitVersion}",
             orma: "com.github.gfx.android.orma:orma:${ormaVersion}",
+            reCAPTCHA: "com.google.android.gms:play-services-safetynet:${googleServiceVersion}",
     ]
 
     domainDependencies = [
@@ -81,8 +80,8 @@ ext {
             circleimageview: "de.hdodenhof:circleimageview:${circleimageviewVersion}",
             picasso: "com.squareup.picasso:picasso:${picassoVersion}",
             zxingEmbedded: "com.journeyapps:zxing-android-embedded:${zxingEmbeddedVersion}",
-            firebaseMessaging: "com.google.firebase:firebase-messaging:${firebaseVersion}",
-            firebaseCrash: "com.google.firebase:firebase-crash:${firebaseVersion}",
+            firebaseMessaging: "com.google.firebase:firebase-messaging:${googleServiceVersion}",
+            firebaseCrash: "com.google.firebase:firebase-crash:${googleServiceVersion}",
             zxingCore: "com.google.zxing:core:${zxingCoreVersion}",
     ]
 
