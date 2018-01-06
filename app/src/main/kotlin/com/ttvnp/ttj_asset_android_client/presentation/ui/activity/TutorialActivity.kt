@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.RelativeLayout
-import com.google.firebase.crash.FirebaseCrash
 import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.RegisterEmailResultModel
@@ -89,6 +87,17 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
                         tutorialPresenter.submitEmailAddress(fragment.getEmailAddressText())
                     }
                 }
+
+                fragment.termsAndConditionsClickHandler = View.OnClickListener {
+                    val dialog = AlertDialog.Builder(this)
+                    dialog.setTitle(null)
+                    dialog.setMessage(getString(R.string.terms_and_conditions_description))
+                    dialog.setPositiveButton(getString(R.string.close), { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    })
+                    dialog.show()
+                }
+
                 adapter.addFragment(fragment)
             }
 
