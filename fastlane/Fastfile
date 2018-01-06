@@ -5,9 +5,20 @@ platform :android do
   before_all do
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Submit a new Dev Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "assembleDevRelease")
+    crashlytics(
+      api_token: ENV['CRASHLYTICS_API_KEY'],
+      build_secret: ENV['CRASHLYTICS_SECRET'],
+      notes_path: "release_notes.txt",
+      groups: "ttj-asset-android-client",
+    )
+  end
+
+  desc "Submit a new Prod Build to Crashlytics Beta"
+  lane :preprod do
+    gradle(task: "assembleProdRelease")
     crashlytics(
       api_token: ENV['CRASHLYTICS_API_KEY'],
       build_secret: ENV['CRASHLYTICS_SECRET'],
