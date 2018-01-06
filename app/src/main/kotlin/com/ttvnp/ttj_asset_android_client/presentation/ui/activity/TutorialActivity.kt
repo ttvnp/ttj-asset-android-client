@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -22,7 +23,7 @@ import javax.inject.Inject
 class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, TutorialPresenterTarget {
 
     @Inject
-    lateinit var tutorialPresenter : TutorialPresenter
+    lateinit var tutorialPresenter: TutorialPresenter
 
     private var emailFragment: TutorialEmailFragment? = null
     private var codeFragment: TutorialCodeFragment? = null
@@ -88,13 +89,15 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
                     }
                 }
 
+                val dialogInterface = { dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.dismiss()
+                }
+
                 fragment.termsAndConditionsClickHandler = View.OnClickListener {
                     val dialog = AlertDialog.Builder(this)
                     dialog.setTitle(null)
                     dialog.setMessage(getString(R.string.terms_and_conditions_description))
-                    dialog.setPositiveButton(getString(R.string.close), { dialogInterface, _ ->
-                        dialogInterface.dismiss()
-                    })
+                    dialog.setPositiveButton(getString(R.string.close), dialogInterface)
                     dialog.show()
                 }
 
