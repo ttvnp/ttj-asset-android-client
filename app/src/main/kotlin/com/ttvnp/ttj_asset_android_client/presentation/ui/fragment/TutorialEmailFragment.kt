@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,11 +45,11 @@ class TutorialEmailFragment : Fragment() {
         chkTermsAndConditions.setOnCheckedChangeListener({
             _, isChecked ->
             if (isChecked) {
-                buttonTutorialSubmit.isEnabled = true
+                setEnableButton(true)
                 return@setOnCheckedChangeListener
             }
 
-            buttonTutorialSubmit.isEnabled = false
+            setEnableButton(false)
         })
         tvTermsAndConditions = view.findViewById(R.id.tvTermsAndConditions)
         tvTermsAndConditions.setOnClickListener(termsAndConditionsClickHandler)
@@ -64,4 +65,26 @@ class TutorialEmailFragment : Fragment() {
         textInputLayoutTutorialEmailAddress.isErrorEnabled = true
         textInputLayoutTutorialEmailAddress.error = errorMessage
     }
+
+    private fun setEnableButton(value: Boolean) {
+        buttonTutorialSubmit.isEnabled = value
+
+        if (value) {
+            buttonTutorialSubmit.setBackgroundColor(
+                    ContextCompat.getColor(
+                            context,
+                            R.color.colorPrimary
+                    )
+            )
+            return
+        }
+
+        buttonTutorialSubmit.setBackgroundColor(
+                ContextCompat.getColor(
+                        context,
+                        R.color.md_grey_500
+                )
+        )
+    }
+
 }
