@@ -1,43 +1,47 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
+import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
+import android.support.v4.app.ActivityCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import com.squareup.picasso.Picasso
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
-import javax.inject.Inject
-import android.media.MediaScannerConnection
-import android.app.Activity.RESULT_OK
-import android.net.Uri
-import android.provider.MediaStore
-import android.widget.Button
-import android.content.ContentValues
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
-import android.support.v4.app.ActivityCompat
-import android.widget.TextView
-import android.widget.Toast
-import com.squareup.picasso.Target
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.inject.Inject
 
 class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresenterTarget {
 
@@ -55,10 +59,12 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
     private lateinit var textProfileLastName: TextInputEditText
     private lateinit var textInputLayoutProfileAddress: TextInputLayout
     private lateinit var textProfileAddress: TextInputEditText
+    private lateinit var textDOB: TextView
 
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
+    private lateinit var calendar: Calendar
 
     companion object {
         val TMP_FILE_NAME = "tmp_profile_image"
@@ -90,6 +96,24 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         textProfileLastName = view.findViewById(R.id.text_profile_last_name)
         textInputLayoutProfileAddress = view.findViewById(R.id.text_input_layout_profile_address)
         textProfileAddress = view.findViewById(R.id.text_profile_address)
+        textDOB = view.findViewById(R.id.text_dob)
+        calendar = Calendar.getInstance()
+        updateDOB()
+        val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, monthOfYear)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateDOB()
+        }
+        textDOB.setOnClickListener({
+            DatePickerDialog(
+                    context,
+                    date,
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH))
+                    .show()
+        })
         val buttonProfileSave = view.findViewById<Button>(R.id.button_profile_save)
 
         if (activity is SettingsProfileActivity) {
@@ -166,6 +190,13 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         if (profileImageFile != null) {
             firebaseAnalyticsHelper?.setHasSetProfileImageUserPropertyOn()
         }
+    }
+
+    @SuppressLint( "SimpleDateFormat")
+    private fun updateDOB() {
+        val format = "dd/MMM/yyyy"
+        val sdf = SimpleDateFormat(format)
+        textDOB.text = sdf.format(calendar.time)
     }
 
     private fun launchCamera() {
