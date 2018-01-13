@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ttvnp.ttj_asset_android_client">
+    package="com.ttvnp.ttj_asset_android_client.presentation">
     <application
         tools:replace="android:name"
-        android:name=".presentation.LocalAndroidApplication">
+        android:name=".LocalAndroidApplication">
     </application>
 </manifest>

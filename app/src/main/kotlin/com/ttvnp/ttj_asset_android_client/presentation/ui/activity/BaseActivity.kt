@@ -10,7 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crash.FirebaseCrash
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
