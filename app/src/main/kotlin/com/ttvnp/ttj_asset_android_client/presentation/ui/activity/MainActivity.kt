@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.crash.FirebaseCrash
 import com.google.zxing.integration.android.IntentIntegrator
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode

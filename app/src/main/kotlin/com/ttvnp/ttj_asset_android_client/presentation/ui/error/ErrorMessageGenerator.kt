@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.error
 
 import android.content.Context
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import javax.inject.Inject
 

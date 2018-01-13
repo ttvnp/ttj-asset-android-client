@@ -8,7 +8,7 @@ import com.google.firebase.messaging.RemoteMessage
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import com.google.firebase.crash.FirebaseCrash
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.PushReceiveActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeDataFactory
