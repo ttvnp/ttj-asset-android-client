@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:856883993971:android:a6c600d07d4c4ed1",
+        "android_client_info": {
+          "package_name": "com.ttvnp.ttj_asset_android_client.simple.testnet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "856883993971-n35fipfn9pei1i7o9m6r7533odo90r04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttvnp.ttj_asset_android_client.simple.testnet",
+            "certificate_hash": "a77fedcdd8015db7fc921d6034a3fbcc6db014f9"
+          }
+        },
+        {
+          "client_id": "856883993971-h9gvunorvu391al5rk4c58obhhrp1re7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg_eq75ASq9_Cg4IzySn4vc1cOelDqB3w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "856883993971-h9gvunorvu391al5rk4c58obhhrp1re7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

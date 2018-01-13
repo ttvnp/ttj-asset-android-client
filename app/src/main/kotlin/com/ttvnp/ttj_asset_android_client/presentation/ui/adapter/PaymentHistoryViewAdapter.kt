@@ -11,7 +11,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.TransactionType
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
 import com.ttvnp.ttj_asset_android_client.domain.util.formatString
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.TransactionStatus
 import com.ttvnp.ttj_asset_android_client.presentation.ui.view.PaymentHistoryViewHolder
 import java.text.SimpleDateFormat
