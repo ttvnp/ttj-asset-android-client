@@ -22,7 +22,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 
 class SettingsProfileUploadDocumentIDFragment : Fragment() {
