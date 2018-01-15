@@ -34,7 +34,12 @@ xcode-select --install
 ```
 fastlane android beta
 ```
-Submit a new Beta Build to Crashlytics Beta
+Submit a new Dev Build to Crashlytics Beta
+### android preprod
+```
+fastlane android preprod
+```
+Submit a new Prod Build to Crashlytics Beta
 ### android deploy
 ```
 fastlane android deploy

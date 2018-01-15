@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.widget.Button
 import android.widget.RadioGroup
 import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.ReceiveSetAmountPresenter
 import dagger.android.AndroidInjection
 import javax.inject.Inject

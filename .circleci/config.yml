@@ -39,6 +39,45 @@ jobs:
       - run:
           name: Deploy to Fabric Beta
           command: fastlane beta
+  preprod:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run: bundle install
+      - run:
+          name: Setup Gcloud Client
+          command: |
+            echo $GCLOUD_SERVICE_KEY|base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            sudo apt-get update && sudo apt-get --only-upgrade install kubectl google-cloud-sdk google-cloud-sdk-datastore-emulator google-cloud-sdk-pubsub-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-app-engine-java google-cloud-sdk-app-engine-python google-cloud-sdk-cbt google-cloud-sdk-bigtable-emulator google-cloud-sdk-datalab
+            gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+            gcloud config set project $GCLOUD_PROJECT
+      - run:
+          name: Download keystore
+          command: gsutil cp gs://ttj-asset-app-credentials/android-client/release.keystore ./buildSystem/release.keystore
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run Tests
+          command: ./gradlew lint test
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+      - run:
+          name: Deploy to Fabric Beta
+          command: fastlane preprod
   deploy:
     working_directory: ~/code
     docker:
@@ -87,6 +126,10 @@ workflows:
           filters:
             branches:
               only: develop
+      - preprod:
+          filters:
+            branches:
+              only: preproduction
       - deploy:
           filters:
             branches:

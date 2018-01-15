@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.R
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
@@ -40,7 +41,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresenterTarget {
