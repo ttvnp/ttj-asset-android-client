@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
@@ -17,7 +18,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 
-class SettingsProfileDetailFragment() : BaseFragment(), SettingsProfileDetailPresenterTarget {
+class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPresenterTarget {
 
     @Inject
     lateinit var settingsProfileDetailPresenter: SettingsProfileDetailPresenter
@@ -28,9 +29,10 @@ class SettingsProfileDetailFragment() : BaseFragment(), SettingsProfileDetailPre
     private lateinit var textProfileMiddleName: TextView
     private lateinit var textProfileLastName: TextView
     private lateinit var textProfileAddress: TextView
+    private lateinit var buttonUploadDocumentID: RelativeLayout
 
     companion object {
-        fun getInstance() : SettingsProfileDetailFragment {
+        fun getInstance(): SettingsProfileDetailFragment {
             return SettingsProfileDetailFragment()
         }
     }
@@ -45,7 +47,7 @@ class SettingsProfileDetailFragment() : BaseFragment(), SettingsProfileDetailPre
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) : View {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_settings_profile_detail, container, false)
         profileImage = view.findViewById<CircleImageView>(R.id.profile_image)
         textProfileEmailAddress = view.findViewById<TextView>(R.id.text_profile_email_address)
@@ -53,6 +55,14 @@ class SettingsProfileDetailFragment() : BaseFragment(), SettingsProfileDetailPre
         textProfileMiddleName = view.findViewById<TextView>(R.id.text_profile_middle_name)
         textProfileLastName = view.findViewById<TextView>(R.id.text_profile_last_name)
         textProfileAddress = view.findViewById<TextView>(R.id.text_profile_address)
+        buttonUploadDocumentID = view.findViewById(R.id.buttonUploadDocumentID)
+        buttonUploadDocumentID.setOnClickListener({
+            val uploadDocumentIDFragment = SettingsProfileUploadDocumentIDFragment()
+            fragmentManager.beginTransaction()
+                    .addToBackStack("")
+                    .replace(R.id.settings_profile_activity_fragment_container, uploadDocumentIDFragment)
+                    .commit()
+        })
         val buttonProfileEdit = view.findViewById<FloatingActionButton>(R.id.button_profile_edit)
         buttonProfileEdit.setOnClickListener {
             val editFragment = SettingsProfileEditFragment.getInstance()
@@ -74,7 +84,7 @@ class SettingsProfileDetailFragment() : BaseFragment(), SettingsProfileDetailPre
     }
 
     override fun bindUserInfo(userModel: UserModel) {
-        if (0 < userModel.profileImageURL.length) {
+        if (userModel.profileImageURL.isNotEmpty()) {
             Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
         }
         val notSet = getString(R.string.not_set)
