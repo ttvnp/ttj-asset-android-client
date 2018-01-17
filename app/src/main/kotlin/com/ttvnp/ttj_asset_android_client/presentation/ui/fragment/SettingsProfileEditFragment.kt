@@ -2,7 +2,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -20,9 +19,7 @@ import android.support.design.widget.TextInputLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
@@ -56,14 +53,21 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     private lateinit var textProfileLastName: TextInputEditText
     private lateinit var textInputLayoutProfileAddress: TextInputLayout
     private lateinit var textProfileAddress: TextInputEditText
+    private lateinit var radioGroupGender: RadioGroup
+    private lateinit var radioMale: RadioButton
+    private lateinit var radioFemale: RadioButton
     private lateinit var textDOB: TextView
-
+    private lateinit var textProfileCellPhoneNumberNationalCode: EditText
+    private lateinit var textProfileCellPhoneNumber: EditText
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
+
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
 
     companion object {
+        val FEMALE = 1
+        val MALE = 2
         val TMP_FILE_NAME = "tmp_profile_image"
         fun getInstance(): SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
@@ -93,7 +97,12 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         textProfileLastName = view.findViewById(R.id.text_profile_last_name)
         textInputLayoutProfileAddress = view.findViewById(R.id.text_input_layout_profile_address)
         textProfileAddress = view.findViewById(R.id.text_profile_address)
+        radioGroupGender = view.findViewById(R.id.radio_group_gender)
+        radioFemale = view.findViewById(R.id.radio_female)
+        radioMale = view.findViewById(R.id.radio_male)
         textDOB = view.findViewById(R.id.text_dob)
+        textProfileCellPhoneNumberNationalCode = view.findViewById(R.id.et_country_code)
+        textProfileCellPhoneNumber = view.findViewById(R.id.et_phone_number)
         calendar = Calendar.getInstance()
         updateDOB()
         val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
@@ -144,7 +153,11 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
                     textProfileFirstName.text.toString(),
                     textProfileMiddleName.text.toString(),
                     textProfileLastName.text.toString(),
-                    textProfileAddress.text.toString()
+                    textProfileAddress.text.toString(),
+                    getGender(),
+                    textDOB.text.toString(),
+                    textProfileCellPhoneNumberNationalCode.text.toString(),
+                    textProfileCellPhoneNumber.text.toString()
             )
         }
         settingsProfileEditPresenter.setupUserInfo()
@@ -161,6 +174,13 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         textProfileMiddleName.setText(userModel.middleName)
         textProfileLastName.setText(userModel.lastName)
         textProfileAddress.setText(userModel.address)
+        if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
+        when {
+            userModel.genderType == FEMALE -> radioFemale.isChecked = true
+            userModel.genderType == MALE -> radioMale.isChecked = true
+        }
+        textProfileCellPhoneNumberNationalCode.setText(userModel.cellphoneNumberNationalCode)
+        textProfileCellPhoneNumber.setText(userModel.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -172,6 +192,19 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         if (profileImageFile != null) {
             firebaseAnalyticsHelper?.setHasSetProfileImageUserPropertyOn()
         }
+    }
+
+    private fun getGender(): Int {
+        val identified = 0
+        val selectGender = radioGroupGender.checkedRadioButtonId
+        val radioButton: RadioButton = radioGroupGender.findViewById(selectGender)
+        if (radioButton.text == getString(R.string.male)) {
+            return MALE
+        } else if (radioButton.text == getString(R.string.female)) {
+            return FEMALE
+        }
+
+        return identified
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -247,23 +280,4 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         }
     }
 
-    private fun createUploadFile(context: Context, bitmap: Bitmap): File {
-        val file = File(context.externalCacheDir, TMP_FILE_NAME)
-        var fos: FileOutputStream? = null
-        try {
-            file.createNewFile()
-            fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        } catch (e: IOException) {
-        } finally {
-            try {
-                fos?.let {
-                    it.flush()
-                    it.close()
-                }
-            } catch (e: IOException) {
-            }
-        }
-        return file
-    }
 }

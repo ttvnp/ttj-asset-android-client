@@ -8,6 +8,6 @@ import java.io.File
 
 interface UserRepository {
     fun getUser(forceRefresh: Boolean): Single<UserModel>
-    fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>>
+    fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String): Single<ModelWrapper<UserModel?>>
     fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>>
 }

@@ -15,7 +15,7 @@ import javax.inject.Inject
 interface SettingsProfileEditPresenter {
     fun initialize(target: SettingsProfileEditPresenterTarget)
     fun setupUserInfo()
-    fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String)
+    fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String)
 }
 
 class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SettingsProfileEditPresenter {
@@ -34,15 +34,16 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                     override fun onSuccess(t: UserModel) {
                         target?.bindUserInfo(t)
                     }
+
                     override fun onError(e: Throwable) {
                         target?.showError(e)
                     }
                 }).addTo(this.disposables)
     }
 
-    override fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String) {
+    override fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String) {
         target?.showProgressDialog()
-        userUseCase.updateUser(profileImageFile, firstName, middleName, lastName, address)
+        userUseCase.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dob, cellphoneNumberNationalCode, cellphoneNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserModel?>>() {
@@ -60,6 +61,7 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                             }
                         }
                     }
+
                     override fun onError(e: Throwable) {
                         target?.dismissProgressDialog()
                         target?.showError(e)

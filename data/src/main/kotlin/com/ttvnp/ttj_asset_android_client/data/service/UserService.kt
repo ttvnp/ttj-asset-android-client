@@ -28,7 +28,11 @@ interface UserService {
             @Part("firstName") firstName: RequestBody,
             @Part("middleName") middleName: RequestBody,
             @Part("lastName") lastName: RequestBody,
-            @Part("address") address: RequestBody
+            @Part("address") address: RequestBody,
+            @Part("genderType") genderType: RequestBody,
+            @Part("dateOfBirth") dateOfBirth: RequestBody,
+            @Part("cellphoneNumberNationalCode") cellphoneNumberNationalCode: RequestBody,
+            @Part("cellphoneNumber") cellphoneNumber: RequestBody
     ): Call<UpdateUserResponse>
 
     @Headers("Accept: application/json")
@@ -84,9 +88,13 @@ class UserServiceImpl(
             firstName: RequestBody,
             middleName: RequestBody,
             lastName: RequestBody,
-            address: RequestBody
+            address: RequestBody,
+            genderType: RequestBody,
+            dob: RequestBody,
+            cellphoneNumberNationalCode: RequestBody,
+            cellphoneNumber: RequestBody
     ): Call<UpdateUserResponse> {
-        return service.updateUser(profileImageFile, firstName, middleName, lastName, address)
+        return service.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dob, cellphoneNumberNationalCode, cellphoneNumber)
     }
 
     override fun getTargetUser(emailAddress: String): Call<GetTargetUserResponse> {

@@ -20,6 +20,11 @@ class FragmentModule {
     }
 
     @Provides
+    fun mainSendPresenter(userUseCase: UserUseCase): MainSendPresenter {
+        return MainSendPresenterImpl(userUseCase)
+    }
+
+    @Provides
     fun sendEmailFormPresenter(userUseCase: UserUseCase): SendEmailFormPresenter {
         return SendEmailFormPresenterImpl(userUseCase)
     }

@@ -17,8 +17,15 @@ internal class UserTranslator : BaseTranslator<UserModel, UserEntity>() {
                 middleName = entity.middleName,
                 lastName = entity.lastName,
                 address = entity.address,
+                genderType = entity.genderType,
+                dateOfBirth = entity.dateOfBirth,
+                cellphoneNumberNationalCode = entity.cellphoneNumberNationalCode,
+                cellphoneNumber = entity.cellphoneNumber,
+                isDocument1ImageURL = entity.idDocument1ImageURL,
+                isDocument2ImageURL = entity.idDocument2ImageURL,
                 isEmailVerified = entity.isEmailVerified,
-                isIdentified = entity.isIdentified
+                isIdentified = entity.isIdentified,
+                identificationStatus = entity.identificationStatus
         )
     }
 }

@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
         private val userService: UserService,
-        private val userDataStore : UserDataStore,
+        private val userDataStore: UserDataStore,
         private val otherUserDataStore: OtherUserDataStore
 ) : UserRepository {
 
@@ -53,11 +53,16 @@ class UserRepositoryImpl @Inject constructor(
                                 profileImageID = it.profileImageID,
                                 profileImageURL = it.profileImageURL,
                                 firstName = it.firstName,
-                                middleName =  it.middleName,
+                                middleName = it.middleName,
                                 lastName = it.lastName,
                                 address = it.address,
+                                genderType = it.genderType,
+                                dateOfBirth = it.dateOfBirth,
+                                cellphoneNumberNationalCode = it.cellphoneNumberNationalCode,
+                                cellphoneNumber = it.cellphoneNumber,
                                 isEmailVerified = it.isEmailVerified,
                                 isIdentified = it.isIdentified,
+                                identificationStatus = it.identificationStatus,
                                 updatedAt = Now()
                         )
                         userEntity = userDataStore.update(userEntity)
@@ -75,32 +80,35 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>> {
+    override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String): Single<ModelWrapper<UserModel?>> {
         return Single.create<ModelWrapper<UserModel?>> { subscriber ->
             val original = userDataStore.get()
             if (original == null) {
-                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_UNKNOWN))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
             val profileImageFileBody: MultipartBody.Part
-            if (profileImageFile == null) {
+            profileImageFileBody = if (profileImageFile == null) {
                 val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOf())
-                profileImageFileBody = MultipartBody.Part.createFormData("profileImageFile", "profile_image", requestFile)
+                MultipartBody.Part.createFormData("profileImageFile", "profile_image", requestFile)
             } else {
                 val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), profileImageFile)
-                profileImageFileBody = MultipartBody.Part.createFormData("profileImageFile", "profile_image", requestFile)
+                MultipartBody.Part.createFormData("profileImageFile", "profile_image", requestFile)
             }
             val firstNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), firstName)
             val middleNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), middleName)
             val lastNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), lastName)
             val addressBody = RequestBody.create(MediaType.parse("multipart/form-data"), address)
+            val genderBody = RequestBody.create(MediaType.parse("multipart/form-data"), genderType.toString())
+            val dobBody = RequestBody.create(MediaType.parse("multipart/form-data"), dob)
+            val cellphoneNumberNationalCodeBody = RequestBody.create(MediaType.parse("multipart/form-data"), cellphoneNumberNationalCode)
+            val cellphoneNumberBody = RequestBody.create(MediaType.parse("multipart/form-data"), cellphoneNumber)
             try {
-                userService.updateUser(profileImageFileBody, firstNameBody, middleNameBody, lastNameBody, addressBody).execute().body()!!.let { response ->
+                userService.updateUser(profileImageFileBody, firstNameBody, middleNameBody, lastNameBody, addressBody, genderBody, dobBody, cellphoneNumberNationalCodeBody, cellphoneNumberBody).execute().body()!!.let { response ->
                     if (response.hasError()) {
-                        val errorCode: ErrorCode
-                        when (response.errorCode) {
-                            ServiceErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE.rawValue -> errorCode = ErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE
-                            else -> errorCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        val errorCode: ErrorCode = when (response.errorCode) {
+                            ServiceErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE.rawValue -> ErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE
+                            else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
                         }
                         subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
                         return@create
@@ -113,8 +121,13 @@ class UserRepositoryImpl @Inject constructor(
                             middleName = response.middleName,
                             lastName = response.lastName,
                             address = response.address,
+                            genderType = response.genderType,
+                            dateOfBirth = response.dateOfBirth,
+                            cellphoneNumberNationalCode = response.cellphoneNumberNationalCode,
+                            cellphoneNumber = response.cellphoneNumber,
                             isEmailVerified = response.isEmailVerified,
                             isIdentified = response.isIdentified,
+                            identificationStatus = response.identificationStatus,
                             updatedAt = Now()
                     )
                     ue = userDataStore.update(ue)
@@ -135,7 +148,7 @@ class UserRepositoryImpl @Inject constructor(
 
             // self send check
             val self = userDataStore.get()
-            if (self?.emailAddress?:"" == emailAddress) {
+            if (self?.emailAddress ?: "" == emailAddress) {
                 subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_CANNOT_SELF_SEND))
                 return@create
             }
@@ -157,7 +170,7 @@ class UserRepositoryImpl @Inject constructor(
                             profileImageID = response.profileImageID,
                             profileImageURL = response.profileImageURL,
                             firstName = response.firstName,
-                            middleName =  response.middleName,
+                            middleName = response.middleName,
                             lastName = response.lastName
                     )
                     otherUserEntity = otherUserDataStore.update(otherUserEntity)

@@ -7,7 +7,7 @@ import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import java.util.*
 
 @Table
-class UserEntity (
+class UserEntity(
         @Column @Setter("emailAddress")
         var emailAddress: String = "",
 
@@ -29,11 +29,32 @@ class UserEntity (
         @Column @Setter("address")
         var address: String = "",
 
+        @Column @Setter("genderType")
+        var genderType: Int = 0,
+
+        @Column @Setter("dateOfBirth")
+        var dateOfBirth: String = "",
+
+        @Column @Setter("cellphoneNumberNationalCode")
+        var cellphoneNumberNationalCode: String = "",
+
+        @Column @Setter("cellphoneNumber")
+        var cellphoneNumber: String = "",
+
+        @Column @Setter("idDocument1ImageURL")
+        var idDocument1ImageURL: String = "",
+
+        @Column @Setter("idDocument2ImageURL")
+        var idDocument2ImageURL: String = "",
+
         @Column @Setter("isEmailVerified")
         var isEmailVerified: Boolean = false,
 
         @Column @Setter("isIdentified")
         var isIdentified: Boolean = false,
+
+        @Column @Setter("identificationStatus")
+        var identificationStatus: Int = 0,
 
         @Column @Setter("updatedAt")
         var updatedAt: Date = Now()
