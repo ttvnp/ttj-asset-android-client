@@ -65,7 +65,7 @@
     <string name="error_invalid_verification_code">This code is wrong.Please check your email again.</string>
     <string name="error_invalid_password_on_import">This password is wrong.Please check your email again sent when you first registered an account.</string>
     <string name="error_device_already_setup">This account has been set up already.Please retry later.</string>
-    <string name="error_cannot_update_profile_image">Failed to update profile info due to your profile image was too large.Please retry later.</string>
+    <string name="error_cannot_update_profile_image">Failed to update profile info due to your profile isFacePhoto was too large.Please retry later.</string>
     <string name="error_cannot_self_send">You cannot send to yourself.</string>
     <string name="error_cannot_send_that_amount">You cannot send that much.</string>
     <string name="error_message_no_such_email_address_user">Sorry.There is no such user account related with the email address.</string>
