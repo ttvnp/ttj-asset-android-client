@@ -59,6 +59,7 @@
     <string name="under_review_for_id_document">Under review for ID Document</string>
     <string name="id_document_was_approved">ID Document was approved</string>
     <string name="can_not_user_this_until_your_identify_is_verified">You cannot user this function until your identify is verified</string>
+    <string name="successfully_uploaded">Successfully uploaded</string>
 
     <!-- error message -->
     <string name="error_default_message">Unknown error occurred.Please retry later.</string>

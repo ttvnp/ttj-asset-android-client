@@ -60,6 +60,8 @@ class UserRepositoryImpl @Inject constructor(
                                 dateOfBirth = it.dateOfBirth,
                                 cellphoneNumberNationalCode = it.cellphoneNumberNationalCode,
                                 cellphoneNumber = it.cellphoneNumber,
+                                idDocument1ImageURL = it.idDocument1ImageURL,
+                                idDocument2ImageURL = it.idDocument2ImageURL,
                                 isEmailVerified = it.isEmailVerified,
                                 isIdentified = it.isIdentified,
                                 identificationStatus = it.identificationStatus,
@@ -125,6 +127,68 @@ class UserRepositoryImpl @Inject constructor(
                             dateOfBirth = response.dateOfBirth,
                             cellphoneNumberNationalCode = response.cellphoneNumberNationalCode,
                             cellphoneNumber = response.cellphoneNumber,
+                            idDocument1ImageURL = response.idDocument1ImageURL,
+                            idDocument2ImageURL = response.idDocument2ImageURL,
+                            isEmailVerified = response.isEmailVerified,
+                            isIdentified = response.isIdentified,
+                            identificationStatus = response.identificationStatus,
+                            updatedAt = Now()
+                    )
+                    ue = userDataStore.update(ue)
+                    subscriber.onSuccess(ModelWrapper<UserModel?>(UserTranslator().translate(ue), ErrorCode.NO_ERROR))
+                }
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
+            }
+        }
+    }
+
+    override fun uploadIdDocument(faceImageFile: File?, addressImageFile: File?): Single<ModelWrapper<UserModel?>> {
+        return Single.create<ModelWrapper<UserModel?>> { subscriber ->
+            val original = userDataStore.get()
+            if (original == null) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
+                return@create
+            }
+            val faceImageFileBody = if (faceImageFile == null) {
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOf())
+                MultipartBody.Part.createFormData("idDocument1", "idDocument1", requestFile)
+            } else {
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), faceImageFile)
+                MultipartBody.Part.createFormData("idDocument1", "idDocument1", requestFile)
+            }
+            val addressImageFileBody = if (faceImageFile == null) {
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOf())
+                MultipartBody.Part.createFormData("idDocument2", "idDocument2", requestFile)
+            } else {
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), faceImageFile)
+                MultipartBody.Part.createFormData("idDocument2", "idDocument2", requestFile)
+            }
+
+            try {
+                userService.uploadIdDocument(faceImageFileBody, addressImageFileBody).execute().body()!!.let { response ->
+                    if (response.hasError()) {
+                        val errorCode: ErrorCode = when (response.errorCode) {
+                            ServiceErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE.rawValue -> ErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE
+                            else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        }
+                        subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
+                        return@create
+                    }
+                    var ue = UserEntity(
+                            emailAddress = original.emailAddress,
+                            profileImageID = response.profileImageID,
+                            profileImageURL = response.profileImageURL,
+                            firstName = response.firstName,
+                            middleName = response.middleName,
+                            lastName = response.lastName,
+                            address = response.address,
+                            genderType = response.genderType,
+                            dateOfBirth = response.dateOfBirth,
+                            cellphoneNumberNationalCode = response.cellphoneNumberNationalCode,
+                            cellphoneNumber = response.cellphoneNumber,
+                            idDocument1ImageURL = response.idDocument1ImageURL,
+                            idDocument2ImageURL = response.idDocument2ImageURL,
                             isEmailVerified = response.isEmailVerified,
                             isIdentified = response.isIdentified,
                             identificationStatus = response.identificationStatus,
@@ -191,4 +255,5 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+
 }

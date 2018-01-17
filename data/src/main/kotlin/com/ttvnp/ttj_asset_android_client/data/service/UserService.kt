@@ -36,6 +36,14 @@ interface UserService {
     ): Call<UpdateUserResponse>
 
     @Headers("Accept: application/json")
+    @Multipart
+    @POST("users/id_document")
+    fun uploadIdDocument(
+            @Part faceImageFile: MultipartBody.Part,
+            @Part addressImageFile: MultipartBody.Part
+    ): Call<UpdateUserResponse>
+
+    @Headers("Accept: application/json")
     @GET("users/targets")
     fun getTargetUser(@Query("emailAddress") emailAddress: String): Call<GetTargetUserResponse>
 
@@ -95,6 +103,10 @@ class UserServiceImpl(
             cellphoneNumber: RequestBody
     ): Call<UpdateUserResponse> {
         return service.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dob, cellphoneNumberNationalCode, cellphoneNumber)
+    }
+
+    override fun uploadIdDocument(faceImageFile: MultipartBody.Part, addressImageFile: MultipartBody.Part): Call<UpdateUserResponse> {
+        return service.uploadIdDocument(faceImageFile, addressImageFile)
     }
 
     override fun getTargetUser(emailAddress: String): Call<GetTargetUserResponse> {

@@ -15,6 +15,8 @@ class GetUserResponse(
         @Json(name = "dateOfBirth") val dateOfBirth: String = "",
         @Json(name = "cellphoneNumberNationalCode") val cellphoneNumberNationalCode: String = "",
         @Json(name = "cellphoneNumber") val cellphoneNumber: String = "",
+        @Json(name = "idDocument1ImageURL") val idDocument1ImageURL: String = "",
+        @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false,
         @Json(name = "identificationStatus ") val identificationStatus: Int = 0
@@ -32,6 +34,8 @@ class UpdateUserResponse(
         @Json(name = "dateOfBirth") val dateOfBirth: String = "",
         @Json(name = "cellphoneNumberNationalCode") val cellphoneNumberNationalCode: String = "",
         @Json(name = "cellphoneNumber") val cellphoneNumber: String = "",
+        @Json(name = "idDocument1ImageURL") val idDocument1ImageURL: String = "",
+        @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false,
         @Json(name = "identificationStatus ") val identificationStatus: Int = 0

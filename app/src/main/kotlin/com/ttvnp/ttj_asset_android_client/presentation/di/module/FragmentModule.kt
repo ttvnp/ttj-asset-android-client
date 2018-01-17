@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
+import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SettingsProfileUploadDocumentIDFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.*
 import dagger.Module
 import dagger.Provides
@@ -47,5 +48,10 @@ class FragmentModule {
     @Provides
     fun settingsProfileEditPresenter(userUseCase: UserUseCase): SettingsProfileEditPresenter {
         return SettingsProfileEditPresenterImpl(userUseCase)
+    }
+
+    @Provides
+    fun settingsProfileUploadDocumentIDPresenter(userUseCase: UserUseCase): SettingsProfileUploadDocumentIDPresenter {
+        return SettingsProfileUploadDocumentIDPresenterImpl(userUseCase)
     }
 }
