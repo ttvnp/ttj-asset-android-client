@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -23,6 +24,9 @@ import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
@@ -56,7 +60,7 @@ abstract class BaseFragment : Fragment() {
         progressDialog = dialog
     }
 
-    protected fun launchCamera(requestCode: Int) : Uri {
+    protected fun launchCamera(requestCode: Int): Uri {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -69,7 +73,7 @@ abstract class BaseFragment : Fragment() {
         return pictureUri
     }
 
-    protected fun checkCameraPermission(requestCode: Int) :Uri? {
+    protected fun checkCameraPermission(requestCode: Int): Uri? {
         if (hasSelfPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             return launchCamera(requestCode = requestCode)
         } else {
@@ -84,6 +88,26 @@ abstract class BaseFragment : Fragment() {
         }
 
         return null
+    }
+
+    protected fun createUploadFile(context: Context, bitmap: Bitmap): File {
+        val file = File(context.externalCacheDir, SettingsProfileEditFragment.TMP_FILE_NAME)
+        var fos: FileOutputStream? = null
+        try {
+            file.createNewFile()
+            fos = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+        } catch (e: IOException) {
+        } finally {
+            try {
+                fos?.let {
+                    it.flush()
+                    it.close()
+                }
+            } catch (e: IOException) {
+            }
+        }
+        return file
     }
 
     private fun hasSelfPermissions(vararg permissions: String): Boolean {

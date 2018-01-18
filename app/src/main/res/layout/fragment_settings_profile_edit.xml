@@ -159,7 +159,7 @@
                             android:text="@string/gender" />
 
                         <RadioGroup
-                            android:id="@+id/radio_group_send"
+                            android:id="@+id/radio_group_gender"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/middle_margin"
@@ -173,7 +173,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:checked="true"
                                 android:text="@string/male" />
 
                             <RadioButton

@@ -4,7 +4,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
-import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileUploadDocumentIDPresenterTarget
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
@@ -12,52 +12,54 @@ import io.reactivex.schedulers.Schedulers
 import java.io.File
 import javax.inject.Inject
 
-interface SettingsProfileEditPresenter {
-    fun initialize(target: SettingsProfileEditPresenterTarget)
-    fun setupUserInfo()
-    fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String)
+interface SettingsProfileUploadDocumentIDPresenter {
+    fun init(target: SettingsProfileUploadDocumentIDPresenterTarget)
+    fun setupDefault()
+    fun uploadIdDocument(faceImageFile: File?, addressImageFile: File?)
 }
 
-class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SettingsProfileEditPresenter {
+class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SettingsProfileUploadDocumentIDPresenter {
 
-    private var target: SettingsProfileEditPresenterTarget? = null
+    private var target: SettingsProfileUploadDocumentIDPresenterTarget? = null
 
-    override fun initialize(target: SettingsProfileEditPresenterTarget) {
+    override fun init(target: SettingsProfileUploadDocumentIDPresenterTarget) {
         this.target = target
     }
 
-    override fun setupUserInfo() {
+    override fun setupDefault() {
         userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserModel>() {
-                    override fun onSuccess(t: UserModel) {
-                        target?.bindUserInfo(t)
+                    override fun onSuccess(userModel: UserModel) {
+                        target?.setDocumentID(userModel.isDocument1ImageURL, userModel.isDocument2ImageURL)
                     }
 
                     override fun onError(e: Throwable) {
-                        target?.showError(e)
+                        // do nothing...
                     }
                 }).addTo(this.disposables)
     }
 
-    override fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String) {
+    override fun uploadIdDocument(faceImageFile: File?, addressImageFile: File?) {
         target?.showProgressDialog()
-        userUseCase.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dob, cellphoneNumberNationalCode, cellphoneNumber)
+        userUseCase.uploadIdDocument(faceImageFile, addressImageFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserModel?>>() {
-                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
+                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
                         target?.dismissProgressDialog()
-                        when (wrapper.errorCode) {
+                        when (wrapper?.errorCode) {
                             ErrorCode.NO_ERROR -> {
                                 wrapper.model?.let {
-                                    target?.showMessageOnUpdateSuccessfullyCompleted()
-                                    target?.bindUserInfo(it)
+                                    target?.showMessageOnUploadSuccessfullyCompleted()
+                                    target?.setDocumentID(it.isDocument1ImageURL, it.isDocument2ImageURL)
                                 }
                             }
                             else -> {
-                                target?.showError(wrapper.errorCode, wrapper.error)
+                                wrapper?.let {
+                                    target?.showError(it.errorCode, it.error)
+                                }
                             }
                         }
                     }
@@ -68,4 +70,5 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                     }
                 }).addTo(this.disposables)
     }
+
 }

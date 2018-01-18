@@ -47,10 +47,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:background="@color/md_grey_500"
+            android:background="@color/md_grey_200"
             android:enabled="false"
             android:text="@string/tutorial_form_submit"
-            android:textColor="@color/colorTextOnPrimary" />
+            android:textColor="@color/md_grey_500" />
 
         <LinearLayout
             android:layout_width="wrap_content"

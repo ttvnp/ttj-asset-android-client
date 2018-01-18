@@ -16,7 +16,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.R
 class TutorialEmailFragment : Fragment() {
 
     companion object {
-        fun getInstance() : TutorialEmailFragment {
+        fun getInstance(): TutorialEmailFragment {
             return TutorialEmailFragment()
         }
     }
@@ -34,7 +34,7 @@ class TutorialEmailFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) : View {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_tutorial_email, container, false)
 
         buttonTutorialSubmit = view.findViewById(R.id.button_tutorial_submit)
@@ -42,8 +42,7 @@ class TutorialEmailFragment : Fragment() {
         textInputLayoutTutorialEmailAddress = view.findViewById(R.id.text_input_layout_tutorial_email_address)
         textTutorialEmailAddress = view.findViewById(R.id.text_tutorial_email_address)
         chkTermsAndConditions = view.findViewById(R.id.chkTermAndConditions)
-        chkTermsAndConditions.setOnCheckedChangeListener({
-            _, isChecked ->
+        chkTermsAndConditions.setOnCheckedChangeListener({ _, isChecked ->
             if (isChecked) {
                 setEnableButton(true)
                 return@setOnCheckedChangeListener
@@ -58,7 +57,7 @@ class TutorialEmailFragment : Fragment() {
     }
 
     fun getEmailAddressText(): String {
-        return textTutorialEmailAddress.text?.toString()?:""
+        return textTutorialEmailAddress.text?.toString() ?: ""
     }
 
     fun showValidationError(errorMessage: String) {
@@ -67,10 +66,12 @@ class TutorialEmailFragment : Fragment() {
     }
 
     private fun setEnableButton(value: Boolean) {
-        var backgroundColorSubmitButton = R.color.md_grey_500
+        var backgroundColorSubmitButton = R.color.md_grey_200
+        var textColor = R.color.md_grey_500
 
         if (value) {
-            backgroundColorSubmitButton =  R.color.colorPrimary
+            backgroundColorSubmitButton = R.color.colorPrimary
+            textColor = R.color.colorTextOnPrimary
         }
 
         buttonTutorialSubmit.isEnabled = value
@@ -80,6 +81,7 @@ class TutorialEmailFragment : Fragment() {
                         backgroundColorSubmitButton
                 )
         )
+        buttonTutorialSubmit.setTextColor(ContextCompat.getColor(context, textColor))
     }
 
 }
