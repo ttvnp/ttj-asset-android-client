@@ -104,7 +104,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
                 MediaScannerConnection.scanFile(
                         this.context,
                         arrayOf(resultUri.path),
-                        arrayOf("isFacePhoto/jpeg"), null
+                        arrayOf("image/jpeg"),null
                 )
                 Picasso.with(this.context).load(resultUri).resize(125, 125).centerCrop().into(object : Target {
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {

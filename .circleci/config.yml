@@ -3,7 +3,7 @@ jobs:
   beta:
     working_directory: ~/code
     docker:
-      - isFacePhoto: circleci/android:api-26-alpha
+      - image: circleci/android:api-26-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -42,7 +42,7 @@ jobs:
   preprod:
     working_directory: ~/code
     docker:
-      - isFacePhoto: circleci/android:api-26-alpha
+      - image: circleci/android:api-26-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -81,7 +81,7 @@ jobs:
   deploy:
     working_directory: ~/code
     docker:
-      - isFacePhoto: circleci/android:api-26-alpha
+      - image: circleci/android:api-26-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
