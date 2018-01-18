@@ -15,12 +15,12 @@ class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     lateinit var toolbar: Toolbar
         get
         private set
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

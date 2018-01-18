@@ -1,45 +1,43 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
-import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
-import javax.inject.Inject
-import android.media.MediaScannerConnection
-import android.app.Activity.RESULT_OK
-import android.net.Uri
-import android.provider.MediaStore
-import android.widget.Button
-import android.content.ContentValues
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
-import android.support.v4.app.ActivityCompat
-import android.widget.TextView
-import android.widget.Toast
-import com.squareup.picasso.Target
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.inject.Inject
 
-class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresenterTarget {
+class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenterTarget {
 
     @Inject
     lateinit var settingsProfileEditPresenter: SettingsProfileEditPresenter
@@ -55,14 +53,23 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
     private lateinit var textProfileLastName: TextInputEditText
     private lateinit var textInputLayoutProfileAddress: TextInputLayout
     private lateinit var textProfileAddress: TextInputEditText
-
+    private lateinit var radioGroupGender: RadioGroup
+    private lateinit var radioMale: RadioButton
+    private lateinit var radioFemale: RadioButton
+    private lateinit var textDOB: TextView
+    private lateinit var textProfileCellPhoneNumberNationalCode: EditText
+    private lateinit var textProfileCellPhoneNumber: EditText
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
+
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
+    private lateinit var calendar: Calendar
 
     companion object {
+        val FEMALE = 1
+        val MALE = 2
         val TMP_FILE_NAME = "tmp_profile_image"
-        fun getInstance() : SettingsProfileEditFragment {
+        fun getInstance(): SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
         }
     }
@@ -77,7 +84,7 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) : View {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_settings_profile_edit, container, false)
         profileImage = view.findViewById(R.id.profile_image)
         buttonProfileImageEdit = view.findViewById(R.id.button_profile_image_edit)
@@ -90,6 +97,29 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         textProfileLastName = view.findViewById(R.id.text_profile_last_name)
         textInputLayoutProfileAddress = view.findViewById(R.id.text_input_layout_profile_address)
         textProfileAddress = view.findViewById(R.id.text_profile_address)
+        radioGroupGender = view.findViewById(R.id.radio_group_gender)
+        radioFemale = view.findViewById(R.id.radio_female)
+        radioMale = view.findViewById(R.id.radio_male)
+        textDOB = view.findViewById(R.id.text_dob)
+        textProfileCellPhoneNumberNationalCode = view.findViewById(R.id.et_country_code)
+        textProfileCellPhoneNumber = view.findViewById(R.id.et_phone_number)
+        calendar = Calendar.getInstance()
+        updateDOB()
+        val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, monthOfYear)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateDOB()
+        }
+        textDOB.setOnClickListener({
+            DatePickerDialog(
+                    context,
+                    date,
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH))
+                    .show()
+        })
         val buttonProfileSave = view.findViewById<Button>(R.id.button_profile_save)
 
         if (activity is SettingsProfileActivity) {
@@ -104,32 +134,17 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         }
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
-        bottomSheetDialogFragment.setFolderOnClickListener(object : View.OnClickListener{
-            override fun onClick(view: View?) {
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.setType("image/jpeg")
-                startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
-            }
+        bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "image/jpeg"
+            startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
         })
-        bottomSheetDialogFragment.setCameraOnClickListener(object : View.OnClickListener{
-            override fun onClick(view: View?) {
-                if (hasSelfPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    launchCamera()
-                } else {
-                    val permissions = arrayListOf<String>()
-                    if (!hasSelfPermissions(Manifest.permission.CAMERA)) {
-                        permissions.add(Manifest.permission.CAMERA)
-                    }
-                    if (!hasSelfPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    }
-                    requestPermissions(permissions.toTypedArray(), RequestCode.REQUEST_PERMISSIONS.rawValue);
-                }
-            }
+        bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
+            pictureUri = checkCameraPermission(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
         })
         buttonProfileImageEdit.setOnClickListener {
-            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.getTag());
+            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         }
 
         buttonProfileSave.setOnClickListener {
@@ -138,7 +153,11 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
                     textProfileFirstName.text.toString(),
                     textProfileMiddleName.text.toString(),
                     textProfileLastName.text.toString(),
-                    textProfileAddress.text.toString()
+                    textProfileAddress.text.toString(),
+                    getGender(),
+                    textDOB.text.toString(),
+                    textProfileCellPhoneNumberNationalCode.text.toString(),
+                    textProfileCellPhoneNumber.text.toString()
             )
         }
         settingsProfileEditPresenter.setupUserInfo()
@@ -147,14 +166,21 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
     }
 
     override fun bindUserInfo(userModel: UserModel) {
-        if (0 < userModel.profileImageURL.length) {
+        if (userModel.profileImageURL.isNotEmpty()) {
             Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
         }
-        textProfileEmailAddress.setText(userModel.emailAddress)
+        textProfileEmailAddress.text = userModel.emailAddress
         textProfileFirstName.setText(userModel.firstName)
         textProfileMiddleName.setText(userModel.middleName)
         textProfileLastName.setText(userModel.lastName)
         textProfileAddress.setText(userModel.address)
+        if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
+        when {
+            userModel.genderType == FEMALE -> radioFemale.isChecked = true
+            userModel.genderType == MALE -> radioMale.isChecked = true
+        }
+        textProfileCellPhoneNumberNationalCode.setText(userModel.cellphoneNumberNationalCode)
+        textProfileCellPhoneNumber.setText(userModel.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -168,43 +194,38 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         }
     }
 
-    private fun launchCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val contentValues = ContentValues()
-        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        pictureUri = this.context
-                .contentResolver
-                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-        startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+    private fun getGender(): Int {
+        val identified = 0
+        val selectGender = radioGroupGender.checkedRadioButtonId
+        val radioButton: RadioButton = radioGroupGender.findViewById(selectGender)
+        if (radioButton.text == getString(R.string.male)) {
+            return MALE
+        } else if (radioButton.text == getString(R.string.female)) {
+            return FEMALE
+        }
+
+        return identified
     }
 
-    private fun hasSelfPermissions(vararg permissions: String): Boolean {
-        for (permission in permissions) {
-            if (ActivityCompat.checkSelfPermission(this.context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
-        }
-        return true
+    @SuppressLint("SimpleDateFormat")
+    private fun updateDOB() {
+        val format = "dd/MMM/yyyy"
+        val sdf = SimpleDateFormat(format)
+        textDOB.text = sdf.format(calendar.time)
     }
 
     private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
-        if (grantResults.size <= 0) throw IllegalArgumentException("grantResults is empty.")
-        for (result in grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
-        }
-        return true
+        if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
+        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             RequestCode.REQUEST_PERMISSIONS.rawValue -> {
-                if (grantResults.size > 0) {
+                if (grantResults.isNotEmpty()) {
                     if (checkGrantResults(grantResults.toList())) {
-                        launchCamera()
+                        launchCamera(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
                     } else {
                         Toast.makeText(
                                 this.context,
@@ -221,25 +242,21 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue -> {
-                if (resultCode != RESULT_OK) return
-                val resultUri: Uri?
-                if (data == null) {
-                    resultUri = this.pictureUri
+                if (resultCode != Activity.RESULT_OK) return
+                val resultUri: Uri = (if (data == null) {
+                    this.pictureUri
                 } else {
-                    resultUri = data.data
-                }
-                if (resultUri == null) {
-                    return
-                }
+                    data.data
+                }) ?: return
                 MediaScannerConnection.scanFile(
                         this.context,
                         arrayOf(resultUri.path),
                         arrayOf("image/jpeg"), null
                 )
-                Picasso.with(this.context).load(resultUri).resize(72, 72).centerCrop().into(object : Target{
+                Picasso.with(this.context).load(resultUri).resize(72, 72).centerCrop().into(object : Target {
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                         bitmap?.let {
-                            Handler(Looper.getMainLooper()).post(object : Runnable{
+                            Handler(Looper.getMainLooper()).post(object : Runnable {
                                 override fun run() {
                                     profileImageFile = createUploadFile(this@SettingsProfileEditFragment.context, it)
                                     profileImage.setImageBitmap(it)
@@ -247,8 +264,10 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
                             })
                         }
                     }
+
                     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                     }
+
                     override fun onBitmapFailed(errorDrawable: Drawable?) {
                         profileImageFile = null
                     }
@@ -261,23 +280,4 @@ class SettingsProfileEditFragment() : BaseFragment(), SettingsProfileEditPresent
         }
     }
 
-    private fun createUploadFile(context: Context, bitmap: Bitmap): File {
-        val file = File(context.externalCacheDir, TMP_FILE_NAME)
-        var fos: FileOutputStream? = null
-        try {
-            file.createNewFile()
-            fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        } catch (e: IOException) {
-        } finally {
-            try {
-                fos?.let {
-                    it.flush()
-                    it.close()
-                }
-            } catch (e: IOException) {
-            }
-        }
-        return file
-    }
 }
