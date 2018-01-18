@@ -10,9 +10,10 @@ import dagger.android.AndroidInjector
         DataModule::class,
         DomainModule::class,
         SettingsProfileDetailFragmentModule::class,
-        SettingsProfileEditFragmentModule::class
+        SettingsProfileEditFragmentModule::class,
+        SettingsProfileUploadDocumentIDFragmentModule::class
 ))
 interface SettingsProfileActivitySubcomponent : AndroidInjector<SettingsProfileActivity> {
     @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<SettingsProfileActivity>() {}
+    abstract class Builder : AndroidInjector.Builder<SettingsProfileActivity>()
 }

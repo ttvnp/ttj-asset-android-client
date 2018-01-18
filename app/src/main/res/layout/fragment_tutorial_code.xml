@@ -30,16 +30,15 @@
                 android:id="@+id/text_tutorial_verification_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/verification_code"
                 android:inputType="number"
-                android:maxLength="10"/>
+                android:maxLength="10" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
-            android:text="@string/tutorial_verification_code_desc" />
+            android:text="@string/tutorial_verification_code_desc"
+            android:textColor="@color/colorSecondaryText" />
 
         <LinearLayout
             android:id="@+id/layout_password_on_import"
@@ -47,28 +46,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
+
             <android.support.design.widget.TextInputLayout
-                android:layout_marginTop="@dimen/middle_margin"
                 android:id="@+id/text_input_layout_tutorial_password_on_import"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/middle_margin"
                 android:hint="@string/password_on_import"
                 app:errorEnabled="true"
                 app:hintEnabled="true">
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/text_tutorial_password_on_import"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password_on_import"
                     android:inputType="numberPassword"
-                    android:maxLength="10"/>
+                    android:maxLength="10" />
             </android.support.design.widget.TextInputLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondaryText"
                 android:layout_marginBottom="@dimen/middle_margin"
-                android:text="@string/tutorial_password_on_import_desc" />
+                android:text="@string/tutorial_password_on_import_desc"
+                android:textColor="@color/colorSecondaryText" />
         </LinearLayout>
 
         <Button

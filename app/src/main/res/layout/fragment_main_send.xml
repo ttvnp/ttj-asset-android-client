@@ -1,31 +1,54 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:paddingStart="@dimen/large_margin"
-    android:paddingEnd="@dimen/large_margin">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button_send_qr"
-        style="@android:style/Widget.DeviceDefault.Button.Borderless"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/text_can_not_send"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/middle_margin"
-        android:text="@string/send_by_qr"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorTextOnPrimary" />
+        android:text="@string/can_not_user_this_until_your_identify_is_verified"
+        android:textColor="@color/md_red_900"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_send_email"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/middle_margin"
-        android:text="@string/send_by_email"
-        style="@android:style/Widget.DeviceDefault.Button.Borderless"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorTextOnPrimary" />
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingEnd="@dimen/large_margin"
+        android:paddingStart="@dimen/large_margin"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/button_send_qr"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/middle_margin"
+            android:background="@color/md_grey_200"
+            android:text="@string/send_by_qr"
+            android:textColor="@color/md_grey_500" />
+
+        <Button
+            android:id="@+id/button_send_email"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/middle_margin"
+            android:background="@color/md_grey_200"
+            android:text="@string/send_by_email"
+            android:textColor="@color/md_grey_500" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
