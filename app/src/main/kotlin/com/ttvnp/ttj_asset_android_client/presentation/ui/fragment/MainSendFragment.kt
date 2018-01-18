@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.CaptureActivityAnyOrientation
@@ -31,6 +32,14 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     companion object {
         fun getInstance(): MainSendFragment {
             return MainSendFragment()
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+
+        if (isVisibleToUser) {
+            mainSendPresenter.setupDefault()
         }
     }
 
