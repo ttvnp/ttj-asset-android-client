@@ -211,7 +211,7 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     @SuppressLint("SimpleDateFormat")
     private fun updateDOB() {
         val format = "dd/MMM/yyyy"
-        val sdf = SimpleDateFormat(format)
+        val sdf = SimpleDateFormat(format, Locale.US)
         textDOB.text = sdf.format(calendar.time)
     }
 
