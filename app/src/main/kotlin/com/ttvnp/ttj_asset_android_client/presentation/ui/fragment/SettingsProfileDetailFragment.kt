@@ -111,8 +111,10 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         var value = getString(R.string.upload_your_id_document)
         if (status == 1) {
             value = getString(R.string.under_review_for_id_document)
-        } else if (status == 12) {
+            buttonUploadDocumentID.isEnabled = false
+        } else if (status == 2) {
             value = getString(R.string.id_document_was_approved)
+            buttonUploadDocumentID.isEnabled = false
         }
 
         return value

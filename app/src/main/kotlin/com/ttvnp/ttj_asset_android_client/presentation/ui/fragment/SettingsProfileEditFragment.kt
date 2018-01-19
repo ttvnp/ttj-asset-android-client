@@ -178,6 +178,7 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         when {
             userModel.genderType == FEMALE -> radioFemale.isChecked = true
             userModel.genderType == MALE -> radioMale.isChecked = true
+            else -> radioMale.isChecked = true
         }
         textProfileCellPhoneNumberNationalCode.setText(userModel.cellphoneNumberNationalCode)
         textProfileCellPhoneNumber.setText(userModel.cellphoneNumber)
