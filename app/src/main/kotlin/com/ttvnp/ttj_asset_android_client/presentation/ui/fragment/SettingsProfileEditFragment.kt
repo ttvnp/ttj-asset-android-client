@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -211,7 +212,7 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     @SuppressLint("SimpleDateFormat")
     private fun updateDOB() {
         val format = "dd/MMM/yyyy"
-        val sdf = SimpleDateFormat(format)
+        val sdf = SimpleDateFormat(format, Locale.US)
         textDOB.text = sdf.format(calendar.time)
     }
 
