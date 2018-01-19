@@ -31,8 +31,6 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.Setti
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
