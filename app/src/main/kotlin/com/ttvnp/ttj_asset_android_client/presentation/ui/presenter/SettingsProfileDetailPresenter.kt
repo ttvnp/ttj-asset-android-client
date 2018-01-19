@@ -23,7 +23,7 @@ class SettingsProfileDetailPresenterImpl @Inject constructor(val userUseCase: Us
     }
 
     override fun setupUserInfo() {
-        userUseCase.getUser(false)
+        userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserModel>() {
