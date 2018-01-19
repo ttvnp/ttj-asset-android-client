@@ -106,7 +106,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
                         arrayOf(resultUri.path),
                         arrayOf("image/jpeg"),null
                 )
-                Picasso.with(this.context).load(resultUri).resize(125, 125).centerCrop().into(object : Target {
+                Picasso.with(this.context).load(resultUri).resize(800, 800).centerInside().into(object : Target {
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                         bitmap?.let {
                             Handler(Looper.getMainLooper()).post(object : Runnable {
