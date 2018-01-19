@@ -19,7 +19,7 @@ class GetUserResponse(
         @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false,
-        @Json(name = "identificationStatus ") val identificationStatus: Int = 0
+        @Json(name = "identificationStatus") val identificationStatus: Int = 0
 ) : BaseResponse()
 
 class UpdateUserResponse(
