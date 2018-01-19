@@ -34,6 +34,14 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         }
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+
+        if (isVisibleToUser) {
+            mainSendPresenter.setupDefault()
+        }
+    }
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)

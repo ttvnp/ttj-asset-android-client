@@ -144,6 +144,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/md_grey_200"
+        android:enabled="false"
         android:text="@string/save_button_text"
         android:textColor="@color/md_grey_500"
         app:layout_constraintBottom_toBottomOf="parent"
