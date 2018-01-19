@@ -157,11 +157,11 @@ class UserRepositoryImpl @Inject constructor(
                 val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), faceImageFile)
                 MultipartBody.Part.createFormData("idDocument1", "idDocument1", requestFile)
             }
-            val addressImageFileBody = if (faceImageFile == null) {
+            val addressImageFileBody = if (addressImageFile == null) {
                 val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOf())
                 MultipartBody.Part.createFormData("idDocument2", "idDocument2", requestFile)
             } else {
-                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), faceImageFile)
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), addressImageFile)
                 MultipartBody.Part.createFormData("idDocument2", "idDocument2", requestFile)
             }
 
