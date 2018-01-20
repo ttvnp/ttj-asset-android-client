@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.squareup.picasso.Picasso
+import com.ttvnp.ttj_asset_android_client.domain.model.IdentificationStatus
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
@@ -107,12 +108,12 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         textDocumentId.text = checkIdentificationStatus(userModel.identificationStatus)
     }
 
-    private fun checkIdentificationStatus(status: Int): String {
+    private fun checkIdentificationStatus(status: IdentificationStatus): String {
         var value = getString(R.string.upload_your_id_document)
-        if (status == 1) {
+        if (status == IdentificationStatus.Applied) {
             value = getString(R.string.under_review_for_id_document)
             buttonUploadDocumentID.isEnabled = false
-        } else if (status == 2) {
+        } else if (status == IdentificationStatus.Identified) {
             value = getString(R.string.id_document_was_approved)
             buttonUploadDocumentID.isEnabled = false
         }
