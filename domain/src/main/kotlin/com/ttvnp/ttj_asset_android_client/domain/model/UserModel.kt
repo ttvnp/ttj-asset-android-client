@@ -16,5 +16,5 @@ class UserModel(
         val isDocument2ImageURL: String = "",
         val isEmailVerified: Boolean = false,
         val isIdentified: Boolean = false,
-        val identificationStatus: Int = 0
+        val identificationStatus: IdentificationStatus = IdentificationStatus.Unchecked
 ) : BaseModel()
