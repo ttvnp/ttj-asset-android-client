@@ -3,13 +3,16 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +25,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileUploadDocumentIDPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileUploadDocumentIDPresenterTarget
 import dagger.android.AndroidInjection
@@ -34,7 +38,6 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     @Inject
     lateinit var settingsProfileUploadDocumentIDPresenter: SettingsProfileUploadDocumentIDPresenter
 
-    private val cameraRequest = 9
     private var pictureUri: Uri? = null
     private var isFacePhoto: Boolean = false
     private var facePhotoFile: File? = null
@@ -64,12 +67,12 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         frameFacePhoto = view.findViewById(R.id.frame_face_photo)
         frameFacePhoto.setOnClickListener({
             isFacePhoto = true
-            pictureUri = checkCameraPermission(cameraRequest)
+            pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
         })
         frameAddress = view.findViewById(R.id.frame_address)
         frameAddress.setOnClickListener({
             isFacePhoto = false
-            pictureUri = checkCameraPermission(cameraRequest)
+            pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
         })
         buttonSave = view.findViewById(R.id.button_save)
         buttonSave.setOnClickListener({
@@ -93,48 +96,26 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            cameraRequest -> {
-                if (resultCode != Activity.RESULT_OK) return
-                val resultUri: Uri = (if (data == null) {
-                    this.pictureUri
-                } else {
-                    data.data
-                }) ?: return
-                MediaScannerConnection.scanFile(
-                        this.context,
-                        arrayOf(resultUri.path),
-                        arrayOf("image/jpeg"),null
-                )
-                Picasso.with(this.context).load(resultUri).resize(800, 800).centerInside().into(object : Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        bitmap?.let {
-                            Handler(Looper.getMainLooper()).post(object : Runnable {
-                                override fun run() {
-                                    if (isFacePhoto) {
-                                        facePhotoFile = createUploadFile(context, it)
-                                        imageFacePhoto.setImageBitmap(it)
-                                        hasPhotos()
-                                        return
-                                    }
+        if (requestCode != RequestCode.REQUEST_PERMISSIONS.rawValue) return
+        if (resultCode != Activity.RESULT_OK) return
 
-                                    addressFile = createUploadFile(context, it)
-                                    imageAddress.setImageBitmap(it)
-                                    hasPhotos()
-                                }
-                            })
-                        }
-                    }
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    }
-
-                    override fun onBitmapFailed(errorDrawable: Drawable?) {
-
-                    }
-                })
-            }
+        val resultUri: Uri = (if (data == null) {
+            this.pictureUri
+        } else {
+            data.data
+        }) ?: return
+        val imageRequiredSize = 800
+        val decodedBitmap = decodeUri(resultUri, imageRequiredSize)
+        if (isFacePhoto) {
+            facePhotoFile = createUploadFile(context, decodedBitmap)
+            imageFacePhoto.setImageBitmap(decodedBitmap)
+            hasPhotos()
+            return
         }
+
+        addressFile = createUploadFile(context, decodedBitmap)
+        imageAddress.setImageBitmap(decodedBitmap)
+        hasPhotos()
     }
 
     override fun setDocumentID(idDocument1ImageURL: String, idDocument2ImageURL: String) {
