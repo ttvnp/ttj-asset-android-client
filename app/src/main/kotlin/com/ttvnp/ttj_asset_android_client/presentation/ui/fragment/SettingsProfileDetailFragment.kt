@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -35,6 +37,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
     private lateinit var textProfileCellPhone: TextView
     private lateinit var buttonUploadDocumentID: RelativeLayout
     private lateinit var textDocumentId: TextView
+    private lateinit var buttonProfileEdit: FloatingActionButton
 
     companion object {
         fun getInstance(): SettingsProfileDetailFragment {
@@ -72,7 +75,8 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
                     .replace(R.id.settings_profile_activity_fragment_container, uploadDocumentIDFragment)
                     .commit()
         })
-        val buttonProfileEdit = view.findViewById<FloatingActionButton>(R.id.button_profile_edit)
+        buttonProfileEdit = view.findViewById<FloatingActionButton>(R.id.button_profile_edit)
+        buttonProfileEdit.visibility = INVISIBLE
         buttonProfileEdit.setOnClickListener {
             val editFragment = SettingsProfileEditFragment.getInstance()
             fragmentManager.beginTransaction()
@@ -96,6 +100,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         if (userModel.profileImageURL.isNotEmpty()) {
             Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
         }
+
         val notSet = getString(R.string.not_set)
         textProfileEmailAddress.text = if (userModel.emailAddress.isBlank()) notSet else userModel.emailAddress
         textProfileFirstName.text = if (userModel.firstName.isBlank()) notSet else userModel.firstName
@@ -105,20 +110,29 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         textProfileGender.text = if (userModel.genderType == 0) notSet else if (userModel.genderType == SettingsProfileEditFragment.MALE) getString(R.string.male) else getString(R.string.female)
         textProfileDOB.text = if (userModel.dateOfBirth.isBlank()) notSet else userModel.dateOfBirth
         textProfileCellPhone.text = if (userModel.cellphoneNumber.isBlank()) notSet else String.format("+%s %s", userModel.cellphoneNumberNationalCode, userModel.cellphoneNumber)
-        textDocumentId.text = checkIdentificationStatus(userModel.identificationStatus)
+
+        checkIdentificationStatus(userModel.identificationStatus)
     }
 
-    private fun checkIdentificationStatus(status: IdentificationStatus): String {
+    private fun checkIdentificationStatus(status: IdentificationStatus) {
         var value = getString(R.string.upload_your_id_document)
-        if (status == IdentificationStatus.Applied) {
-            value = getString(R.string.under_review_for_id_document)
-            buttonUploadDocumentID.isEnabled = false
-        } else if (status == IdentificationStatus.Identified) {
-            value = getString(R.string.id_document_was_approved)
-            buttonUploadDocumentID.isEnabled = false
+        buttonUploadDocumentID.isEnabled = true
+        buttonProfileEdit.visibility = VISIBLE
+
+        when (status) {
+            IdentificationStatus.Applied -> {
+                value = getString(R.string.under_review_for_id_document)
+                buttonUploadDocumentID.isEnabled = false
+                buttonProfileEdit.visibility = INVISIBLE
+            }
+            IdentificationStatus.Identified -> {
+                value = getString(R.string.id_document_was_approved)
+                buttonUploadDocumentID.isEnabled = false
+                buttonProfileEdit.visibility = INVISIBLE
+            }
         }
 
-        return value
+        textDocumentId.text = value
     }
 
 }
