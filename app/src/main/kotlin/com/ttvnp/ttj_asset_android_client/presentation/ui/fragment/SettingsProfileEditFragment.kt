@@ -257,7 +257,7 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
                         bitmap?.let {
                             Handler(Looper.getMainLooper()).post(object : Runnable {
                                 override fun run() {
-                                    profileImageFile = createUploadFile(this@SettingsProfileEditFragment.context, it)
+                                    profileImageFile = createUploadFile(this@SettingsProfileEditFragment.context, it, TMP_FILE_NAME)
                                     profileImage.setImageBitmap(it)
                                 }
                             })
