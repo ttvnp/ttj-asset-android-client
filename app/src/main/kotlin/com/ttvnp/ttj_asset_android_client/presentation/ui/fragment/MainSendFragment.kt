@@ -34,14 +34,6 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         }
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-
-        if (isVisibleToUser) {
-            mainSendPresenter.setupDefault()
-        }
-    }
-
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -69,6 +61,8 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
             val intent = Intent(activity, SendActivity::class.java)
             startActivity(intent)
         }
+
+        setEnableButton(false)
 
         mainSendPresenter.setupDefault()
         return view
