@@ -28,6 +28,8 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     private lateinit var buttonSendQR: Button
     private lateinit var buttonSendEmail: Button
 
+    private var isInit = false
+
     companion object {
         fun getInstance(): MainSendFragment {
             return MainSendFragment()
@@ -38,6 +40,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         mainSendPresenter.init(this)
+        isInit = true
     }
 
     override fun onCreateView(
@@ -62,10 +65,19 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
             startActivity(intent)
         }
 
-        setEnableButton(false)
+        setIdentify(false)
 
         mainSendPresenter.setupDefault()
         return view
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+
+        if (isVisibleToUser && isInit) {
+            setIdentify(false)
+            mainSendPresenter.setupDefault()
+        }
     }
 
     override fun setIdentify(identifier: Boolean) {

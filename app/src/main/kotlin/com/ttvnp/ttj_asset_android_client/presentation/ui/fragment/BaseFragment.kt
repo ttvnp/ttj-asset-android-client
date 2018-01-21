@@ -90,8 +90,8 @@ abstract class BaseFragment : Fragment() {
         return null
     }
 
-    protected fun createUploadFile(context: Context, bitmap: Bitmap): File {
-        val file = File(context.externalCacheDir, SettingsProfileEditFragment.TMP_FILE_NAME)
+    protected fun createUploadFile(context: Context, bitmap: Bitmap, tmpFileName: String): File {
+        val file = File(context.externalCacheDir, tmpFileName)
         var fos: FileOutputStream? = null
         try {
             file.createNewFile()

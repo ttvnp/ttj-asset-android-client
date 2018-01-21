@@ -49,6 +49,11 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     private lateinit var frameAddress: FrameLayout
     private lateinit var buttonSave: Button
 
+    companion object {
+        val TMP_FILE_NAME_FACE = "tmp_id_face_image"
+        val TMP_FILE_NAME_ADDRESS = "tmp_id_address_image"
+    }
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -63,12 +68,13 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         val view = inflater.inflate(R.layout.fragment_settings_profile_upload_document_id, container, false)
 
         imageFacePhoto = view.findViewById(R.id.image_face_photo)
-        imageAddress = view.findViewById(R.id.image_address)
         frameFacePhoto = view.findViewById(R.id.frame_face_photo)
         frameFacePhoto.setOnClickListener({
             isFacePhoto = true
             pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
         })
+
+        imageAddress = view.findViewById(R.id.image_address)
         frameAddress = view.findViewById(R.id.frame_address)
         frameAddress.setOnClickListener({
             isFacePhoto = false
@@ -107,13 +113,13 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         val imageRequiredSize = 800
         val decodedBitmap = decodeUri(resultUri, imageRequiredSize)
         if (isFacePhoto) {
-            facePhotoFile = createUploadFile(context, decodedBitmap)
+            facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
             imageFacePhoto.setImageBitmap(decodedBitmap)
             hasPhotos()
             return
         }
 
-        addressFile = createUploadFile(context, decodedBitmap)
+        addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
         imageAddress.setImageBitmap(decodedBitmap)
         hasPhotos()
     }
