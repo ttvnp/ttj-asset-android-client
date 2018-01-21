@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import de.hdodenhof.circleimageview.CircleImageView
 
 class PaymentHistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -52,6 +52,53 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266509601268:android:2640d86b981635a7",
+        "android_client_info": {
+          "package_name": "com.ttvnp.ttj_asset_android_client.simple"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266509601268-o5i8kb9br5v72hf6q1dhglr41gjlqrbu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttvnp.ttj_asset_android_client.simple",
+            "certificate_hash": "79cd8daa44a542f88dcf655680e7d384dcc8b2a8"
+          }
+        },
+        {
+          "client_id": "266509601268-rtvlf3hdlm2rhk9m4tu9ha079dm8je0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbm8Tu2INoA6jh5mphUa7S_SpiNqJYcwU"
+        },
+        {
+          "current_key": "AIzaSyD1CclfFmMFwjLzVgwXsXNcwhmJyiQD6QE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266509601268-rtvlf3hdlm2rhk9m4tu9ha079dm8je0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

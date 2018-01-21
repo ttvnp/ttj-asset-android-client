@@ -1,13 +1,12 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.RelativeLayout
-import com.google.firebase.crash.FirebaseCrash
-import com.ttvnp.ttj_asset_android_client.R
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.RegisterEmailResultModel
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.TutorialEndFragment
@@ -24,7 +23,7 @@ import javax.inject.Inject
 class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, TutorialPresenterTarget {
 
     @Inject
-    lateinit var tutorialPresenter : TutorialPresenter
+    lateinit var tutorialPresenter: TutorialPresenter
 
     private var emailFragment: TutorialEmailFragment? = null
     private var codeFragment: TutorialCodeFragment? = null
@@ -89,6 +88,19 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
                         tutorialPresenter.submitEmailAddress(fragment.getEmailAddressText())
                     }
                 }
+
+                val dialogInterface = { dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.dismiss()
+                }
+
+                fragment.termsAndConditionsClickHandler = View.OnClickListener {
+                    val dialog = AlertDialog.Builder(this)
+                    dialog.setTitle(null)
+                    dialog.setMessage(getString(R.string.terms_and_conditions_description))
+                    dialog.setPositiveButton(getString(R.string.close), dialogInterface)
+                    dialog.show()
+                }
+
                 adapter.addFragment(fragment)
             }
 

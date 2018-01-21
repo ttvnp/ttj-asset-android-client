@@ -1,0 +1,167 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_white_1000"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingBottom="32dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="32dp"
+    tools:context="com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SettingsProfileUploadDocumentIDFragment">
+
+    <TextView
+        android:id="@+id/text_upload_photo_of_your_document"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_photo_of_your_document"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_following_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="@string/following_item_must_be_clearly_visible"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_upload_photo_of_your_document" />
+
+    <TextView
+        android:id="@+id/text_list_of_document_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/list_of_document_id"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_following_item" />
+
+    <FrameLayout
+        android:id="@+id/frame_face_photo"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/dot_rectangle"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_list_of_document_id">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/large_margin"
+            android:layout_marginStart="@dimen/large_margin"
+            android:background="@drawable/dot_horizontal"
+            android:layerType="software" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/large_margin"
+            android:layout_marginStart="@dimen/large_margin"
+            android:background="@drawable/dot_vertical"
+            android:layerType="software" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_face_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textFacePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:text="@string/face_photo"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintLeft_toLeftOf="@id/frame_face_photo"
+        app:layout_constraintRight_toRightOf="@id/frame_face_photo"
+        app:layout_constraintTop_toBottomOf="@id/frame_face_photo" />
+
+    <FrameLayout
+        android:id="@+id/frame_address"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/dot_rectangle"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/frame_face_photo">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/large_margin"
+            android:layout_marginStart="@dimen/large_margin"
+            android:background="@drawable/dot_horizontal"
+            android:layerType="software" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/large_margin"
+            android:layout_marginStart="@dimen/large_margin"
+            android:background="@drawable/dot_vertical"
+            android:layerType="software" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:text="@string/address"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintLeft_toLeftOf="@id/frame_address"
+        app:layout_constraintRight_toRightOf="@id/frame_address"
+        app:layout_constraintTop_toBottomOf="@id/frame_address" />
+
+    <TextView
+        android:id="@+id/text_note_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_note_upload_id_for_disabling_edit_profile"
+        android:textColor="@color/md_red_900"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFacePhoto" />
+
+    <Button
+        android:id="@+id/button_save"
+        style="@android:style/Widget.DeviceDefault.Button.Borderless"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/md_grey_200"
+        android:enabled="false"
+        android:text="@string/save_button_text"
+        android:textColor="@color/md_grey_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

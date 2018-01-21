@@ -1,2 +1,2 @@
-json_key_file "" # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+json_key_file "/Users/tanakahiroki/google-play-developer.json"
 package_name "com.ttvnp.ttj_asset_android_client"

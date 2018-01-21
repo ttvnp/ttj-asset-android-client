@@ -30,7 +30,6 @@
                 android:id="@+id/text_tutorial_email_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_address"
                 android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
@@ -39,8 +38,8 @@
             android:id="@+id/text_tutorial_form_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
-            android:text="@string/tutorial_form_desc" />
+            android:text="@string/tutorial_form_desc"
+            android:textColor="@color/colorSecondaryText" />
 
         <Button
             android:id="@+id/button_tutorial_submit"
@@ -48,9 +47,34 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/md_grey_200"
+            android:enabled="false"
             android:text="@string/tutorial_form_submit"
-            android:textColor="@color/colorTextOnPrimary" />
+            android:textColor="@color/md_grey_500" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/chkTermAndConditions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_term_and_conditions"
+                android:textColor="@color/colorSecondaryText" />
+
+            <TextView
+                android:id="@+id/tvTermsAndConditions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="@string/terms_and_conditions"
+                android:textColor="@color/colorSecondaryText" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

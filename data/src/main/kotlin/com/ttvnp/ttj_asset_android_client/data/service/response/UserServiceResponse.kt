@@ -11,8 +11,15 @@ class GetUserResponse(
         @Json(name = "middleName") val middleName: String = "",
         @Json(name = "lastName") val lastName: String = "",
         @Json(name = "address") val address: String = "",
+        @Json(name = "genderType") val genderType: Int = 0,
+        @Json(name = "dateOfBirth") val dateOfBirth: String = "",
+        @Json(name = "cellphoneNumberNationalCode") val cellphoneNumberNationalCode: String = "",
+        @Json(name = "cellphoneNumber") val cellphoneNumber: String = "",
+        @Json(name = "idDocument1ImageURL") val idDocument1ImageURL: String = "",
+        @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
-        @Json(name = "isIdentified") val isIdentified: Boolean = false
+        @Json(name = "isIdentified") val isIdentified: Boolean = false,
+        @Json(name = "identificationStatus") val identificationStatus: Int = 0
 ) : BaseResponse()
 
 class UpdateUserResponse(
@@ -23,8 +30,15 @@ class UpdateUserResponse(
         @Json(name = "middleName") val middleName: String = "",
         @Json(name = "lastName") val lastName: String = "",
         @Json(name = "address") val address: String = "",
+        @Json(name = "genderType") val genderType: Int = 0,
+        @Json(name = "dateOfBirth") val dateOfBirth: String = "",
+        @Json(name = "cellphoneNumberNationalCode") val cellphoneNumberNationalCode: String = "",
+        @Json(name = "cellphoneNumber") val cellphoneNumber: String = "",
+        @Json(name = "idDocument1ImageURL") val idDocument1ImageURL: String = "",
+        @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
-        @Json(name = "isIdentified") val isIdentified: Boolean = false
+        @Json(name = "isIdentified") val isIdentified: Boolean = false,
+        @Json(name = "identificationStatus ") val identificationStatus: Int = 0
 ) : BaseResponse()
 
 class GetTargetUserResponse(

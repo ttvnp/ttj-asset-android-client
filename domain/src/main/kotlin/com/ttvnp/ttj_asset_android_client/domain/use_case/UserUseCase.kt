@@ -18,7 +18,9 @@ interface UserUseCase {
 
     fun getUser(forceRefresh: Boolean): Single<UserModel>
 
-    fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>>
+    fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String): Single<ModelWrapper<UserModel?>>
+
+    fun uploadIdDocument(faceImageFile: File?, addressImageFile: File?): Single<ModelWrapper<UserModel?>>
 
     fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>>
 
@@ -41,8 +43,12 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getUser(forceRefresh)
     }
 
-    override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String): Single<ModelWrapper<UserModel?>> {
-        return userRepository.updateUser(profileImageFile, firstName, middleName, lastName, address)
+    override fun updateUser(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String): Single<ModelWrapper<UserModel?>> {
+        return userRepository.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dob, cellphoneNumberNationalCode, cellphoneNumber)
+    }
+
+    override fun uploadIdDocument(faceImageFile: File?, addressImageFile: File?): Single<ModelWrapper<UserModel?>> {
+        return userRepository.uploadIdDocument(faceImageFile, addressImageFile)
     }
 
     override fun getTargetUser(emailAddress: String): Single<ModelWrapper<OtherUserModel?>> {
@@ -75,6 +81,7 @@ class UserUseCaseImpl @Inject constructor(
                         subscriber.onSuccess(ErrorCode.NO_ERROR)
                     }
                 }
+
                 override fun onError(e: Throwable) {
                     subscriber.onError(e)
                 }
@@ -92,6 +99,7 @@ class UserUseCaseImpl @Inject constructor(
             this.balanceRepository.updateBalances(balanceModels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
                 override fun onSuccess(t: BalancesModel) {
                 }
+
                 override fun onError(e: Throwable) {
                 }
             }).addTo(disposables)
