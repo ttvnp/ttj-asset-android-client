@@ -25,6 +25,7 @@ import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
@@ -146,6 +147,10 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         }
 
         buttonProfileSave.setOnClickListener {
+            if (!validationNationalCode()) {
+                return@setOnClickListener
+            }
+
             settingsProfileEditPresenter.updateUserInfo(
                     profileImageFile,
                     textProfileFirstName.text.toString(),
@@ -211,6 +216,20 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         val format = "dd/MMM/yyyy"
         val sdf = SimpleDateFormat(format, Locale.US)
         textDOB.text = sdf.format(calendar.time)
+    }
+
+    private fun validationNationalCode(): Boolean {
+        val nationalCode: String = textProfileCellPhoneNumberNationalCode.text.toString()
+        if (nationalCode == NationalCode.JAPAN.value || nationalCode == NationalCode.VIETNAM.value) {
+            return true
+        }
+
+        Toast.makeText(
+                context,
+                R.string.national_code_should_be,
+                Toast.LENGTH_SHORT
+        ).show()
+        return false
     }
 
     private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
