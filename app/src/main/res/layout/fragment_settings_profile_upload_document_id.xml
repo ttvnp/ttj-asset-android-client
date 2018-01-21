@@ -80,6 +80,7 @@
     </FrameLayout>
 
     <TextView
+        android:id="@+id/textFacePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
@@ -134,6 +135,18 @@
         app:layout_constraintLeft_toLeftOf="@id/frame_address"
         app:layout_constraintRight_toRightOf="@id/frame_address"
         app:layout_constraintTop_toBottomOf="@id/frame_address" />
+
+    <TextView
+        android:id="@+id/text_note_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_note_upload_id_for_disabling_edit_profile"
+        android:textColor="@color/md_red_900"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFacePhoto" />
 
     <Button
         android:id="@+id/button_save"

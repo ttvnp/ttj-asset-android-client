@@ -7,7 +7,7 @@
         android:id="@+id/text_can_not_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/can_not_use_this_until_your_identify_is_verified"
+        android:text="@string/message_note_disabled_send_for_id"
         android:textColor="@color/md_red_900"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
