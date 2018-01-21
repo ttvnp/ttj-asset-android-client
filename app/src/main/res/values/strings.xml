@@ -58,7 +58,8 @@
     <string name="upload_your_id_document">Upload Your ID Document</string>
     <string name="under_review_for_id_document">Under review for ID Document</string>
     <string name="id_document_was_approved">ID Document was approved</string>
-    <string name="can_not_use_this_until_your_identify_is_verified">You cannot use this function until your identify is verified</string>
+    <string name="message_note_disabled_send_for_id">You cannot use this function until your identify is verified</string>
+    <string name="message_note_upload_id_for_disabling_edit_profile">Once you upload images, you will not be able to edit your profile.</string>
     <string name="successfully_uploaded">Successfully uploaded</string>
 
     <!-- error message -->
