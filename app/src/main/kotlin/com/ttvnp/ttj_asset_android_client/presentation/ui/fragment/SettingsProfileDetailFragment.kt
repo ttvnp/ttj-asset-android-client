@@ -109,7 +109,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         textProfileAddress.text = if (userModel.address.isBlank()) notSet else userModel.address
         textProfileGender.text = if (userModel.genderType.getGender(context).isBlank()) notSet else userModel.genderType.getGender(context)
         textProfileDOB.text = if (userModel.dateOfBirth.isBlank()) notSet else userModel.dateOfBirth
-        textProfileCellPhone.text = if (userModel.phoneNumber.getPhoneNumberWithNationalCode().isBlank()) notSet else userModel.phoneNumber.getPhoneNumberWithNationalCode()
+        textProfileCellPhone.text = if (userModel.phoneNumber.getCellphoneNumberWithNationalCode().isBlank()) notSet else userModel.phoneNumber.getCellphoneNumberWithNationalCode()
 
         checkIdentificationStatus(userModel.identificationStatus)
     }
