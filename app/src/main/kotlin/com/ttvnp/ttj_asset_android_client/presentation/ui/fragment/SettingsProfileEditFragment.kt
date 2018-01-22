@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import com.ttvnp.ttj_asset_android_client.domain.model.Gender
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
@@ -65,8 +66,6 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     private lateinit var calendar: Calendar
 
     companion object {
-        val FEMALE = 1
-        val MALE = 2
         val TMP_FILE_NAME = "tmp_profile_image"
         fun getInstance(): SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
@@ -179,12 +178,12 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         textProfileAddress.setText(userModel.address)
         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
         when {
-            userModel.genderType == FEMALE -> radioFemale.isChecked = true
-            userModel.genderType == MALE -> radioMale.isChecked = true
+            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
+            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
             else -> radioMale.isChecked = true
         }
-        textProfileCellPhoneNumberNationalCode.setText(userModel.cellphoneNumberNationalCode)
-        textProfileCellPhoneNumber.setText(userModel.cellphoneNumber)
+        textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
+        textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -203,9 +202,9 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         val selectGender = radioGroupGender.checkedRadioButtonId
         val radioButton: RadioButton = radioGroupGender.findViewById(selectGender)
         if (radioButton.text == getString(R.string.male)) {
-            return MALE
+            return Gender.MALE.rawValue
         } else if (radioButton.text == getString(R.string.female)) {
-            return FEMALE
+            return Gender.FEMALE.rawValue
         }
 
         return identified
