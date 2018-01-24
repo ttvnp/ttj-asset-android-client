@@ -29,16 +29,18 @@ class SettingMenuViewAdapter(
     override fun onBindViewHolder(holder: SettingMenuViewHolder, position: Int) {
         val item = data[position]
 
-        if (item.isBlank()) {
-            holder.linearLayoutMenu.setBackgroundColor(
-                    ContextCompat.getColor(context, R.color.material_grey_100)
-            )
-        }
-
         holder.textMenu.text = item
         holder.linearLayoutMenu.isSelected = false
         holder.linearLayoutMenu.id = holder.adapterPosition
         linearLayoutMenus.add(holder.linearLayoutMenu)
+
+        if (item.isBlank()) {
+            holder.linearLayoutMenu.setBackgroundColor(
+                    ContextCompat.getColor(context, R.color.material_grey_100)
+            )
+            return
+        }
+
         holder.linearLayoutMenu.setOnClickListener { view ->
             linearLayoutMenus.forEach {
                 it.isSelected = false

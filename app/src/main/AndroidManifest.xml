@@ -27,11 +27,11 @@
         </activity>
         <activity
             android:name=".ui.activity.TutorialActivity"
-            android:theme="@style/TutorialTheme"></activity>
+            android:theme="@style/TutorialTheme" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".ui.activity.ReceiveSetAmountActivity" />
         <activity
             android:name=".ui.activity.CaptureActivityAnyOrientation"
@@ -71,7 +71,8 @@
             android:name="io.fabric.ApiKey"
             android:value="${fabric_api_key}" />
 
-        <activity android:name=".ui.activity.SettingTermsOfConditionActivity"></activity>
+        <activity android:name=".ui.activity.SettingTermsOfConditionActivity" />
+        <activity android:name=".ui.activity.SettingPrivacyPolicyActivity"></activity>
     </application>
 
 </manifest>

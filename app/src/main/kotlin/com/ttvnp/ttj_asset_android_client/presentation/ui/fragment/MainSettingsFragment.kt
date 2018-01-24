@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingPrivacyPolicyActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingTermsOfConditionActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsNotificationActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
@@ -64,6 +65,8 @@ class MainSettingsFragment : BaseMainFragment() {
                     }
                     4 -> {
                         //case privacy policy
+                        val intent = Intent(activity, SettingPrivacyPolicyActivity::class.java)
+                        startActivity(intent)
                     }
                     else -> { /* do nothing */
                     }
