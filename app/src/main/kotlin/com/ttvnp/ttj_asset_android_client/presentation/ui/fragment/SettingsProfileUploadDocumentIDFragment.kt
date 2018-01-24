@@ -38,6 +38,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     @Inject
     lateinit var settingsProfileUploadDocumentIDPresenter: SettingsProfileUploadDocumentIDPresenter
 
+    private val cameraRequest = 9
     private var pictureUri: Uri? = null
     private var isFacePhoto: Boolean = false
     private var facePhotoFile: File? = null
@@ -48,6 +49,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     private lateinit var frameFacePhoto: FrameLayout
     private lateinit var frameAddress: FrameLayout
     private lateinit var buttonSave: Button
+    private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
     companion object {
         val TMP_FILE_NAME_FACE = "tmp_id_face_image"
@@ -71,18 +73,29 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         frameFacePhoto = view.findViewById(R.id.frame_face_photo)
         frameFacePhoto.setOnClickListener({
             isFacePhoto = true
-            pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
+            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         })
 
         imageAddress = view.findViewById(R.id.image_address)
         frameAddress = view.findViewById(R.id.frame_address)
         frameAddress.setOnClickListener({
             isFacePhoto = false
-            pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
+            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         })
         buttonSave = view.findViewById(R.id.button_save)
         buttonSave.setOnClickListener({
             settingsProfileUploadDocumentIDPresenter.uploadIdDocument(faceImageFile = facePhotoFile, addressImageFile = addressFile)
+        })
+
+        bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
+        bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "image/jpeg"
+            startActivityForResult(intent, cameraRequest)
+        })
+        bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
+            pictureUri = checkCameraPermission(cameraRequest)
         })
 
         if (activity is SettingsProfileActivity) {
@@ -102,7 +115,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != RequestCode.REQUEST_PERMISSIONS.rawValue) return
+        if (requestCode != cameraRequest) return
         if (resultCode != Activity.RESULT_OK) return
 
         val resultUri: Uri = (if (data == null) {
@@ -112,6 +125,11 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         }) ?: return
         val imageRequiredSize = 800
         val decodedBitmap = decodeUri(resultUri, imageRequiredSize)
+
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+        }
+
         if (isFacePhoto) {
             facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
             imageFacePhoto.setImageBitmap(decodedBitmap)
