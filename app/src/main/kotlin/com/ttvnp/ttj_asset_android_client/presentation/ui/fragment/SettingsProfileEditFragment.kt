@@ -133,10 +133,7 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "image/jpeg"
-            startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+            openGallery(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
             pictureUri = checkCameraPermission(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)

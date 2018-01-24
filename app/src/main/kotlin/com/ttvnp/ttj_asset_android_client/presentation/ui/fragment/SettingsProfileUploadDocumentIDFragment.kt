@@ -89,10 +89,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "image/jpeg"
-            startActivityForResult(intent, cameraRequest)
+            openGallery(cameraRequest)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
             pictureUri = checkCameraPermission(cameraRequest)
