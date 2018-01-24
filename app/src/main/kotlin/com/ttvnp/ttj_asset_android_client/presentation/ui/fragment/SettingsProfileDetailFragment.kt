@@ -115,7 +115,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
     }
 
     private fun checkIdentificationStatus(status: IdentificationStatus) {
-        var value = getString(R.string.upload_your_id_document)
+        var value = ""
         buttonUploadDocumentID.isEnabled = true
         buttonProfileEdit.visibility = VISIBLE
 
@@ -129,6 +129,9 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
                 value = getString(R.string.id_document_was_approved)
                 buttonUploadDocumentID.isEnabled = false
                 buttonProfileEdit.visibility = INVISIBLE
+            }
+            else -> {
+                value = getString(R.string.upload_your_id_document)
             }
         }
 
