@@ -21,40 +21,37 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.TutorialActivity"
-            android:theme="@style/TutorialTheme">
-        </activity>
+            android:theme="@style/TutorialTheme"></activity>
         <activity
-            android:launchMode="singleTop"
             android:name=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity
-            android:name=".ui.activity.ReceiveSetAmountActivity" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".ui.activity.ReceiveSetAmountActivity" />
         <activity
             android:name=".ui.activity.CaptureActivityAnyOrientation"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".ui.activity.SendActivity" />
-        <activity
-            android:name=".ui.activity.SettingsProfileActivity" />
-        <activity
-            android:name=".ui.activity.SettingsNotificationActivity" />
+        <activity android:name=".ui.activity.SendActivity" />
+        <activity android:name=".ui.activity.SettingsProfileActivity" />
+        <activity android:name=".ui.activity.SettingsNotificationActivity" />
         <activity
             android:name=".ui.activity.PushReceiveActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="push_notification" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".ui.service.AndroidFirebaseMessagingService"
             android:exported="false">
@@ -69,9 +66,12 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabric_api_key}" />
+
+        <activity android:name=".ui.activity.SettingTermsOfConditionActivity"></activity>
     </application>
 
 </manifest>

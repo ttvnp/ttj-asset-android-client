@@ -112,6 +112,7 @@ dependencies {
     // Compile
     def compileTimeDependencies = rootProject.ext.compileTimeDependencies
     implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     kapt compileTimeDependencies.daggerCompiler
     kapt compileTimeDependencies.daggerAndroidProcessor
     compileOnly compileTimeDependencies.javaxAnnotation
@@ -152,7 +153,7 @@ dependencies {
 
     // for fabric crashlytics
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
-        transitive = true;
+        transitive = true
     }
 }
 
