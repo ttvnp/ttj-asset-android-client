@@ -60,6 +60,13 @@ abstract class BaseFragment : Fragment() {
         progressDialog = dialog
     }
 
+    protected fun openGallery(requestCode: Int) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "image/jpeg"
+        startActivityForResult(intent, requestCode)
+    }
+
     protected fun launchCamera(requestCode: Int): Uri {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val contentValues = ContentValues()
