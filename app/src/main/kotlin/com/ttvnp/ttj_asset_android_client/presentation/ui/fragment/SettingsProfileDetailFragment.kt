@@ -107,15 +107,15 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         textProfileMiddleName.text = if (userModel.middleName.isBlank()) notSet else userModel.middleName
         textProfileLastName.text = if (userModel.lastName.isBlank()) notSet else userModel.lastName
         textProfileAddress.text = if (userModel.address.isBlank()) notSet else userModel.address
-        textProfileGender.text = if (userModel.genderType == 0) notSet else if (userModel.genderType == SettingsProfileEditFragment.MALE) getString(R.string.male) else getString(R.string.female)
+        textProfileGender.text = if (userModel.genderType.getGender(context).isBlank()) notSet else userModel.genderType.getGender(context)
         textProfileDOB.text = if (userModel.dateOfBirth.isBlank()) notSet else userModel.dateOfBirth
-        textProfileCellPhone.text = if (userModel.cellphoneNumber.isBlank()) notSet else String.format("+%s %s", userModel.cellphoneNumberNationalCode, userModel.cellphoneNumber)
+        textProfileCellPhone.text = if (userModel.phoneNumber.getCellphoneNumberWithNationalCode().isBlank()) notSet else userModel.phoneNumber.getCellphoneNumberWithNationalCode()
 
         checkIdentificationStatus(userModel.identificationStatus)
     }
 
     private fun checkIdentificationStatus(status: IdentificationStatus) {
-        var value = getString(R.string.upload_your_id_document)
+        var value = ""
         buttonUploadDocumentID.isEnabled = true
         buttonProfileEdit.visibility = VISIBLE
 
@@ -129,6 +129,9 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
                 value = getString(R.string.id_document_was_approved)
                 buttonUploadDocumentID.isEnabled = false
                 buttonProfileEdit.visibility = INVISIBLE
+            }
+            else -> {
+                value = getString(R.string.upload_your_id_document)
             }
         }
 

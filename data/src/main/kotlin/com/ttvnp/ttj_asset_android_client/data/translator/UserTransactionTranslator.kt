@@ -9,9 +9,12 @@ internal class UserTransactionTranslator : BaseTranslator<UserTransactionModel, 
         if (entity == null) {
             return null
         }
-        val transactionStatus = TransactionStatus.values().filter { entity.transactionStatus == it.rawValue }.firstOrNull()?:return null
-        val transactionType = TransactionType.values().filter { entity.transactionType == it.rawValue }.firstOrNull()?:return null
-        val assetType = AssetType.values().filter { entity.assetType == it.rawValue }.firstOrNull()?:return null
+        val transactionStatus = TransactionStatus.values().filter { entity.transactionStatus == it.rawValue }.firstOrNull()
+                ?: return null
+        val transactionType = TransactionType.values().filter { entity.transactionType == it.rawValue }.firstOrNull()
+                ?: return null
+        val assetType = AssetType.values().filter { entity.assetType == it.rawValue }.firstOrNull()
+                ?: return null
         return UserTransactionModel(
                 id = entity.id,
                 loggedAt = entity.loggedAt,

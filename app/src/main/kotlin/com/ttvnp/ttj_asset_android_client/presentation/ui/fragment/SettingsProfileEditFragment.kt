@@ -22,9 +22,11 @@ import android.view.ViewGroup
 import android.widget.*
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import com.ttvnp.ttj_asset_android_client.domain.model.Gender
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
@@ -64,8 +66,6 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     private lateinit var calendar: Calendar
 
     companion object {
-        val FEMALE = 1
-        val MALE = 2
         val TMP_FILE_NAME = "tmp_profile_image"
         fun getInstance(): SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
@@ -133,10 +133,7 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "image/jpeg"
-            startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+            openGallery(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
             pictureUri = checkCameraPermission(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
@@ -146,6 +143,10 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         }
 
         buttonProfileSave.setOnClickListener {
+            if (!validationNationalCode()) {
+                return@setOnClickListener
+            }
+
             settingsProfileEditPresenter.updateUserInfo(
                     profileImageFile,
                     textProfileFirstName.text.toString(),
@@ -174,12 +175,12 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         textProfileAddress.setText(userModel.address)
         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
         when {
-            userModel.genderType == FEMALE -> radioFemale.isChecked = true
-            userModel.genderType == MALE -> radioMale.isChecked = true
+            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
+            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
             else -> radioMale.isChecked = true
         }
-        textProfileCellPhoneNumberNationalCode.setText(userModel.cellphoneNumberNationalCode)
-        textProfileCellPhoneNumber.setText(userModel.cellphoneNumber)
+        textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
+        textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -198,9 +199,9 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         val selectGender = radioGroupGender.checkedRadioButtonId
         val radioButton: RadioButton = radioGroupGender.findViewById(selectGender)
         if (radioButton.text == getString(R.string.male)) {
-            return MALE
+            return Gender.MALE.rawValue
         } else if (radioButton.text == getString(R.string.female)) {
-            return FEMALE
+            return Gender.FEMALE.rawValue
         }
 
         return identified
@@ -211,6 +212,20 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         val format = "dd/MMM/yyyy"
         val sdf = SimpleDateFormat(format, Locale.US)
         textDOB.text = sdf.format(calendar.time)
+    }
+
+    private fun validationNationalCode(): Boolean {
+        val nationalCode: String = textProfileCellPhoneNumberNationalCode.text.toString()
+        if (nationalCode == NationalCode.JAPAN.value || nationalCode == NationalCode.VIETNAM.value) {
+            return true
+        }
+
+        Toast.makeText(
+                context,
+                R.string.national_code_should_be,
+                Toast.LENGTH_SHORT
+        ).show()
+        return false
     }
 
     private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
