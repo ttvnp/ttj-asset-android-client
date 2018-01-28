@@ -14,5 +14,4 @@ domain/build/
 /.java-version
 fabric.properties
 /fastlane/report.xml
-/fastlane/metadata/
 buildSystem/release.keystore
