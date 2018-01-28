@@ -1,2 +1,2 @@
-json_key_file "/Users/tanakahiroki/google-play-developer.json"
+json_key_file "/usr/local/google-play/ttj-asset-android-client/google-play-developer.json"
 package_name "com.ttvnp.ttj_asset_android_client.simple"
