@@ -1,0 +1,1 @@
+Simple "SEN Coin" and "Sen Point" Wallet.
