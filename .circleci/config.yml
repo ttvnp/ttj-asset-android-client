@@ -94,6 +94,8 @@ jobs:
             sudo apt-get update && sudo apt-get --only-upgrade install kubectl google-cloud-sdk google-cloud-sdk-datastore-emulator google-cloud-sdk-pubsub-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-app-engine-java google-cloud-sdk-app-engine-python google-cloud-sdk-cbt google-cloud-sdk-bigtable-emulator google-cloud-sdk-datalab
             gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT
+            mkdir -p /usr/local/google-play/ttj-asset-android-client
+            echo $GOOGLE_PLAY_DEVELOPER_SERVICE_KEY|base64 --decode --ignore-garbage > /usr/local/google-play/ttj-asset-android-client/google-play-developer.json
       - run:
           name: Download keystore
           command: gsutil cp gs://ttj-asset-app-credentials/android-client/release.keystore ./buildSystem/release.keystore
@@ -116,7 +118,7 @@ jobs:
           path: app/build/test-results
       - run:
           name: Deploy to Google Play
-          command: echo "deploy"
+          command: fastlane deploy
 
 workflows:
   version: 2
