@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -30,7 +29,6 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
     private val imageRequest = 8
     private val cameraRequest = 9
-    private var pictureUri: Uri? = null
     private var isFacePhoto: Boolean = false
     private var facePhotoFile: File? = null
     private var addressFile: File? = null
@@ -104,31 +102,31 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) return
-        val imageRequiredSize = 800
-        val decodedBitmap =
-                if (requestCode == cameraRequest) data?.extras?.get("data") as Bitmap
-                else decodeUri(data?.data!!, imageRequiredSize)
+        data?.let {
+            val imageRequiredSize = 800
+            val decodedBitmap = if (requestCode == cameraRequest) it.extras.get("data") as Bitmap else decodeUri(it.data, imageRequiredSize)
 
-        if (!bottomSheetDialogFragment.isHidden) {
-            bottomSheetDialogFragment.dismiss()
-        }
+            if (!bottomSheetDialogFragment.isHidden) {
+                bottomSheetDialogFragment.dismiss()
+            }
 
-        var bitmap: Bitmap
-        if (isFacePhoto) {
-            facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
+            var bitmap: Bitmap
+            if (isFacePhoto) {
+                facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
+                facePhotoFile?.absolutePath?.let {
+                    bitmap = getRotatedImage(decodedBitmap, it)
+                    imageFacePhoto.setImageBitmap(bitmap)
+                    hasPhotos()
+                }
+                return
+            }
+
+            addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
             facePhotoFile?.absolutePath?.let {
                 bitmap = getRotatedImage(decodedBitmap, it)
-                imageFacePhoto.setImageBitmap(bitmap)
+                imageAddress.setImageBitmap(bitmap)
                 hasPhotos()
             }
-            return
-        }
-
-        addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
-        facePhotoFile?.absolutePath?.let {
-            bitmap = getRotatedImage(decodedBitmap, it)
-            imageAddress.setImageBitmap(bitmap)
-            hasPhotos()
         }
     }
 
