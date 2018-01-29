@@ -3,16 +3,9 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -22,13 +15,10 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileUploadDocumentIDPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileUploadDocumentIDPresenterTarget
-import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import java.io.File
 import javax.inject.Inject
@@ -38,6 +28,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     @Inject
     lateinit var settingsProfileUploadDocumentIDPresenter: SettingsProfileUploadDocumentIDPresenter
 
+    private val imageRequest = 8
     private val cameraRequest = 9
     private var pictureUri: Uri? = null
     private var isFacePhoto: Boolean = false
@@ -89,10 +80,10 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(cameraRequest)
+            openGallery(imageRequest)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = checkCameraPermission(cameraRequest)
+            launchCamera(cameraRequest)
         })
 
         if (activity is SettingsProfileActivity) {
@@ -112,31 +103,33 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != cameraRequest) return
         if (resultCode != Activity.RESULT_OK) return
-
-        val resultUri: Uri = (if (data == null) {
-            this.pictureUri
-        } else {
-            data.data
-        }) ?: return
         val imageRequiredSize = 800
-        val decodedBitmap = decodeUri(resultUri, imageRequiredSize)
+        val decodedBitmap =
+                if (requestCode == cameraRequest) data?.extras?.get("data") as Bitmap
+                else decodeUri(data?.data!!, imageRequiredSize)
 
         if (!bottomSheetDialogFragment.isHidden) {
             bottomSheetDialogFragment.dismiss()
         }
 
+        var bitmap: Bitmap
         if (isFacePhoto) {
             facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
-            imageFacePhoto.setImageBitmap(decodedBitmap)
-            hasPhotos()
+            facePhotoFile?.absolutePath?.let {
+                bitmap = getRotatedImage(decodedBitmap, it)
+                imageFacePhoto.setImageBitmap(bitmap)
+                hasPhotos()
+            }
             return
         }
 
         addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
-        imageAddress.setImageBitmap(decodedBitmap)
-        hasPhotos()
+        facePhotoFile?.absolutePath?.let {
+            bitmap = getRotatedImage(decodedBitmap, it)
+            imageAddress.setImageBitmap(bitmap)
+            hasPhotos()
+        }
     }
 
     override fun setDocumentID(idDocument1ImageURL: String, idDocument2ImageURL: String) {

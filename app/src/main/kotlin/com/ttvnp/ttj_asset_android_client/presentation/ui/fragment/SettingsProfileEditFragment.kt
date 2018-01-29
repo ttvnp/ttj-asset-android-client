@@ -7,12 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.media.MediaScannerConnection
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
@@ -21,13 +16,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.domain.model.Gender
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -37,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenterTarget {
+class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPresenterTarget {
 
     @Inject
     lateinit var settingsProfileEditPresenter: SettingsProfileEditPresenter
@@ -61,7 +54,8 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     private lateinit var textProfileCellPhoneNumber: EditText
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
-    private var pictureUri: Uri? = null
+    private val imageRequest = 7
+    private val cameraRequest = 8
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
 
@@ -133,10 +127,10 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+            openGallery(imageRequest)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = checkCameraPermission(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+            checkCameraPermission(cameraRequest)
         })
         buttonProfileImageEdit.setOnClickListener {
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
@@ -236,10 +230,10 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            RequestCode.REQUEST_PERMISSIONS.rawValue -> {
+            cameraRequest -> {
                 if (grantResults.isNotEmpty()) {
                     if (checkGrantResults(grantResults.toList())) {
-                        launchCamera(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+                        launchCamera(cameraRequest)
                     } else {
                         Toast.makeText(
                                 this.context,
@@ -254,38 +248,17 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue -> {
-                if (resultCode != Activity.RESULT_OK) return
-                val resultUri: Uri = (if (data == null) {
-                    this.pictureUri
-                } else {
-                    data.data
-                }) ?: return
-                MediaScannerConnection.scanFile(
-                        this.context,
-                        arrayOf(resultUri.path),
-                        arrayOf("image/jpeg"), null
-                )
-                Picasso.with(this.context).load(resultUri).resize(72, 72).centerCrop().into(object : Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        bitmap?.let {
-                            Handler(Looper.getMainLooper()).post(object : Runnable {
-                                override fun run() {
-                                    profileImageFile = createUploadFile(this@SettingsProfileEditFragment.context, it, TMP_FILE_NAME)
-                                    profileImage.setImageBitmap(it)
-                                }
-                            })
-                        }
-                    }
+        if (resultCode != Activity.RESULT_OK) return
+        data?.let {
+            val imageRequiredSize = 72
+            val decodedBitmap =
+                    if (requestCode == cameraRequest) it.extras.get("data") as Bitmap
+                    else decodeUri(it.data, imageRequiredSize)
+            profileImageFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME)
+            profileImageFile?.absolutePath?.let {
+                val bitmap = getRotatedImage(decodedBitmap, it)
+                profileImage.setImageBitmap(bitmap)
 
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    }
-
-                    override fun onBitmapFailed(errorDrawable: Drawable?) {
-                        profileImageFile = null
-                    }
-                })
                 // close modal
                 if (!bottomSheetDialogFragment.isHidden) {
                     bottomSheetDialogFragment.dismiss()
@@ -293,5 +266,4 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
             }
         }
     }
-
 }
