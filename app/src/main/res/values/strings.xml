@@ -51,7 +51,7 @@
     <string name="send_by_qr">Scan Code</string>
     <string name="send_by_email">By Email Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
-    <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed</string>
+    <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed.</string>
     <string name="profile_successfully_updated">Your profile has been updated successfully.</string>
     <string name="push_notification">Push Notification</string>
     <string name="email_notification">Email Notification</string>
