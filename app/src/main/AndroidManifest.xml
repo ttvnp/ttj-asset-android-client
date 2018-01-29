@@ -18,6 +18,7 @@
         <activity
             android:name=".ui.activity.LaunchActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,15 +27,16 @@
         </activity>
         <activity
             android:name=".ui.activity.TutorialActivity"
-            android:theme="@style/TutorialTheme">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/TutorialTheme" />
         <activity
-            android:launchMode="singleTop"
             android:name=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.activity.ReceiveSetAmountActivity" />
+            android:name=".ui.activity.ReceiveSetAmountActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.CaptureActivityAnyOrientation"
             android:screenOrientation="fullSensor"
@@ -42,11 +44,14 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".ui.activity.SendActivity" />
+            android:name=".ui.activity.SendActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SettingsProfileActivity" />
+            android:name=".ui.activity.SettingsProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SettingsNotificationActivity" />
+            android:name=".ui.activity.SettingsNotificationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PushReceiveActivity"
             android:launchMode="singleTask">
@@ -55,6 +60,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".ui.service.AndroidFirebaseMessagingService"
             android:exported="false">
@@ -69,6 +75,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabric_api_key}" />
