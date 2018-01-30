@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
@@ -15,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.Gender
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
@@ -54,8 +56,8 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     private lateinit var textProfileCellPhoneNumber: EditText
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
-    private val imageRequest = 7
-    private val cameraRequest = 8
+    private val requestCode = 8
+    private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
 
@@ -127,10 +129,10 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(imageRequest)
+            openGallery(requestCode)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            checkCameraPermission(cameraRequest)
+            pictureUri = checkCameraPermission(requestCode)
         })
         buttonProfileImageEdit.setOnClickListener {
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
@@ -230,10 +232,10 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            cameraRequest -> {
+            requestCode -> {
                 if (grantResults.isNotEmpty()) {
                     if (checkGrantResults(grantResults.toList())) {
-                        launchCamera(cameraRequest)
+                        pictureUri = launchCamera(requestCode)
                     } else {
                         Toast.makeText(
                                 this.context,
@@ -249,20 +251,22 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) return
-        data?.let {
-            val imageRequiredSize = 72
-            val decodedBitmap =
-                    if (requestCode == cameraRequest) it.extras.get("data") as Bitmap
-                    else decodeUri(it.data, imageRequiredSize)
-            profileImageFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME)
-            profileImageFile?.absolutePath?.let {
-                val bitmap = getRotatedImage(decodedBitmap, it)
-                profileImage.setImageBitmap(bitmap)
+        if (requestCode != this.requestCode) return
+        val uri = (if (pictureUri != null) {
+            pictureUri
+        } else {
+            data?.data
+        }) ?: return
+        val imageRequiredSize = 72
+        val decodedBitmap = decodeUri(uri, imageRequiredSize)
+        profileImageFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME)
+        profileImageFile?.absolutePath?.let {
+            Glide.with(context).load(uri).into(profileImage)
 
-                // close modal
-                if (!bottomSheetDialogFragment.isHidden) {
-                    bottomSheetDialogFragment.dismiss()
-                }
+            // close modal
+            if (!bottomSheetDialogFragment.isHidden) {
+                bottomSheetDialogFragment.dismiss()
+                pictureUri = null
             }
         }
     }

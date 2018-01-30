@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
@@ -30,6 +32,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     private val imageRequest = 8
     private val cameraRequest = 9
     private var isFacePhoto: Boolean = false
+    private var pictureUri: Uri? = null
     private var facePhotoFile: File? = null
     private var addressFile: File? = null
 
@@ -81,7 +84,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
             openGallery(imageRequest)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            launchCamera(cameraRequest)
+            pictureUri = launchCamera(cameraRequest)
         })
 
         if (activity is SettingsProfileActivity) {
@@ -102,31 +105,32 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) return
-        data?.let {
-            val imageRequiredSize = 800
-            val decodedBitmap = if (requestCode == cameraRequest) it.extras.get("data") as Bitmap else decodeUri(it.data, imageRequiredSize)
+        val uri = (if (pictureUri != null) {
+            pictureUri
+        } else {
+            data?.data
+        }) ?: return
 
-            if (!bottomSheetDialogFragment.isHidden) {
-                bottomSheetDialogFragment.dismiss()
-            }
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+            pictureUri = null
+        }
 
-            var bitmap: Bitmap
-            if (isFacePhoto) {
-                facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
-                facePhotoFile?.absolutePath?.let {
-                    bitmap = getRotatedImage(decodedBitmap, it)
-                    imageFacePhoto.setImageBitmap(bitmap)
-                    hasPhotos()
-                }
-                return
-            }
-
-            addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
+        val imageRequiredSize = 800
+        val decodedBitmap = decodeUri(uri, imageRequiredSize)
+        if (isFacePhoto) {
+            facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
             facePhotoFile?.absolutePath?.let {
-                bitmap = getRotatedImage(decodedBitmap, it)
-                imageAddress.setImageBitmap(bitmap)
+                Glide.with(context).load(uri).into(imageFacePhoto)
                 hasPhotos()
             }
+            return
+        }
+
+        addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
+        facePhotoFile?.absolutePath?.let {
+            Glide.with(context).load(uri).into(imageAddress)
+            hasPhotos()
         }
     }
 
