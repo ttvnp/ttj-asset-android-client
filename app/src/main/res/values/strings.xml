@@ -25,16 +25,16 @@
     <!-- general -->
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
-    <string name="email_address">email address</string>
-    <string name="first_name">first name</string>
-    <string name="middle_name">middle name</string>
-    <string name="last_name">last name</string>
-    <string name="address">address</string>
-    <string name="gender">gender</string>
+    <string name="email_address">Email address</string>
+    <string name="first_name">First name</string>
+    <string name="middle_name">Middle name</string>
+    <string name="last_name">Last name</string>
+    <string name="address">Address</string>
+    <string name="gender">Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="cell_phone_number">cell phone number</string>
-    <string name="dob">date of birth</string>
+    <string name="cell_phone_number">Cell phone number</string>
+    <string name="dob">Date of birth</string>
     <string name="qr_code">QR Code</string>
     <string name="complete">Complete</string>
     <string name="transaction_type">send/receive</string>
