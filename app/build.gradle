@@ -152,8 +152,11 @@ dependencies {
 
     // for fabric crashlytics
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
-        transitive = true;
+        transitive = true
     }
+
+    //glide
+    compile 'com.github.bumptech.glide:glide:3.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
