@@ -29,14 +29,14 @@ allprojects {
 
     ext {
         androidApplicationId = "com.ttvnp.ttj_asset_android_client.simple"
-        androidVersionCode = 3
-        androidVersionName = "1.0.0"
+        androidVersionCode = 4
+        androidVersionName = "1.0.1"
 
-        dataLibraryVersionCode = 1
-        dataLibraryVersionName = "1.0.0"
+        dataLibraryVersionCode = 2
+        dataLibraryVersionName = "1.0.1"
 
-        domainLibraryVersionCode = 1
-        domainLibraryVersionName = "1.0.0"
+        domainLibraryVersionCode = 2
+        domainLibraryVersionName = "1.0.1"
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
