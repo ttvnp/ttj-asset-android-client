@@ -4,8 +4,6 @@ import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
-import com.squareup.moshi.Moshi
-import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Exception
@@ -13,28 +11,23 @@ import kotlin.Exception
 class DateAdapter : JsonAdapter<Date?>() {
 
     companion object {
-        val FACTORY: Factory = object : Factory {
-            override fun create(type: Type?, annotations: MutableSet<out Annotation>?, moshi: Moshi?): JsonAdapter<*>? {
-                if (type === Date::class.java) {
-                    return DateAdapter()
-                }
-                return null
+        val FACTORY: Factory = Factory { type, _, _ ->
+            if (type === Date::class.java) {
+                return@Factory DateAdapter()
             }
+            null
         }
     }
 
     override fun fromJson(reader: JsonReader): Date? {
-        val dateString = reader.nextString()
-        if (dateString == null) {
-            return null
-        }
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.UK)
+        val dateString = reader.nextString() ?: return null
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK)
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        try {
-            return dateFormat.parse(dateString)
+        return try {
+            dateFormat.parse(dateString)
         } catch (e: Exception) {
             Log.e("MoshiDateAdapter", "could not parse date string: " + dateString)
-            return null
+            null
         }
     }
 
