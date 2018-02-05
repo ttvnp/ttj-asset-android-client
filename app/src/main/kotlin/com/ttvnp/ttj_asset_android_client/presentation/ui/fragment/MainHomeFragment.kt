@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
@@ -43,7 +44,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     private var emptyTextViewPaymentHistory: TextView? = null
 
     companion object {
-        fun getInstance() : MainHomeFragment {
+        fun getInstance(): MainHomeFragment {
             return MainHomeFragment()
         }
     }
@@ -58,7 +59,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) : View {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_main_home, container, false)
         textEmailAddress = view.findViewById(R.id.text_email_address)
         profileImage = view.findViewById(R.id.profile_image)
@@ -105,9 +106,11 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
     override fun bindUserInfo(userModel: UserModel) {
         textEmailAddress?.text = userModel.emailAddress
-        if (0 < userModel.profileImageURL.length) {
-            Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
-        }
+        if (userModel.profileImageURL.isEmpty()) return
+        Glide
+                .with(this.context)
+                .load(userModel.profileImageURL)
+                .into(profileImage)
     }
 
     override fun bindBalanceInfo(balancesModel: BalancesModel) {

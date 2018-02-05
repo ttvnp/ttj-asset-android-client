@@ -10,6 +10,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.IdentificationStatus
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
@@ -98,7 +99,10 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
 
     override fun bindUserInfo(userModel: UserModel) {
         if (userModel.profileImageURL.isNotEmpty()) {
-            Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
+            Glide
+                    .with(this.context)
+                    .load(userModel.profileImageURL)
+                    .into(profileImage)
         }
 
         val notSet = getString(R.string.not_set)
@@ -123,12 +127,12 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
             IdentificationStatus.Applied -> {
                 value = getString(R.string.under_review_for_id_document)
                 buttonUploadDocumentID.isEnabled = false
-                buttonProfileEdit.visibility = INVISIBLE
+                //buttonProfileEdit.visibility = INVISIBLE
             }
             IdentificationStatus.Identified -> {
                 value = getString(R.string.id_document_was_approved)
                 buttonUploadDocumentID.isEnabled = false
-                buttonProfileEdit.visibility = INVISIBLE
+                //buttonProfileEdit.visibility = INVISIBLE
             }
             else -> {
                 value = getString(R.string.upload_your_id_document)
