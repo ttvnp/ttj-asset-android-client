@@ -3,12 +3,16 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
@@ -18,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.domain.model.Gender
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
@@ -28,6 +33,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.Setti
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -162,7 +168,10 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
     override fun bindUserInfo(userModel: UserModel) {
         if (userModel.profileImageURL.isNotEmpty()) {
-            Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
+            Picasso
+                    .with(this.context)
+                    .load(userModel.profileImageURL)
+                    .into(profileImage)
         }
         textProfileEmailAddress.text = userModel.emailAddress
         textProfileFirstName.setText(userModel.firstName)
@@ -258,16 +267,14 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             data?.data
         }) ?: return
         val imageRequiredSize = 72
-        val decodedBitmap = decodeUri(uri, imageRequiredSize)
-        profileImageFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME)
-        profileImageFile?.absolutePath?.let {
-            Glide.with(context).load(uri).into(profileImage)
+        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
+        profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
+        Glide.with(context).load(uri).into(profileImage)
 
-            // close modal
-            if (!bottomSheetDialogFragment.isHidden) {
-                bottomSheetDialogFragment.dismiss()
-                pictureUri = null
-            }
+        // close modal
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+            pictureUri = null
         }
     }
 }

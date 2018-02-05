@@ -117,26 +117,22 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         }
 
         val imageRequiredSize = 800
-        val decodedBitmap = decodeUri(uri, imageRequiredSize)
+        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
         if (isFacePhoto) {
-            facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
-            facePhotoFile?.absolutePath?.let {
-                Glide.with(context).load(uri).into(imageFacePhoto)
-                hasPhotos()
-            }
+            facePhotoFile = createUploadFile(context, bitmap, TMP_FILE_NAME_FACE)
+            Glide.with(context).load(uri).into(imageFacePhoto)
+            hasPhotos()
             return
         }
 
-        addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
-        facePhotoFile?.absolutePath?.let {
-            Glide.with(context).load(uri).into(imageAddress)
-            hasPhotos()
-        }
+        addressFile = createUploadFile(context, bitmap, TMP_FILE_NAME_ADDRESS)
+        Glide.with(context).load(uri).into(imageAddress)
+        hasPhotos()
     }
 
     override fun setDocumentID(idDocument1ImageURL: String, idDocument2ImageURL: String) {
-        if (idDocument1ImageURL.isNotBlank()) Picasso.with(this.context).load(idDocument1ImageURL).into(imageFacePhoto)
-        if (idDocument2ImageURL.isNotBlank()) Picasso.with(this.context).load(idDocument2ImageURL).into(imageAddress)
+        if (idDocument1ImageURL.isNotBlank()) Glide.with(this.context).load(idDocument1ImageURL).into(imageFacePhoto)
+        if (idDocument2ImageURL.isNotBlank()) Glide.with(this.context).load(idDocument2ImageURL).into(imageAddress)
     }
 
     override fun showMessageOnUploadSuccessfullyCompleted() {
