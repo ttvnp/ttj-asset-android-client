@@ -46,7 +46,7 @@ class CryptorFactory(
         when (type) {
             CipherAlgorithm.AES -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    return AESCryptor(alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding)
+                    return AESCryptor(alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding, context = context)
                 } else {
                     throw NoSuchAlgorithmException("AES is support only above API Lv23.")
                 }
@@ -54,7 +54,7 @@ class CryptorFactory(
             CipherAlgorithm.RSA -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     context?.let { Log.i("Cryptore", "No Need \"Context\" for RSA on above API Lv23") }
-                    return RSACryptor(alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding)
+                    return RSACryptor(alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding, context = context)
                 } else if (Build.VERSION_CODES.JELLY_BEAN_MR2 <= Build.VERSION.SDK_INT) {
                     context?.let {
                         return RSACryptorBeforeM(alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding, context = it)

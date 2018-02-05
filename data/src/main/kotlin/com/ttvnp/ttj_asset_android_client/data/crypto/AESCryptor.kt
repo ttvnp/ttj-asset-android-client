@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.data.crypto
 
 import android.annotation.TargetApi
+import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -23,11 +24,13 @@ import javax.crypto.SecretKey
 class AESCryptor(
         alias: String,
         blockMode: BlockMode,
-        encryptionPadding: EncryptionPadding
+        encryptionPadding: EncryptionPadding,
+        context: Context?
 ) : BaseCryptor(
         alias = alias,
         blockMode = blockMode,
-        encryptionPadding = encryptionPadding
+        encryptionPadding = encryptionPadding,
+        context = context
 ) {
 
     @Throws(KeyStoreException::class, CertificateException::class, NoSuchAlgorithmException::class, IOException::class, NoSuchProviderException::class, InvalidAlgorithmParameterException::class)
@@ -51,7 +54,7 @@ class AESCryptor(
     }
 
     @Throws(NoSuchProviderException::class, NoSuchAlgorithmException::class, InvalidAlgorithmParameterException::class)
-    override fun createNewKey(alias: String, blockMode: BlockMode, encryptionPadding: EncryptionPadding) {
+    override fun createNewKey(context: Context?, alias: String, blockMode: BlockMode, encryptionPadding: EncryptionPadding) {
         val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
         generator.init(KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(blockMode.rawValue)
