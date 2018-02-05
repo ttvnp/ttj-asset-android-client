@@ -27,11 +27,12 @@ class RSACryptorBeforeM(
         alias: String,
         blockMode: BlockMode,
         encryptionPadding: EncryptionPadding,
-        private val context: Context
+        context: Context?
 ) : BaseCryptor(
         alias = alias,
         blockMode = blockMode,
-        encryptionPadding = encryptionPadding
+        encryptionPadding = encryptionPadding,
+        context = context
 ) {
 
     @Throws(KeyStoreException::class, CertificateException::class, NoSuchAlgorithmException::class, IOException::class, NoSuchProviderException::class, InvalidAlgorithmParameterException::class)
@@ -55,7 +56,7 @@ class RSACryptorBeforeM(
     }
 
     @Throws(NoSuchProviderException::class, NoSuchAlgorithmException::class, InvalidAlgorithmParameterException::class)
-    override fun createNewKey(alias: String, blockMode: BlockMode, encryptionPadding: EncryptionPadding) {
+    override fun createNewKey(context: Context?, alias: String, blockMode: BlockMode, encryptionPadding: EncryptionPadding) {
         val start = Calendar.getInstance()
         val end = Calendar.getInstance()
         end.add(Calendar.YEAR, 100)
