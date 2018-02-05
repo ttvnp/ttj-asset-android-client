@@ -45,7 +45,7 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                         target?.dismissProgressDialog()
                         target?.showError(e)
                     }
-                }).addTo(this.disposables)
+                })
     }
 
     override fun submitEmailAddress(emailAddress: String) {
