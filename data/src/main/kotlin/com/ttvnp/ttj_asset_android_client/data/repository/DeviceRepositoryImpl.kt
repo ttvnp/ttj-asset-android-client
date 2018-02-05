@@ -83,7 +83,7 @@ class DeviceRepositoryImpl @Inject constructor(
         val register: (SingleEmitter<ModelWrapper<DeviceModel?>>) -> Unit = { subscriber ->
 
             recaptchaService.verifyWithRecaptcha().addOnSuccessListener { recaptchaTokenResponse ->
-                val recaptchaToken = recaptchaTokenResponse.getTokenResult();
+                val recaptchaToken = recaptchaTokenResponse.tokenResult
                 // note that this is in the main thread.
                 val disposables = CompositeDisposable()
                 Single.create<ModelWrapper<DeviceModel?>> { inner ->
