@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+﻿// Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: 'dependencies.gradle'
 
 buildscript {
@@ -29,8 +29,8 @@ allprojects {
 
     ext {
         androidApplicationId = "com.ttvnp.ttj_asset_android_client.simple"
-        androidVersionCode = 4
-        androidVersionName = "1.0.0"
+        androidVersionCode = 5
+        androidVersionName = "1.0.1"
 
         dataLibraryVersionCode = 1
         dataLibraryVersionName = "1.0.0"
