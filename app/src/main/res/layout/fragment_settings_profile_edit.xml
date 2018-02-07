@@ -140,7 +140,7 @@
                             android:id="@+id/text_input_layout_profile_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/address"
+                            android:hint="@string/address_place_holder"
                             app:errorEnabled="true"
                             app:hintEnabled="true">
 
