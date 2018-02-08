@@ -199,7 +199,7 @@
                             android:layout_marginTop="8dp"
                             android:textColor="@color/md_black_1000"
                             android:textSize="18sp"
-                            tools:text="01/Sep/2018" />
+                            android:text="@string/default_dob"/>
 
                         <View
                             android:layout_width="match_parent"
