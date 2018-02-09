@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import com.ttvnp.ttj_asset_android_client.presentation.R
 
-class SettingPrivacyPolicyActivity : AppCompatActivity() {
+class SettingPrivacyPolicyActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
