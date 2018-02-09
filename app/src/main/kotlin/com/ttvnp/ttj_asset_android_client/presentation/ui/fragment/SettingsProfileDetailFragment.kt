@@ -127,12 +127,12 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
             IdentificationStatus.Applied -> {
                 value = getString(R.string.under_review_for_id_document)
                 buttonUploadDocumentID.isEnabled = false
-                buttonProfileEdit.visibility = INVISIBLE
+                //buttonProfileEdit.visibility = INVISIBLE
             }
             IdentificationStatus.Identified -> {
                 value = getString(R.string.id_document_was_approved)
                 buttonUploadDocumentID.isEnabled = false
-                buttonProfileEdit.visibility = INVISIBLE
+                //buttonProfileEdit.visibility = INVISIBLE
             }
             else -> {
                 value = getString(R.string.upload_your_id_document)

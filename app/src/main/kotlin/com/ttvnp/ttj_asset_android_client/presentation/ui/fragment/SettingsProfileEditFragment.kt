@@ -145,7 +145,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         }
 
         buttonProfileSave.setOnClickListener {
-            if (!validationNationalCode()) {
+            if (!validation()) {
                 return@setOnClickListener
             }
 
@@ -179,11 +179,10 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         textProfileLastName.setText(userModel.lastName)
         textProfileAddress.setText(userModel.address)
         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
-        when {
-            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
-            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
-            else -> radioMale.isChecked = true
-        }
+//        when {
+//            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
+//            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
+//        }
         textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
         textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
@@ -217,6 +216,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         val format = "dd/MMM/yyyy"
         val sdf = SimpleDateFormat(format, Locale.US)
         textDOB.text = sdf.format(calendar.time)
+    }
+
+    private fun validation(): Boolean {
+        if (!validationNationalCode()) {
+            return false
+        }
+
+        if (!radioFemale.isChecked && !radioMale.isChecked) {
+            Toast.makeText(context, getString(R.string.please_select_gender), Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
     }
 
     private fun validationNationalCode(): Boolean {
