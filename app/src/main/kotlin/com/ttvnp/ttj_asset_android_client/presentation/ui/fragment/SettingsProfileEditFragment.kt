@@ -179,10 +179,10 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         textProfileLastName.setText(userModel.lastName)
         textProfileAddress.setText(userModel.address)
         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
-//        when {
-//            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
-//            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
-//        }
+        when {
+            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
+            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
+        }
         textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
         textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
