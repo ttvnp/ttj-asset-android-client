@@ -61,7 +61,8 @@
     <string name="message_note_disabled_send_for_id">You cannot use this function until your ID is verified.</string>
     <string name="message_note_upload_id_for_disabling_edit_profile">Once you upload images, you will not be able to edit your profile.</string>
     <string name="successfully_uploaded">Successfully uploaded</string>
-    <string name="national_code_should_be">National code should be 81(Japan) or 84(Vietnam)</string>
+    <string name="national_code_should_be">National code should be 81(Japan) or 84(Vietnam).</string>
+    <string name="please_select_gender">Please select gender.</string>
     <string name="default_dob">01/Jan/1990</string>
     <string name="address_place_holder">House No, Street No, City, Country, Postal Code</string>
     <string name="dot">•</string>
