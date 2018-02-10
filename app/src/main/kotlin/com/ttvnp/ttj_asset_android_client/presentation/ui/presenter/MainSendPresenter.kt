@@ -1,6 +1,5 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
-import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainSendPresenterTarget
@@ -24,7 +23,7 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
     }
 
     override fun setupDefault() {
-        userUseCase.getUser(false)
+        userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<UserModel>() {
