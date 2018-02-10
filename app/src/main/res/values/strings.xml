@@ -59,7 +59,7 @@
     <string name="under_review_for_id_document">Under review for ID Document</string>
     <string name="id_document_was_approved">ID Document was approved</string>
     <string name="message_note_disabled_send_for_id">You cannot use this function until your ID is verified.</string>
-    <string name="message_note_upload_id_for_disabling_edit_profile">Oncet you upload images, you will not be able to edit your profile.</string>
+    <string name="message_note_upload_id_for_disabling_edit_profile">Once you upload images, you will not be able to edit your profile.</string>
     <string name="successfully_uploaded">Successfully uploaded</string>
     <string name="national_code_should_be">National code should be 81(Japan) or 84(Vietnam)</string>
     <string name="dot">•</string>
