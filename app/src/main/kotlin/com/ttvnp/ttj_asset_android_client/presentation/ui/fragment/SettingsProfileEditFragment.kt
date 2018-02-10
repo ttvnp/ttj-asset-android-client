@@ -188,6 +188,8 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         if (profileImageFile != null) {
             firebaseAnalyticsHelper?.setHasSetProfileImageUserPropertyOn()
         }
+
+        activity.onBackPressed()
     }
 
     private fun getGender(): Int {
