@@ -3,16 +3,9 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -21,14 +14,12 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileUploadDocumentIDPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileUploadDocumentIDPresenterTarget
-import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import java.io.File
 import javax.inject.Inject
@@ -38,8 +29,10 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     @Inject
     lateinit var settingsProfileUploadDocumentIDPresenter: SettingsProfileUploadDocumentIDPresenter
 
-    private var pictureUri: Uri? = null
+    private val imageRequest = 8
+    private val cameraRequest = 9
     private var isFacePhoto: Boolean = false
+    private var pictureUri: Uri? = null
     private var facePhotoFile: File? = null
     private var addressFile: File? = null
 
@@ -48,6 +41,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     private lateinit var frameFacePhoto: FrameLayout
     private lateinit var frameAddress: FrameLayout
     private lateinit var buttonSave: Button
+    private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
     companion object {
         val TMP_FILE_NAME_FACE = "tmp_id_face_image"
@@ -71,18 +65,26 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         frameFacePhoto = view.findViewById(R.id.frame_face_photo)
         frameFacePhoto.setOnClickListener({
             isFacePhoto = true
-            pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
+            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         })
 
         imageAddress = view.findViewById(R.id.image_address)
         frameAddress = view.findViewById(R.id.frame_address)
         frameAddress.setOnClickListener({
             isFacePhoto = false
-            pictureUri = checkCameraPermission(RequestCode.REQUEST_PERMISSIONS.rawValue)
+            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         })
         buttonSave = view.findViewById(R.id.button_save)
         buttonSave.setOnClickListener({
             settingsProfileUploadDocumentIDPresenter.uploadIdDocument(faceImageFile = facePhotoFile, addressImageFile = addressFile)
+        })
+
+        bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
+        bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
+            openGallery(imageRequest)
+        })
+        bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
+            pictureUri = launchCamera(cameraRequest)
         })
 
         if (activity is SettingsProfileActivity) {
@@ -102,31 +104,35 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != RequestCode.REQUEST_PERMISSIONS.rawValue) return
         if (resultCode != Activity.RESULT_OK) return
-
-        val resultUri: Uri = (if (data == null) {
-            this.pictureUri
+        val uri = (if (pictureUri != null) {
+            pictureUri
         } else {
-            data.data
+            data?.data
         }) ?: return
+
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+            pictureUri = null
+        }
+
         val imageRequiredSize = 800
-        val decodedBitmap = decodeUri(resultUri, imageRequiredSize)
+        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
         if (isFacePhoto) {
-            facePhotoFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_FACE)
-            imageFacePhoto.setImageBitmap(decodedBitmap)
+            facePhotoFile = createUploadFile(context, bitmap, TMP_FILE_NAME_FACE)
+            Glide.with(context).load(uri).into(imageFacePhoto)
             hasPhotos()
             return
         }
 
-        addressFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME_ADDRESS)
-        imageAddress.setImageBitmap(decodedBitmap)
+        addressFile = createUploadFile(context, bitmap, TMP_FILE_NAME_ADDRESS)
+        Glide.with(context).load(uri).into(imageAddress)
         hasPhotos()
     }
 
     override fun setDocumentID(idDocument1ImageURL: String, idDocument2ImageURL: String) {
-        if (idDocument1ImageURL.isNotBlank()) Picasso.with(this.context).load(idDocument1ImageURL).into(imageFacePhoto)
-        if (idDocument2ImageURL.isNotBlank()) Picasso.with(this.context).load(idDocument2ImageURL).into(imageAddress)
+        if (idDocument1ImageURL.isNotBlank()) Glide.with(this.context).load(idDocument1ImageURL).into(imageFacePhoto)
+        if (idDocument2ImageURL.isNotBlank()) Glide.with(this.context).load(idDocument2ImageURL).into(imageAddress)
     }
 
     override fun showMessageOnUploadSuccessfullyCompleted() {

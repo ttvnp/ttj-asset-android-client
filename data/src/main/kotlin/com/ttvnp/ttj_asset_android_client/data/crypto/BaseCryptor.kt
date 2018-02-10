@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.data.crypto
 
+import android.content.Context
 import java.io.IOException
 import java.security.NoSuchAlgorithmException
 import java.security.InvalidAlgorithmParameterException
@@ -17,7 +18,8 @@ import javax.crypto.spec.IvParameterSpec
 abstract class BaseCryptor(
         private val alias: String,
         blockMode: BlockMode,
-        encryptionPadding: EncryptionPadding
+        encryptionPadding: EncryptionPadding,
+        context: Context?
 ) : Cryptor {
 
     private val cipher: Cipher
@@ -27,7 +29,7 @@ abstract class BaseCryptor(
         cipher = this.createCipher(blockMode = blockMode, encryptionPadding = encryptionPadding)
         keyStore = this.createKeyStore()
         keyStore.load(null)
-        if (!keyStore.containsAlias(alias)) this.createNewKey(alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding)
+        if (!keyStore.containsAlias(alias)) this.createNewKey(context = context, alias = alias, blockMode = blockMode, encryptionPadding = encryptionPadding)
     }
 
     @Throws(UnrecoverableKeyException::class, NoSuchAlgorithmException::class, KeyStoreException::class, InvalidKeyException::class, IOException::class)
@@ -55,7 +57,7 @@ abstract class BaseCryptor(
     protected abstract fun createCipher(blockMode: BlockMode, encryptionPadding: EncryptionPadding): Cipher
 
     @Throws(NoSuchAlgorithmException::class, InvalidAlgorithmParameterException::class, NoSuchProviderException::class, KeyStoreException::class)
-    protected abstract fun createNewKey(alias: String, blockMode: BlockMode, encryptionPadding: EncryptionPadding)
+    protected abstract fun createNewKey(context: Context?, alias: String, blockMode: BlockMode, encryptionPadding: EncryptionPadding)
 
     @Throws(UnrecoverableKeyException::class, NoSuchAlgorithmException::class, KeyStoreException::class, InvalidKeyException::class, IOException::class)
     protected abstract fun getEncryptKey(keyStore: KeyStore, alias: String): Key

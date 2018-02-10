@@ -1,0 +1,7 @@
+TTJ Wallet
+
+With this wallet, users can hold or share "SEN Coin" and "Sen Point".
+"SEN Coin" and "Sen Point" are digital asset based on Stellar network issued by Truong Thanh Japan.
+
+TTJ Wallet is free and open source software.
+Anyone can review TTJ Wallet's source code on GitHub (https://github.com/ttvnp/ttj-asset-android-client).

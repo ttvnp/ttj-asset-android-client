@@ -3,12 +3,12 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -20,22 +20,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import com.ttvnp.ttj_asset_android_client.domain.model.Gender
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenterTarget {
+class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPresenterTarget {
 
     @Inject
     lateinit var settingsProfileEditPresenter: SettingsProfileEditPresenter
@@ -59,13 +62,12 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     private lateinit var textProfileCellPhoneNumber: EditText
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
+    private val requestCode = 8
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
 
     companion object {
-        val FEMALE = 1
-        val MALE = 2
         val TMP_FILE_NAME = "tmp_profile_image"
         fun getInstance(): SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
@@ -133,19 +135,20 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "image/jpeg"
-            startActivityForResult(intent, RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+            openGallery(requestCode)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = checkCameraPermission(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+            pictureUri = checkCameraPermission(requestCode)
         })
         buttonProfileImageEdit.setOnClickListener {
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         }
 
         buttonProfileSave.setOnClickListener {
+            if (!validationNationalCode()) {
+                return@setOnClickListener
+            }
+
             settingsProfileEditPresenter.updateUserInfo(
                     profileImageFile,
                     textProfileFirstName.text.toString(),
@@ -165,7 +168,10 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
     override fun bindUserInfo(userModel: UserModel) {
         if (userModel.profileImageURL.isNotEmpty()) {
-            Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
+            Picasso
+                    .with(this.context)
+                    .load(userModel.profileImageURL)
+                    .into(profileImage)
         }
         textProfileEmailAddress.text = userModel.emailAddress
         textProfileFirstName.setText(userModel.firstName)
@@ -174,12 +180,12 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         textProfileAddress.setText(userModel.address)
         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
         when {
-            userModel.genderType == FEMALE -> radioFemale.isChecked = true
-            userModel.genderType == MALE -> radioMale.isChecked = true
+            userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
+            userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
             else -> radioMale.isChecked = true
         }
-        textProfileCellPhoneNumberNationalCode.setText(userModel.cellphoneNumberNationalCode)
-        textProfileCellPhoneNumber.setText(userModel.cellphoneNumber)
+        textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
+        textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -198,9 +204,9 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         val selectGender = radioGroupGender.checkedRadioButtonId
         val radioButton: RadioButton = radioGroupGender.findViewById(selectGender)
         if (radioButton.text == getString(R.string.male)) {
-            return MALE
+            return Gender.MALE.rawValue
         } else if (radioButton.text == getString(R.string.female)) {
-            return FEMALE
+            return Gender.FEMALE.rawValue
         }
 
         return identified
@@ -213,6 +219,20 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
         textDOB.text = sdf.format(calendar.time)
     }
 
+    private fun validationNationalCode(): Boolean {
+        val nationalCode: String = textProfileCellPhoneNumberNationalCode.text.toString()
+        if (nationalCode == NationalCode.JAPAN.value || nationalCode == NationalCode.VIETNAM.value) {
+            return true
+        }
+
+        Toast.makeText(
+                context,
+                R.string.national_code_should_be,
+                Toast.LENGTH_SHORT
+        ).show()
+        return false
+    }
+
     private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
         if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
         return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
@@ -221,10 +241,10 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            RequestCode.REQUEST_PERMISSIONS.rawValue -> {
+            requestCode -> {
                 if (grantResults.isNotEmpty()) {
                     if (checkGrantResults(grantResults.toList())) {
-                        launchCamera(RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue)
+                        pictureUri = launchCamera(requestCode)
                     } else {
                         Toast.makeText(
                                 this.context,
@@ -239,44 +259,22 @@ class SettingsProfileEditFragment : BaseFragment(), SettingsProfileEditPresenter
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            RequestCode.IMAGE_SELECTOR_ACTIVITY.rawValue -> {
-                if (resultCode != Activity.RESULT_OK) return
-                val resultUri: Uri = (if (data == null) {
-                    this.pictureUri
-                } else {
-                    data.data
-                }) ?: return
-                MediaScannerConnection.scanFile(
-                        this.context,
-                        arrayOf(resultUri.path),
-                        arrayOf("image/jpeg"), null
-                )
-                Picasso.with(this.context).load(resultUri).resize(72, 72).centerCrop().into(object : Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        bitmap?.let {
-                            Handler(Looper.getMainLooper()).post(object : Runnable {
-                                override fun run() {
-                                    profileImageFile = createUploadFile(this@SettingsProfileEditFragment.context, it, TMP_FILE_NAME)
-                                    profileImage.setImageBitmap(it)
-                                }
-                            })
-                        }
-                    }
+        if (resultCode != Activity.RESULT_OK) return
+        if (requestCode != this.requestCode) return
+        val uri = (if (pictureUri != null) {
+            pictureUri
+        } else {
+            data?.data
+        }) ?: return
+        val imageRequiredSize = 72
+        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
+        profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
+        Glide.with(context).load(uri).into(profileImage)
 
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    }
-
-                    override fun onBitmapFailed(errorDrawable: Drawable?) {
-                        profileImageFile = null
-                    }
-                })
-                // close modal
-                if (!bottomSheetDialogFragment.isHidden) {
-                    bottomSheetDialogFragment.dismiss()
-                }
-            }
+        // close modal
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+            pictureUri = null
         }
     }
-
 }

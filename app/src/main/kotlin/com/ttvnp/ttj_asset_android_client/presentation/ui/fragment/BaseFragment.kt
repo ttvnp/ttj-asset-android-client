@@ -60,60 +60,6 @@ abstract class BaseFragment : Fragment() {
         progressDialog = dialog
     }
 
-    protected fun launchCamera(requestCode: Int): Uri {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val contentValues = ContentValues()
-        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        val pictureUri = this.context
-                .contentResolver
-                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-        startActivityForResult(intent, requestCode)
-
-        return pictureUri
-    }
-
-    protected fun checkCameraPermission(requestCode: Int): Uri? {
-        if (hasSelfPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            return launchCamera(requestCode = requestCode)
-        } else {
-            val permissions = arrayListOf<String>()
-            if (!hasSelfPermissions(Manifest.permission.CAMERA)) {
-                permissions.add(Manifest.permission.CAMERA)
-            }
-            if (!hasSelfPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            }
-            requestPermissions(permissions.toTypedArray(), requestCode)
-        }
-
-        return null
-    }
-
-    protected fun createUploadFile(context: Context, bitmap: Bitmap, tmpFileName: String): File {
-        val file = File(context.externalCacheDir, tmpFileName)
-        var fos: FileOutputStream? = null
-        try {
-            file.createNewFile()
-            fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        } catch (e: IOException) {
-        } finally {
-            try {
-                fos?.let {
-                    it.flush()
-                    it.close()
-                }
-            } catch (e: IOException) {
-            }
-        }
-        return file
-    }
-
-    private fun hasSelfPermissions(vararg permissions: String): Boolean {
-        return permissions.none { ActivityCompat.checkSelfPermission(this.context, it) != PackageManager.PERMISSION_GRANTED }
-    }
-
     open fun showProgressDialog() {
         progressDialog?.show()
     }

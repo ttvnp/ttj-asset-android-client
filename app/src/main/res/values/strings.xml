@@ -25,16 +25,16 @@
     <!-- general -->
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
-    <string name="email_address">email address</string>
-    <string name="first_name">first name</string>
-    <string name="middle_name">middle name</string>
-    <string name="last_name">last name</string>
-    <string name="address">address</string>
-    <string name="gender">gender</string>
+    <string name="email_address">Email address</string>
+    <string name="first_name">First name</string>
+    <string name="middle_name">Middle name</string>
+    <string name="last_name">Last name</string>
+    <string name="address">Address</string>
+    <string name="gender">Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="cell_phone_number">cell phone number</string>
-    <string name="dob">date of birth</string>
+    <string name="cell_phone_number">Cell phone number</string>
+    <string name="dob">Date of birth</string>
     <string name="qr_code">QR Code</string>
     <string name="complete">Complete</string>
     <string name="transaction_type">send/receive</string>
@@ -51,16 +51,17 @@
     <string name="send_by_qr">Scan Code</string>
     <string name="send_by_email">By Email Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
-    <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed</string>
+    <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed.</string>
     <string name="profile_successfully_updated">Your profile has been updated successfully.</string>
     <string name="push_notification">Push Notification</string>
     <string name="email_notification">Email Notification</string>
     <string name="upload_your_id_document">Upload Your ID Document</string>
     <string name="under_review_for_id_document">Under review for ID Document</string>
     <string name="id_document_was_approved">ID Document was approved</string>
-    <string name="message_note_disabled_send_for_id">You cannot use this function until your identify is verified</string>
+    <string name="message_note_disabled_send_for_id">You cannot use this function until your ID is verified.</string>
     <string name="message_note_upload_id_for_disabling_edit_profile">Oncet you upload images, you will not be able to edit your profile.</string>
     <string name="successfully_uploaded">Successfully uploaded</string>
+    <string name="national_code_should_be">National code should be 81(Japan) or 84(Vietnam)</string>
     <string name="dot">•</string>
 
     <!-- privacy policy -->
