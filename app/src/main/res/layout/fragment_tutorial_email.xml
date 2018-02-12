@@ -62,7 +62,7 @@
                 android:id="@+id/chkTermAndConditions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_term_and_conditions"
+                android:text="@string/select_term_of_services"
                 android:textColor="@color/colorSecondaryText" />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:text="@string/terms_and_conditions"
+                android:text="@string/terms_of_services"
                 android:textColor="@color/colorSecondaryText" />
 
         </LinearLayout>
