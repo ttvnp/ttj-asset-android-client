@@ -22,6 +22,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -82,14 +83,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         profileImage = view.findViewById(R.id.profile_image)
         buttonProfileImageEdit = view.findViewById(R.id.button_profile_image_edit)
         textProfileEmailAddress = view.findViewById(R.id.text_profile_email_address)
+        textProfileEmailAddress.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.email_address))
         textInputLayoutProfileFirstName = view.findViewById(R.id.text_input_layout_profile_first_name)
         textProfileFirstName = view.findViewById(R.id.text_profile_first_name)
+        textProfileFirstName.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.first_name))
         textInputLayoutProfileMiddleName = view.findViewById(R.id.text_input_layout_profile_middle_name)
         textProfileMiddleName = view.findViewById(R.id.text_profile_middle_name)
+        textProfileMiddleName.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.middle_name))
         textInputLayoutProfileLastName = view.findViewById(R.id.text_input_layout_profile_last_name)
         textProfileLastName = view.findViewById(R.id.text_profile_last_name)
+        textProfileLastName.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.last_name))
         textInputLayoutProfileAddress = view.findViewById(R.id.text_input_layout_profile_address)
         textProfileAddress = view.findViewById(R.id.text_profile_address)
+        textProfileAddress.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.address_place_holder))
         radioGroupGender = view.findViewById(R.id.radio_group_gender)
         radioFemale = view.findViewById(R.id.radio_female)
         radioMale = view.findViewById(R.id.radio_male)

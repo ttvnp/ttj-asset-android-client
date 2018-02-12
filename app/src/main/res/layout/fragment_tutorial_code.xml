@@ -1,6 +1,5 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -45,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/text_input_layout_tutorial_password_on_import"
@@ -60,7 +59,6 @@
                     android:id="@+id/text_tutorial_password_on_import"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password_on_import"
                     android:inputType="numberPassword"
                     android:maxLength="10" />
             </android.support.design.widget.TextInputLayout>
