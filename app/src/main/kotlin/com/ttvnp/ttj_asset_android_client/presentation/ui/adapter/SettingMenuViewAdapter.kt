@@ -1,6 +1,8 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -25,20 +27,28 @@ class SettingMenuViewAdapter(
     }
 
     override fun onBindViewHolder(holder: SettingMenuViewHolder, position: Int) {
-        holder.textMenu.text = data.get(position)
+        val item = data[position]
+
+        holder.textMenu.text = item
         holder.linearLayoutMenu.isSelected = false
         holder.linearLayoutMenu.id = holder.adapterPosition
         linearLayoutMenus.add(holder.linearLayoutMenu)
-        holder.linearLayoutMenu.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                linearLayoutMenus.forEach {
-                    it.isSelected = false
-                }
-                linearLayoutMenus.get(holder.linearLayoutMenu.id).isSelected = true
-                holder.linearLayoutMenu.isSelected = true
-                itemOnClickListener?.onClick(view)
+
+        if (item.isBlank()) {
+            holder.linearLayoutMenu.setBackgroundColor(
+                    ContextCompat.getColor(context, R.color.material_grey_100)
+            )
+            return
+        }
+
+        holder.linearLayoutMenu.setOnClickListener { view ->
+            linearLayoutMenus.forEach {
+                it.isSelected = false
             }
-        })
+            linearLayoutMenus[holder.linearLayoutMenu.id].isSelected = true
+            holder.linearLayoutMenu.isSelected = true
+            itemOnClickListener?.onClick(view)
+        }
     }
 
     override fun getItemCount(): Int {

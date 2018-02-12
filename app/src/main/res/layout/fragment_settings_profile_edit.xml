@@ -140,7 +140,7 @@
                             android:id="@+id/text_input_layout_profile_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/address"
+                            android:hint="@string/address_place_holder"
                             app:errorEnabled="true"
                             app:hintEnabled="true">
 
@@ -199,7 +199,7 @@
                             android:layout_marginTop="8dp"
                             android:textColor="@color/md_black_1000"
                             android:textSize="18sp"
-                            tools:text="01/Sep/2018" />
+                            android:text="@string/default_dob"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -247,6 +247,7 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="phone"
                                 android:lines="1"
+                                android:maxLength="12"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintLeft_toRightOf="@id/et_country_code"
                                 app:layout_constraintRight_toRightOf="parent"
