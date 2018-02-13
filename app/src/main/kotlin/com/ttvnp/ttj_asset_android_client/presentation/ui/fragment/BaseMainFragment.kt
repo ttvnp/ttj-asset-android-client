@@ -67,10 +67,13 @@ abstract class BaseMainFragment : BaseFragment() {
         return pictureUri
     }
 
-    fun checkCameraPermission(requestCode: Int): Uri? {
+    fun checkPermission(requestCode: Int, isCamera: Boolean): Uri? {
         if (hasSelfPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            return launchCamera(requestCode = requestCode)
+            if (isCamera) {
+                return launchCamera(requestCode = requestCode)
+            }
+            openGallery(requestCode = requestCode)
         } else {
             val permissions = arrayListOf<String>()
             if (!hasSelfPermissions(Manifest.permission.CAMERA)) {
@@ -86,6 +89,11 @@ abstract class BaseMainFragment : BaseFragment() {
         }
 
         return null
+    }
+
+    fun checkGrantResults(grantResults: Collection<Int>): Boolean {
+        if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
+        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
     }
 
     fun createUploadFile(context: Context, bitmap: Bitmap, tmpFileName: String): File {
