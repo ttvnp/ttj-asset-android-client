@@ -56,6 +56,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
     private val requestCode = 8
+    private var isCamera = true
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
@@ -127,10 +128,12 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(requestCode)
+            isCamera = false
+            checkPermission(requestCode, isCamera)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = checkCameraPermission(requestCode)
+            isCamera = true
+            pictureUri = checkPermission(requestCode, isCamera)
         })
         buttonProfileImageEdit.setOnClickListener {
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
@@ -239,26 +242,26 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         return false
     }
 
-    private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
-        if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
-        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             requestCode -> {
-                if (grantResults.isNotEmpty()) {
-                    if (checkGrantResults(grantResults.toList())) {
+                if (grantResults.isEmpty()) return
+                if (checkGrantResults(grantResults.toList())) {
+                    if (isCamera) {
                         pictureUri = launchCamera(requestCode)
-                    } else {
-                        Toast.makeText(
-                                this.context,
-                                getString(R.string.error_permission_denied_on_launch_camera),
-                                Toast.LENGTH_SHORT
-                        ).show()
+                        return
                     }
+
+                    openGallery(requestCode)
+                    return
                 }
+
+                Toast.makeText(
+                        this.context,
+                        getString(R.string.error_permission_denied),
+                        Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
