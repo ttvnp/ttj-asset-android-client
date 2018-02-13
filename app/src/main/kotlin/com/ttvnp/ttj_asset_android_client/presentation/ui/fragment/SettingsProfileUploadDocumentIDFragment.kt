@@ -3,7 +3,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -15,7 +14,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileUploadDocumentIDPresenter
@@ -29,8 +27,8 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     @Inject
     lateinit var settingsProfileUploadDocumentIDPresenter: SettingsProfileUploadDocumentIDPresenter
 
-    private val imageRequest = 8
-    private val cameraRequest = 9
+    private val requestCode = 9
+    private var isCamera = true
     private var isFacePhoto: Boolean = false
     private var pictureUri: Uri? = null
     private var facePhotoFile: File? = null
@@ -81,10 +79,12 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(imageRequest)
+            isCamera = false
+            checkPermission(requestCode,isCamera)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = launchCamera(cameraRequest)
+            isCamera = true
+            pictureUri = checkPermission(requestCode, isCamera)
         })
 
         if (activity is SettingsProfileActivity) {
@@ -142,6 +142,30 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
                 Toast.LENGTH_SHORT
         ).show()
         fragmentManager.popBackStack()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            requestCode -> {
+                if (grantResults.isEmpty()) return
+                if (checkGrantResults(grantResults.toList())) {
+                    if (isCamera) {
+                        pictureUri = launchCamera(requestCode)
+                        return
+                    }
+
+                    openGallery(requestCode)
+                    return
+                }
+
+                Toast.makeText(
+                        this.context,
+                        getString(R.string.error_permission_denied),
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun hasPhotos() {
