@@ -61,7 +61,11 @@
     <string name="message_note_disabled_send_for_id">You cannot use this function until your ID is verified.</string>
     <string name="message_note_upload_id_for_disabling_edit_profile">Once you upload images, you will not be able to edit your profile.</string>
     <string name="successfully_uploaded">Successfully uploaded</string>
-    <string name="national_code_should_be">National code should be 81(Japan) or 84(Vietnam)</string>
+    <string name="national_code_should_be">National code should be 81(Japan) or 84(Vietnam).</string>
+    <string name="please_select_gender">Please select gender.</string>
+    <string name="default_dob">01/Jan/1990</string>
+    <string name="address_place_holder">House No, Street No, City, Country, Postal Code</string>
+    <string name="dot">•</string>
 
     <!-- error message -->
     <string name="error_default_message">Unknown error occurred.Please retry later.</string>
@@ -76,7 +80,7 @@
     <string name="error_cannot_send_that_amount">You cannot send that much.</string>
     <string name="error_message_no_such_email_address_user">Sorry.There is no such user account related with the email address.</string>
     <string name="error_message_invalid_long">please input valid number of amount.</string>
-    <string name="error_permission_denied_on_launch_camera">Cannot activate camera. Please grant authorities to this app.</string>
+    <string name="error_permission_denied">Cannot activate camera or choose picture from folder. Please grant authorities to this app.</string>
 
     <!-- button -->
     <string name="default_positive_button_text">OK</string>
@@ -100,6 +104,8 @@
     <string name="title_settings_profile">Your Profile</string>
     <string name="title_settings_edit_profile">Edit Profile</string>
     <string name="title_settings_notification">Notifications</string>
+    <string name="title_setting_terms_of_conditions">Terms of Conditions</string>
+    <string name="title_setting_privacy_policy">Privacy Policy</string>
 
     <!-- Notification -->
     <string name="channel_name_default">Default Notification</string>

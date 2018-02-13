@@ -3,13 +3,19 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.CursorLoader
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
+import android.text.TextUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -45,8 +51,7 @@ abstract class BaseMainFragment : BaseFragment() {
     }
 
     fun openGallery(requestCode: Int) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/jpeg"
         startActivityForResult(intent, requestCode)
     }
@@ -62,10 +67,13 @@ abstract class BaseMainFragment : BaseFragment() {
         return pictureUri
     }
 
-    fun checkCameraPermission(requestCode: Int): Uri? {
+    fun checkPermission(requestCode: Int, isCamera: Boolean): Uri? {
         if (hasSelfPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            return launchCamera(requestCode = requestCode)
+            if (isCamera) {
+                return launchCamera(requestCode = requestCode)
+            }
+            openGallery(requestCode = requestCode)
         } else {
             val permissions = arrayListOf<String>()
             if (!hasSelfPermissions(Manifest.permission.CAMERA)) {
@@ -81,6 +89,11 @@ abstract class BaseMainFragment : BaseFragment() {
         }
 
         return null
+    }
+
+    fun checkGrantResults(grantResults: Collection<Int>): Boolean {
+        if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
+        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
     }
 
     fun createUploadFile(context: Context, bitmap: Bitmap, tmpFileName: String): File {
@@ -101,6 +114,51 @@ abstract class BaseMainFragment : BaseFragment() {
             }
         }
         return file
+    }
+
+    fun getResultImage(bitmap: Bitmap, path: String): Bitmap {
+        val exif = ExifInterface(path)
+        val rotation = exif.getAttribute(ExifInterface.TAG_ORIENTATION)
+        if (!TextUtils.isEmpty(rotation)) {
+            val param = rotation.toInt()
+            when (param) {
+                ExifInterface.ORIENTATION_NORMAL -> {
+                    return getRotatedImage(bitmap, 0f)
+                }
+                ExifInterface.ORIENTATION_ROTATE_90 -> {
+                    return getRotatedImage(bitmap, 90f)
+                }
+                ExifInterface.ORIENTATION_ROTATE_180 -> {
+                    return getRotatedImage(bitmap, 180f)
+                }
+                ExifInterface.ORIENTATION_ROTATE_270 -> {
+                    return getRotatedImage(bitmap, 270f)
+                }
+            }
+        }
+
+        return bitmap
+    }
+
+    fun getPath(uri: Uri): String {
+        var cursor: Cursor? = null
+        return try {
+            val projection = arrayOf(MediaStore.Images.Media.DATA)
+            cursor = context.contentResolver.query(uri, projection, null, null, null)
+            val index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            cursor.getString(index)
+        } finally {
+            if (cursor != null) {
+                cursor.close()
+            }
+        }
+    }
+
+    private fun getRotatedImage(bitmap: Bitmap, rotate: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(rotate)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
     private fun hasSelfPermissions(vararg permissions: String): Boolean {

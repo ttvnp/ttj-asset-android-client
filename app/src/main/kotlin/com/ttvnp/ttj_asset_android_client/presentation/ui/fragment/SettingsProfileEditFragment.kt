@@ -6,7 +6,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -57,6 +56,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
     private val requestCode = 8
+    private var isCamera = true
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
@@ -98,7 +98,6 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         textProfileCellPhoneNumberNationalCode = view.findViewById(R.id.et_country_code)
         textProfileCellPhoneNumber = view.findViewById(R.id.et_phone_number)
         calendar = Calendar.getInstance()
-        updateDOB()
         val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
@@ -109,9 +108,9 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             DatePickerDialog(
                     context,
                     date,
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH))
+                    1990,
+                    0,
+                    1)
                     .show()
         })
         val buttonProfileSave = view.findViewById<Button>(R.id.button_profile_save)
@@ -129,17 +128,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(requestCode)
+            isCamera = false
+            checkPermission(requestCode, isCamera)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = checkCameraPermission(requestCode)
+            isCamera = true
+            pictureUri = checkPermission(requestCode, isCamera)
         })
         buttonProfileImageEdit.setOnClickListener {
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         }
 
         buttonProfileSave.setOnClickListener {
-            if (!validationNationalCode()) {
+            if (!validation()) {
                 return@setOnClickListener
             }
 
@@ -162,18 +163,20 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
     override fun bindUserInfo(userModel: UserModel) {
         if (userModel.profileImageURL.isNotEmpty()) {
-            Picasso.with(this.context).load(userModel.profileImageURL).into(profileImage)
+            Picasso
+                    .with(this.context)
+                    .load(userModel.profileImageURL)
+                    .into(profileImage)
         }
         textProfileEmailAddress.text = userModel.emailAddress
         textProfileFirstName.setText(userModel.firstName)
         textProfileMiddleName.setText(userModel.middleName)
         textProfileLastName.setText(userModel.lastName)
         textProfileAddress.setText(userModel.address)
-        if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
+         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
         when {
             userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
             userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
-            else -> radioMale.isChecked = true
         }
         textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
         textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
@@ -188,6 +191,8 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         if (profileImageFile != null) {
             firebaseAnalyticsHelper?.setHasSetProfileImageUserPropertyOn()
         }
+
+        activity.onBackPressed()
     }
 
     private fun getGender(): Int {
@@ -210,6 +215,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         textDOB.text = sdf.format(calendar.time)
     }
 
+    private fun validation(): Boolean {
+        if (!validationNationalCode()) {
+            return false
+        }
+
+        if (!radioFemale.isChecked && !radioMale.isChecked) {
+            Toast.makeText(context, getString(R.string.please_select_gender), Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
+
     private fun validationNationalCode(): Boolean {
         val nationalCode: String = textProfileCellPhoneNumberNationalCode.text.toString()
         if (nationalCode == NationalCode.JAPAN.value || nationalCode == NationalCode.VIETNAM.value) {
@@ -224,26 +242,26 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         return false
     }
 
-    private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
-        if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
-        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             requestCode -> {
-                if (grantResults.isNotEmpty()) {
-                    if (checkGrantResults(grantResults.toList())) {
+                if (grantResults.isEmpty()) return
+                if (checkGrantResults(grantResults.toList())) {
+                    if (isCamera) {
                         pictureUri = launchCamera(requestCode)
-                    } else {
-                        Toast.makeText(
-                                this.context,
-                                getString(R.string.error_permission_denied_on_launch_camera),
-                                Toast.LENGTH_SHORT
-                        ).show()
+                        return
                     }
+
+                    openGallery(requestCode)
+                    return
                 }
+
+                Toast.makeText(
+                        this.context,
+                        getString(R.string.error_permission_denied),
+                        Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -258,16 +276,14 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             data?.data
         }) ?: return
         val imageRequiredSize = 72
-        val decodedBitmap = decodeUri(uri, imageRequiredSize)
-        profileImageFile = createUploadFile(context, decodedBitmap, TMP_FILE_NAME)
-        profileImageFile?.absolutePath?.let {
-            Glide.with(context).load(uri).into(profileImage)
+        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
+        profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
+        Glide.with(context).load(uri).into(profileImage)
 
-            // close modal
-            if (!bottomSheetDialogFragment.isHidden) {
-                bottomSheetDialogFragment.dismiss()
-                pictureUri = null
-            }
+        // close modal
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+            pictureUri = null
         }
     }
 }
