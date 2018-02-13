@@ -22,13 +22,13 @@ class TutorialEmailFragment : Fragment() {
     }
 
     var submitButtonClickHandler: View.OnClickListener? = null
-    var termsAndConditionsClickHandler: View.OnClickListener? = null
+    var termsOfServiceListener: View.OnClickListener? = null
 
     private lateinit var textInputLayoutTutorialEmailAddress: TextInputLayout
     private lateinit var textTutorialEmailAddress: TextInputEditText
     private lateinit var buttonTutorialSubmit: Button
-    private lateinit var chkTermsAndConditions: CheckBox
-    private lateinit var tvTermsAndConditions: TextView
+    private lateinit var ckTermsOfService: CheckBox
+    private lateinit var tvTermsOfService: TextView
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -41,8 +41,8 @@ class TutorialEmailFragment : Fragment() {
         buttonTutorialSubmit.setOnClickListener(submitButtonClickHandler)
         textInputLayoutTutorialEmailAddress = view.findViewById(R.id.text_input_layout_tutorial_email_address)
         textTutorialEmailAddress = view.findViewById(R.id.text_tutorial_email_address)
-        chkTermsAndConditions = view.findViewById(R.id.chkTermAndConditions)
-        chkTermsAndConditions.setOnCheckedChangeListener({ _, isChecked ->
+        ckTermsOfService = view.findViewById(R.id.chk_terms_of_service)
+        ckTermsOfService.setOnCheckedChangeListener({ _, isChecked ->
             if (isChecked) {
                 setEnableButton(true)
                 return@setOnCheckedChangeListener
@@ -50,8 +50,8 @@ class TutorialEmailFragment : Fragment() {
 
             setEnableButton(false)
         })
-        tvTermsAndConditions = view.findViewById(R.id.tvTermsAndConditions)
-        tvTermsAndConditions.setOnClickListener(termsAndConditionsClickHandler)
+        tvTermsOfService = view.findViewById(R.id.text_terms_of_service)
+        tvTermsOfService.setOnClickListener(termsOfServiceListener)
 
         return view
     }
