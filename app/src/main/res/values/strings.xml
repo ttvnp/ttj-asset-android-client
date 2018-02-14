@@ -23,6 +23,7 @@
     <string name="app_start">start</string>
 
     <!-- general -->
+    <string name="maintenance">We are currently undergoing maintenance. This will not take long :)</string>
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
     <string name="email_address">Email address</string>
@@ -118,6 +119,9 @@
     <string name="notification_body_receive_payment_notification">You received %s %s from %s.</string>
     <string name="notification_title_send_payment_notification">Payment Completed</string>
     <string name="notification_body_send_payment_notification">The payment (%s %s to %s) has been completed successfully.</string>
+
+    <!-- network -->
+    <string name="network_error">Network Error</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

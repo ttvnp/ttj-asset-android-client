@@ -5,8 +5,8 @@ import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileUploadDocumentIDPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import java.io.File
@@ -30,12 +30,12 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
         userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<UserModel>() {
+                .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
                     override fun onSuccess(userModel: UserModel) {
                         target?.setDocumentID(userModel.isDocument1ImageURL, userModel.isDocument2ImageURL)
                     }
 
-                    override fun onError(e: Throwable) {
+                    override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
                 }).addTo(this.disposables)
@@ -46,7 +46,7 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
         userUseCase.uploadIdDocument(faceImageFile, addressImageFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
                         target?.dismissProgressDialog()
                         when (wrapper?.errorCode) {
@@ -64,9 +64,9 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                         }
                     }
 
-                    override fun onError(e: Throwable) {
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
                 }).addTo(this.disposables)
     }

@@ -6,8 +6,8 @@ import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountConfirmPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
         userUseCase.createTransaction(sendInfoModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserTransactionModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserTransactionModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<UserTransactionModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -39,9 +39,9 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
                         }
                     }
-                    override fun onError(e: Throwable) {
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
                 }).addTo(this.disposables)
     }

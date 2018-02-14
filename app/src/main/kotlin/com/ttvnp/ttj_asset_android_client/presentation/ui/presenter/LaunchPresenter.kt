@@ -5,9 +5,9 @@ import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.LaunchPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
         deviceUseCase.getDevice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> {
@@ -44,8 +44,9 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
                             }
                         }
                     }
-                    override fun onError(e: Throwable) {
-                        target?.showError(e)
+
+                    override fun onOtherError(error: Throwable?) {
+                        error?.let{ target?.showError(it) }
                     }
                 }).addTo(disposables)
     }

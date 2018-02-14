@@ -5,8 +5,8 @@ import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsNotificationPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -27,14 +27,14 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
         deviceUseCase.getDevice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         wrapper.model?.let {
                             target.bindDeviceInfo(it)
                         }
                     }
-                    override fun onError(e: Throwable) {
-                        target.showError(e)
+                    override fun onOtherError(error: Throwable?) {
+                        error?.let { target.showError(error) }
                     }
                 }).addTo(this.disposables)
     }
@@ -44,7 +44,7 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
         deviceUseCase.updateGrantPushNotification(grantPushNotification)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -58,9 +58,9 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                             }
                         }
                     }
-                    override fun onError(e: Throwable) {
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
                 }).addTo(this.disposables)
     }
@@ -70,7 +70,7 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
         deviceUseCase.updateGrantEmailNotification(grantEmailNotification)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -84,9 +84,9 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                             }
                         }
                     }
-                    override fun onError(e: Throwable) {
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
                 }).addTo(this.disposables)
     }
