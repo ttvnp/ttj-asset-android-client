@@ -48,6 +48,11 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
                     override fun onOtherError(error: Throwable?) {
                         error?.let{ target?.showError(it) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(disposables)
     }
 }

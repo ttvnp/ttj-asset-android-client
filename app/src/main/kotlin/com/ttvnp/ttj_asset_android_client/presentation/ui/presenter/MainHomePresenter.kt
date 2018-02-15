@@ -34,6 +34,7 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object: DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(userModel: UserModel) {
                         target?.bindUserInfo(userModel)
                     }
@@ -41,6 +42,11 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(disposables)
     }
 
@@ -49,12 +55,19 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<BalancesModel>() {
+
                     override fun onSuccess(t: BalancesModel) {
                         target?.bindBalanceInfo(t)
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -66,9 +79,15 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                     override fun onSuccess(model: UserTransactionsModel) {
                         target?.bindUserTransactions(model, forceRefresh)
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -80,9 +99,15 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                     override fun onSuccess(t: UserTransactionsModel) {
                         handleLoadedData(t)
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 

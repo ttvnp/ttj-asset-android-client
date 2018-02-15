@@ -29,15 +29,22 @@ class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCas
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<OtherUserModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> handleSuccess(wrapper.model!!)
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

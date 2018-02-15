@@ -31,6 +31,7 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(userModel: UserModel) {
                         target?.setDocumentID(userModel.isDocument1ImageURL, userModel.isDocument2ImageURL)
                     }
@@ -38,6 +39,11 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                     override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -47,6 +53,7 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
                         target?.dismissProgressDialog()
                         when (wrapper?.errorCode) {
@@ -68,6 +75,11 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 

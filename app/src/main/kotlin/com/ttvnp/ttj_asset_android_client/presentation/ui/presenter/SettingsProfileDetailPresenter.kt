@@ -27,12 +27,19 @@ class SettingsProfileDetailPresenterImpl @Inject constructor(val userUseCase: Us
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(t: UserModel) {
                         target?.bindUserInfo(t)
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

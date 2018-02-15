@@ -27,6 +27,7 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(t: UserModel) {
                         target?.setIdentify(t.isIdentified)
                     }
@@ -34,6 +35,11 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                     override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

@@ -25,6 +25,7 @@ class SendAmountFormPresenterImpl @Inject constructor(val userUseCase: UserUseCa
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<OtherUserModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> {
@@ -46,9 +47,15 @@ class SendAmountFormPresenterImpl @Inject constructor(val userUseCase: UserUseCa
                             else -> target.showError(wrapper.errorCode, wrapper.error)
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -57,15 +64,22 @@ class SendAmountFormPresenterImpl @Inject constructor(val userUseCase: UserUseCa
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ErrorCode>() {
+
                     override fun onSuccess(errorCode: ErrorCode) {
                         when (errorCode) {
                             ErrorCode.NO_ERROR -> target?.navigateToConfirm(assetType, amountString.toAmount())
                             else -> target?.showError(errorCode, null)
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

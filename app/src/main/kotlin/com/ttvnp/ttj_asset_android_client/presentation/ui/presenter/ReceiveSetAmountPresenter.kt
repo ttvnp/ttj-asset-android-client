@@ -31,6 +31,7 @@ class ReceiveSetAmountPresenterImpl @Inject constructor(val userUseCase: UserUse
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(t: UserModel) {
                         val model = QRCodeInfoModel(
                                 emailAddress = t.emailAddress,
@@ -39,9 +40,15 @@ class ReceiveSetAmountPresenterImpl @Inject constructor(val userUseCase: UserUse
                         )
                         handleSuccess(model)
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
+
+                    override fun onMaintenance() {
+
+                    }
+
                 }).addTo(this.disposables)
     }
 }

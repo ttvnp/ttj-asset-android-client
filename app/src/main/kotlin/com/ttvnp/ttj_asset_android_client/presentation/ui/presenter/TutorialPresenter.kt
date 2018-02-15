@@ -30,6 +30,7 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -41,10 +42,16 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                             }
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -54,6 +61,7 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<RegisterEmailResultModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<RegisterEmailResultModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -65,10 +73,16 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                             }
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -78,6 +92,7 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -89,10 +104,16 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                             }
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

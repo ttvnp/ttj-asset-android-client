@@ -28,12 +28,19 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(t: UserModel) {
                         target?.setQRCode(QRCodeInfoModel(emailAddress = t.emailAddress).toQRString())
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

@@ -32,6 +32,7 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserTransactionModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<UserTransactionModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -39,10 +40,16 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

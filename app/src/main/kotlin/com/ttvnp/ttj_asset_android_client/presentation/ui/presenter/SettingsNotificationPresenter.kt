@@ -28,14 +28,21 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         wrapper.model?.let {
                             target.bindDeviceInfo(it)
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -45,6 +52,7 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -58,10 +66,16 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                             }
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -71,6 +85,7 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -84,10 +99,16 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
                             }
                         }
                     }
+
                     override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

@@ -31,6 +31,7 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(t: UserModel) {
                         target?.bindUserInfo(t)
                     }
@@ -38,6 +39,11 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                     override fun onOtherError(error: Throwable?) {
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -66,6 +72,11 @@ class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: User
                         target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }
