@@ -81,7 +81,7 @@
     <string name="error_cannot_send_that_amount">You cannot send that much.</string>
     <string name="error_message_no_such_email_address_user">Sorry.There is no such user account related with the email address.</string>
     <string name="error_message_invalid_long">please input valid number of amount.</string>
-    <string name="error_permission_denied_on_launch_camera">Cannot activate camera. Please grant authorities to this app.</string>
+    <string name="error_permission_denied">Cannot activate camera or choose picture from folder. Please grant authorities to this app.</string>
 
     <!-- button -->
     <string name="default_positive_button_text">OK</string>
