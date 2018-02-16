@@ -5,12 +5,12 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +22,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -56,6 +57,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
     private val requestCode = 8
+    private var isCamera = true
     private var pictureUri: Uri? = null
     private var profileImageFile: File? = null
     private lateinit var calendar: Calendar
@@ -82,14 +84,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         profileImage = view.findViewById(R.id.profile_image)
         buttonProfileImageEdit = view.findViewById(R.id.button_profile_image_edit)
         textProfileEmailAddress = view.findViewById(R.id.text_profile_email_address)
+        textProfileEmailAddress.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.email_address))
         textInputLayoutProfileFirstName = view.findViewById(R.id.text_input_layout_profile_first_name)
         textProfileFirstName = view.findViewById(R.id.text_profile_first_name)
+        textProfileFirstName.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.first_name))
         textInputLayoutProfileMiddleName = view.findViewById(R.id.text_input_layout_profile_middle_name)
         textProfileMiddleName = view.findViewById(R.id.text_profile_middle_name)
+        textProfileMiddleName.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.middle_name))
         textInputLayoutProfileLastName = view.findViewById(R.id.text_input_layout_profile_last_name)
         textProfileLastName = view.findViewById(R.id.text_profile_last_name)
+        textProfileLastName.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.last_name))
         textInputLayoutProfileAddress = view.findViewById(R.id.text_input_layout_profile_address)
         textProfileAddress = view.findViewById(R.id.text_profile_address)
+        textProfileAddress.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.address_place_holder))
         radioGroupGender = view.findViewById(R.id.radio_group_gender)
         radioFemale = view.findViewById(R.id.radio_female)
         radioMale = view.findViewById(R.id.radio_male)
@@ -127,10 +134,12 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
-            openGallery(requestCode)
+            isCamera = false
+            checkPermission(requestCode, isCamera)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
-            pictureUri = checkCameraPermission(requestCode)
+            isCamera = true
+            pictureUri = checkPermission(requestCode, isCamera)
         })
         buttonProfileImageEdit.setOnClickListener {
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
@@ -159,24 +168,36 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     }
 
     override fun bindUserInfo(userModel: UserModel) {
+        if (userModel.isIdentified) {
+            textProfileFirstName.isEnabled = false
+            textProfileMiddleName.isEnabled = false
+            textProfileLastName.isEnabled = false
+            textProfileAddress.isEnabled = false
+            radioMale.isEnabled = false
+            radioFemale.isEnabled = false
+            textDOB.isEnabled = false
+            textDOB.setTextColor(ContextCompat.getColor(context, R.color.md_grey_400))
+            textProfileCellPhoneNumberNationalCode.isEnabled = false
+            textProfileCellPhoneNumber.isEnabled = false
+        }
         if (userModel.profileImageURL.isNotEmpty()) {
             Picasso
                     .with(this.context)
                     .load(userModel.profileImageURL)
                     .into(profileImage)
         }
-        textProfileEmailAddress.text = userModel.emailAddress
-        textProfileFirstName.setText(userModel.firstName)
-        textProfileMiddleName.setText(userModel.middleName)
-        textProfileLastName.setText(userModel.lastName)
-        textProfileAddress.setText(userModel.address)
-         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
+        if (userModel.emailAddress.isNotBlank()) textProfileEmailAddress.text = userModel.emailAddress
+        if (userModel.firstName.isNotBlank()) textProfileFirstName.setText(userModel.firstName)
+        if (userModel.middleName.isNotBlank()) textProfileMiddleName.setText(userModel.middleName)
+        if (userModel.lastName.isNotBlank()) textProfileLastName.setText(userModel.lastName)
+        if (userModel.address.isNotBlank()) textProfileAddress.setText(userModel.address)
+        if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
         when {
             userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
             userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
         }
-        textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
-        textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
+        if (userModel.phoneNumber.nationalCode.isNotBlank()) textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
+        if (userModel.phoneNumber.cellphoneNumber.isNotBlank()) textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -239,26 +260,26 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         return false
     }
 
-    private fun checkGrantResults(grantResults: Collection<Int>): Boolean {
-        if (grantResults.isEmpty()) throw IllegalArgumentException("grantResults is empty.")
-        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             requestCode -> {
-                if (grantResults.isNotEmpty()) {
-                    if (checkGrantResults(grantResults.toList())) {
+                if (grantResults.isEmpty()) return
+                if (checkGrantResults(grantResults.toList())) {
+                    if (isCamera) {
                         pictureUri = launchCamera(requestCode)
-                    } else {
-                        Toast.makeText(
-                                this.context,
-                                getString(R.string.error_permission_denied_on_launch_camera),
-                                Toast.LENGTH_SHORT
-                        ).show()
+                        return
                     }
+
+                    openGallery(requestCode)
+                    return
                 }
+
+                Toast.makeText(
+                        this.context,
+                        getString(R.string.error_permission_denied),
+                        Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

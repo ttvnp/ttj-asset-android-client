@@ -3,8 +3,8 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.TutorialPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -29,7 +29,8 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
         deviceUseCase.init()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -41,10 +42,16 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                             }
                         }
                     }
-                    override fun onError(e: Throwable) {
+
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -53,7 +60,8 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
         deviceUseCase.registerEmail(emailAddress)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<RegisterEmailResultModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<RegisterEmailResultModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<RegisterEmailResultModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -65,10 +73,16 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                             }
                         }
                     }
-                    override fun onError(e: Throwable) {
+
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 
@@ -77,7 +91,8 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
         deviceUseCase.verifyEmail(verificationCode, passwordOnImport)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<UserModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
+
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
@@ -89,10 +104,16 @@ class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase
                             }
                         }
                     }
-                    override fun onError(e: Throwable) {
+
+                    override fun onOtherError(error: Throwable?) {
                         target?.dismissProgressDialog()
-                        target?.showError(e)
+                        error?.let { target?.showError(error) }
                     }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
                 }).addTo(this.disposables)
     }
 }

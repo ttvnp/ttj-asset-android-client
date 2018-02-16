@@ -23,6 +23,7 @@
     <string name="app_start">start</string>
 
     <!-- general -->
+    <string name="maintenance">We are currently undergoing maintenance. This will not take long :)</string>
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
     <string name="email_address">Email address</string>
@@ -80,7 +81,7 @@
     <string name="error_cannot_send_that_amount">You cannot send that much.</string>
     <string name="error_message_no_such_email_address_user">Sorry.There is no such user account related with the email address.</string>
     <string name="error_message_invalid_long">please input valid number of amount.</string>
-    <string name="error_permission_denied_on_launch_camera">Cannot activate camera. Please grant authorities to this app.</string>
+    <string name="error_permission_denied">Cannot activate camera or choose picture from folder. Please grant authorities to this app.</string>
 
     <!-- button -->
     <string name="default_positive_button_text">OK</string>
@@ -118,6 +119,9 @@
     <string name="notification_body_receive_payment_notification">You received %s %s from %s.</string>
     <string name="notification_title_send_payment_notification">Payment Completed</string>
     <string name="notification_body_send_payment_notification">The payment (%s %s to %s) has been completed successfully.</string>
+
+    <!-- network -->
+    <string name="network_error">Network Error</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

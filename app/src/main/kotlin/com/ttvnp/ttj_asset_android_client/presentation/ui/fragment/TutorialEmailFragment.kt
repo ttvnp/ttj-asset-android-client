@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 
 class TutorialEmailFragment : Fragment() {
 
@@ -41,6 +42,7 @@ class TutorialEmailFragment : Fragment() {
         buttonTutorialSubmit.setOnClickListener(submitButtonClickHandler)
         textInputLayoutTutorialEmailAddress = view.findViewById(R.id.text_input_layout_tutorial_email_address)
         textTutorialEmailAddress = view.findViewById(R.id.text_tutorial_email_address)
+        textTutorialEmailAddress.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.email_address))
         ckTermsOfService = view.findViewById(R.id.chk_terms_of_service)
         ckTermsOfService.setOnCheckedChangeListener({ _, isChecked ->
             if (isChecked) {

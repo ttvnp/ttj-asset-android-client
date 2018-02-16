@@ -10,8 +10,8 @@ import android.view.Window
 import android.view.WindowManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crash.FirebaseCrash
-import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
 import javax.inject.Inject
@@ -49,6 +49,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun dismissProgressDialog() {
         progressDialog?.dismiss()
+    }
+
+    open fun showMaintenance() {
+        MaintenanceActivity.start()
     }
 
     protected open fun showErrorDialog(errorMessage: String) {
