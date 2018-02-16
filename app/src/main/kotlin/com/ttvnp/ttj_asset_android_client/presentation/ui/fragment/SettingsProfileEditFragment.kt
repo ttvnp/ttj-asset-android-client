@@ -5,12 +5,12 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -168,24 +168,36 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     }
 
     override fun bindUserInfo(userModel: UserModel) {
+        if (userModel.isIdentified) {
+            textProfileFirstName.isEnabled = false
+            textProfileMiddleName.isEnabled = false
+            textProfileLastName.isEnabled = false
+            textProfileAddress.isEnabled = false
+            radioMale.isEnabled = false
+            radioFemale.isEnabled = false
+            textDOB.isEnabled = false
+            textDOB.setTextColor(ContextCompat.getColor(context, R.color.md_grey_400))
+            textProfileCellPhoneNumberNationalCode.isEnabled = false
+            textProfileCellPhoneNumber.isEnabled = false
+        }
         if (userModel.profileImageURL.isNotEmpty()) {
             Picasso
                     .with(this.context)
                     .load(userModel.profileImageURL)
                     .into(profileImage)
         }
-        textProfileEmailAddress.text = userModel.emailAddress
-        textProfileFirstName.setText(userModel.firstName)
-        textProfileMiddleName.setText(userModel.middleName)
-        textProfileLastName.setText(userModel.lastName)
-        textProfileAddress.setText(userModel.address)
-         if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
+        if (userModel.emailAddress.isNotBlank()) textProfileEmailAddress.text = userModel.emailAddress
+        if (userModel.firstName.isNotBlank()) textProfileFirstName.setText(userModel.firstName)
+        if (userModel.middleName.isNotBlank()) textProfileMiddleName.setText(userModel.middleName)
+        if (userModel.lastName.isNotBlank()) textProfileLastName.setText(userModel.lastName)
+        if (userModel.address.isNotBlank()) textProfileAddress.setText(userModel.address)
+        if (userModel.dateOfBirth.isNotBlank()) textDOB.text = userModel.dateOfBirth
         when {
             userModel.genderType.type == Gender.FEMALE.rawValue -> radioFemale.isChecked = true
             userModel.genderType.type == Gender.MALE.rawValue -> radioMale.isChecked = true
         }
-        textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
-        textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
+        if (userModel.phoneNumber.nationalCode.isNotBlank()) textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
+        if (userModel.phoneNumber.cellphoneNumber.isNotBlank()) textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
