@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendEmailFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendEmailFormPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -42,6 +43,7 @@ class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
         val view = inflater.inflate(R.layout.fragment_send_email_form, container, false)
         textInputLayoutSendEmail = view.findViewById(R.id.text_input_layout_send_email)
         textSendEmail = view.findViewById(R.id.text_send_email)
+        textSendEmail.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.email_address))
         val buttonCancel = view.findViewById<Button>(R.id.button_send_email_cancel)
         buttonCancel.setOnClickListener(cancelButtonClickHandler)
         val buttonSubmit = view.findViewById<Button>(R.id.button_send_email_submit)
