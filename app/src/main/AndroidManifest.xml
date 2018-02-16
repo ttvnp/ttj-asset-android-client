@@ -83,7 +83,7 @@
             android:name="io.fabric.ApiKey"
             android:value="${fabric_api_key}" />
 
-        <activity android:name=".ui.activity.SettingTermsOfConditionActivity" />
+        <activity android:name=".ui.activity.SettingTermsOfServiceActivity" />
         <activity android:name=".ui.activity.SettingPrivacyPolicyActivity" />
         <activity android:name=".ui.activity.MaintenanceActivity"/>
     </application>
