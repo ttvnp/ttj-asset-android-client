@@ -21,6 +21,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendAmountFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
 import dagger.android.support.AndroidSupportInjection
@@ -77,6 +78,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
         radioSendCoin = view.findViewById(R.id.radio_send_coin)
         textInputLayoutSendAmount = view.findViewById(R.id.text_input_layout_send_amount)
         textSendAmount = view.findViewById(R.id.text_send_amount)
+        textSendAmount.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.hint_receive_amount))
         qrCodeInfo?.let {
             sendAmountFormPresenter.initialize(this, it)
         }

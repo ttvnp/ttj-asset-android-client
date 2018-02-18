@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/text_can_not_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
+            android:visibility="invisible"
             android:id="@+id/button_send_qr"
             style="@android:style/Widget.DeviceDefault.Button.Borderless"
             android:layout_width="match_parent"
@@ -40,6 +42,7 @@
             android:textColor="@color/md_grey_500" />
 
         <Button
+            android:visibility="invisible"
             android:id="@+id/button_send_email"
             style="@android:style/Widget.DeviceDefault.Button.Borderless"
             android:layout_width="match_parent"
