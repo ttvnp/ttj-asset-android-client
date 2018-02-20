@@ -8,7 +8,10 @@ import com.ttvnp.ttj_asset_android_client.data.store.OtherUserDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.OtherUserTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
-import com.ttvnp.ttj_asset_android_client.domain.model.*
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
+import com.ttvnp.ttj_asset_android_client.domain.model.OtherUserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import com.ttvnp.ttj_asset_android_client.domain.util.addHour
@@ -16,6 +19,7 @@ import io.reactivex.Single
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -44,7 +48,12 @@ class UserRepositoryImpl @Inject constructor(
             }
             if (refresh) {
                 try {
-                    userService.getUser().execute().body()?.let {
+                    val userResponse = userService.getUser().execute()
+                    if (!userResponse.isSuccessful) {
+                        subscriber.onError(HttpException(userResponse))
+                        return@create
+                    }
+                    userResponse.body()?.let {
                         if (it.hasError()) {
                             return@let
                         }
@@ -106,13 +115,18 @@ class UserRepositoryImpl @Inject constructor(
             val cellphoneNumberNationalCodeBody = RequestBody.create(MediaType.parse("multipart/form-data"), cellphoneNumberNationalCode)
             val cellphoneNumberBody = RequestBody.create(MediaType.parse("multipart/form-data"), cellphoneNumber)
             try {
-                userService.updateUser(profileImageFileBody, firstNameBody, middleNameBody, lastNameBody, addressBody, genderBody, dobBody, cellphoneNumberNationalCodeBody, cellphoneNumberBody).execute().body()!!.let { response ->
+                val updateUserResponse = userService.updateUser(profileImageFileBody, firstNameBody, middleNameBody, lastNameBody, addressBody, genderBody, dobBody, cellphoneNumberNationalCodeBody, cellphoneNumberBody).execute()
+                if (!updateUserResponse.isSuccessful) {
+                    subscriber.onError(HttpException(updateUserResponse))
+                    return@create
+                }
+                updateUserResponse.body()?.let { response ->
                     if (response.hasError()) {
                         val errorCode: ErrorCode = when (response.errorCode) {
                             ServiceErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE.rawValue -> ErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE
                             else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
                         }
-                        subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
+                        subscriber.onSuccess(ModelWrapper(null, errorCode))
                         return@create
                     }
                     var ue = UserEntity(
@@ -135,10 +149,10 @@ class UserRepositoryImpl @Inject constructor(
                             updatedAt = Now()
                     )
                     ue = userDataStore.update(ue)
-                    subscriber.onSuccess(ModelWrapper<UserModel?>(UserTranslator().translate(ue), ErrorCode.NO_ERROR))
+                    subscriber.onSuccess(ModelWrapper(UserTranslator().translate(ue), ErrorCode.NO_ERROR))
                 }
             } catch (e: IOException) {
-                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
             }
         }
     }
@@ -166,13 +180,18 @@ class UserRepositoryImpl @Inject constructor(
             }
 
             try {
-                userService.uploadIdDocument(faceImageFileBody, addressImageFileBody).execute().body()!!.let { response ->
+                val uploadIdDocumentResponse = userService.uploadIdDocument(faceImageFileBody, addressImageFileBody).execute()
+                if (!uploadIdDocumentResponse.isSuccessful) {
+                    subscriber.onError(HttpException(uploadIdDocumentResponse))
+                    return@create
+                }
+                uploadIdDocumentResponse.body()?.let { response ->
                     if (response.hasError()) {
                         val errorCode: ErrorCode = when (response.errorCode) {
                             ServiceErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE.rawValue -> ErrorCode.ERROR_UPLOAD_PROFILE_IMAGE_FILE_TOO_LARGE
                             else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
                         }
-                        subscriber.onSuccess(ModelWrapper<UserModel?>(null, errorCode))
+                        subscriber.onSuccess(ModelWrapper(null, errorCode))
                         return@create
                     }
                     var ue = UserEntity(
@@ -195,10 +214,10 @@ class UserRepositoryImpl @Inject constructor(
                             updatedAt = Now()
                     )
                     ue = userDataStore.update(ue)
-                    subscriber.onSuccess(ModelWrapper<UserModel?>(UserTranslator().translate(ue), ErrorCode.NO_ERROR))
+                    subscriber.onSuccess(ModelWrapper(UserTranslator().translate(ue), ErrorCode.NO_ERROR))
                 }
             } catch (e: IOException) {
-                subscriber.onSuccess(ModelWrapper<UserModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
             }
         }
     }
@@ -213,18 +232,23 @@ class UserRepositoryImpl @Inject constructor(
             // self send check
             val self = userDataStore.get()
             if (self?.emailAddress ?: "" == emailAddress) {
-                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_CANNOT_SELF_SEND))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_SELF_SEND))
                 return@create
             }
 
             var model: OtherUserModel? = null
             var errCode = ErrorCode.ERROR_UNKNOWN
             try {
-                userService.getTargetUser(emailAddress).execute().body()?.let { response ->
+                val targetUserResponse = userService.getTargetUser(emailAddress).execute()
+                if (!targetUserResponse.isSuccessful) {
+                    subscriber.onError(HttpException(targetUserResponse))
+                    return@create
+                }
+                targetUserResponse.body()?.let { response ->
                     if (response.hasError()) {
-                        when (response.errorCode) {
-                            ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> errCode = ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
-                            else -> errCode = ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        errCode = when (response.errorCode) {
+                            ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
+                            else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
                         }
                         return@let
                     }
@@ -246,12 +270,12 @@ class UserRepositoryImpl @Inject constructor(
             if (model == null) {
                 model = getModelFromLocal()
                 if (model == null) {
-                    subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, errCode))
+                    subscriber.onSuccess(ModelWrapper(null, errCode))
                 } else {
-                    subscriber.onSuccess(ModelWrapper<OtherUserModel?>(model, ErrorCode.NO_ERROR))
+                    subscriber.onSuccess(ModelWrapper(model, ErrorCode.NO_ERROR))
                 }
             } else {
-                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(model, ErrorCode.NO_ERROR))
+                subscriber.onSuccess(ModelWrapper(model, ErrorCode.NO_ERROR))
             }
         }
     }

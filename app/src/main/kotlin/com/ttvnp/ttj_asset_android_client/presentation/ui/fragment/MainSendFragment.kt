@@ -65,8 +65,6 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
             startActivity(intent)
         }
 
-        setIdentify(false)
-
         mainSendPresenter.setupDefault()
         return view
     }
@@ -75,30 +73,29 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         super.setUserVisibleHint(isVisibleToUser)
 
         if (isVisibleToUser && isInit) {
-            setIdentify(false)
             mainSendPresenter.setupDefault()
         }
     }
 
     override fun setIdentify(identifier: Boolean) {
         if (identifier) {
-            textCannotSend.visibility = View.INVISIBLE
             setEnableButton(true)
             return
         }
 
-        textCannotSend.visibility = View.VISIBLE
         setEnableButton(false)
     }
 
     @SuppressLint("ResourceAsColor")
     private fun setEnableButton(value: Boolean) {
-        var backgroundColor = R.color.md_grey_200
-        var textColor = R.color.md_grey_500
+        textCannotSend.visibility = View.INVISIBLE
+        var backgroundColor = R.color.colorPrimary
+        var textColor = R.color.colorTextOnPrimary
 
-        if (value) {
-            backgroundColor = R.color.colorPrimary
-            textColor = R.color.colorTextOnPrimary
+        if (!value) {
+            textCannotSend.visibility = View.VISIBLE
+            backgroundColor = R.color.md_grey_200
+            textColor = R.color.md_grey_500
         }
 
         buttonSendQR.isEnabled = value
@@ -109,6 +106,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
                 )
         )
         buttonSendQR.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonSendQR.visibility = View.VISIBLE
 
         buttonSendEmail.isEnabled = value
         buttonSendEmail.setBackgroundColor(
@@ -118,6 +116,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
                 )
         )
         buttonSendEmail.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonSendEmail.visibility = View.VISIBLE
     }
 
 }

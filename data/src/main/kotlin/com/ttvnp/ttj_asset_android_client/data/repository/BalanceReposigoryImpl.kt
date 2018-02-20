@@ -11,6 +11,7 @@ import com.ttvnp.ttj_asset_android_client.domain.repository.BalanceRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import com.ttvnp.ttj_asset_android_client.domain.util.addHour
 import io.reactivex.Single
+import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
@@ -40,7 +41,12 @@ class BalanceRepositoryImpl @Inject constructor(
             }
             if (refresh) {
                 try {
-                    userService.getBalances().execute().body()!!.let { response ->
+                    val balancesResponse = userService.getBalances().execute()
+                    if (!balancesResponse.isSuccessful) {
+                        subscriber.onError(HttpException(balancesResponse))
+                        return@create
+                    }
+                    balancesResponse.body()?.let { response ->
                         if (response.hasError()) {
                             return@let
                         }
@@ -75,7 +81,7 @@ class BalanceRepositoryImpl @Inject constructor(
 
     override fun updateBalances(balanceModels: Collection<BalanceModel>): Single<BalancesModel> {
         return Single.create { subscriber ->
-            var balanceEntities: Collection<BalanceEntity> = arrayListOf<BalanceEntity>()
+            var balanceEntities: Collection<BalanceEntity> = arrayListOf()
             balanceEntities = balanceEntities.toMutableList()
             for (bm in balanceModels) {
                 balanceEntities.add(BalanceEntity(
