@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.LaunchPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.LaunchPresenterTarget
@@ -52,6 +52,10 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
                 .show()
     }
 
+    override fun showMaintenance() {
+        MaintenanceActivity.start()
+    }
+
     override fun showError(throwable: Throwable) {
         showErrorDialog(errorMessageGenerator.default())
     }
@@ -69,4 +73,5 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
         // don't use this method
         throw NotImplementedError()
     }
+
 }

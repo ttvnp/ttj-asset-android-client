@@ -4,8 +4,8 @@ import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
+import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -30,7 +30,8 @@ class ReceiveSetAmountPresenterImpl @Inject constructor(val userUseCase: UserUse
         userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<UserModel>() {
+                .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+
                     override fun onSuccess(t: UserModel) {
                         val model = QRCodeInfoModel(
                                 emailAddress = t.emailAddress,
@@ -39,9 +40,15 @@ class ReceiveSetAmountPresenterImpl @Inject constructor(val userUseCase: UserUse
                         )
                         handleSuccess(model)
                     }
-                    override fun onError(e: Throwable) {
+
+                    override fun onOtherError(error: Throwable?) {
                         // do nothing...
                     }
+
+                    override fun onMaintenance() {
+
+                    }
+
                 }).addTo(this.disposables)
     }
 }

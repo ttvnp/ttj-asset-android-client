@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingPrivacyPolicyActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingTermsOfConditionActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingTermsOfServiceActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsNotificationActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.SettingMenuViewAdapter
@@ -40,13 +40,13 @@ class MainSettingsFragment : BaseMainFragment() {
                 getString(R.string.menu_settings_profile),
                 getString(R.string.menu_settings_notifications),
                 "",
-                getString(R.string.title_setting_terms_of_conditions),
+                getString(R.string.title_setting_terms_of_service),
                 getString(R.string.title_setting_privacy_policy)
         )
 
         val adapter = SettingMenuViewAdapter(menuStrings)
-        adapter.setItemOnClickListener(View.OnClickListener { view ->
-            view?.let {
+        adapter.setItemOnClickListener(View.OnClickListener { v ->
+            v?.let {
                 when (it.id) {
                     0 -> {
                         // case profile clicked.
@@ -60,7 +60,7 @@ class MainSettingsFragment : BaseMainFragment() {
                     }
                     3 -> {
                         //case terms of conditions.
-                        val intent = Intent(activity, SettingTermsOfConditionActivity::class.java)
+                        val intent = Intent(activity, SettingTermsOfServiceActivity::class.java)
                         startActivity(intent)
                     }
                     4 -> {
