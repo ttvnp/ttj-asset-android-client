@@ -49,8 +49,7 @@ class DeviceRepositoryImpl @Inject constructor(
             }
 
             // get from device info
-            var deviceEntity: DeviceEntity? = null
-            deviceEntity = deviceDataStore.get() // at first from local.
+            val deviceEntity: DeviceEntity? = deviceDataStore.get()
             if (deviceEntity != null && deviceEntity.isActivated) {
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
                 return@create
@@ -312,7 +311,6 @@ class DeviceRepositoryImpl @Inject constructor(
                 subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
-            val disposables = CompositeDisposable()
             val grantPushNotificationUpdateValue = grantPushNotification?:deviceEntity.grantPushNotification
             val grantEmailNotificationUpdateValue = grantEmailNotification?:deviceEntity.grantEmailNotification
 
