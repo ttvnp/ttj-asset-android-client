@@ -57,3 +57,7 @@
 
 # kotlin reflect / annotations
 -dontwarn kotlin.reflect.jvm.internal.**
+
+# ok
+-dontwarn okhttp3.**
+-dontwarn okio.**
