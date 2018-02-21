@@ -8,6 +8,10 @@ import io.reactivex.Single
 
 interface DeviceRepository {
 
+    fun getLanguage(): Single<String>
+
+    fun saveLanguage(language: String)
+
     fun getDevice(): Single<ModelWrapper<DeviceModel?>>
 
     fun register(): Single<ModelWrapper<DeviceModel?>>

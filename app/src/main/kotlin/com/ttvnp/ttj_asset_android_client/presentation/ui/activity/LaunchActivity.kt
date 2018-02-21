@@ -31,6 +31,10 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
         launchPresenter.checkDeviceReady()
     }
 
+    override fun checkLanguage(language: String) {
+        //changeLocale(resources, Locale(language))
+    }
+
     override fun startNextActivity(isDeviceReady: Boolean) {
         if (isDeviceReady) {
             val intent = Intent(this, MainActivity::class.java)

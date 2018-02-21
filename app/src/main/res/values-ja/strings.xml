@@ -98,6 +98,7 @@
     <string name="menu_settings">設定</string>
     <string name="menu_settings_profile">プロフィール</string>
     <string name="menu_settings_notifications">通知設定</string>
+    <string name="menu_settings_language">言語設定</string>
 
     <!-- function title -->
     <string name="title_set_amount">取引量を設定してください</string>
@@ -105,6 +106,7 @@
     <string name="title_settings_profile">プロフィール</string>
     <string name="title_settings_edit_profile">プロフィールを編集する</string>
     <string name="title_settings_notification">通知設定</string>
+    <string name="title_settings_language">言語設定</string>
     <string name="title_setting_terms_of_service">利用規約</string>
     <string name="title_setting_privacy_policy">プライバシーポリシー</string>
 
