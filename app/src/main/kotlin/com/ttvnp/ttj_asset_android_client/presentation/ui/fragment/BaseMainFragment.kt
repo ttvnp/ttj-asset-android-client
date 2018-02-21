@@ -3,7 +3,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
-import android.content.CursorLoader
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -12,7 +11,6 @@ import android.net.Uri
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.text.TextUtils

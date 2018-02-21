@@ -1,6 +1,5 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -59,18 +58,18 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/chkTermAndConditions"
+                android:id="@+id/chk_terms_of_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_term_and_conditions"
+                android:text="@string/select_term_of_services"
                 android:textColor="@color/colorSecondaryText" />
 
             <TextView
-                android:id="@+id/tvTermsAndConditions"
+                android:id="@+id/text_terms_of_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:text="@string/terms_and_conditions"
+                android:text="@string/terms_of_services"
                 android:textColor="@color/colorSecondaryText" />
 
         </LinearLayout>

@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.RadioGroup
 import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.ReceiveSetAmountPresenter
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -32,13 +33,14 @@ class ReceiveSetAmountActivity : BaseActivity() {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
             val intent = Intent()
-            setResult(RESULT_CANCELED, intent);
+            setResult(RESULT_CANCELED, intent)
             finish()
         }
 
         val radioGroupReceive = findViewById<RadioGroup>(R.id.radio_group_receive)
         val textInputLayoutReceiveAmount = findViewById<TextInputLayout>(R.id.text_input_layout_receive_amount)
         val textReceiveAmount = findViewById<TextInputEditText>(R.id.text_receive_amount)
+        textReceiveAmount.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.hint_receive_amount))
 
         // set on click
         val buttonTutorialSubmit = findViewById<Button>(R.id.button_tutorial_submit)
