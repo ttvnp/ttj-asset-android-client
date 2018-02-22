@@ -19,7 +19,7 @@
         android:paddingStart="@dimen/large_margin"
         android:paddingEnd="@dimen/large_margin"
         android:layout_marginTop="@dimen/middle_margin"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/button_primary"
         android:text="@string/set_amount_desc"
         android:textColor="@color/colorTextOnPrimary" />
 

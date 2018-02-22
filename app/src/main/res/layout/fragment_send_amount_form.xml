@@ -87,7 +87,7 @@
             android:layout_weight="1"
             android:layout_marginStart="@dimen/middle_margin"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_primary"
             style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
             android:text="@string/default_positive_button_text"
             android:textColor="@color/colorTextOnPrimary" />
