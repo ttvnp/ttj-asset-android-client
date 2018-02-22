@@ -89,32 +89,18 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     @SuppressLint("ResourceAsColor")
     private fun setEnableButton(value: Boolean) {
         textCannotSend.visibility = View.INVISIBLE
-        var backgroundColor = R.color.colorPrimary
         var textColor = R.color.colorTextOnPrimary
 
         if (!value) {
             textCannotSend.visibility = View.VISIBLE
-            backgroundColor = R.color.md_grey_200
             textColor = R.color.md_grey_500
         }
 
         buttonSendQR.isEnabled = value
-        buttonSendQR.setBackgroundColor(
-                ContextCompat.getColor(
-                        context,
-                        backgroundColor
-                )
-        )
         buttonSendQR.setTextColor(ContextCompat.getColor(context, textColor))
         buttonSendQR.visibility = View.VISIBLE
 
         buttonSendEmail.isEnabled = value
-        buttonSendEmail.setBackgroundColor(
-                ContextCompat.getColor(
-                        context,
-                        backgroundColor
-                )
-        )
         buttonSendEmail.setTextColor(ContextCompat.getColor(context, textColor))
         buttonSendEmail.visibility = View.VISIBLE
     }
