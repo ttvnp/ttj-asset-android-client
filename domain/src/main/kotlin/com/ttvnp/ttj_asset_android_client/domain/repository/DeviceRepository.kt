@@ -8,7 +8,7 @@ import io.reactivex.Single
 
 interface DeviceRepository {
 
-    fun getLanguage(): Single<String>
+    fun getLanguage(): String
 
     fun saveLanguage(language: String)
 

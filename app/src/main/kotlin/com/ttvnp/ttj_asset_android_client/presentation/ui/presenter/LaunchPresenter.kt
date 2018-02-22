@@ -8,7 +8,6 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.Launc
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -26,12 +25,7 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
     override fun initialize(target: LaunchPresenterTarget) {
         this.target = target
 
-        deviceUseCase.getLanguage()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(Consumer {
-                    target.checkLanguage(it)
-                })
+        target.checkLanguage(deviceUseCase.getLanguage())
     }
 
     override fun checkDeviceReady() {
