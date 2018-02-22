@@ -40,6 +40,14 @@ class DeviceRepositoryImpl @Inject constructor(
         private val recaptchaService: RecaptchaService
 ) : DeviceRepository {
 
+    override fun getLanguage(): String {
+        return deviceInfoDataStore.getLanguage()
+    }
+
+    override fun saveLanguage(language: String) {
+        deviceInfoDataStore.saveLanguage(language)
+    }
+
     override fun getDevice(): Single<ModelWrapper<DeviceModel?>> {
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             val deviceInfo = deviceInfoDataStore.get()
@@ -49,8 +57,7 @@ class DeviceRepositoryImpl @Inject constructor(
             }
 
             // get from device info
-            var deviceEntity: DeviceEntity? = null
-            deviceEntity = deviceDataStore.get() // at first from local.
+            val deviceEntity: DeviceEntity? = deviceDataStore.get() // at first from local.
             if (deviceEntity != null && deviceEntity.isActivated) {
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
                 return@create
@@ -312,7 +319,6 @@ class DeviceRepositoryImpl @Inject constructor(
                 subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
-            val disposables = CompositeDisposable()
             val grantPushNotificationUpdateValue = grantPushNotification?:deviceEntity.grantPushNotification
             val grantEmailNotificationUpdateValue = grantEmailNotification?:deviceEntity.grantEmailNotification
 

@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" />
       <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/ttj-asset-android-client.iml" filepath="$PROJECT_DIR$/ttj-asset-android-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ttj-asset-android-client.iml" filepath="$PROJECT_DIR$/.idea/ttj-asset-android-client.iml" />
     </modules>
   </component>
 </project>
