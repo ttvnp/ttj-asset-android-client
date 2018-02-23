@@ -59,7 +59,7 @@
     <string name="upload_your_id_document">IDを送信する</string>
     <string name="under_review_for_id_document">ID審査中</string>
     <string name="id_document_was_approved">ID承認済</string>
-    <string name="message_note_disabled_send_for_id">IDが承認されるまでこのサービスは利用できません。/nプロフィールページからIDを申請してください。</string>
+    <string name="message_note_disabled_send_for_id">IDが承認されるまでこのサービスは利用できません。\nプロフィールページからIDを申請してください。</string>
     <string name="message_note_upload_id_for_disabling_edit_profile">IDを申請されますとプロフィールは変更できません。</string>
     <string name="successfully_uploaded">アップロード完了しました</string>
     <string name="national_code_should_be">国番号の利用は 81(日本) と 84(ベトナム)のみご利用できます</string>
