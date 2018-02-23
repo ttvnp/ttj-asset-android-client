@@ -57,7 +57,7 @@ class DeviceRepositoryImpl @Inject constructor(
             }
 
             // get from device info
-            val deviceEntity: DeviceEntity? = deviceDataStore.get() // at first from local.
+            val deviceEntity: DeviceEntity? = deviceDataStore.get()
             if (deviceEntity != null && deviceEntity.isActivated) {
                 subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
                 return@create
