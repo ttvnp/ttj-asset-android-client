@@ -120,17 +120,9 @@ class MainSettingsFragment : BaseMainFragment() {
             val locale = getCurrentLocale(context)
             when (position) {
                 0 -> {
-                    if (locale != Locale.JAPAN) {
-                        dialog.dismiss()
-                        return@OnItemClickListener
-                    }
                     changeLanguage(dialog, Locale.US)
                 }
                 else -> {
-                    if (locale != Locale.US) {
-                        dialog.dismiss()
-                        return@OnItemClickListener
-                    }
                     changeLanguage(dialog, Locale.JAPAN)
                 }
             }
