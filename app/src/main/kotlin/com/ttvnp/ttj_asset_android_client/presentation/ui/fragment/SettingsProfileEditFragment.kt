@@ -176,9 +176,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             radioMale.isEnabled = false
             radioFemale.isEnabled = false
             textDOB.isEnabled = false
-            context?.let {
-                textDOB.setTextColor(ContextCompat.getColor(context, R.color.md_grey_400))
-            }
+            textDOB.setTextColor(ContextCompat.getColor(activity, R.color.md_grey_400))
             textProfileCellPhoneNumberNationalCode.isEnabled = false
             textProfileCellPhoneNumber.isEnabled = false
         }

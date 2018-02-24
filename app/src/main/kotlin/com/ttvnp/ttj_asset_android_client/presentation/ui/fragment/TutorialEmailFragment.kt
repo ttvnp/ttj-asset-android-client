@@ -75,7 +75,7 @@ class TutorialEmailFragment : Fragment() {
         }
 
         buttonTutorialSubmit.isEnabled = value
-        buttonTutorialSubmit.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonTutorialSubmit.setTextColor(ContextCompat.getColor(activity, textColor))
     }
 
 }

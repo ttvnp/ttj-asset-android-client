@@ -97,11 +97,11 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         }
 
         buttonSendQR.isEnabled = value
-        buttonSendQR.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonSendQR.setTextColor(ContextCompat.getColor(activity, textColor))
         buttonSendQR.visibility = View.VISIBLE
 
         buttonSendEmail.isEnabled = value
-        buttonSendEmail.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonSendEmail.setTextColor(ContextCompat.getColor(activity, textColor))
         buttonSendEmail.visibility = View.VISIBLE
     }
 
