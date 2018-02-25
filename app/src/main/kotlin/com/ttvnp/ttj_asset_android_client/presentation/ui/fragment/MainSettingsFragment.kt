@@ -3,7 +3,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -117,7 +116,6 @@ class MainSettingsFragment : BaseMainFragment() {
         )
         listLanguages.adapter = adapter
         listLanguages.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val locale = getCurrentLocale(context)
             when (position) {
                 0 -> {
                     changeLanguage(dialog, Locale.US)
@@ -128,15 +126,6 @@ class MainSettingsFragment : BaseMainFragment() {
             }
         }
         dialog.show()
-    }
-
-    private fun getCurrentLocale(context: Context): Locale {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales.get(0)
-        } else {
-
-            context.resources.configuration.locale
-        }
     }
 
     private fun changeLanguage(dialog: Dialog, locale: Locale) {
