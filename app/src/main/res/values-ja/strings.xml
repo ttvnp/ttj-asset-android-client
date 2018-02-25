@@ -111,6 +111,12 @@
     <string name="title_setting_terms_of_service">利用規約</string>
     <string name="title_setting_privacy_policy">プライバシーポリシー</string>
 
+    <!-- language -->
+    <string-array name="languages">
+        <item>English</item>
+        <item>日本語</item>
+    </string-array>
+
     <!-- Notification -->
     <string name="channel_name_default">デフォルト通知設定</string>
 
