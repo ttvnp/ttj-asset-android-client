@@ -37,7 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/middle_margin"
-            android:background="@color/md_grey_200"
+            android:background="@drawable/button_primary"
+            android:enabled="false"
             android:text="@string/send_by_qr"
             android:textColor="@color/md_grey_500" />
 
@@ -48,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/middle_margin"
-            android:background="@color/md_grey_200"
+            android:background="@drawable/button_primary"
+            android:enabled="false"
             android:text="@string/send_by_email"
             android:textColor="@color/md_grey_500" />
 

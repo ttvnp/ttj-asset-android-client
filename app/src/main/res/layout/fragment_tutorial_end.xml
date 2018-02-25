@@ -36,7 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:background="@color/colorIcons"
+        android:background="@drawable/button_accent"
         android:text="@string/app_start"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
