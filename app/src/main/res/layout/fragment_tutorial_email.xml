@@ -61,7 +61,13 @@
                 android:id="@+id/chk_terms_of_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_term_of_services"
+                android:textColor="@color/colorSecondaryText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="@string/terms_of_services_pre"
                 android:textColor="@color/colorSecondaryText" />
 
             <TextView
@@ -72,6 +78,12 @@
                 android:text="@string/terms_of_services"
                 android:textColor="@color/colorSecondaryText" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="@string/terms_of_services_post"
+                android:textColor="@color/colorSecondaryText" />
         </LinearLayout>
 
     </LinearLayout>
