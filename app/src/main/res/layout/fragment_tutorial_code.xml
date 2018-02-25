@@ -77,7 +77,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_primary"
             android:text="@string/tutorial_form_submit"
             android:textColor="@color/colorTextOnPrimary" />
     </LinearLayout>

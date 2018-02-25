@@ -1,0 +1,130 @@
+<resources>
+    <!-- upload id document -->
+    <string name="title_upload_id_document">ID資料のアップロード</string>
+    <string name="upload_photo_of_your_document">ID資料をアップロードしてください。</string>
+    <string name="following_item_must_be_clearly_visible">以下の項目が確認できるようにしてください。</string>
+    <string name="list_of_document_id">. 顔写真\n. 氏名\n. 住所\n. 生年月日\n. 有効期限</string>
+    <string name="face_photo">顔写真</string>
+
+    <!-- terms and conditions -->
+    <string name="terms_and_conditions_description">The software you are about to use functions as a free, and open source.\n\nWhile the software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, we cannot guarantee that there will be no bugs in the software. You acknowledge that your use of this software is at your own discretion and in compliance with all applicable laws. You are responsible for safekeeping your passwords, and any other codes you use to access the software.\n\nTo the fullest extent permitted by law, this software is provided as is and no representations or warranties can be made of any kind, express or implied, including but not limited to the warranties of merchantability, fitness or a particular purpose and noninfringement. You assume any and all risks associated with the use of the software. In no event shall the authors of the software, employees and affiliates of Truong Thanh JAPAN, copyright holders, or Truong Thanh JAPAN, Co,.Ltd. be held liable for any claim, damages or other liability, whether in an action of contract, tort, or otherwise, arising from, out of or in connection with the software. We reserve the right to modify this disclaimer from time to time.</string>
+    <string name="terms_of_services"><u>利用規約</u></string>
+    <string name="select_term_of_services">に同意する</string>
+    <string name="close">閉じる</string>
+
+    <!-- tutorial -->
+    <string name="tutorial_welcome">Welcome</string>
+    <string name="tutorial_start">始める</string>
+    <string name="tutorial_form_submit">送信</string>
+    <string name="tutorial_form_desc">* アカウント作成のためメールアドレスを入力してください。\n* 送信されますと確認メールをお送りいたします。</string>
+    <string name="tutorial_verification_code_desc">* メールに記載されたVerification code（認識コード）を入力してください。</string>
+    <string name="tutorial_password_on_import_desc">* 登録時に送付されたメールに記載されているパスワードを入力してください。</string>
+    <string name="tutorial_end_desc">アカウントの確認が完了しました。\nご利用ください。</string>
+    <string name="app_start">始める</string>
+
+    <!-- general -->
+    <string name="maintenance">サーバーメンテナンス中です。少々お待ちください。</string>
+    <string name="point_name">POINT</string>
+    <string name="coin_name">COIN</string>
+    <string name="email_address">メールアドレス</string>
+    <string name="first_name">名</string>
+    <string name="middle_name">ミドルネーム</string>
+    <string name="last_name">姓</string>
+    <string name="address">住所</string>
+    <string name="gender">性別</string>
+    <string name="male">男性</string>
+    <string name="female">女性</string>
+    <string name="cell_phone_number">電話番号</string>
+    <string name="dob">生年月日</string>
+    <string name="qr_code">QRコード</string>
+    <string name="complete">完了</string>
+    <string name="transaction_type">送信/受信</string>
+    <string name="transaction_status">ステータス</string>
+    <string name="tab">タブ</string>
+    <string name="verification_code">コード</string>
+    <string name="password_on_import">パスワード</string>
+    <string name="not_set">未設定</string>
+    <string name="error_dialog_title">エラー</string>
+    <string name="no_transaction_data">取引履歴はありません。</string>
+    <string name="set_amount_desc">取引量を設定してください</string>
+    <string name="hint_receive_amount">取引量を設定してください</string>
+    <string name="hint_send_amount">取引量を設定してください</string>
+    <string name="send_by_qr">コードをスキャンする</string>
+    <string name="send_by_email">メールで送る</string>
+    <string name="send_email_form_desc">* Point/Coinを送信されるメールアドレスを入力してください。</string>
+    <string name="send_successfully_executed">送信が完了しました。\n取引が反映されるまで少々時間が掛かりますので、暫く経ってから再度ご確認ください。</string>
+    <string name="profile_successfully_updated">ユーザー情報を保存しました。</string>
+    <string name="push_notification">プッシュ通知</string>
+    <string name="email_notification">メール通知</string>
+    <string name="upload_your_id_document">IDを送信する</string>
+    <string name="under_review_for_id_document">ID審査中</string>
+    <string name="id_document_was_approved">ID承認済</string>
+    <string name="message_note_disabled_send_for_id">IDが承認されるまでこのサービスは利用できません。\nプロフィールページからIDを申請してください。</string>
+    <string name="message_note_upload_id_for_disabling_edit_profile">IDを申請されますとプロフィールは変更できません。</string>
+    <string name="successfully_uploaded">アップロード完了しました</string>
+    <string name="national_code_should_be">国番号の利用は 81(日本) と 84(ベトナム)のみご利用できます</string>
+    <string name="please_select_gender">性別を選択してください</string>
+    <string name="default_dob">01/Jan/1990</string>
+    <string name="address_place_holder">住所を入力してください</string>
+    <string name="dot">•</string>
+
+    <!-- error message -->
+    <string name="error_default_message">エラーが発生しました。再度実行してください。</string>
+    <string name="error_cannot_connect_to_server">ネットワークエラーが発生しました。再度実行してください。</string>
+    <string name="error_lockout_message">サーバーエラーが発生しました。再度実行してください。</string>
+    <string name="error_validation_email_address">メールアドレスが正しくありません。</string>
+    <string name="error_invalid_verification_code">認証コードが正しくありません。再度メールをご確認ください。</string>
+    <string name="error_invalid_password_on_import">パスワードが正しくありません。登録時に送付されたメールに記載されているパスワードを入力してください。</string>
+    <string name="error_device_already_setup">このアカウントは既に確認が完了しています。再度実行してください。</string>
+    <string name="error_cannot_update_profile_image">ファイルの容量が大きすぎます。もう一度アップロードしてください。</string>
+    <string name="error_cannot_self_send">ご自身のメールアドレスには送信できません。</string>
+    <string name="error_cannot_send_that_amount">Point/Coinが足りません。</string>
+    <string name="error_message_no_such_email_address_user">入力されたメールアドレスのアカウントが見つかりせん。</string>
+    <string name="error_message_invalid_long">正しい数字を入力してください。</string>
+    <string name="error_permission_denied">カメラまたはアルバムが利用できません。デバイスの設定をご確認ください。</string>
+
+    <!-- button -->
+    <string name="default_positive_button_text">OK</string>
+    <string name="default_cancel_button_text">キャンセル</string>
+    <string name="send_button_text">送信</string>
+    <string name="save_button_text">保存</string>
+    <string name="image_from_folder">アルバムから選択する</string>
+    <string name="image_from_camera">写真を撮影する</string>
+
+    <!-- menu -->
+    <string name="menu_home">Home</string>
+    <string name="menu_receive">受信</string>
+    <string name="menu_send">送信</string>
+    <string name="menu_settings">設定</string>
+    <string name="menu_settings_profile">プロフィール</string>
+    <string name="menu_settings_notifications">通知設定</string>
+    <string name="menu_settings_language">言語設定</string>
+
+    <!-- function title -->
+    <string name="title_set_amount">取引量を設定してください</string>
+    <string name="title_send">送信</string>
+    <string name="title_settings_profile">プロフィール</string>
+    <string name="title_settings_edit_profile">プロフィールを編集する</string>
+    <string name="title_settings_notification">通知設定</string>
+    <string name="title_settings_language">言語設定</string>
+    <string name="title_setting_terms_of_service">利用規約</string>
+    <string name="title_setting_privacy_policy">プライバシーポリシー</string>
+
+    <!-- Notification -->
+    <string name="channel_name_default">デフォルト通知設定</string>
+
+    <!-- format -->
+    <string name="any">%s</string>
+    <string name="send_confirm_desc_format">%d %s を %s に送信しますか?</string>
+    <!-- Push Notification -->
+    <string name="notification_title_receive_payment_notification">受信</string>
+    <string name="notification_body_receive_payment_notification">%sから %s %s を受信しました。</string>
+    <string name="notification_title_send_payment_notification">取引が完了しました。</string>
+    <string name="notification_body_send_payment_notification">取引(%s へ %s %s を送信)が完了しました。</string>
+
+    <!-- network -->
+    <string name="network_error">ネットワークエラー</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -40,6 +40,14 @@ class DeviceRepositoryImpl @Inject constructor(
         private val recaptchaService: RecaptchaService
 ) : DeviceRepository {
 
+    override fun getLanguage(): String {
+        return deviceInfoDataStore.getLanguage()
+    }
+
+    override fun saveLanguage(language: String) {
+        deviceInfoDataStore.saveLanguage(language)
+    }
+
     override fun getDevice(): Single<ModelWrapper<DeviceModel?>> {
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             val deviceInfo = deviceInfoDataStore.get()

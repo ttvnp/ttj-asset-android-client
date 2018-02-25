@@ -8,6 +8,10 @@ import javax.inject.Inject
 
 interface DeviceUseCase {
 
+    fun getLanguage(): String
+
+    fun saveLanguage(language: String)
+
     fun getDevice(): Single<ModelWrapper<DeviceModel?>>
 
     fun init() : Single<ModelWrapper<DeviceModel?>>
@@ -26,6 +30,14 @@ interface DeviceUseCase {
 class DeviceUseCaseImpl @Inject constructor(
         private val repository: DeviceRepository
 ) : DeviceUseCase {
+
+    override fun getLanguage(): String {
+        return repository.getLanguage()
+    }
+
+    override fun saveLanguage(language: String) {
+        repository.saveLanguage(language)
+    }
 
     override fun getDevice(): Single<ModelWrapper<DeviceModel?>> {
         return repository.getDevice()

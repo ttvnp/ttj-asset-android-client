@@ -5,7 +5,11 @@ import com.ttvnp.ttj_asset_android_client.data.driver.SharedPreferencesDriver
 import com.ttvnp.ttj_asset_android_client.data.entity.DeviceInfoEntity
 import javax.inject.Inject
 
+const val KEY_LANGUAGE = "language"
+
 interface DeviceInfoDataStore {
+    fun getLanguage(): String
+    fun saveLanguage(language: String)
     fun get(): DeviceInfoEntity?
     fun save(entity: DeviceInfoEntity)
 }
@@ -19,6 +23,14 @@ class DeviceInfoDataStoreImpl @Inject constructor(
     private val CREDENTIAL_KEY = "device.credential"
 
     private var cached: DeviceInfoEntity? = null
+
+    override fun getLanguage(): String {
+        return sharedPreferencesDriver.getString(KEY_LANGUAGE)?: "en"
+    }
+
+    override fun saveLanguage(language: String) {
+        sharedPreferencesDriver.putString(KEY_LANGUAGE, language)
+    }
 
     override fun get(): DeviceInfoEntity? {
 
