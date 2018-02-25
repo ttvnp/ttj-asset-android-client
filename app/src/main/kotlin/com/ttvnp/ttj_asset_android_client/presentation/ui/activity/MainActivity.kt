@@ -37,11 +37,12 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
 
     private var tabLayout: TabLayout? = null
     private var viewPager: ViewPager? = null
+    lateinit var adapter: MainViewPageAdapter
     private lateinit var homeFragment: MainHomeFragment
     private lateinit var receiveFragment: MainReceiveFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this);
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -49,8 +50,8 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         viewPager = findViewById<ViewPager>(R.id.view_pager_main)
 
         // set up view pager
-        val fragmentManager = getSupportFragmentManager()
-        val adapter = MainViewPageAdapter(fragmentManager)
+        val fragmentManager = supportFragmentManager
+        adapter = MainViewPageAdapter(fragmentManager)
         homeFragment = MainHomeFragment.getInstance()
         adapter.addFragment(homeFragment)
         receiveFragment = MainReceiveFragment.getInstance()
@@ -63,16 +64,16 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         tabLayout?.setupWithViewPager(viewPager)
 
         val homeTabView = View.inflate(this, R.layout.view_main_tab, null)
-        tabLayout?.getTabAt(0)?.setCustomView(homeTabView)
+        tabLayout?.getTabAt(0)?.customView = homeTabView
         homeTabView.findViewById<ImageView>(R.id.image_tab).setImageResource(R.drawable.ic_home)
         val receiveTabView = View.inflate(this, R.layout.view_main_tab, null)
-        tabLayout?.getTabAt(1)?.setCustomView(receiveTabView)
+        tabLayout?.getTabAt(1)?.customView = receiveTabView
         receiveTabView.findViewById<ImageView>(R.id.image_tab).setImageResource(R.drawable.ic_receive)
         val sendTabView = View.inflate(this, R.layout.view_main_tab, null)
-        tabLayout?.getTabAt(2)?.setCustomView(sendTabView)
+        tabLayout?.getTabAt(2)?.customView = sendTabView
         sendTabView.findViewById<ImageView>(R.id.image_tab).setImageResource(R.drawable.ic_send)
         val settingsTabView = View.inflate(this, R.layout.view_main_tab, null)
-        tabLayout?.getTabAt(3)?.setCustomView(settingsTabView)
+        tabLayout?.getTabAt(3)?.customView = settingsTabView
         settingsTabView.findViewById<ImageView>(R.id.image_tab).setImageResource(R.drawable.ic_settings)
 
         handleNotified()

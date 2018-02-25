@@ -4,12 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.webkit.WebView
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.LaunchPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.LaunchPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.util.changeLocale
 import dagger.android.AndroidInjection
+import java.util.*
 import javax.inject.Inject
 
 class LaunchActivity : Activity(), LaunchPresenterTarget {
@@ -18,7 +21,7 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
     lateinit var errorMessageGenerator: ErrorMessageGenerator
 
     @Inject
-    lateinit var launchPresenter : LaunchPresenter
+    lateinit var launchPresenter: LaunchPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -29,6 +32,17 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
 
         // get user data
         launchPresenter.checkDeviceReady()
+    }
+
+    override fun checkLanguage(language: String) {
+        WebView(this).destroy()
+
+        var locale = Locale.US
+        if (language != "en") {
+            locale = Locale.JAPAN
+        }
+
+        changeLocale(resources, locale)
     }
 
     override fun startNextActivity(isDeviceReady: Boolean) {

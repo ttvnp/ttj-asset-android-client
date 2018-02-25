@@ -12,7 +12,8 @@ import dagger.android.AndroidInjector
         DomainModule::class,
         MainHomeFragmentModule::class,
         MainReceiveFragmentModule::class,
-        MainSendFragmentModule::class
+        MainSendFragmentModule::class,
+        MainSettingsFragmentModule::class
 ))
 interface MainActivitySubcomponent : AndroidInjector<MainActivity> {
     @Subcomponent.Builder
