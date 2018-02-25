@@ -79,7 +79,7 @@
     <string name="error_cannot_update_profile_image">ファイルの容量が大きすぎます。もう一度アップロードしてください。</string>
     <string name="error_cannot_self_send">ご自身のメールアドレスには送信できません。</string>
     <string name="error_cannot_send_that_amount">Point/Coinが足りません。</string>
-    <string name="error_message_no_such_email_address_user">入力されたメールアドレスのアカウントが見つかりせん。</string>
+    <string name="error_message_no_such_email_address_user">入力されたメールアドレスのアカウントが見つかりません。</string>
     <string name="error_message_invalid_long">正しい数字を入力してください。</string>
     <string name="error_permission_denied">カメラまたはアルバムが利用できません。デバイスの設定をご確認ください。</string>
 
