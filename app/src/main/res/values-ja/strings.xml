@@ -8,16 +8,17 @@
 
     <!-- terms and conditions -->
     <string name="terms_and_conditions_description">The software you are about to use functions as a free, and open source.\n\nWhile the software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, we cannot guarantee that there will be no bugs in the software. You acknowledge that your use of this software is at your own discretion and in compliance with all applicable laws. You are responsible for safekeeping your passwords, and any other codes you use to access the software.\n\nTo the fullest extent permitted by law, this software is provided as is and no representations or warranties can be made of any kind, express or implied, including but not limited to the warranties of merchantability, fitness or a particular purpose and noninfringement. You assume any and all risks associated with the use of the software. In no event shall the authors of the software, employees and affiliates of Truong Thanh JAPAN, copyright holders, or Truong Thanh JAPAN, Co,.Ltd. be held liable for any claim, damages or other liability, whether in an action of contract, tort, or otherwise, arising from, out of or in connection with the software. We reserve the right to modify this disclaimer from time to time.</string>
+    <string name="terms_of_services_pre"></string>
     <string name="terms_of_services"><u>利用規約</u></string>
-    <string name="select_term_of_services">に同意する</string>
+    <string name="terms_of_services_post">に同意する</string>
     <string name="close">閉じる</string>
 
     <!-- tutorial -->
     <string name="tutorial_welcome">Welcome</string>
     <string name="tutorial_start">始める</string>
     <string name="tutorial_form_submit">送信</string>
-    <string name="tutorial_form_desc">* アカウント作成のためメールアドレスを入力してください。\n* 送信されますと確認メールをお送りいたします。</string>
-    <string name="tutorial_verification_code_desc">* メールに記載されたVerification code（認識コード）を入力してください。</string>
+    <string name="tutorial_form_desc">* アカウント作成のためメールアドレスを入力してください。\n* 確認メールに認証コードをお送りいたします。</string>
+    <string name="tutorial_verification_code_desc">* メールに記載されたVerification code（認証コード）を入力してください。</string>
     <string name="tutorial_password_on_import_desc">* 登録時に送付されたメールに記載されているパスワードを入力してください。</string>
     <string name="tutorial_end_desc">アカウントの確認が完了しました。\nご利用ください。</string>
     <string name="app_start">始める</string>
@@ -41,7 +42,7 @@
     <string name="transaction_type">送信/受信</string>
     <string name="transaction_status">ステータス</string>
     <string name="tab">タブ</string>
-    <string name="verification_code">コード</string>
+    <string name="verification_code">認証コード</string>
     <string name="password_on_import">パスワード</string>
     <string name="not_set">未設定</string>
     <string name="error_dialog_title">エラー</string>
@@ -49,9 +50,9 @@
     <string name="set_amount_desc">取引量を設定してください</string>
     <string name="hint_receive_amount">取引量を設定してください</string>
     <string name="hint_send_amount">取引量を設定してください</string>
-    <string name="send_by_qr">コードをスキャンする</string>
+    <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
-    <string name="send_email_form_desc">* Point/Coinを送信されるメールアドレスを入力してください。</string>
+    <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください。</string>
     <string name="send_successfully_executed">送信が完了しました。\n取引が反映されるまで少々時間が掛かりますので、暫く経ってから再度ご確認ください。</string>
     <string name="profile_successfully_updated">ユーザー情報を保存しました。</string>
     <string name="push_notification">プッシュ通知</string>
@@ -109,6 +110,12 @@
     <string name="title_settings_language">言語設定</string>
     <string name="title_setting_terms_of_service">利用規約</string>
     <string name="title_setting_privacy_policy">プライバシーポリシー</string>
+
+    <!-- language -->
+    <string-array name="languages">
+        <item>English</item>
+        <item>日本語</item>
+    </string-array>
 
     <!-- Notification -->
     <string name="channel_name_default">デフォルト通知設定</string>
