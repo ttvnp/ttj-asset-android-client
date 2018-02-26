@@ -138,16 +138,17 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
             swipeLayoutEmptyPaymentHistory?.visibility = View.GONE
             emptyTextViewPaymentHistory?.visibility = View.GONE
             if (userTransactionsModel.hasMore) {
+                var lastUserTransactionID = userTransactionsModel.userTransactions.last().id
                 recyclerViewPaymentHistory?.addOnScrollListener(object : EndlessScrollListener(recyclerViewPaymentHistory?.layoutManager as LinearLayoutManager) {
                     override fun onLoadMore(currentPage: Int) {
                         // get last item
-                        val lastUserTransactionID = userTransactionsModel.userTransactions.last().id
-                        val initialSize = userTransactionsModel.userTransactions.size
+                        val sizeBeforeLoad = adapter.itemCount
                         mainHomePresenter.loadMoreUserTransactions(lastUserTransactionID, { loadedModel ->
                             if (!loadedModel.hasMore) this.setFinished()
                             adapter.addAllUserTransactionModel(loadedModel.userTransactions)
-                            val updatedSize = adapter.itemCount
-                            recyclerViewPaymentHistory?.post { adapter.notifyItemRangeInserted(initialSize, updatedSize) }
+                            val updatedSize = loadedModel.userTransactions.size
+                            recyclerViewPaymentHistory?.post { adapter.notifyItemRangeInserted(sizeBeforeLoad, updatedSize) }
+                            lastUserTransactionID = loadedModel.userTransactions.last().id
                         }, forceRefresh)
                     }
                 })
