@@ -49,6 +49,7 @@
     <string name="no_transaction_data">There is no transaction data.</string>
     <string name="set_amount_desc">set amount</string>
     <string name="hint_receive_amount">amount</string>
+    <string name="hint_send_amount">amount</string>
     <string name="send_by_qr">Scan Code</string>
     <string name="send_by_email">By Email Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>

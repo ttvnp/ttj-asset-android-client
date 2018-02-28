@@ -49,6 +49,7 @@
     <string name="no_transaction_data">取引履歴はありません。</string>
     <string name="set_amount_desc">受取額を設定する</string>
     <string name="hint_receive_amount">受取額を設定してください</string>
+    <string name="hint_send_amount">送信額</string>
     <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
     <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください。</string>
