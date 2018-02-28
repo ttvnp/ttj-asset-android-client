@@ -186,11 +186,11 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         buttonSave.isEnabled = value
         buttonSave.setBackgroundColor(
                 ContextCompat.getColor(
-                        context,
+                        buttonSave.context,
                         backgroundColorSubmitButton
                 )
         )
-        buttonSave.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonSave.setTextColor(ContextCompat.getColor(buttonSave.context, textColor))
     }
 
 }
