@@ -57,17 +57,17 @@ class PaymentHistoryViewAdapter(
         )
         when (model.transactionStatus) {
             TransactionStatus.Unprocessed -> {
-                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(context, R.color.md_yellow_100))
+                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(holder.layoutPaymentHistory.context, R.color.md_yellow_100))
                 holder.imageTransactionStatus.visibility = View.VISIBLE
                 holder.imageTransactionStatus.setImageResource(R.drawable.ic_pending)
             }
             TransactionStatus.Error -> {
-                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(context, R.color.md_grey_300))
+                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(holder.layoutPaymentHistory.context, R.color.md_grey_300))
                 holder.imageTransactionStatus.visibility = View.VISIBLE
                 holder.imageTransactionStatus.setImageResource(R.drawable.ic_error)
             }
             else -> {
-                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(context, R.color.md_white_1000))
+                holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(holder.layoutPaymentHistory.context, R.color.md_white_1000))
                 holder.imageTransactionStatus.visibility = View.GONE
             }
         }

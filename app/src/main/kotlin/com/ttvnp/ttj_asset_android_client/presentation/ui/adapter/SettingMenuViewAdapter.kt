@@ -36,7 +36,7 @@ class SettingMenuViewAdapter(
 
         if (item.isBlank()) {
             holder.linearLayoutMenu.setBackgroundColor(
-                    ContextCompat.getColor(context, R.color.material_grey_100)
+                    ContextCompat.getColor(holder.linearLayoutMenu.context, R.color.material_grey_100)
             )
             return
         }
