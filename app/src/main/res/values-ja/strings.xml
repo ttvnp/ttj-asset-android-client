@@ -1,7 +1,7 @@
 <resources>
     <!-- upload id document -->
-    <string name="title_upload_id_document">ID資料のアップロード</string>
-    <string name="upload_photo_of_your_document">ID資料をアップロードしてください。</string>
+    <string name="title_upload_id_document">本人確認書類(ID)のアップロード</string>
+    <string name="upload_photo_of_your_document">ご本人確認書類をアップロードしてください。</string>
     <string name="following_item_must_be_clearly_visible">以下の項目が確認できるようにしてください。</string>
     <string name="list_of_document_id">. 顔写真\n. 氏名\n. 住所\n. 生年月日\n. 有効期限</string>
     <string name="face_photo">顔写真</string>
@@ -47,9 +47,9 @@
     <string name="not_set">未設定</string>
     <string name="error_dialog_title">エラー</string>
     <string name="no_transaction_data">取引履歴はありません。</string>
-    <string name="set_amount_desc">取引量を設定してください</string>
-    <string name="hint_receive_amount">取引量を設定してください</string>
-    <string name="hint_send_amount">取引量を設定してください</string>
+    <string name="set_amount_desc">受取額を設定する</string>
+    <string name="hint_receive_amount">受取額を設定してください</string>
+    <string name="hint_send_amount">送信額</string>
     <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
     <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください。</string>
@@ -102,7 +102,7 @@
     <string name="menu_settings_language">言語設定</string>
 
     <!-- function title -->
-    <string name="title_set_amount">取引量を設定してください</string>
+    <string name="title_set_amount">受取額設定</string>
     <string name="title_send">送信</string>
     <string name="title_settings_profile">プロフィール</string>
     <string name="title_settings_edit_profile">プロフィールを編集する</string>

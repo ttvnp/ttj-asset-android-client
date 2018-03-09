@@ -78,7 +78,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
         radioSendCoin = view.findViewById(R.id.radio_send_coin)
         textInputLayoutSendAmount = view.findViewById(R.id.text_input_layout_send_amount)
         textSendAmount = view.findViewById(R.id.text_send_amount)
-        textSendAmount.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.hint_receive_amount))
+        textSendAmount.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.hint_send_amount))
         qrCodeInfo?.let {
             sendAmountFormPresenter.initialize(this, it)
         }
