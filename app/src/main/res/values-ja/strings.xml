@@ -46,10 +46,10 @@
     <string name="password_on_import">パスワード</string>
     <string name="not_set">未設定</string>
     <string name="error_dialog_title">エラー</string>
-    <string name="no_transaction_data">取引履歴はありません</string>
-    <string name="set_amount_desc">Point/Coinを設定してください</string>
-    <string name="hint_receive_amount">Point/Coinを設定してください</string>
-    <string name="hint_send_amount">Point/Coinを設定してください</string>
+    <string name="no_transaction_data">取引履歴はありません。</string>
+    <string name="set_amount_desc">受取額を設定する</string>
+    <string name="hint_receive_amount">受取額を設定してください</string>
+    <string name="hint_send_amount">送信額を設定してください</string>
     <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
     <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください</string>
@@ -102,7 +102,7 @@
     <string name="menu_settings_language">言語設定</string>
 
     <!-- function title -->
-    <string name="title_set_amount">Point/Coinを設定してください</string>
+    <string name="title_set_amount">受取額設定</string>
     <string name="title_send">送信</string>
     <string name="title_settings_profile">プロフィール</string>
     <string name="title_settings_edit_profile">プロフィールを編集する</string>
