@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.webkit.WebView
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.util.getCurrentLocale
+import java.util.*
 
 class SettingTermsOfServiceActivity : BaseActivity() {
 
@@ -15,7 +17,11 @@ class SettingTermsOfServiceActivity : BaseActivity() {
         setContentView(R.layout.activity_terms_of_service)
 
         webViewTOC = findViewById(R.id.web_view_tom)
-        webViewTOC.loadUrl("file:///android_asset/sen_token_tos.html")
+        var tos = "sen_token_tos.html"
+        if (getCurrentLocale(resources) == Locale.JAPAN) {
+            tos = "ja_terms_of_services.html"
+        }
+        webViewTOC.loadUrl("file:///android_asset/" + tos)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_terms_of_condition)
         toolbar.title = getString(R.string.title_setting_terms_of_service)
