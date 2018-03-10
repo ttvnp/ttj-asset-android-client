@@ -68,22 +68,14 @@ class TutorialEmailFragment : Fragment() {
     }
 
     private fun setEnableButton(value: Boolean) {
-        var backgroundColorSubmitButton = R.color.md_grey_200
         var textColor = R.color.md_grey_500
 
         if (value) {
-            backgroundColorSubmitButton = R.color.colorPrimary
             textColor = R.color.colorTextOnPrimary
         }
 
         buttonTutorialSubmit.isEnabled = value
-        buttonTutorialSubmit.setBackgroundColor(
-                ContextCompat.getColor(
-                        context,
-                        backgroundColorSubmitButton
-                )
-        )
-        buttonTutorialSubmit.setTextColor(ContextCompat.getColor(context, textColor))
+        buttonTutorialSubmit.setTextColor(ContextCompat.getColor(buttonTutorialSubmit.context, textColor))
     }
 
 }

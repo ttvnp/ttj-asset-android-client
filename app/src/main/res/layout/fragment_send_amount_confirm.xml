@@ -51,7 +51,7 @@
             android:layout_marginEnd="@dimen/middle_margin"
             android:text="@string/default_cancel_button_text"
             style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
-            android:background="@color/colorCancel"
+            android:background="@drawable/button_second_primary"
             android:textColor="@color/colorPrimaryText" />
         <Button
             android:id="@+id/button_send_confirm_submit"
@@ -59,7 +59,7 @@
             android:layout_weight="1"
             android:layout_marginStart="@dimen/middle_margin"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_primary"
             style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
             android:text="@string/send_button_text"
             android:textColor="@color/colorTextOnPrimary" />

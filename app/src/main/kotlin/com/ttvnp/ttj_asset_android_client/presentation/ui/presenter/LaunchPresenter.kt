@@ -24,6 +24,8 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
 
     override fun initialize(target: LaunchPresenterTarget) {
         this.target = target
+
+        target.checkLanguage(deviceUseCase.getLanguage())
     }
 
     override fun checkDeviceReady() {

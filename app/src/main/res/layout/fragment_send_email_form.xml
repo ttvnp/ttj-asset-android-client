@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/middle_margin"
             android:layout_weight="1"
-            android:background="@color/colorCancel"
+            android:background="@drawable/button_second_primary"
             android:text="@string/default_cancel_button_text"
             android:textColor="@color/colorPrimaryText" />
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/middle_margin"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_primary"
             android:text="@string/default_positive_button_text"
             android:textColor="@color/colorTextOnPrimary" />
     </LinearLayout>
