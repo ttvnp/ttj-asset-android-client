@@ -54,7 +54,7 @@
         android:id="@+id/text_input_layout_send_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_receive_amount"
+        android:hint="@string/hint_send_amount"
         app:errorEnabled="true"
         app:hintEnabled="true">
 

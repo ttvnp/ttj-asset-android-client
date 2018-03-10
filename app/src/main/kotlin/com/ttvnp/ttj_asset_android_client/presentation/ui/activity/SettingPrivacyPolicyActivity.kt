@@ -1,11 +1,12 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.webkit.WebView
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.util.getCurrentLocale
+import java.util.*
 
 class SettingPrivacyPolicyActivity : BaseActivity() {
 
@@ -15,7 +16,11 @@ class SettingPrivacyPolicyActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting_privacy_policy)
         webViewPP = findViewById(R.id.web_view_pp)
-        webViewPP.loadUrl("file:///android_asset/sen_token_privacy_policy.html")
+        var pp = "sen_token_privacy_policy.html"
+        if (getCurrentLocale(resources) == Locale.JAPAN) {
+            pp = "ja_privacy_of_policy.html"
+        }
+        webViewPP.loadUrl("file:///android_asset/" + pp)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_privacy_policy)
         toolbar.title = getString(R.string.title_setting_privacy_policy)
