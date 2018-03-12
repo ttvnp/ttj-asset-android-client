@@ -21,7 +21,7 @@ class SettingTermsOfServiceActivity : BaseActivity() {
         if (getCurrentLocale(resources) == Locale.JAPAN) {
             tos = "ja_terms_of_services.html"
         }
-        webViewTOC.loadUrl("file:///android_asset/" + tos)
+        webViewTOC.loadUrl("file:///android_asset/$tos")
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_terms_of_condition)
         toolbar.title = getString(R.string.title_setting_terms_of_service)

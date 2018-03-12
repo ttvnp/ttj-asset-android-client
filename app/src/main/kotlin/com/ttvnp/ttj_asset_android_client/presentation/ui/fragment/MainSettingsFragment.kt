@@ -120,8 +120,11 @@ class MainSettingsFragment : BaseMainFragment() {
                 0 -> {
                     changeLanguage(dialog, Locale.US)
                 }
-                else -> {
+                1 -> {
                     changeLanguage(dialog, Locale.JAPAN)
+                }
+                else -> {
+                    changeLanguage(dialog, Locale("vi"))
                 }
             }
         }
