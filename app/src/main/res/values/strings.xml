@@ -116,6 +116,7 @@
     <string-array name="languages">
         <item>English</item>
         <item>Japanese</item>
+        <item>Vietnamese</item>
     </string-array>
 
     <!-- Notification -->

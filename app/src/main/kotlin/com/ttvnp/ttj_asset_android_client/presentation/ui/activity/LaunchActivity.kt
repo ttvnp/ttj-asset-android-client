@@ -37,9 +37,11 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
     override fun checkLanguage(language: String) {
         WebView(this).destroy()
 
-        var locale = Locale.US
-        if (language != "en") {
+        var locale: Locale = Locale.US
+        if (language == "ja") {
             locale = Locale.JAPAN
+        } else if (language == "vi") {
+            locale = Locale("vi")
         }
 
         changeLocale(resources, locale)

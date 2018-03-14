@@ -113,8 +113,9 @@
 
     <!-- language -->
     <string-array name="languages">
-        <item>English</item>
+        <item>英語</item>
         <item>日本語</item>
+        <item>ベトナム語</item>
     </string-array>
 
     <!-- Notification -->
