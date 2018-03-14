@@ -29,8 +29,8 @@ allprojects {
 
     ext {
         androidApplicationId = "com.ttvnp.ttj_asset_android_client.simple"
-        androidVersionCode = 11
-        androidVersionName = "1.0.7"
+        androidVersionCode = 12
+        androidVersionName = "1.0.8"
 
         dataLibraryVersionCode = 1
         dataLibraryVersionName = "1.0.0"
