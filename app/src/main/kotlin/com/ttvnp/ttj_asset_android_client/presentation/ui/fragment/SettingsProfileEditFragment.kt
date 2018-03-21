@@ -213,6 +213,51 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         activity.onBackPressed()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            requestCode -> {
+                if (grantResults.isEmpty()) return
+                if (checkGrantResults(grantResults.toList())) {
+                    if (isCamera) {
+                        pictureUri = launchCamera(requestCode)
+                        return
+                    }
+
+                    openGallery(requestCode)
+                    return
+                }
+
+                Toast.makeText(
+                        this.context,
+                        getString(R.string.error_permission_denied),
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) return
+        if (requestCode != this.requestCode) return
+        val uri = (if (pictureUri != null) {
+            pictureUri
+        } else {
+            data?.data
+        }) ?: return
+        val imageRequiredSize = 72
+        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
+        profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
+        Glide.with(context).load(uri).into(profileImage)
+
+        // close modal
+        if (!bottomSheetDialogFragment.isHidden) {
+            bottomSheetDialogFragment.dismiss()
+            pictureUri = null
+        }
+    }
+
     private fun getGender(): Int {
         val identified = 0
         val selectGender = radioGroupGender.checkedRadioButtonId
@@ -260,48 +305,4 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         return false
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            requestCode -> {
-                if (grantResults.isEmpty()) return
-                if (checkGrantResults(grantResults.toList())) {
-                    if (isCamera) {
-                        pictureUri = launchCamera(requestCode)
-                        return
-                    }
-
-                    openGallery(requestCode)
-                    return
-                }
-
-                Toast.makeText(
-                        this.context,
-                        getString(R.string.error_permission_denied),
-                        Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-        if (requestCode != this.requestCode) return
-        val uri = (if (pictureUri != null) {
-            pictureUri
-        } else {
-            data?.data
-        }) ?: return
-        val imageRequiredSize = 72
-        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
-        profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
-        Glide.with(context).load(uri).into(profileImage)
-
-        // close modal
-        if (!bottomSheetDialogFragment.isHidden) {
-            bottomSheetDialogFragment.dismiss()
-            pictureUri = null
-        }
-    }
 }

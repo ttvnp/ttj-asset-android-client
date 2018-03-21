@@ -4,7 +4,11 @@
     <string name="upload_photo_of_your_document">Please upload photo of your travel document.</string>
     <string name="following_item_must_be_clearly_visible">The following items must be clearly visible</string>
     <string name="list_of_document_id">. face photo\n. name\n. address\n. date of birth\n. date of expiry</string>
-    <string name="face_photo">face photo</string>
+    <string name="face_photo">Face photo</string>
+    <string name="face_photo_point_one">. Please submit the page containing your photograph and the page</string>
+    <string name="face_photo_point_two">. Ensure that all documents are clear and readable</string>
+    <string name="address_point_one">. Please submit the page containing your address information (your home address.)</string>
+    <string name="address_point_two">. Ensure that all documents are clear and readable</string>
 
     <!-- terms and conditions -->
     <string name="terms_and_conditions_description">The software you are about to use functions as a free, and open source.\n\nWhile the software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, we cannot guarantee that there will be no bugs in the software. You acknowledge that your use of this software is at your own discretion and in compliance with all applicable laws. You are responsible for safekeeping your passwords, and any other codes you use to access the software.\n\nTo the fullest extent permitted by law, this software is provided as is and no representations or warranties can be made of any kind, express or implied, including but not limited to the warranties of merchantability, fitness or a particular purpose and noninfringement. You assume any and all risks associated with the use of the software. In no event shall the authors of the software, employees and affiliates of Truong Thanh JAPAN, copyright holders, or Truong Thanh JAPAN, Co,.Ltd. be held liable for any claim, damages or other liability, whether in an action of contract, tort, or otherwise, arising from, out of or in connection with the software. We reserve the right to modify this disclaimer from time to time.</string>
@@ -24,6 +28,7 @@
     <string name="app_start">start</string>
 
     <!-- general -->
+    <string name="sample">Sample</string>
     <string name="maintenance">We are currently undergoing maintenance. This will not take long :)</string>
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
