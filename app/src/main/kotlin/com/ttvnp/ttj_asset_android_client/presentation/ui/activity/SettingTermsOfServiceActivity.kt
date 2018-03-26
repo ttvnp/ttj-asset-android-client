@@ -20,6 +20,8 @@ class SettingTermsOfServiceActivity : BaseActivity() {
         var tos = "sen_token_tos.html"
         if (getCurrentLocale(resources) == Locale.JAPAN) {
             tos = "ja_terms_of_services.html"
+        } else if (getCurrentLocale(resources) == Locale("vi")) {
+            tos = "vn_terms_of_services.html"
         }
         webViewTOC.loadUrl("file:///android_asset/$tos")
 
