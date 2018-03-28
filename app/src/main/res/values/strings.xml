@@ -2,7 +2,7 @@
     <!-- upload id document -->
     <string name="title_upload_id_document">Upload ID Document</string>
     <string name="upload_photo_of_your_document">Please upload photo of your travel document.</string>
-    <string name="following_item_must_be_clearly_visible">The following items must be clearly visible</string>
+    <string name="following_item_must_be_clearly_visible">The following items must be clearly visible.</string>
     <string name="list_of_document_id">-  face photo\n- name\n- address\n- date of birth\n- date of expiry</string>
     <string name="face_photo">Face photo</string>
     <string name="face_photo_point_one">-  Please submit the page containing your photograph</string>

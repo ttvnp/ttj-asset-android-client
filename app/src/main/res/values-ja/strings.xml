@@ -28,7 +28,7 @@
     <string name="app_start">始める</string>
 
     <!-- general -->
-    <string name="sample">sample</string>
+    <string name="sample">例</string>
     <string name="maintenance">サーバーメンテナンス中です。少々お待ちください。</string>
     <string name="point_name">POINT</string>
     <string name="coin_name">COIN</string>
