@@ -20,6 +20,9 @@ class SettingPrivacyPolicyActivity : BaseActivity() {
         if (getCurrentLocale(resources) == Locale.JAPAN) {
             pp = "ja_privacy_of_policy.html"
         }
+        if (getCurrentLocale(resources) == Locale("vi")){
+            pp = "vn_privacy_of_policy.html"
+        }
         webViewPP.loadUrl("file:///android_asset/$pp")
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_privacy_policy)
