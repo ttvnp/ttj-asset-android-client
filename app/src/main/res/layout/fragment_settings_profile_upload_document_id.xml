@@ -116,11 +116,11 @@
                         android:textColor="@color/md_black_1000" />
 
                     <ImageView
-                        android:layout_width="125dp"
+                        android:layout_width="89dp"
                         android:layout_height="125dp"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/face_photo_sample" />
+                        android:src="@drawable/passport_sample_face" />
 
                 </LinearLayout>
 
@@ -209,22 +209,20 @@
                     android:layout_marginBottom="0dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="36dp"
                         android:text="@string/sample"
                         android:textColor="@color/md_black_1000" />
 
                     <ImageView
-                        android:layout_width="105dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/address_sample" />
+                        android:layout_width="82dp"
+                        android:layout_height="125dp"
+                        android:src="@drawable/passport_sample_address" />
 
                 </LinearLayout>
 
