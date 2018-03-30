@@ -3,7 +3,7 @@
     <string name="title_upload_id_document">ご本人確認資料のアップロード</string>
     <string name="upload_photo_of_your_document">ご本人確認資料をアップロードしてください。</string>
     <string name="following_item_must_be_clearly_visible">以下の項目が確認できるようにしてください。</string>
-    <string name="list_of_document_id">. 顔写真\n. 氏名\n. 住所\n. 生年月日\n. 有効期限</string>
+    <string name="list_of_document_id">- 顔写真\n- 氏名\n- 住所\n. 生年月日\n- 有効期限</string>
     <string name="face_photo">顔写真</string>
     <string name="face_photo_point_one">- 顔写真が確認できるページをアップロードしてください。</string>
     <string name="face_photo_point_two">- 資料全面が鮮明に写るようにしてください。</string>
