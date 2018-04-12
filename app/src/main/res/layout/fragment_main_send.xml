@@ -8,6 +8,8 @@
         android:id="@+id/text_can_not_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/large_margin"
+        android:paddingStart="@dimen/large_margin"
         android:text="@string/message_note_disabled_send_for_id"
         android:textColor="@color/md_red_900"
         android:textSize="12sp"
