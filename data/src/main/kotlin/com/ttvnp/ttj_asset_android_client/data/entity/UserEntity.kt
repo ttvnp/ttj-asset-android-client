@@ -8,54 +8,54 @@ import java.util.*
 
 @Table
 class UserEntity(
-        @Column @Setter("emailAddress")
+        @Column(defaultExpr = "") @Setter("emailAddress")
         var emailAddress: String = "",
 
-        @Column @Setter("profileImageId")
+        @Column(defaultExpr = "0") @Setter("profileImageId")
         var profileImageID: Long = 0,
 
-        @Column @Setter("profileImageURL")
+        @Column(defaultExpr = "") @Setter("profileImageURL")
         var profileImageURL: String = "",
 
-        @Column @Setter("firstName")
+        @Column(defaultExpr = "") @Setter("firstName")
         var firstName: String = "",
 
-        @Column @Setter("middleName")
+        @Column(defaultExpr = "") @Setter("middleName")
         var middleName: String = "",
 
-        @Column @Setter("lastName")
+        @Column(defaultExpr = "") @Setter("lastName")
         var lastName: String = "",
 
-        @Column @Setter("address")
+        @Column(defaultExpr = "") @Setter("address")
         var address: String = "",
 
-        @Column @Setter("genderType")
+        @Column(defaultExpr = "0") @Setter("genderType")
         var genderType: Int = 0,
 
-        @Column @Setter("dateOfBirth")
+        @Column(defaultExpr = "") @Setter("dateOfBirth")
         var dateOfBirth: String = "",
 
-        @Column @Setter("cellphoneNumberNationalCode")
+        @Column(defaultExpr = "") @Setter("cellphoneNumberNationalCode")
         var cellphoneNumberNationalCode: String = "",
 
-        @Column @Setter("cellphoneNumber")
+        @Column(defaultExpr = "") @Setter("cellphoneNumber")
         var cellphoneNumber: String = "",
 
-        @Column @Setter("idDocument1ImageURL")
+        @Column(defaultExpr = "") @Setter("idDocument1ImageURL")
         var idDocument1ImageURL: String = "",
 
-        @Column @Setter("idDocument2ImageURL")
+        @Column(defaultExpr = "") @Setter("idDocument2ImageURL")
         var idDocument2ImageURL: String = "",
 
-        @Column @Setter("isEmailVerified")
+        @Column(defaultExpr = "false") @Setter("isEmailVerified")
         var isEmailVerified: Boolean = false,
 
-        @Column @Setter("isIdentified")
+        @Column(defaultExpr = "false") @Setter("isIdentified")
         var isIdentified: Boolean = false,
 
-        @Column @Setter("identificationStatus")
+        @Column(defaultExpr = "0") @Setter("identificationStatus")
         var identificationStatus: Int = 0,
 
-        @Column @Setter("updatedAt")
+        @Column(defaultExpr = "now") @Setter("updatedAt")
         var updatedAt: Date = Now()
 )
