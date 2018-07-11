@@ -7,17 +7,23 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.Gender
+import com.ttvnp.ttj_asset_android_client.domain.model.IdentificationStatus
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
@@ -25,8 +31,10 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
+import com.ttvnp.ttj_asset_android_client.presentation.ui.util.hideKeyboard
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.fragment_settings_profile_detail.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,7 +71,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
     private lateinit var calendar: Calendar
 
     companion object {
-        val TMP_FILE_NAME = "tmp_profile_image"
+        const val TMP_FILE_NAME = "tmp_profile_image"
         fun getInstance(): SettingsProfileEditFragment {
             return SettingsProfileEditFragment()
         }
@@ -162,23 +170,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
                     textProfileCellPhoneNumber.text.toString()
             )
         }
+        setEnableView(false)
         settingsProfileEditPresenter.setupUserInfo()
 
         return view
     }
 
     override fun bindUserInfo(userModel: UserModel) {
+        setEnableView(true)
         if (userModel.isIdentified) {
-            textProfileFirstName.isEnabled = false
-            textProfileMiddleName.isEnabled = false
-            textProfileLastName.isEnabled = false
-            textProfileAddress.isEnabled = false
-            radioMale.isEnabled = false
-            radioFemale.isEnabled = false
-            textDOB.isEnabled = false
-            textDOB.setTextColor(ContextCompat.getColor(textDOB.context, R.color.md_grey_400))
-            textProfileCellPhoneNumberNationalCode.isEnabled = false
-            textProfileCellPhoneNumber.isEnabled = false
+            setEnableView(false)
+            context?.let {
+                textDOB.setTextColor(ContextCompat.getColor(it, R.color.md_grey_400))
+            }
         }
         if (userModel.profileImageURL.isNotEmpty()) {
             Picasso
@@ -198,6 +202,8 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         }
         if (userModel.phoneNumber.nationalCode.isNotBlank()) textProfileCellPhoneNumberNationalCode.setText(userModel.phoneNumber.nationalCode)
         if (userModel.phoneNumber.cellphoneNumber.isNotBlank()) textProfileCellPhoneNumber.setText(userModel.phoneNumber.cellphoneNumber)
+
+        checkUnderReviewing(userModel.identificationStatus.rawValue)
     }
 
     override fun showMessageOnUpdateSuccessfullyCompleted() {
@@ -269,6 +275,91 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         }
 
         return identified
+    }
+
+    private fun checkUnderReviewing(status: Int) {
+        if (status == IdentificationStatus.Applied.rawValue) {
+            var view:View? = null
+            context?.let {
+                val textColor = ContextCompat.getColor(it, R.color.md_grey_400)
+                textProfileFirstName.setTextColor(textColor)
+                textProfileFirstName.onFocusChangeListener = onFocusChangeListener { it ->
+                    clearUnderReviewMessage(view)
+                    view = it
+                }
+                textProfileMiddleName.setTextColor(textColor)
+                textProfileMiddleName.onFocusChangeListener = onFocusChangeListener { it ->
+                    clearUnderReviewMessage(view)
+                    view = it
+                }
+                textProfileLastName.setTextColor(textColor)
+                textProfileLastName.onFocusChangeListener = onFocusChangeListener { it ->
+                    clearUnderReviewMessage(view)
+                    view = it
+                }
+                textProfileAddress.setTextColor(textColor)
+                textProfileAddress.onFocusChangeListener = onFocusChangeListener { it ->
+                    clearUnderReviewMessage(view)
+                    view = it
+                }
+                textProfileCellPhoneNumberNationalCode.setTextColor(textColor)
+                textProfileCellPhoneNumberNationalCode.onFocusChangeListener = onFocusChangeListener {
+                    clearUnderReviewMessage(view)
+                    textProfileCellPhoneNumberNationalCode.error = null
+                    textProfileCellPhoneNumber.error = getString(R.string.message_under_review)
+                    textProfileCellPhoneNumber.requestFocus()
+                    view = textProfileCellPhoneNumber
+                }
+                textProfileCellPhoneNumber.setTextColor(textColor)
+                textProfileCellPhoneNumber.onFocusChangeListener = onFocusChangeListener {
+                    clearUnderReviewMessage(view)
+                    textProfileCellPhoneNumber.error = getString(R.string.message_under_review)
+                    view = it
+                }
+                radioGroupGender.setOnClickListener {
+                    clearUnderReviewMessage(view)
+                    Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()
+                }
+                radioFemale.isEnabled = false
+                radioMale.isEnabled = false
+                textDOB.setTextColor(textColor)
+                textDOB.setOnClickListener {
+                    clearUnderReviewMessage(view)
+                    textDOB.requestFocus()
+                    Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun setEnableView(b: Boolean) {
+        textProfileFirstName.isEnabled = b
+        textProfileMiddleName.isEnabled = b
+        textProfileLastName.isEnabled = b
+        textProfileAddress.isEnabled = b
+        textDOB.isEnabled = b
+        radioMale.isEnabled = b
+        radioFemale.isEnabled = b
+        textProfileCellPhoneNumberNationalCode.isEnabled = b
+        textProfileCellPhoneNumber.isEnabled = b
+    }
+
+    private fun clearUnderReviewMessage(view: View?) {
+        view?.let {
+            if (view is EditText) {
+                view.error = null
+            }
+        }
+    }
+
+    private fun onFocusChangeListener(onFocusChanged: (view: View) -> Unit): View.OnFocusChangeListener {
+        return View.OnFocusChangeListener { view, _ ->
+            if (view is EditText) {
+                view.setRawInputType(InputType.TYPE_NULL)
+                view.error = getString(R.string.message_under_review)
+            }
+            onFocusChanged(view)
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
