@@ -115,6 +115,7 @@
                                 android:id="@+id/text_profile_middle_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:focusable="true"
                                 android:inputType="text"
                                 android:maxLength="200" />
                         </android.support.design.widget.TextInputLayout>
