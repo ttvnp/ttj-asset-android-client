@@ -29,6 +29,7 @@
     <string name="app_start">Bắt đầu</string>
 
     <!-- general -->
+    <string name="message_under_review">When ID was approved or under review, you can change only the avatar image.</string>
     <string name="sample">Mẫu vật</string>
     <string name="maintenance">Phiên bản đang bảo trì. Xin vui lòng đợi trong giây lát.</string>
     <string name="point_name">POINT</string>
