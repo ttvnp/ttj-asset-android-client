@@ -180,9 +180,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         setEnableView(true)
         if (userModel.isIdentified) {
             setEnableView(false)
-            context?.let {
-                textDOB.setTextColor(ContextCompat.getColor(it, R.color.md_grey_400))
-            }
+            context?.let { textDOB.setTextColor(ContextCompat.getColor(it, R.color.md_grey_400)) }
         }
         if (userModel.profileImageURL.isNotEmpty()) {
             Picasso
@@ -283,24 +281,24 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             context?.let {
                 val textColor = ContextCompat.getColor(it, R.color.md_grey_400)
                 textProfileFirstName.setTextColor(textColor)
-                textProfileFirstName.onFocusChangeListener = onFocusChangeListener { it ->
+                textProfileFirstName.onFocusChangeListener = onFocusChangeListener { v ->
                     clearUnderReviewMessage(view)
-                    view = it
+                    view = v
                 }
                 textProfileMiddleName.setTextColor(textColor)
-                textProfileMiddleName.onFocusChangeListener = onFocusChangeListener { it ->
+                textProfileMiddleName.onFocusChangeListener = onFocusChangeListener { v ->
                     clearUnderReviewMessage(view)
-                    view = it
+                    view = v
                 }
                 textProfileLastName.setTextColor(textColor)
-                textProfileLastName.onFocusChangeListener = onFocusChangeListener { it ->
+                textProfileLastName.onFocusChangeListener = onFocusChangeListener { v ->
                     clearUnderReviewMessage(view)
-                    view = it
+                    view = v
                 }
                 textProfileAddress.setTextColor(textColor)
-                textProfileAddress.onFocusChangeListener = onFocusChangeListener { it ->
+                textProfileAddress.onFocusChangeListener = onFocusChangeListener { v ->
                     clearUnderReviewMessage(view)
-                    view = it
+                    view = v
                 }
                 textProfileCellPhoneNumberNationalCode.setTextColor(textColor)
                 textProfileCellPhoneNumberNationalCode.onFocusChangeListener = onFocusChangeListener {
