@@ -330,16 +330,16 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         }
     }
 
-    private fun setEnableView(b: Boolean) {
-        textProfileFirstName.isEnabled = b
-        textProfileMiddleName.isEnabled = b
-        textProfileLastName.isEnabled = b
-        textProfileAddress.isEnabled = b
-        textDOB.isEnabled = b
-        radioMale.isEnabled = b
-        radioFemale.isEnabled = b
-        textProfileCellPhoneNumberNationalCode.isEnabled = b
-        textProfileCellPhoneNumber.isEnabled = b
+    private fun setEnableView(enable: Boolean) {
+        textProfileFirstName.isEnabled = enable
+        textProfileMiddleName.isEnabled = enable
+        textProfileLastName.isEnabled = enable
+        textProfileAddress.isEnabled = enable
+        textDOB.isEnabled = enable
+        radioMale.isEnabled = enable
+        radioFemale.isEnabled = enable
+        textProfileCellPhoneNumberNationalCode.isEnabled = enable
+        textProfileCellPhoneNumber.isEnabled = enable
     }
 
     private fun clearUnderReviewMessage(view: View?) {
