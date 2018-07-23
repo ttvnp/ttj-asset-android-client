@@ -125,7 +125,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         when (status) {
             IdentificationStatus.Applied -> {
                 value = getString(R.string.under_review_for_id_document)
-                buttonUploadDocumentID.isEnabled = true
+                buttonUploadDocumentID.isEnabled = false
             }
             IdentificationStatus.Identified -> {
                 value = getString(R.string.id_document_was_approved)

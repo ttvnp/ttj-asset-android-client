@@ -18,10 +18,10 @@ class FirebaseAnalyticsHelper(val firebaseAnalytics: FirebaseAnalytics) {
 
     fun logAssetSendEvent(assetType: AssetType, amount: Long) {
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, assetType.rawValue)
         bundle.putString(FirebaseAnalytics.Param.VIRTUAL_CURRENCY_NAME, assetType.rawValue)
         bundle.putLong(FirebaseAnalytics.Param.VALUE, amount)
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE, bundle)
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SPEND_VIRTUAL_CURRENCY, bundle)
     }
 
     fun setHasSetProfileImageUserPropertyOn() {

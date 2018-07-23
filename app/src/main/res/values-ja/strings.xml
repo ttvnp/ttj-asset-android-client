@@ -29,6 +29,7 @@
     <string name="app_start">始める</string>
 
     <!-- general -->
+    <string name="message_under_review">ご本人確認資料(ID)が承認済あるいは審査中は、プロフィール画像のみ変更できます。</string>
     <string name="sample">例</string>
     <string name="maintenance">サーバーメンテナンス中です。少々お待ちください。</string>
     <string name="point_name">POINT</string>
@@ -132,9 +133,9 @@
     <string name="send_confirm_desc_format">%d %s を %s に送信しますか?</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">受信</string>
-    <string name="notification_body_receive_payment_notification">%sから %s %s を受信しました。</string>
+    <string name="notification_body_receive_payment_notification">%s %s を %sから 受信しました。</string>
     <string name="notification_title_send_payment_notification">取引が完了しました。</string>
-    <string name="notification_body_send_payment_notification">取引(%s へ %s %s を送信)が完了しました。</string>
+    <string name="notification_body_send_payment_notification">取引(%s %s を %s へ 送信)が完了しました。</string>
 
     <!-- network -->
     <string name="network_error">ネットワークエラー</string>
