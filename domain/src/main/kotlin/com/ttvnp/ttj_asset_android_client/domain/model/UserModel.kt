@@ -1,5 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.domain.model
 
+import android.content.Context
+
 class UserModel(
         val emailAddress: String = "",
         val profileImageID: Long = 0L,
@@ -16,4 +18,15 @@ class UserModel(
         val isEmailVerified: Boolean = false,
         val isIdentified: Boolean = false,
         val identificationStatus: IdentificationStatus = IdentificationStatus.Unchecked
-) : BaseModel()
+) : BaseModel() {
+    fun hasAllNecessaryInfo(context: Context): Boolean {
+        return (
+                this.firstName.isEmpty()
+                && this.lastName.isEmpty()
+                && this.address.isEmpty()
+                && this.dateOfBirth.isEmpty()
+                && this.genderType.getGender(context).isEmpty()
+                && this.phoneNumber.getCellphoneNumberWithNationalCode().isEmpty()
+                )
+    }
+}
