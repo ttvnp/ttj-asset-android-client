@@ -33,7 +33,7 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
 
                     override fun onSuccess(userModel: UserModel) {
-                        target?.setDocumentID(userModel.isDocument1ImageURL, userModel.isDocument2ImageURL)
+                        target?.setDocumentID(userModel)
                     }
 
                     override fun onOtherError(error: Throwable?) {
@@ -60,7 +60,7 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                             ErrorCode.NO_ERROR -> {
                                 wrapper.model?.let {
                                     target?.showMessageOnUploadSuccessfullyCompleted()
-                                    target?.setDocumentID(it.isDocument1ImageURL, it.isDocument2ImageURL)
+                                    target?.setDocumentID(it)
                                 }
                             }
                             else -> {
