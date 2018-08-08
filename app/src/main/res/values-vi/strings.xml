@@ -105,7 +105,7 @@
     <string name="menu_settings">Cài đặt</string>
     <string name="menu_settings_profile">Hồ sơ của bạn</string>
     <string name="menu_settings_notifications">Thông báo</string>
-    <string name="menu_settings_language">Ngôn ngữ</string>
+    <string name="menu_settings_language">Ngôn ngữ - Language</string>
 
 
     <!-- function title -->
@@ -114,15 +114,15 @@
     <string name="title_settings_profile">Hồ sơ của bạn</string>
     <string name="title_settings_edit_profile">Chỉnh sửa hồ sơ</string>
     <string name="title_settings_notification">Thông báo</string>
-    <string name="title_settings_language">Ngôn ngữ</string>
+    <string name="title_settings_language">Ngôn ngữ - Language</string>
     <string name="title_setting_terms_of_service">Điều khoản dịch vụ</string>
     <string name="title_setting_privacy_policy">Chính sách bảo mật</string>
 
     <!-- language -->
     <string-array name="languages">
-        <item>Tiếng Anh</item>
-        <item>Tiếng Nhật</item>
-        <item>Tiếng Việt</item>
+        <item>Tiếng Anh - English</item>
+        <item>Tiếng Nhật - Japanese</item>
+        <item>Tiếng Việt - Vietnamese</item>
     </string-array>
 
     <!-- Notification -->

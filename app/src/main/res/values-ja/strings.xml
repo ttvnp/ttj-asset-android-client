@@ -104,7 +104,7 @@
     <string name="menu_settings">設定</string>
     <string name="menu_settings_profile">プロフィール</string>
     <string name="menu_settings_notifications">通知設定</string>
-    <string name="menu_settings_language">言語設定</string>
+    <string name="menu_settings_language">言語設定 - Language</string>
 
     <!-- function title -->
     <string name="title_set_amount">受取額設定</string>
@@ -112,15 +112,15 @@
     <string name="title_settings_profile">プロフィール</string>
     <string name="title_settings_edit_profile">プロフィールを編集する</string>
     <string name="title_settings_notification">通知設定</string>
-    <string name="title_settings_language">言語設定</string>
+    <string name="title_settings_language">言語設定 - Language</string>
     <string name="title_setting_terms_of_service">利用規約</string>
     <string name="title_setting_privacy_policy">プライバシーポリシー</string>
 
     <!-- language -->
     <string-array name="languages">
-        <item>英語</item>
-        <item>日本語</item>
-        <item>ベトナム語</item>
+        <item>英語 - English</item>
+        <item>日本語 - Japanese</item>
+        <item>ベトナム語 - Vietnamese</item>
     </string-array>
 
     <!-- Notification -->
