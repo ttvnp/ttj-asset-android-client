@@ -28,6 +28,7 @@
     <string name="app_start">start</string>
 
     <!-- general -->
+    <string name="message_under_review">When ID was approved or under review, you can change only the avatar image.</string>
     <string name="sample">Sample</string>
     <string name="maintenance">We are currently undergoing maintenance. This will not take long :)</string>
     <string name="point_name">POINT</string>

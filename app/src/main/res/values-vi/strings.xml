@@ -29,6 +29,7 @@
     <string name="app_start">Bắt đầu</string>
 
     <!-- general -->
+    <string name="message_under_review">Khi ID xác minh chủ tài khoản đã được xác nhận hoặc đang trong khi xét duyệt, thì bạn chỉ có thể thay đổi ảnh đại diện.</string>
     <string name="sample">Mẫu vật</string>
     <string name="maintenance">Phiên bản đang bảo trì. Xin vui lòng đợi trong giây lát.</string>
     <string name="point_name">POINT</string>
