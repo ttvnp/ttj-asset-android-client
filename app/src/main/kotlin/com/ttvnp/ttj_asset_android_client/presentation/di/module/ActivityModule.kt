@@ -29,4 +29,10 @@ class ActivityModule {
     fun settingsNotificationPresenter(deviceUseCase: DeviceUseCase): SettingsNotificationPresenter {
         return SettingsNotificationPresenterImpl(deviceUseCase)
     }
+
+    @Provides
+    fun settingsChangePasswordPresenter(userUseCase: UserUseCase): SettingsChangePasswordPresenter {
+        return SettingsChangePasswordPresenterImpl(userUseCase)
+    }
+
 }

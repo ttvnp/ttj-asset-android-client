@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -12,6 +13,13 @@ import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class SettingsNotificationActivity : BaseActivity(), SettingsNotificationPresenterTarget {
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, SettingsNotificationActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     @Inject
     lateinit var settingsNotificationPresenter : SettingsNotificationPresenter
