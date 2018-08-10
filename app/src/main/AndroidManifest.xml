@@ -86,7 +86,7 @@
         <activity android:name=".ui.activity.SettingTermsOfServiceActivity" />
         <activity android:name=".ui.activity.SettingPrivacyPolicyActivity" />
         <activity android:name=".ui.activity.MaintenanceActivity" />
-        <activity android:name=".ui.activity.SettingsChangePasswordActivity"></activity>
+        <activity android:name=".ui.activity.SettingsChangePasswordActivity" />
     </application>
 
 </manifest>
