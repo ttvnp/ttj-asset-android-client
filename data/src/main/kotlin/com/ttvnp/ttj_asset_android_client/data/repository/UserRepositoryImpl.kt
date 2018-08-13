@@ -280,4 +280,35 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>> {
+        return Single.create { subscriber ->
+            var errCode = ErrorCode.ERROR_UNKNOWN
+            var model: UserModel? = null
+            try {
+                val changePasswordResponse = userService.changePassword(oldPassword, newPassword, retypePassword).execute()
+                if (!changePasswordResponse.isSuccessful) {
+                    subscriber.onError(HttpException(changePasswordResponse))
+                    return@create
+                }
+                changePasswordResponse.body()?.let {
+                    if (it.hasError()) {
+                        errCode = when (it.errorCode) {
+                            ServiceErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT.rawValue -> ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT
+                            else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        }
+                        return@let
+                    }
+                    val ue = UserEntity()
+                    UserTranslator().translate(ue)?.let {
+                        model = it
+                    }
+                }
+            } catch (ex: IOException) {
+                errCode = ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER
+            }
+            model?.let {
+                subscriber.onSuccess(ModelWrapper(model, ErrorCode.NO_ERROR))
+            } ?: subscriber.onSuccess(ModelWrapper(null, errCode))
+        }
+    }
 }

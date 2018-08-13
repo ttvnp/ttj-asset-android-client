@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.data.service.response
 
 import com.squareup.moshi.Json
-import java.util.Date
+import java.util.*
 
 class DeviceResponse(
         @Json(name = "accessToken") val accessToken: String = "",
@@ -40,4 +40,4 @@ class UserResponse(
         @Json(name = "address") val address: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false
-)
+) : BaseResponse()

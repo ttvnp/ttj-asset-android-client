@@ -17,6 +17,7 @@ import javax.inject.Singleton
         SendActivityModule::class,
         SettingsProfileActivityModule::class,
         SettingsNotificationActivityModule::class,
+        SettingsChangePasswordActivityModule::class,
         AndroidFirebaseInstanceIDServiceModule::class
 ))
 interface ApplicationComponent {

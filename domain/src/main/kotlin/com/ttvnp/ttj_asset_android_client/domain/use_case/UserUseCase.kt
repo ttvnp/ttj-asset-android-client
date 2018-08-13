@@ -31,6 +31,8 @@ interface UserUseCase {
     fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
 
     fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>>
+
+    fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>>
 }
 
 class UserUseCaseImpl @Inject constructor(
@@ -104,5 +106,9 @@ class UserUseCaseImpl @Inject constructor(
                 }
             }).addTo(disposables)
         })
+    }
+
+    override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>> {
+        return userRepository.changePassword(oldPassword, newPassword, retypePassword)
     }
 }

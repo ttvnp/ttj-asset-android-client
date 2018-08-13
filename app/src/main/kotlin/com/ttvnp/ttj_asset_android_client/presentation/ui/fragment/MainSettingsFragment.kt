@@ -2,7 +2,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -55,6 +54,7 @@ class MainSettingsFragment : BaseMainFragment() {
 
         val menuStrings = listOf(
                 getString(R.string.menu_settings_profile),
+                getString(R.string.title_change_password),
                 getString(R.string.menu_settings_notifications),
                 getString(R.string.menu_settings_language),
                 "",
@@ -68,27 +68,27 @@ class MainSettingsFragment : BaseMainFragment() {
                 when (it.id) {
                     0 -> {
                         // case profile clicked.
-                        val intent = Intent(activity, SettingsProfileActivity::class.java)
-                        startActivity(intent)
+                        SettingsProfileActivity.start(context)
                     }
                     1 -> {
-                        // case notifications clicked.
-                        val intent = Intent(activity, SettingsNotificationActivity::class.java)
-                        startActivity(intent)
+                        // case change password clicked.
+                        SettingsChangePasswordActivity.start(context)
                     }
                     2 -> {
+                        // case notifications clicked.
+                        SettingsNotificationActivity.start(context)
+                    }
+                    3 -> {
                         //change language dialog
                         showLanguagesDialog()
                     }
-                    4 -> {
-                        //case terms of conditions.
-                        val intent = Intent(activity, SettingTermsOfServiceActivity::class.java)
-                        startActivity(intent)
-                    }
                     5 -> {
+                        //case terms of conditions.
+                        SettingTermsOfServiceActivity.start(context)
+                    }
+                    6 -> {
                         //case privacy policy
-                        val intent = Intent(activity, SettingPrivacyPolicyActivity::class.java)
-                        startActivity(intent)
+                        SettingPrivacyPolicyActivity.start(context)
                     }
                     else -> { /* do nothing */
                     }

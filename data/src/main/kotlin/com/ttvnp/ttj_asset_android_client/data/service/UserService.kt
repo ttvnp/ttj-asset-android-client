@@ -59,6 +59,14 @@ interface UserService {
     @FormUrlEncoded
     @POST("users/transactions")
     fun createTransaction(@Header("credential") credential: String, @Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Call<CreateTransactionResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @PATCH("users/password_on_import")
+    fun changePassword(@Field("current_password") oldPassword: String,
+                       @Field("new_password") newPassword: String,
+                       @Field("new_password2")retypePassword: String): Call<UserResponse>
+
 }
 
 class UserServiceImpl(
@@ -123,5 +131,9 @@ class UserServiceImpl(
 
     override fun createTransaction(credential: String, emailAddress: String, assetType: String, amount: Long): Call<CreateTransactionResponse> {
         return service.createTransaction(ServerCryptoUtil.encrypt(credential), emailAddress, assetType, amount)
+    }
+
+    override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Call<UserResponse> {
+        return service.changePassword(oldPassword, newPassword, retypePassword)
     }
 }
