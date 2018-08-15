@@ -1,7 +1,9 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -16,13 +18,14 @@ import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.*
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.SettingMenuViewAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainSettingsPresenter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainSettingsPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.util.changeLocale
 import dagger.android.support.AndroidSupportInjection
 import java.util.*
 import javax.inject.Inject
 
 
-class MainSettingsFragment : BaseMainFragment() {
+class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
 
     companion object {
         fun getInstance(): MainSettingsFragment {
@@ -44,7 +47,7 @@ class MainSettingsFragment : BaseMainFragment() {
             savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_main_settings, container, false)
-
+        mainSettingsPresenter.init(this)
         val layoutManager = LinearLayoutManager(this.context)
         val recyclerViewSettingMenu: RecyclerView = view.findViewById(R.id.recycler_view_setting_menu)
         val dividerItemDecoration = DividerItemDecoration(recyclerViewSettingMenu.context, layoutManager.orientation)
@@ -59,7 +62,8 @@ class MainSettingsFragment : BaseMainFragment() {
                 getString(R.string.menu_settings_language),
                 getString(R.string.title_setting_terms_of_service),
                 getString(R.string.title_setting_privacy_policy),
-                getString(R.string.title_change_password)
+                getString(R.string.title_change_password),
+                getString(R.string.logout)
         )
 
         val adapter = SettingMenuViewAdapter(menuStrings)
@@ -94,6 +98,10 @@ class MainSettingsFragment : BaseMainFragment() {
                         // case change password clicked.
                         SettingsChangePasswordActivity.start(context)
                     }
+                    8 -> {
+                        // case logout
+                        showLogoutDialog()
+                    }
                     else -> { /* do nothing */
                     }
                 }
@@ -102,6 +110,16 @@ class MainSettingsFragment : BaseMainFragment() {
         recyclerViewSettingMenu.adapter = adapter
 
         return view
+    }
+
+    override fun onLogoutSuccessfully(isLogout: Boolean) {
+        dismissProgressDialog()
+        if (!isLogout) {
+            showErrorDialog(errorMessageGenerator.default())
+            return
+        }
+        activity?.startActivity(Intent(context, TutorialActivity::class.java))
+        activity?.finish()
     }
 
     private fun showLanguagesDialog() {
@@ -133,6 +151,20 @@ class MainSettingsFragment : BaseMainFragment() {
             }
         }
         dialog.show()
+    }
+
+    private fun showLogoutDialog() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(getString(R.string.logout))
+        builder.setMessage(getString(R.string.logout_message))
+        builder.setPositiveButton(getString(R.string.yes), {
+            dialogInterface, _ -> dialogInterface.dismiss()
+            mainSettingsPresenter.logout()
+        })
+        builder.setNegativeButton(getString(R.string.no), {
+            dialogInterface, _ -> dialogInterface.dismiss()
+        })
+        builder.show()
     }
 
     private fun changeLanguage(dialog: Dialog, locale: Locale) {

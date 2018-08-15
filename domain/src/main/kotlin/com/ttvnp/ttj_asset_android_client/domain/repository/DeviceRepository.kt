@@ -1,9 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.domain.repository
 
-import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.model.RegisterEmailResultModel
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import io.reactivex.Single
 
 interface DeviceRepository {
@@ -23,4 +20,6 @@ interface DeviceRepository {
     fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>>
 
     fun updateNotificationSettings(grantPushNotification: Boolean?): Single<ModelWrapper<DeviceModel?>>
+
+    fun logout(): Single<ModelWrapper<LogoutModel?>>
 }

@@ -345,4 +345,32 @@ class DeviceRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun logout(): Single<ModelWrapper<LogoutModel?>> {
+        return Single.create { subscriber ->
+            try {
+                val logout = deviceService.logout().execute()
+                if (!logout.isSuccessful) {
+                    subscriber.onError(HttpException(logout))
+                    return@create
+                }
+                logout.body()?.let {
+                    if (it.hasError()) {
+                        subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
+                        return@create
+                    }
+                    if(it.logout) {
+                        if (deviceInfoDataStore.isRemoved()) {
+                            deviceDataStore.removeAll()
+                            subscriber.onSuccess(ModelWrapper(LogoutModel(it.logout), ErrorCode.NO_ERROR))
+                        }
+                        return@create
+                    }
+                    subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
+                }
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
+        }
+    }
 }
