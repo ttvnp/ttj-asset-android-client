@@ -24,6 +24,8 @@ interface DeviceUseCase {
 
     fun updateGrantPushNotification(grantPushNotification: Boolean): Single<ModelWrapper<DeviceModel?>>
 
+    fun logout(): Single<ModelWrapper<LogoutModel?>>
+
 }
 
 class DeviceUseCaseImpl @Inject constructor(
@@ -68,5 +70,8 @@ class DeviceUseCaseImpl @Inject constructor(
         return repository.updateNotificationSettings(grantPushNotification)
     }
 
+    override fun logout(): Single<ModelWrapper<LogoutModel?>> {
+        return repository.logout()
+    }
 }
 

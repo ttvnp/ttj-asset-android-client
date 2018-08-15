@@ -1,4 +1,10 @@
 <resources>
+    <!-- general -->
+    <string name="logout">ログアウト</string>
+    <string name="logout_message">ログアウトしてもよろしいですか？</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+
     <!-- security -->
     <string name="security">セキュリティ</string>
     <string name="require_password_on_send">ポイント・コインを送信する時にパスワードを入力する</string>

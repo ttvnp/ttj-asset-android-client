@@ -41,3 +41,7 @@ class UserResponse(
         @Json(name = "grantEmailNotification") val grantEmailNotification: Boolean = false,
         @Json(name = "requirePasswordOnSend") val requirePasswordOnSend: Boolean = false
 ) : BaseResponse()
+
+class LogoutResponse(
+        @Json(name = "logout") val logout: Boolean = false
+) : BaseResponse()

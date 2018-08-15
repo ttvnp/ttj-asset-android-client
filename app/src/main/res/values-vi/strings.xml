@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- general -->
+    <string name="logout">Đăng xuất</string>
+    <string name="logout_message">Bạn có chắc chắn muốn đăng xuất không?</string>
+    <string name="yes">Vâng</string>
+    <string name="no">Không</string>
+
     <!-- security -->
     <string name="security">Bảo mật</string>
     <string name="require_password_on_send">Nhập mật khẩu để gửi điểm hoặc Coin</string>

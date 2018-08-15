@@ -5,6 +5,7 @@ import com.ttvnp.ttj_asset_android_client.data.service.adapter.DateAdapter
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceRegisterEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
+import com.ttvnp.ttj_asset_android_client.data.service.response.LogoutResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
 import okhttp3.OkHttpClient
@@ -42,6 +43,11 @@ interface DeviceService {
     fun verifyEmail(@Field("verificationCode") verificationCode: String,
                     @Field("passwordOnImport") passwordOnImport: String
     ): Call<DeviceVerifyEmailResponse>
+
+    @Headers("Accept: application/json")
+    @POST("devices/logout")
+    fun logout(): Call<LogoutResponse>
+
 }
 
 class DeviceServiceImpl(
@@ -88,5 +94,9 @@ class DeviceServiceImpl(
 
     override fun verifyEmail(verificationCode: String, passwordOnImport: String): Call<DeviceVerifyEmailResponse> {
         return service.verifyEmail(verificationCode, passwordOnImport)
+    }
+
+    override fun logout(): Call<LogoutResponse> {
+        return service.logout()
     }
 }

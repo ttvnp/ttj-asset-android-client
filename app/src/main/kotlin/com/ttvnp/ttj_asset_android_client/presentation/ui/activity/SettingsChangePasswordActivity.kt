@@ -39,7 +39,6 @@ class SettingsChangePasswordActivity : BaseActivity(), SettingsChangePasswordPre
     }
 
     override fun onChangePasswordSuccessful() {
-        dismissProgressDialog()
         finish()
     }
 
@@ -79,7 +78,6 @@ class SettingsChangePasswordActivity : BaseActivity(), SettingsChangePasswordPre
             val newPassword = mTextInputNewPassword.text.toString()
             val retypePassword = mTextInputRetypePassword.text.toString()
             if (!mPresenter.isValidated(this, oldPassword, newPassword, retypePassword)) return@setOnClickListener
-            showProgressDialog()
             mPresenter.changePassword(oldPassword, newPassword, retypePassword)
         }
     }

@@ -33,6 +33,7 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
             newPassword: String,
             retypePassword: String
     ) {
+        target.showProgressDialog()
         userUseCase.changePassword(oldPassword, newPassword, retypePassword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -43,10 +44,12 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
                     }
 
                     override fun onMaintenance() {
+                        target.dismissProgressDialog()
                         target.showMaintenance()
                     }
 
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
+                        target.dismissProgressDialog()
                         wrapper?.let {
                             when (it.errorCode) {
                                 ErrorCode.NO_ERROR -> target.onChangePasswordSuccessful()

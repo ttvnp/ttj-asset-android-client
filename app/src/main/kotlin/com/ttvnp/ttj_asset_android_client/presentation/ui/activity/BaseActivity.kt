@@ -70,7 +70,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        dismissProgressDialog()
         showErrorDialog(errorMessageGenerator.generate(errorCode, throwable))
     }
 }
