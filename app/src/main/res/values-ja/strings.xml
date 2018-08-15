@@ -1,4 +1,11 @@
 <resources>
+    <!-- security -->
+    <string name="security">セキュリティ</string>
+    <string name="require_password_on_send">ポイント・コインを送信する時にパスワードを入力する</string>
+    <string name="input_password">パスワードの入力</string>
+    <string name="please_input_password">パスワードを入力してください。</string>
+    <string name="password_is_not_correct">パスワードが正しくありません。</string>
+
     <!-- change password -->
     <string name="title_change_password">パスワード変更</string>
     <string name="old_password">現在のパスワード</string>

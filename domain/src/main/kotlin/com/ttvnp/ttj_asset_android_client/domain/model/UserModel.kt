@@ -17,7 +17,9 @@ class UserModel(
         val isDocument2ImageURL: String = "",
         val isEmailVerified: Boolean = false,
         val isIdentified: Boolean = false,
-        val identificationStatus: IdentificationStatus = IdentificationStatus.Unchecked
+        val identificationStatus: IdentificationStatus = IdentificationStatus.Unchecked,
+        val grantEmailNotification: Boolean = false,
+        val requirePasswordOnSend: Boolean = false
 ) : BaseModel() {
     fun hasAllNecessaryInfo(context: Context): Boolean {
         return (

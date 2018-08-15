@@ -22,7 +22,6 @@ import java.util.*
 import javax.inject.Inject
 
 
-
 class MainSettingsFragment : BaseMainFragment() {
 
     companion object {
@@ -54,12 +53,13 @@ class MainSettingsFragment : BaseMainFragment() {
 
         val menuStrings = listOf(
                 getString(R.string.menu_settings_profile),
-                getString(R.string.title_change_password),
+                "",
+                getString(R.string.security),
                 getString(R.string.menu_settings_notifications),
                 getString(R.string.menu_settings_language),
-                "",
                 getString(R.string.title_setting_terms_of_service),
-                getString(R.string.title_setting_privacy_policy)
+                getString(R.string.title_setting_privacy_policy),
+                getString(R.string.title_change_password)
         )
 
         val adapter = SettingMenuViewAdapter(menuStrings)
@@ -70,15 +70,15 @@ class MainSettingsFragment : BaseMainFragment() {
                         // case profile clicked.
                         SettingsProfileActivity.start(context)
                     }
-                    1 -> {
-                        // case change password clicked.
-                        SettingsChangePasswordActivity.start(context)
-                    }
                     2 -> {
+                        // case security
+                        SettingsSecurityActivity.start(context)
+                    }
+                    3 -> {
                         // case notifications clicked.
                         SettingsNotificationActivity.start(context)
                     }
-                    3 -> {
+                    4 -> {
                         //change language dialog
                         showLanguagesDialog()
                     }
@@ -89,6 +89,10 @@ class MainSettingsFragment : BaseMainFragment() {
                     6 -> {
                         //case privacy policy
                         SettingPrivacyPolicyActivity.start(context)
+                    }
+                    7 -> {
+                        // case change password clicked.
+                        SettingsChangePasswordActivity.start(context)
                     }
                     else -> { /* do nothing */
                     }
@@ -104,8 +108,8 @@ class MainSettingsFragment : BaseMainFragment() {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.view_language_dialog)
         dialog.setTitle(getString(R.string.title_settings_language))
-        dialog.setOnCancelListener {
-            dialogInterface -> dialogInterface.dismiss()
+        dialog.setOnCancelListener { dialogInterface ->
+            dialogInterface.dismiss()
         }
         val languages = resources.getStringArray(R.array.languages)
         val listLanguages: ListView = dialog.findViewById(R.id.list_languages)
@@ -133,7 +137,7 @@ class MainSettingsFragment : BaseMainFragment() {
 
     private fun changeLanguage(dialog: Dialog, locale: Locale) {
         changeLocale(context.resources, locale)
-        val fragment = MainSettingsFragment@this
+        val fragment = MainSettingsFragment@ this
         fragment
                 .fragmentManager
                 .beginTransaction()

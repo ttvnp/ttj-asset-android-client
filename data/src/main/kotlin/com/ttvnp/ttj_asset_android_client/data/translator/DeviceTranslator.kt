@@ -6,7 +6,7 @@ import com.ttvnp.ttj_asset_android_client.domain.util.Now
 
 internal class DeviceTranslator: BaseTranslator<DeviceModel, DeviceEntity>() {
 
-    override internal fun translate(entity: DeviceEntity?): DeviceModel? {
+    override fun translate(entity: DeviceEntity?): DeviceModel? {
         if (entity == null) {
             return null
         }
@@ -15,8 +15,7 @@ internal class DeviceTranslator: BaseTranslator<DeviceModel, DeviceEntity>() {
                 accessTokenExpiry = entity.accessTokenExpiry?: Now(),
                 isActivated = entity.isActivated,
                 deviceToken = entity.deviceToken,
-                grantPushNotification = entity.grantPushNotification,
-                grantEmailNotification = entity.grantEmailNotification
+                grantPushNotification = entity.grantPushNotification
         )
     }
 }

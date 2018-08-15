@@ -19,7 +19,9 @@ class GetUserResponse(
         @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false,
-        @Json(name = "identificationStatus") val identificationStatus: Int = 0
+        @Json(name = "identificationStatus") val identificationStatus: Int = 0,
+        @Json(name = "grantEmailNotification") val grantEmailNotification: Boolean = false,
+        @Json(name = "requirePasswordOnSend") val requirePasswordOnSend: Boolean = false
 ) : BaseResponse()
 
 class UpdateUserResponse(
@@ -38,7 +40,9 @@ class UpdateUserResponse(
         @Json(name = "idDocument2ImageURL") val idDocument2ImageURL: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
         @Json(name = "isIdentified") val isIdentified: Boolean = false,
-        @Json(name = "identificationStatus ") val identificationStatus: Int = 0
+        @Json(name = "identificationStatus ") val identificationStatus: Int = 0,
+        @Json(name = "grantEmailNotification") val grantEmailNotification: Boolean = false,
+        @Json(name = "requirePasswordOnSend") val requirePasswordOnSend: Boolean = false
 ) : BaseResponse()
 
 class GetTargetUserResponse(
