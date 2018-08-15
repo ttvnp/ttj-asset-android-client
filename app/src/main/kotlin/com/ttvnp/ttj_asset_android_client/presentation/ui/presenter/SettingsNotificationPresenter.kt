@@ -31,25 +31,6 @@ class SettingsNotificationPresenterImpl @Inject constructor(
         deviceUseCase.getDevice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map {
-                    userUseCase.getUser(false)
-                            .subscribeWith(object: DisposableApiSingleObserver<UserModel>() {
-                                override fun onOtherError(error: Throwable?) {
-                                    // do nothing
-                                }
-
-                                override fun onMaintenance() {
-                                    target.showMaintenance()
-                                }
-
-                                override fun onSuccess(userModel: UserModel?) {
-                                    userModel?.let {
-                                        target.bindUserInfo(it)
-                                    }
-                                }
-                            }).addTo(this.disposables)
-                     it
-                }
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
 
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
@@ -66,6 +47,24 @@ class SettingsNotificationPresenterImpl @Inject constructor(
                         target.showMaintenance()
                     }
 
+                }).addTo(this.disposables)
+        userUseCase.getUser(false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object: DisposableApiSingleObserver<UserModel>() {
+                    override fun onOtherError(error: Throwable?) {
+                        // do nothing
+                    }
+
+                    override fun onMaintenance() {
+                        target.showMaintenance()
+                    }
+
+                    override fun onSuccess(userModel: UserModel?) {
+                        userModel?.let {
+                            target.bindUserInfo(it)
+                        }
+                    }
                 }).addTo(this.disposables)
     }
 
