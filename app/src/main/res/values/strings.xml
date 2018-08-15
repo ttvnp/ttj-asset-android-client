@@ -1,4 +1,11 @@
 <resources>
+    <!-- security -->
+    <string name="security">Security</string>
+    <string name="require_password_on_send">Require password to send assets</string>
+    <string name="input_password">Input Password</string>
+    <string name="please_input_password">Please input password.</string>
+    <string name="password_is_not_correct">Password is not correct.</string>
+
     <!-- change password -->
     <string name="title_change_password">Change Password</string>
     <string name="old_password">Old password</string>
@@ -7,7 +14,7 @@
     <string name="please_input_old_password">Please input Old password.</string>
     <string name="please_input_new_password">Please input New password.</string>
     <string name="please_input_retype_password">Please input Retype password.</string>
-    <string name="old_password_is_not_correct">Old password is not correct.</string>
+    <string name="old_password_is_not_correct">Password is not correct.</string>
     <string name="new_passwords_are_not_matched">New passwords are not matched.</string>
     <string name="password_should_be_than_6_characters_or_numbers">
         Password should be more than 6 characters or numbers.

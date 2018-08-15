@@ -7,8 +7,8 @@ import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceResponse
 import com.ttvnp.ttj_asset_android_client.data.service.response.DeviceVerifyEmailResponse
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.DeviceInfoDataStore
-import retrofit2.Call
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -28,8 +28,7 @@ interface DeviceService {
     @FormUrlEncoded
     @PATCH("devices/notification_settings")
     fun updateNotificationSettings(
-            @Field("grantPushNotification") grantPushNotification: Boolean,
-            @Field("grantEmailNotification") grantEmailNotification: Boolean
+            @Field("grantPushNotification") grantPushNotification: Boolean
     ): Call<DeviceResponse>
 
     @Headers("Accept: application/json")
@@ -40,7 +39,9 @@ interface DeviceService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("devices/verify_email")
-    fun verifyEmail(@Field("verificationCode") verificationCode: String, @Field("passwordOnImport") passwordOnImport: String): Call<DeviceVerifyEmailResponse>
+    fun verifyEmail(@Field("verificationCode") verificationCode: String,
+                    @Field("passwordOnImport") passwordOnImport: String
+    ): Call<DeviceVerifyEmailResponse>
 }
 
 class DeviceServiceImpl(
@@ -77,8 +78,8 @@ class DeviceServiceImpl(
         return service.updateDeviceToken(deviceToken)
     }
 
-    override fun updateNotificationSettings(grantPushNotification: Boolean, grantEmailNotification: Boolean): Call<DeviceResponse> {
-        return service.updateNotificationSettings(grantPushNotification, grantEmailNotification)
+    override fun updateNotificationSettings(grantPushNotification: Boolean): Call<DeviceResponse> {
+        return service.updateNotificationSettings(grantPushNotification)
     }
 
     override fun registerEmail(emailAddress: String): Call<DeviceRegisterEmailResponse> {

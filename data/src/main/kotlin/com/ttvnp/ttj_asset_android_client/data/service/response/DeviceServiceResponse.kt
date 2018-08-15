@@ -8,8 +8,7 @@ class DeviceResponse(
         @Json(name = "accessTokenExpiry") val accessTokenExpiry: Date? = null,
         @Json(name = "isActivated") val isActivated: Boolean = false,
         @Json(name = "deviceToken") val deviceToken: String = "",
-        @Json(name = "grantPushNotification") val grantPushNotification: Boolean = false,
-        @Json(name = "grantEmailNotification") val grantEmailNotification: Boolean = false
+        @Json(name = "grantPushNotification") val grantPushNotification: Boolean = false
 ) : BaseResponse()
 
 class DeviceRegisterEmailResponse(
@@ -26,8 +25,7 @@ class DeviceResponse2(
         @Json(name = "accessTokenExpiry") val accessTokenExpiry: Date? = null,
         @Json(name = "isActivated") val isActivated: Boolean = false,
         @Json(name = "deviceToken") val deviceToken: String = "",
-        @Json(name = "grantPushNotification") val grantPushNotification: Boolean = false,
-        @Json(name = "grantEmailNotification") val grantEmailNotification: Boolean = false
+        @Json(name = "grantPushNotification") val grantPushNotification: Boolean = false
 )
 
 class UserResponse(
@@ -39,5 +37,7 @@ class UserResponse(
         @Json(name = "lastName") val lastName: String = "",
         @Json(name = "address") val address: String = "",
         @Json(name = "isEmailVerified") val isEmailVerified: Boolean = false,
-        @Json(name = "isIdentified") val isIdentified: Boolean = false
+        @Json(name = "isIdentified") val isIdentified: Boolean = false,
+        @Json(name = "grantEmailNotification") val grantEmailNotification: Boolean = false,
+        @Json(name = "requirePasswordOnSend") val requirePasswordOnSend: Boolean = false
 ) : BaseResponse()

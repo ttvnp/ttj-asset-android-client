@@ -1,10 +1,8 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
-import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
-import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountConfirmPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +12,9 @@ import javax.inject.Inject
 
 interface SendAmountConfirmPresenter {
     fun initialize(target: SendAmountConfirmPresenterTarget, sendInfoModel: SendInfoModel)
-    fun createTransaction(sendInfoModel: SendInfoModel)
+    fun getUserInfo()
+    fun createTransaction(sendInfoModel: SendInfoModel, password: String)
+    fun isValidated(password: String): Boolean
 }
 
 class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SendAmountConfirmPresenter {
@@ -26,9 +26,30 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
         target.setSendInfo(sendInfoModel)
     }
 
-    override fun createTransaction(sendInfoModel: SendInfoModel) {
+    override fun getUserInfo() {
+        userUseCase.getUser(false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
+                    override fun onOtherError(error: Throwable?) {
+                        // do nothing
+                    }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
+                    override fun onSuccess(userModel: UserModel?) {
+                        userModel?.let {
+                            target?.onBindUserInfo(it)
+                        }
+                    }
+                })
+    }
+
+    override fun createTransaction(sendInfoModel: SendInfoModel, password: String) {
         target?.showProgressDialog()
-        userUseCase.createTransaction(sendInfoModel)
+        userUseCase.createTransaction(sendInfoModel, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserTransactionModel?>>() {
@@ -52,4 +73,16 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
 
                 }).addTo(this.disposables)
     }
+
+    override fun isValidated(password: String): Boolean {
+        var passwordError: Int? = null
+        if (password.isEmpty()) {
+            passwordError = R.string.please_input_password
+            target?.validateForm(passwordError)
+            return false
+        }
+        target?.validateForm(passwordError)
+        return true
+    }
+
 }

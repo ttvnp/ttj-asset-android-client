@@ -22,5 +22,5 @@ interface DeviceRepository {
 
     fun updateDeviceToken(deviceToken: String): Single<ModelWrapper<DeviceModel?>>
 
-    fun updateNotificationSettings(grantPushNotification: Boolean?, grantEmailNotification: Boolean?): Single<ModelWrapper<DeviceModel?>>
+    fun updateNotificationSettings(grantPushNotification: Boolean?): Single<ModelWrapper<DeviceModel?>>
 }

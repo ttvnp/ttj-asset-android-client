@@ -3,7 +3,9 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
+import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsNotificationPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,16 +19,37 @@ interface SettingsNotificationPresenter {
     fun updateGrantEmailNotification(grantEmailNotification: Boolean)
 }
 
-class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) : BasePresenter(), SettingsNotificationPresenter {
+class SettingsNotificationPresenterImpl @Inject constructor(
+        val deviceUseCase: DeviceUseCase,
+        val userUseCase: UserUseCase
+) : BasePresenter(), SettingsNotificationPresenter {
 
     private var target: SettingsNotificationPresenterTarget? = null
-
 
     override fun setupNotificationInfo(target: SettingsNotificationPresenterTarget) {
         this.target = target
         deviceUseCase.getDevice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map {
+                    userUseCase.getUser(false)
+                            .subscribeWith(object: DisposableApiSingleObserver<UserModel>() {
+                                override fun onOtherError(error: Throwable?) {
+                                    // do nothing
+                                }
+
+                                override fun onMaintenance() {
+                                    target.showMaintenance()
+                                }
+
+                                override fun onSuccess(userModel: UserModel?) {
+                                    userModel?.let {
+                                        target.bindUserInfo(it)
+                                    }
+                                }
+                            }).addTo(this.disposables)
+                     it
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
 
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
@@ -81,17 +104,17 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
 
     override fun updateGrantEmailNotification(grantEmailNotification: Boolean) {
         target?.showProgressDialog()
-        deviceUseCase.updateGrantEmailNotification(grantEmailNotification)
+        userUseCase.updateGrantEmailNotification(grantEmailNotification)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<DeviceModel?>>() {
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
 
-                    override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
+                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> {
                                 wrapper.model?.let {
-                                    target?.bindDeviceInfo(it)
+                                    target?.bindUserInfo(it)
                                 }
                             }
                             else -> {
@@ -111,4 +134,5 @@ class SettingsNotificationPresenterImpl @Inject constructor(val deviceUseCase: D
 
                 }).addTo(this.disposables)
     }
+
 }

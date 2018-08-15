@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- security -->
+    <string name="security">Bảo mật</string>
+    <string name="require_password_on_send">Nhập mật khẩu để gửi điểm hoặc Coin</string>
+    <string name="input_password">Nhập mật khẩu</string>
+    <string name="please_input_password">Vui lòng nhập mật khẩu.</string>
+    <string name="password_is_not_correct">Mật khẩu không chính xác.</string>
+
+    <!-- change password -->
     <string name="title_change_password">Thay đổi mật khẩu</string>
     <string name="old_password">Mật khẩu hiện nay</string>
     <string name="new_password">Mật khẩu mới</string>
@@ -8,7 +16,7 @@
     <string name="please_input_new_password">Vui lòng nhập mật khẩu mới.</string>
     <string name="please_input_retype_password">Vui lòng nhập lại mật khẩu.</string>
     <string name="old_password_is_not_correct">Mật khẩu hiện tại không chính xác.</string>
-    <string name="new_passwords_are_not_matched">New passwords are not matched.</string>
+    <string name="new_passwords_are_not_matched">Mật khẩu mới không đồng nhất.</string>
     <string name="password_should_be_than_6_characters_or_numbers">
         Mật khẩu nên được cài đặt 6 ký tự hoặc số.
     </string>

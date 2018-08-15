@@ -16,42 +16,41 @@ abstract class BaseAuthService(
         val lock = java.lang.Object()
     }
 
-    open protected fun getAccessTokenInterceptor(): Interceptor {
+    protected open fun getAccessTokenInterceptor(): Interceptor {
         return Interceptor { chain ->
             var request = chain.request()
             val builder = request.newBuilder()
             builder.addHeader("Accept", "application/json")
             val setAuthHeader: (String) -> Unit = { token ->
-                if (1 < token.length) builder.addHeader("Authorization", "Bearer " + token)
+                if (1 < token.length) builder.addHeader("Authorization", "Bearer $token")
             }
             var accessToken: String = getAccessToken()
             setAuthHeader(accessToken)
-            request = builder.build();
+            request = builder.build()
             var response = chain.proceed(request)
             if (response.code() == 401) { // if unauthorized
                 synchronized(lock) {
                     accessToken = retrieveAccessToken()
                     setAuthHeader(accessToken)
-                    request = builder.build();
-                    response = chain.proceed(request); // repeat request with new token.
+                    request = builder.build()
+                    response = chain.proceed(request) // repeat request with new token.
                 }
             }
             response
         }
     }
 
-    open protected fun getAccessToken(): String {
+    protected open fun getAccessToken(): String {
         val deviceEntity = deviceDataStore.get()
-        if (deviceEntity == null || deviceEntity.accessTokenExpiry == null) return ""
+        if (deviceEntity?.accessTokenExpiry == null) return ""
         if (deviceEntity.accessTokenExpiry.before(Now())) {
             return retrieveAccessToken()
         }
         return deviceEntity.accessToken
     }
 
-    open protected fun retrieveAccessToken(): String {
-        val deviceEntity = deviceDataStore.get()
-        if (deviceEntity == null) return ""
+    protected open fun retrieveAccessToken(): String {
+        val deviceEntity = deviceDataStore.get() ?: return ""
         val deviceInfoEntity = deviceInfoDataStore.get()
         deviceInfoEntity?.let {
             try {
@@ -65,8 +64,7 @@ abstract class BaseAuthService(
                             accessTokenExpiry = it.accessTokenExpiry,
                             isActivated = deviceEntity.isActivated,
                             deviceToken = deviceEntity.deviceToken,
-                            grantPushNotification = deviceEntity.grantPushNotification,
-                            grantEmailNotification = deviceEntity.grantEmailNotification
+                            grantPushNotification = deviceEntity.grantPushNotification
                     )
                     deviceDataStore.update(newDeviceEntity)
                     return newDeviceEntity.accessToken
