@@ -3,10 +3,11 @@ package com.ttvnp.ttj_asset_android_client.data.driver
 import android.content.SharedPreferences
 import javax.inject.Inject
 
-interface SharedPreferencesDriver {
+interface
+SharedPreferencesDriver {
     fun getString(key: String, defaultValue: String = ""): String?
     fun putString(key: String, value: String)
-    fun isRemoved(): Boolean
+    fun remove()
 }
 
 class SharedPreferencesDriverImpl @Inject constructor(
@@ -20,7 +21,7 @@ class SharedPreferencesDriverImpl @Inject constructor(
         sharedPreferences.edit().putString(key, value).apply()
     }
 
-    override fun isRemoved(): Boolean {
-        return sharedPreferences.edit().clear().commit()
+    override fun remove() {
+        sharedPreferences.edit().clear().apply()
     }
 }
