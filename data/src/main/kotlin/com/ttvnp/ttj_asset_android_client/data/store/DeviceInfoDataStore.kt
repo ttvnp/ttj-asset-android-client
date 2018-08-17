@@ -12,7 +12,7 @@ interface DeviceInfoDataStore {
     fun saveLanguage(language: String)
     fun get(): DeviceInfoEntity?
     fun save(entity: DeviceInfoEntity)
-    fun isRemoved(): Boolean
+    fun removeAll()
 }
 
 class DeviceInfoDataStoreImpl @Inject constructor(
@@ -61,7 +61,8 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         cached = entity
     }
 
-    override fun isRemoved(): Boolean {
-        return sharedPreferencesDriver.isRemoved()
+    override fun removeAll() {
+        cached = null
+        sharedPreferencesDriver.remove()
     }
 }
