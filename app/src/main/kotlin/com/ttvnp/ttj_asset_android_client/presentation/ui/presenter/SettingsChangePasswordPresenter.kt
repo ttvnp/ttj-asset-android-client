@@ -93,8 +93,8 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
 
         target.onValidateForm(oldPasswordError, newPasswordError, retypePasswordError)
 
-        return (oldPassword.isEmpty() || newPassword.isEmpty() || newPassword.count() < 6
-                || retypePassword.isEmpty() || newPassword != retypePassword)
+        return (oldPassword.isNotEmpty() && newPassword.isNotEmpty() && newPassword.count() >= 6
+                && retypePassword.isNotEmpty() && newPassword == retypePassword)
     }
 
 }
