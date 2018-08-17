@@ -78,7 +78,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         buttonSave = view.findViewById(R.id.button_save)
         buttonSave.setOnClickListener({
             userModel?.let {
-                if (it.hasAllNecessaryInfo(context)) {
+                if (!it.hasAllNecessaryInfo(context)) {
                     AlertDialog
                             .Builder(context)
                             .setMessage(getString(R.string.validate_profile_for_id_document))

@@ -17,7 +17,7 @@
     <string name="title_change_password">Thay đổi mật khẩu</string>
     <string name="old_password">Mật khẩu hiện nay</string>
     <string name="new_password">Mật khẩu mới</string>
-    <string name="retype_password">Nhập lại mật khẩu  </string>
+    <string name="retype_password">Nhập lại mật khẩu</string>
     <string name="please_input_old_password">Vui lòng nhập mật khẩu hiện tại.</string>
     <string name="please_input_new_password">Vui lòng nhập mật khẩu mới.</string>
     <string name="please_input_retype_password">Vui lòng nhập lại mật khẩu.</string>

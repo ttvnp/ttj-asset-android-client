@@ -75,7 +75,7 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
             oldPasswordError = context.getString(R.string.please_input_old_password)
         }
 
-        if (newPassword.count() <= 6) {
+        if (newPassword.count() < 6) {
             newPasswordError = context.getString(R.string.password_should_be_than_6_characters_or_numbers)
         }
 
@@ -93,12 +93,8 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
 
         target.onValidateForm(oldPasswordError, newPasswordError, retypePasswordError)
 
-        if (oldPassword.isEmpty() || newPassword.isEmpty() || newPassword.count() <= 6
-                || retypePassword.isEmpty() || newPassword != retypePassword) {
-            return false
-        }
-
-        return true
+        return (oldPassword.isEmpty() || newPassword.isEmpty() || newPassword.count() < 6
+                || retypePassword.isEmpty() || newPassword != retypePassword)
     }
 
 }
