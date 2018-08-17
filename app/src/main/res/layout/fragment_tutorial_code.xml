@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="10" />
+                android:maxLength="100" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -41,7 +41,7 @@
 
         <LinearLayout
             android:id="@+id/layout_password_on_import"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="visible">
@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:maxLength="10" />
+                    android:maxLength="100" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
