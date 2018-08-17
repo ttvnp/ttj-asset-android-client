@@ -56,6 +56,13 @@ class UserEntity(
         @Column(defaultExpr = "0") @Setter("identificationStatus")
         var identificationStatus: Int = 0,
 
+        @Column(defaultExpr = "false") @Setter("grantEmailNotification")
+        var grantEmailNotification: Boolean = false,
+
+        @Column(defaultExpr = "false") @Setter("requirePasswordOnSend")
+        var requirePasswordOnSend: Boolean = false,
+
         @Column(defaultExpr = "now") @Setter("updatedAt")
         var updatedAt: Date = Now()
+
 )

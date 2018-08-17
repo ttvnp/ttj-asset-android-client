@@ -12,6 +12,7 @@ interface DeviceInfoDataStore {
     fun saveLanguage(language: String)
     fun get(): DeviceInfoEntity?
     fun save(entity: DeviceInfoEntity)
+    fun removeAll()
 }
 
 class DeviceInfoDataStoreImpl @Inject constructor(
@@ -42,12 +43,10 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         if (deviceCode.isNullOrBlank() || credential.isNullOrBlank()) return null
 
         // decrypt
-        val deviceCodePlainText = cryptDriver.decrypt(deviceCode!!)
-        if (deviceCodePlainText == null) return null
+        val deviceCodePlainText = cryptDriver.decrypt(deviceCode!!) ?: return null
         deviceCode = deviceCodePlainText
 
-        val credentialPlainText = cryptDriver.decrypt(credential!!)
-        if (credentialPlainText == null) return null
+        val credentialPlainText = cryptDriver.decrypt(credential!!) ?: return null
         credential = credentialPlainText
 
         cached = DeviceInfoEntity(deviceCode, credential)
@@ -60,5 +59,10 @@ class DeviceInfoDataStoreImpl @Inject constructor(
         sharedPreferencesDriver.putString(DEVICE_CODE_KEY, deviceCode!!)
         sharedPreferencesDriver.putString(CREDENTIAL_KEY, credential!!)
         cached = entity
+    }
+
+    override fun removeAll() {
+        cached = null
+        sharedPreferencesDriver.remove()
     }
 }

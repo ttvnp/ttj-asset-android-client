@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -9,6 +10,13 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.util.getCurrentLocale
 import java.util.*
 
 class SettingTermsOfServiceActivity : BaseActivity() {
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, SettingTermsOfServiceActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     private lateinit var webViewTOC: WebView
 

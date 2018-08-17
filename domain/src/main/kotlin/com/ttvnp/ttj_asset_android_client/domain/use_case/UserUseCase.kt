@@ -30,7 +30,14 @@ interface UserUseCase {
 
     fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
 
-    fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>>
+    fun createTransaction(sendInfoModel: SendInfoModel, password: String): Single<ModelWrapper<UserTransactionModel?>>
+
+    fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>>
+
+    fun updateGrantEmailNotification(grantEmailNotification: Boolean): Single<ModelWrapper<UserModel?>>
+
+    fun updateSecuritySettings(requirePasswordOnSend: Boolean): Single<ModelWrapper<UserModel?>>
+
 }
 
 class UserUseCaseImpl @Inject constructor(
@@ -55,7 +62,7 @@ class UserUseCaseImpl @Inject constructor(
         val input = emailAddress.trim()
         if (!isEmailValid(input)) {
             return Single.create { subscriber ->
-                subscriber.onSuccess(ModelWrapper<OtherUserModel?>(null, ErrorCode.ERROR_VALIDATION_EMAIL))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_VALIDATION_EMAIL))
             }
         }
         return userRepository.getTargetUser(emailAddress)
@@ -93,8 +100,8 @@ class UserUseCaseImpl @Inject constructor(
         return userTransactionRepository.getTopByUserID(upperID, limit, forceRefresh)
     }
 
-    override fun createTransaction(sendInfoModel: SendInfoModel): Single<ModelWrapper<UserTransactionModel?>> {
-        return userTransactionRepository.createTransaction(sendInfoModel, { balanceModels ->
+    override fun createTransaction(sendInfoModel: SendInfoModel, password: String): Single<ModelWrapper<UserTransactionModel?>> {
+        return userTransactionRepository.createTransaction(sendInfoModel, password, { balanceModels ->
             val disposables = CompositeDisposable()
             this.balanceRepository.updateBalances(balanceModels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
                 override fun onSuccess(t: BalancesModel) {
@@ -104,5 +111,17 @@ class UserUseCaseImpl @Inject constructor(
                 }
             }).addTo(disposables)
         })
+    }
+
+    override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>> {
+        return userRepository.changePassword(oldPassword, newPassword, retypePassword)
+    }
+
+    override fun updateGrantEmailNotification(grantEmailNotification: Boolean): Single<ModelWrapper<UserModel?>> {
+        return userRepository.updateNotificationSettings(grantEmailNotification)
+    }
+
+    override fun updateSecuritySettings(requirePasswordOnSend: Boolean): Single<ModelWrapper<UserModel?>> {
+        return userRepository.updateSecuritySettings(requirePasswordOnSend)
     }
 }

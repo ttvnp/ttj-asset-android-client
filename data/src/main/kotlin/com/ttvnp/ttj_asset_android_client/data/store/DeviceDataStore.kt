@@ -7,6 +7,7 @@ import javax.inject.Inject
 interface DeviceDataStore {
     fun get(): DeviceEntity?
     fun update(entity: DeviceEntity): DeviceEntity
+    fun removeAll()
 }
 
 class DeviceDataStoreImpl @Inject constructor(val ormaHolder: OrmaHolder) : DeviceDataStore {
@@ -22,5 +23,9 @@ class DeviceDataStoreImpl @Inject constructor(val ormaHolder: OrmaHolder) : Devi
             orma.insertIntoDeviceEntity(entity)
         }
         return entity
+    }
+
+    override fun removeAll() {
+        ormaHolder.ormaDatabase.deleteAll()
     }
 }

@@ -8,7 +8,7 @@ import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 
 internal class UserTranslator : BaseTranslator<UserModel, UserEntity>() {
 
-    override internal fun translate(entity: UserEntity?): UserModel? {
+    override fun translate(entity: UserEntity?): UserModel? {
         if (entity == null) {
             return null
         }
@@ -29,7 +29,9 @@ internal class UserTranslator : BaseTranslator<UserModel, UserEntity>() {
                 isDocument2ImageURL = entity.idDocument2ImageURL,
                 isEmailVerified = entity.isEmailVerified,
                 isIdentified = entity.isIdentified,
-                identificationStatus = identificationStatus
+                identificationStatus = identificationStatus,
+                grantEmailNotification = entity.grantEmailNotification,
+                requirePasswordOnSend = entity.requirePasswordOnSend
         )
     }
 }

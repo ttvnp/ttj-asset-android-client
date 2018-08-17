@@ -1,5 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
@@ -12,6 +14,13 @@ import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, SettingsProfileActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>

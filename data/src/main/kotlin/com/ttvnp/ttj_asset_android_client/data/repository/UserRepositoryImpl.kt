@@ -74,6 +74,8 @@ class UserRepositoryImpl @Inject constructor(
                                 isEmailVerified = it.isEmailVerified,
                                 isIdentified = it.isIdentified,
                                 identificationStatus = it.identificationStatus,
+                                grantEmailNotification = it.grantEmailNotification,
+                                requirePasswordOnSend = it.requirePasswordOnSend,
                                 updatedAt = Now()
                         )
                         userEntity = userDataStore.update(userEntity)
@@ -146,6 +148,8 @@ class UserRepositoryImpl @Inject constructor(
                             isEmailVerified = response.isEmailVerified,
                             isIdentified = response.isIdentified,
                             identificationStatus = response.identificationStatus,
+                            grantEmailNotification = response.grantEmailNotification,
+                            requirePasswordOnSend = response.requirePasswordOnSend,
                             updatedAt = Now()
                     )
                     ue = userDataStore.update(ue)
@@ -211,6 +215,8 @@ class UserRepositoryImpl @Inject constructor(
                             isEmailVerified = response.isEmailVerified,
                             isIdentified = response.isIdentified,
                             identificationStatus = response.identificationStatus,
+                            grantEmailNotification = response.grantEmailNotification,
+                            requirePasswordOnSend = response.requirePasswordOnSend,
                             updatedAt = Now()
                     )
                     ue = userDataStore.update(ue)
@@ -280,4 +286,139 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>> {
+        return Single.create { subscriber ->
+            var errCode = ErrorCode.ERROR_UNKNOWN
+            var model: UserModel? = null
+            try {
+                val changePasswordResponse = userService.changePassword(oldPassword, newPassword, retypePassword).execute()
+                if (!changePasswordResponse.isSuccessful) {
+                    subscriber.onError(HttpException(changePasswordResponse))
+                    return@create
+                }
+                changePasswordResponse.body()?.let {
+                    if (it.hasError()) {
+                        errCode = when (it.errorCode) {
+                            ServiceErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT.rawValue -> ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT
+                            else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        }
+                        return@let
+                    }
+                    val ue = UserEntity()
+                    UserTranslator().translate(ue)?.let {
+                        model = it
+                    }
+                }
+            } catch (ex: IOException) {
+                errCode = ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER
+            }
+            model?.let {
+                subscriber.onSuccess(ModelWrapper(model, ErrorCode.NO_ERROR))
+            } ?: subscriber.onSuccess(ModelWrapper(null, errCode))
+        }
+    }
+
+    override fun updateNotificationSettings(grantEmailhNotification: Boolean?): Single<ModelWrapper<UserModel?>> {
+        return Single.create<ModelWrapper<UserModel?>> { subscriber ->
+            var userEntity = userDataStore.get()
+            if (userEntity == null) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
+                return@create
+            }
+            val grantEmailNotificationUpdateValue = grantEmailhNotification
+                    ?: userEntity.grantEmailNotification
+
+            try {
+                val updateNotificationSettings = userService.updateNotificationSettings(grantEmailNotificationUpdateValue).execute()
+                if (!updateNotificationSettings.isSuccessful) {
+                    subscriber.onError(HttpException(updateNotificationSettings))
+                    return@create
+                }
+                updateNotificationSettings.body()?.let {
+                    val response = it
+                    if (response.hasError()) {
+                        subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_UPDATE_DEVICE))
+                        return@create
+                    }
+                    val ue = UserEntity(
+                            emailAddress = userEntity?.emailAddress ?: "",
+                            profileImageID = response.profileImageID,
+                            profileImageURL = response.profileImageURL,
+                            firstName = response.firstName,
+                            middleName = response.middleName,
+                            lastName = response.lastName,
+                            address = response.address,
+                            genderType = response.genderType,
+                            dateOfBirth = response.dateOfBirth,
+                            cellphoneNumberNationalCode = response.cellphoneNumberNationalCode,
+                            cellphoneNumber = response.cellphoneNumber,
+                            idDocument1ImageURL = response.idDocument1ImageURL,
+                            idDocument2ImageURL = response.idDocument2ImageURL,
+                            isEmailVerified = response.isEmailVerified,
+                            isIdentified = response.isIdentified,
+                            identificationStatus = response.identificationStatus,
+                            grantEmailNotification = response.grantEmailNotification,
+                            requirePasswordOnSend = response.requirePasswordOnSend,
+                            updatedAt = Now()
+                    )
+                    userEntity = userDataStore.update(ue)
+                    subscriber.onSuccess(ModelWrapper(UserTranslator().translate(userEntity), ErrorCode.NO_ERROR))
+                }
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
+        }
+    }
+
+    override fun updateSecuritySettings(requirePasswordOnSend: Boolean?): Single<ModelWrapper<UserModel?>> {
+        return Single.create<ModelWrapper<UserModel?>> { subscriber ->
+            var userEntity = userDataStore.get()
+            if (userEntity == null) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
+                return@create
+            }
+            val requirePasswordOnSendUpdateValue = requirePasswordOnSend
+                    ?: userEntity.requirePasswordOnSend
+
+            try {
+                val updateSecuritySettings = userService.updateSecuritySettings(requirePasswordOnSendUpdateValue).execute()
+                if (!updateSecuritySettings.isSuccessful) {
+                    subscriber.onError(HttpException(updateSecuritySettings))
+                    return@create
+                }
+                updateSecuritySettings.body()?.let {
+                    val response = it
+                    if (response.hasError()) {
+                        subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_UPDATE_DEVICE))
+                        return@create
+                    }
+                    val ue = UserEntity(
+                            emailAddress = userEntity?.emailAddress ?: "",
+                            profileImageID = response.profileImageID,
+                            profileImageURL = response.profileImageURL,
+                            firstName = response.firstName,
+                            middleName = response.middleName,
+                            lastName = response.lastName,
+                            address = response.address,
+                            genderType = response.genderType,
+                            dateOfBirth = response.dateOfBirth,
+                            cellphoneNumberNationalCode = response.cellphoneNumberNationalCode,
+                            cellphoneNumber = response.cellphoneNumber,
+                            idDocument1ImageURL = response.idDocument1ImageURL,
+                            idDocument2ImageURL = response.idDocument2ImageURL,
+                            isEmailVerified = response.isEmailVerified,
+                            isIdentified = response.isIdentified,
+                            identificationStatus = response.identificationStatus,
+                            grantEmailNotification = response.grantEmailNotification,
+                            requirePasswordOnSend = response.requirePasswordOnSend,
+                            updatedAt = Now()
+                    )
+                    userEntity = userDataStore.update(ue)
+                    subscriber.onSuccess(ModelWrapper(UserTranslator().translate(userEntity), ErrorCode.NO_ERROR))
+                }
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
+        }
+    }
 }

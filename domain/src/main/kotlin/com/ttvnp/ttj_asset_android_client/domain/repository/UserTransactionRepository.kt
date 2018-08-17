@@ -5,5 +5,5 @@ import io.reactivex.Single
 
 interface UserTransactionRepository {
     fun getTopByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
-    fun createTransaction(sendInfoModel: SendInfoModel, onReceiveBalances: (Collection<BalanceModel>) -> Unit): Single<ModelWrapper<UserTransactionModel?>>
+    fun createTransaction(sendInfoModel: SendInfoModel, password: String, onReceiveBalances: (Collection<BalanceModel>) -> Unit): Single<ModelWrapper<UserTransactionModel?>>
 }

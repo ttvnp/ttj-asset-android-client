@@ -2,11 +2,16 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
+import android.util.TypedValue
+import android.view.*
 import android.widget.Button
+import android.widget.EditText
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
@@ -16,24 +21,24 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendA
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
-import android.util.TypedValue
-import android.view.*
 
-
-class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTarget {
+class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarget {
 
     @Inject
     lateinit var sendAmountConfirmPresenter: SendAmountConfirmPresenter
 
     private lateinit var imageSendTargetUserProfile: CircleImageView
+    private lateinit var textInputLayoutPassword: TextInputLayout
+    private lateinit var textInputPassword: EditText
     private lateinit var textSendTargetUser: TextView
     private lateinit var textSendConfirmDesc: TextView
     private var popup: PopupWindow? = null
 
     private var sendInfoModel: SendInfoModel? = null
+    private var userModel: UserModel? = null
 
     companion object {
-        val SEND_INFO_KEY = "send_info"
+        const val SEND_INFO_KEY = "send_info"
         fun getInstance() : SendAmountConfirmFragment {
             return SendAmountConfirmFragment()
         }
@@ -54,6 +59,8 @@ class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTa
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_send_amount_confirm, container, false)
         imageSendTargetUserProfile = view.findViewById(R.id.image_send_target_user_profile)
+        textInputLayoutPassword = view.findViewById(R.id.text_input_layout_password)
+        textInputPassword = view.findViewById(R.id.text_password)
         textSendTargetUser = view.findViewById(R.id.text_send_target_user)
         textSendConfirmDesc = view.findViewById(R.id.text_send_confirm_desc)
         val buttonSendAmountCancel = view.findViewById<Button>(R.id.button_send_confirm_cancel)
@@ -64,10 +71,26 @@ class SendAmountConfirmFragment() : BaseFragment(), SendAmountConfirmPresenterTa
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
         buttonSendAmountSubmit.setOnClickListener {
-            sendAmountConfirmPresenter.createTransaction(sendInfoModel!!)
+            userModel?.let {
+                if (it.requirePasswordOnSend) {
+                    if (!sendAmountConfirmPresenter.isValidated(textInputPassword.text.toString())) return@setOnClickListener
+                }
+                sendAmountConfirmPresenter.createTransaction(sendInfoModel!!, textInputPassword.text.toString())
+            }
         }
         sendAmountConfirmPresenter.initialize(this, this.sendInfoModel!!)
+        sendAmountConfirmPresenter.getUserInfo()
         return view
+    }
+
+    override fun onBindUserInfo(userModel: UserModel) {
+        this.userModel = userModel
+        if (userModel.requirePasswordOnSend) return
+        textInputLayoutPassword.visibility = View.GONE
+    }
+
+    override fun validateForm(passwordError: Int?) {
+        passwordError?.let { textInputPassword.error = getString(it) }
     }
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
