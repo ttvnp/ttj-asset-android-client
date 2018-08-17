@@ -23,12 +23,12 @@ class UserModel(
 ) : BaseModel() {
     fun hasAllNecessaryInfo(context: Context): Boolean {
         return (
-                this.firstName.isEmpty()
-                && this.lastName.isEmpty()
-                && this.address.isEmpty()
-                && this.dateOfBirth.isEmpty()
-                && this.genderType.getGender(context).isEmpty()
-                && this.phoneNumber.getCellphoneNumberWithNationalCode().isEmpty()
+                this.firstName.isNotEmpty()
+                && this.lastName.isNotEmpty()
+                && this.address.isNotBlank()
+                && this.dateOfBirth.isNotEmpty()
+                && this.genderType.getGender(context).isNotEmpty()
+                && this.phoneNumber.getCellphoneNumberWithNationalCode().isNotEmpty()
                 )
     }
 }
