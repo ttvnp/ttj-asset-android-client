@@ -318,14 +318,14 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun updateNotificationSettings(grantEmailhNotification: Boolean?): Single<ModelWrapper<UserModel?>> {
+    override fun updateNotificationSettings(grantEmailNotification: Boolean?): Single<ModelWrapper<UserModel?>> {
         return Single.create<ModelWrapper<UserModel?>> { subscriber ->
             var userEntity = userDataStore.get()
             if (userEntity == null) {
                 subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
-            val grantEmailNotificationUpdateValue = grantEmailhNotification
+            val grantEmailNotificationUpdateValue = grantEmailNotification
                     ?: userEntity.grantEmailNotification
 
             try {
@@ -417,7 +417,7 @@ class UserRepositoryImpl @Inject constructor(
                     subscriber.onSuccess(ModelWrapper(UserTranslator().translate(userEntity), ErrorCode.NO_ERROR))
                 }
             } catch (e: IOException) {
-                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER))
             }
         }
     }
