@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
@@ -44,22 +45,35 @@ class SettingsSecurityPresenterImpl @Inject constructor(
     }
 
     override fun updateSecuritySettings(requirePasswordOnSend: Boolean) {
+        target.showProgressDialog()
         userUseCase.updateSecuritySettings(requirePasswordOnSend)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
 
                     override fun onOtherError(error: Throwable?) {
+                        target.dismissProgressDialog()
                         error?.let { target.showError(error) }
                     }
 
                     override fun onMaintenance() {
+                        target.dismissProgressDialog()
                         target.showMaintenance()
                     }
 
                     override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
-                        wrapper?.model?.let {
-                            target.bindUserInfo(it)
+                        target.dismissProgressDialog()
+                        wrapper?.let {
+                            when (it.errorCode) {
+                                ErrorCode.NO_ERROR -> {
+                                    it.model?.let {
+                                        target.bindUserInfo(it)
+                                    }
+                                }
+                                else -> {
+                                    target.showError(it.errorCode, it.error)
+                                }
+                            }
                         }
                     }
                 }).addTo(disposables)

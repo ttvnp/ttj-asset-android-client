@@ -38,7 +38,6 @@ class SettingsSecurityActivity : BaseActivity(), SettingsSecurityPresenterTarget
     }
 
     override fun bindUserInfo(userModel: UserModel) {
-        dismissProgressDialog()
         mRequirePasswordOnSendSwitch.isChecked = userModel.requirePasswordOnSend
     }
 
@@ -61,7 +60,6 @@ class SettingsSecurityActivity : BaseActivity(), SettingsSecurityPresenterTarget
 
     private fun setListener() {
         mRequirePasswordOnSendSwitch.setOnClickListener {
-            showProgressDialog()
             mPresenter.updateSecuritySettings(mRequirePasswordOnSendSwitch.isChecked)
         }
     }
