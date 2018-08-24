@@ -24,12 +24,9 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
     lateinit var launchPresenter: LaunchPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
         launchPresenter.initialize(this)
-
         // get user data
         launchPresenter.checkDeviceReady()
     }
@@ -73,11 +70,11 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
     }
 
     override fun showError(throwable: Throwable) {
-        showErrorDialog(errorMessageGenerator.default())
+        showErrorDialog(getString(R.string.error_default_message))
     }
 
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        showErrorDialog(errorMessageGenerator.generate(errorCode, throwable))
+        showErrorDialog(getString(errorMessageGenerator.convert(errorCode)))
     }
 
     override fun showProgressDialog() {

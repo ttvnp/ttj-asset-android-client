@@ -7,7 +7,7 @@ interface
 SharedPreferencesDriver {
     fun getString(key: String, defaultValue: String = ""): String?
     fun putString(key: String, value: String)
-    fun remove()
+    fun removeString(key: String)
 }
 
 class SharedPreferencesDriverImpl @Inject constructor(
@@ -21,7 +21,7 @@ class SharedPreferencesDriverImpl @Inject constructor(
         sharedPreferences.edit().putString(key, value).apply()
     }
 
-    override fun remove() {
-        sharedPreferences.edit().clear().apply()
+    override fun removeString(key: String) {
+        sharedPreferences.edit().remove(key).apply()
     }
 }
