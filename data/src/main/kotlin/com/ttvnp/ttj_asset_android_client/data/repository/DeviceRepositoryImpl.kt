@@ -360,7 +360,7 @@ class DeviceRepositoryImpl @Inject constructor(
                         return@create
                     }
                     if(it.logout) {
-                        deviceInfoDataStore.removeAll()
+                        deviceInfoDataStore.removeDeviceInfo()
                         deviceDataStore.removeAll()
                         subscriber.onSuccess(ModelWrapper(LogoutModel(it.logout), ErrorCode.NO_ERROR))
                         return@create

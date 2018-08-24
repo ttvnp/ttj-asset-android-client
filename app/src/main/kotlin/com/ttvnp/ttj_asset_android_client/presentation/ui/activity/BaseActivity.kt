@@ -65,11 +65,11 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun showError(throwable: Throwable) {
-        showErrorDialog(errorMessageGenerator.default())
+        showErrorDialog(getString(R.string.error_default_message))
         FirebaseCrash.report(throwable)
     }
 
     open fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        showErrorDialog(errorMessageGenerator.generate(errorCode, throwable))
+        showErrorDialog(getString(errorMessageGenerator.convert(errorCode)))
     }
 }

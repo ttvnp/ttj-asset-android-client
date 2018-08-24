@@ -15,7 +15,7 @@ class ErrorMessageGenerator @Inject constructor(val context: Context) {
         return context.getString(convert(errorCode))
     }
 
-    private fun convert(errorCode: ErrorCode): Int {
+    fun convert(errorCode: ErrorCode): Int {
         return when (errorCode) {
             ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER -> R.string.error_cannot_connect_to_server
             ErrorCode.ERROR_LOCKED_OUT -> R.string.error_lockout_message

@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.model.LogoutModel
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
 import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
@@ -45,9 +46,16 @@ class MainSettingsPresenterImpl @Inject constructor(val deviceUseCase: DeviceUse
                     }
 
                     override fun onSuccess(wrapper: ModelWrapper<LogoutModel?>?) {
-                        wrapper?.model?.let {
-                            target.dismissProgressDialog()
-                            target.onLogoutSuccessfully(it.isLogout)
+                        target.dismissProgressDialog()
+                        wrapper?.let {
+                            when (it.errorCode) {
+                                ErrorCode.NO_ERROR -> {
+                                    target.onLogoutSuccessfully(it.model?.isLogout ?: false)
+                                }
+                                else -> {
+                                    target.showError(it.errorCode, it.error)
+                                }
+                            }
                         }
                     }
                 })
