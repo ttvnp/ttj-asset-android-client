@@ -115,7 +115,7 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
     override fun onLogoutSuccessfully(isLogout: Boolean) {
         dismissProgressDialog()
         if (!isLogout) {
-            showErrorDialog(errorMessageGenerator.default())
+            showErrorDialog(getString(R.string.error_default_message))
             return
         }
         activity?.startActivity(Intent(context, TutorialActivity::class.java))
@@ -137,7 +137,7 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
                 languages
         )
         listLanguages.adapter = adapter
-        listLanguages.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        listLanguages.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> {
                     changeLanguage(dialog, Locale.US)
@@ -157,13 +157,13 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(getString(R.string.logout))
         builder.setMessage(getString(R.string.logout_message))
-        builder.setPositiveButton(getString(R.string.yes), {
+        builder.setPositiveButton(getString(R.string.yes)) {
             dialogInterface, _ -> dialogInterface.dismiss()
             mainSettingsPresenter.logout()
-        })
-        builder.setNegativeButton(getString(R.string.no), {
+        }
+        builder.setNegativeButton(getString(R.string.no)) {
             dialogInterface, _ -> dialogInterface.dismiss()
-        })
+        }
         builder.show()
     }
 
