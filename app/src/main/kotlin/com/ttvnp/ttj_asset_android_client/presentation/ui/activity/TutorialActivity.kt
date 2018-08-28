@@ -40,7 +40,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        val errMsg = errorMessageGenerator.generate(errorCode, throwable)
+        val errMsg = getString(errorMessageGenerator.convert(errorCode))
         when (errorCode) {
             ErrorCode.ERROR_VALIDATION_EMAIL -> emailFragment?.showValidationError(errMsg)
             ErrorCode.ERROR_VALIDATION_VERIFICATION_CODE -> codeFragment?.showCodeValidationError(errMsg)

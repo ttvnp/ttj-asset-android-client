@@ -58,7 +58,34 @@ interface UserService {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("users/transactions")
-    fun createTransaction(@Header("credential") credential: String, @Field("emailAddress") emailAddress: String, @Field("assetType") assetType: String, @Field("amount") amount: Long): Call<CreateTransactionResponse>
+    fun createTransaction(@Header("credential") credential: String,
+                          @Field("emailAddress") emailAddress: String,
+                          @Field("assetType") assetType: String,
+                          @Field("amount") amount: Long,
+                          @Field("password") password: String
+    ): Call<CreateTransactionResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @PATCH("users/password_on_import")
+    fun changePassword(@Field("current_password") oldPassword: String,
+                       @Field("new_password") newPassword: String,
+                       @Field("new_password2")retypePassword: String): Call<UserResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @PATCH("users/notification_settings")
+    fun updateNotificationSettings(
+            @Field("grantEmailNotification") grantEmailNotification: Boolean
+    ): Call<UpdateUserResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @PATCH("users/security_settings")
+    fun updateSecuritySettings(
+            @Field("requirePasswordOnSend") requirePasswordOnSend: Boolean
+    ): Call<UpdateUserResponse>
+
 }
 
 class UserServiceImpl(
@@ -121,7 +148,24 @@ class UserServiceImpl(
         return service.getTransactions(upperUserTransactionID)
     }
 
-    override fun createTransaction(credential: String, emailAddress: String, assetType: String, amount: Long): Call<CreateTransactionResponse> {
-        return service.createTransaction(ServerCryptoUtil.encrypt(credential), emailAddress, assetType, amount)
+    override fun createTransaction(credential: String,
+                                   emailAddress: String,
+                                   assetType: String,
+                                   amount: Long,
+                                   password: String
+    ): Call<CreateTransactionResponse> {
+        return service.createTransaction(ServerCryptoUtil.encrypt(credential), emailAddress, assetType, amount, password)
+    }
+
+    override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Call<UserResponse> {
+        return service.changePassword(oldPassword, newPassword, retypePassword)
+    }
+
+    override fun updateNotificationSettings(grantEmailNotification: Boolean): Call<UpdateUserResponse> {
+        return service.updateNotificationSettings(grantEmailNotification)
+    }
+
+    override fun updateSecuritySettings(requirePasswordOnSend: Boolean): Call<UpdateUserResponse> {
+        return service.updateSecuritySettings(requirePasswordOnSend)
     }
 }

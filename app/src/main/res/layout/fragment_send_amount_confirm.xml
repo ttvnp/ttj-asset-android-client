@@ -27,6 +27,7 @@
             android:id="@+id/text_send_target_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <TextView
@@ -37,12 +38,30 @@
         android:textSize="16sp"
         android:layout_marginBottom="@dimen/middle_margin" />
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_layout_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/input_password"
+        app:errorEnabled="true"
+        app:hintEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/text_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/middle_margin"
         android:gravity="center_horizontal">
+
         <Button
             android:id="@+id/button_send_confirm_cancel"
             android:layout_width="0dp"
@@ -63,6 +82,7 @@
             style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
             android:text="@string/send_button_text"
             android:textColor="@color/colorTextOnPrimary" />
+
     </LinearLayout>
 
 </LinearLayout>

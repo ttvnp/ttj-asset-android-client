@@ -1,10 +1,12 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Switch
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsNotificationPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsNotificationPresenterTarget
@@ -12,6 +14,13 @@ import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class SettingsNotificationActivity : BaseActivity(), SettingsNotificationPresenterTarget {
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, SettingsNotificationActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     @Inject
     lateinit var settingsNotificationPresenter : SettingsNotificationPresenter
@@ -29,7 +38,7 @@ class SettingsNotificationActivity : BaseActivity(), SettingsNotificationPresent
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
             val intent = Intent()
-            setResult(RESULT_CANCELED, intent);
+            setResult(RESULT_CANCELED, intent)
             finish()
         }
 
@@ -46,6 +55,10 @@ class SettingsNotificationActivity : BaseActivity(), SettingsNotificationPresent
 
     override fun bindDeviceInfo(deviceModel: DeviceModel) {
         switchPushNotification.isChecked = deviceModel.grantPushNotification
-        switchEmailNotification.isChecked = deviceModel.grantEmailNotification
     }
+
+    override fun bindUserInfo(userModel: UserModel) {
+        switchEmailNotification.isChecked = userModel.grantEmailNotification
+    }
+
 }

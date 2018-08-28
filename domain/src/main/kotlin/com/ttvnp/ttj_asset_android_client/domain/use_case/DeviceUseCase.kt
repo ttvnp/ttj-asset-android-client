@@ -24,7 +24,8 @@ interface DeviceUseCase {
 
     fun updateGrantPushNotification(grantPushNotification: Boolean): Single<ModelWrapper<DeviceModel?>>
 
-    fun updateGrantEmailNotification(grantEmailNotification: Boolean): Single<ModelWrapper<DeviceModel?>>
+    fun logout(): Single<ModelWrapper<LogoutModel?>>
+
 }
 
 class DeviceUseCaseImpl @Inject constructor(
@@ -51,7 +52,7 @@ class DeviceUseCaseImpl @Inject constructor(
         val input = emailAddress.trim()
         if (!isEmailValid(input)) {
             return Single.create { subscriber ->
-                subscriber.onSuccess(ModelWrapper<RegisterEmailResultModel?>(null, ErrorCode.ERROR_VALIDATION_EMAIL))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_VALIDATION_EMAIL))
             }
         }
         return repository.registerEmail(input)
@@ -66,11 +67,11 @@ class DeviceUseCaseImpl @Inject constructor(
     }
 
     override fun updateGrantPushNotification(grantPushNotification: Boolean): Single<ModelWrapper<DeviceModel?>> {
-        return repository.updateNotificationSettings(grantPushNotification, null)
+        return repository.updateNotificationSettings(grantPushNotification)
     }
 
-    override fun updateGrantEmailNotification(grantEmailNotification: Boolean): Single<ModelWrapper<DeviceModel?>> {
-        return repository.updateNotificationSettings(null, grantEmailNotification)
+    override fun logout(): Single<ModelWrapper<LogoutModel?>> {
+        return repository.logout()
     }
 }
 

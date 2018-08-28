@@ -1,6 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -14,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileUploadDocumentIDPresenter
@@ -33,6 +35,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     private var pictureUri: Uri? = null
     private var facePhotoFile: File? = null
     private var addressFile: File? = null
+    private var userModel: UserModel? = null
 
     private lateinit var imageFacePhoto: ImageView
     private lateinit var imageAddress: ImageView
@@ -74,7 +77,19 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         })
         buttonSave = view.findViewById(R.id.button_save)
         buttonSave.setOnClickListener({
-            settingsProfileUploadDocumentIDPresenter.uploadIdDocument(faceImageFile = facePhotoFile, addressImageFile = addressFile)
+            userModel?.let {
+                if (!it.hasAllNecessaryInfo(context)) {
+                    AlertDialog
+                            .Builder(context)
+                            .setMessage(getString(R.string.validate_profile_for_id_document))
+                            .setPositiveButton(android.R.string.yes, { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                            })
+                            .show()
+                    return@setOnClickListener
+                }
+                settingsProfileUploadDocumentIDPresenter.uploadIdDocument(faceImageFile = facePhotoFile, addressImageFile = addressFile)
+            }
         })
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
@@ -130,9 +145,10 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         hasPhotos()
     }
 
-    override fun setDocumentID(idDocument1ImageURL: String, idDocument2ImageURL: String) {
-        if (idDocument1ImageURL.isNotBlank()) Glide.with(this.context).load(idDocument1ImageURL).into(imageFacePhoto)
-        if (idDocument2ImageURL.isNotBlank()) Glide.with(this.context).load(idDocument2ImageURL).into(imageAddress)
+    override fun setDocumentID(userModel: UserModel) {
+        this.userModel = userModel
+        if (userModel.isDocument1ImageURL.isNotBlank()) Glide.with(this.context).load(userModel.isDocument1ImageURL).into(imageFacePhoto)
+        if (userModel.isDocument2ImageURL.isNotBlank()) Glide.with(this.context).load(userModel.isDocument2ImageURL).into(imageAddress)
     }
 
     override fun showMessageOnUploadSuccessfullyCompleted() {

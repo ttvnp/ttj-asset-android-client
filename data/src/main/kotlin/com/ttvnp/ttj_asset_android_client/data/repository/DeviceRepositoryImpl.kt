@@ -32,11 +32,11 @@ import java.io.IOException
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
-        private val deviceServiceWithNoAuth : DeviceServiceWithNoAuth,
-        private val deviceService : DeviceService,
-        private val deviceDataStore : DeviceDataStore,
-        private val deviceInfoDataStore : DeviceInfoDataStore,
-        private val userDataStore : UserDataStore,
+        private val deviceServiceWithNoAuth: DeviceServiceWithNoAuth,
+        private val deviceService: DeviceService,
+        private val deviceDataStore: DeviceDataStore,
+        private val deviceInfoDataStore: DeviceInfoDataStore,
+        private val userDataStore: UserDataStore,
         private val recaptchaService: RecaptchaService
 ) : DeviceRepository {
 
@@ -80,8 +80,7 @@ class DeviceRepositoryImpl @Inject constructor(
                             accessTokenExpiry = response.accessTokenExpiry,
                             isActivated = response.isActivated,
                             deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
+                            grantPushNotification = response.grantPushNotification
                     )
                     de = deviceDataStore.update(de)
                     subscriber.onSuccess(ModelWrapper(DeviceTranslator().translate(de), ErrorCode.NO_ERROR))
@@ -121,8 +120,7 @@ class DeviceRepositoryImpl @Inject constructor(
                                         accessTokenExpiry = response.accessTokenExpiry,
                                         isActivated = response.isActivated,
                                         deviceToken = response.deviceToken,
-                                        grantPushNotification = response.grantPushNotification,
-                                        grantEmailNotification = response.grantEmailNotification
+                                        grantPushNotification = response.grantPushNotification
                                 )
                                 deviceEntity = deviceDataStore.update(deviceEntity)
                                 inner.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
@@ -132,15 +130,16 @@ class DeviceRepositoryImpl @Inject constructor(
                         inner.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
                     }
                 }.subscribeOn(Schedulers.io())
-                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
-                    override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
-                        subscriber.onSuccess(wrapper)
-                    }
-                    override fun onError(e: Throwable) {
-                        subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN, e))
-                    }
-                }).addTo(disposables)
-            }.addOnFailureListener{ e ->
+                        .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                            override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
+                                subscriber.onSuccess(wrapper)
+                            }
+
+                            override fun onError(e: Throwable) {
+                                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN, e))
+                            }
+                        }).addTo(disposables)
+            }.addOnFailureListener { e ->
                 if (e is ApiException) {
                     val errCode: ErrorCode = when (e.statusCode) {
                         SafetyNetStatusCodes.API_NOT_CONNECTED -> ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER
@@ -186,8 +185,7 @@ class DeviceRepositoryImpl @Inject constructor(
                         accessTokenExpiry = responseBody.accessTokenExpiry,
                         isActivated = responseBody.isActivated,
                         deviceToken = responseBody.deviceToken,
-                        grantPushNotification = responseBody.grantPushNotification,
-                        grantEmailNotification = responseBody.grantEmailNotification
+                        grantPushNotification = responseBody.grantPushNotification
                 )
                 deviceEntity2 = deviceDataStore.update(deviceEntity2)
                 subscriber.onSuccess(ModelWrapper(DeviceTranslator().translate(deviceEntity2), ErrorCode.NO_ERROR))
@@ -247,7 +245,7 @@ class DeviceRepositoryImpl @Inject constructor(
                             profileImageID = response.user.profileImageID,
                             profileImageURL = response.user.profileImageURL,
                             firstName = response.user.firstName,
-                            middleName =  response.user.middleName,
+                            middleName = response.user.middleName,
                             lastName = response.user.lastName,
                             address = response.user.address,
                             isEmailVerified = response.user.isEmailVerified,
@@ -262,8 +260,7 @@ class DeviceRepositoryImpl @Inject constructor(
                             accessTokenExpiry = response.device.accessTokenExpiry,
                             isActivated = response.device.isActivated,
                             deviceToken = response.device.deviceToken,
-                            grantPushNotification = response.device.grantPushNotification,
-                            grantEmailNotification = response.device.grantEmailNotification
+                            grantPushNotification = response.device.grantPushNotification
                     )
                     deviceDataStore.update(deviceEntity)
 
@@ -300,8 +297,7 @@ class DeviceRepositoryImpl @Inject constructor(
                             accessTokenExpiry = response.accessTokenExpiry,
                             isActivated = response.isActivated,
                             deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
+                            grantPushNotification = response.grantPushNotification
                     )
                     deviceEntity = deviceDataStore.update(deviceEntity!!)
                     subscriber.onSuccess(ModelWrapper(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
@@ -312,18 +308,18 @@ class DeviceRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun updateNotificationSettings(grantPushNotification: Boolean?, grantEmailNotification: Boolean?): Single<ModelWrapper<DeviceModel?>> {
+    override fun updateNotificationSettings(grantPushNotification: Boolean?): Single<ModelWrapper<DeviceModel?>> {
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             var deviceEntity = deviceDataStore.get()
             if (deviceEntity == null) {
                 subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                 return@create
             }
-            val grantPushNotificationUpdateValue = grantPushNotification?:deviceEntity.grantPushNotification
-            val grantEmailNotificationUpdateValue = grantEmailNotification?:deviceEntity.grantEmailNotification
+            val grantPushNotificationUpdateValue = grantPushNotification
+                    ?: deviceEntity.grantPushNotification
 
             try {
-                val updateNotificationSettings = deviceService.updateNotificationSettings(grantPushNotificationUpdateValue, grantEmailNotificationUpdateValue).execute()
+                val updateNotificationSettings = deviceService.updateNotificationSettings(grantPushNotificationUpdateValue).execute()
                 if (!updateNotificationSettings.isSuccessful) {
                     subscriber.onError(HttpException(updateNotificationSettings))
                     return@create
@@ -339,11 +335,37 @@ class DeviceRepositoryImpl @Inject constructor(
                             accessTokenExpiry = response.accessTokenExpiry,
                             isActivated = response.isActivated,
                             deviceToken = response.deviceToken,
-                            grantPushNotification = response.grantPushNotification,
-                            grantEmailNotification = response.grantEmailNotification
+                            grantPushNotification = response.grantPushNotification
                     )
                     deviceEntity = deviceDataStore.update(deviceEntity!!)
                     subscriber.onSuccess(ModelWrapper(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
+                }
+            } catch (e: IOException) {
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+            }
+        }
+    }
+
+    override fun logout(): Single<ModelWrapper<LogoutModel?>> {
+        return Single.create { subscriber ->
+            try {
+                val logout = deviceService.logout().execute()
+                if (!logout.isSuccessful) {
+                    subscriber.onError(HttpException(logout))
+                    return@create
+                }
+                logout.body()?.let {
+                    if (it.hasError()) {
+                        subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
+                        return@create
+                    }
+                    if(it.logout) {
+                        deviceInfoDataStore.removeDeviceInfo()
+                        deviceDataStore.removeAll()
+                        subscriber.onSuccess(ModelWrapper(LogoutModel(it.logout), ErrorCode.NO_ERROR))
+                        return@create
+                    }
+                    subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                 }
             } catch (e: IOException) {
                 subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))

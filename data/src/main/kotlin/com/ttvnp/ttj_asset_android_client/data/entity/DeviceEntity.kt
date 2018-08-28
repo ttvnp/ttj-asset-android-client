@@ -6,7 +6,7 @@ import com.github.gfx.android.orma.annotation.Table
 import java.util.*
 
 @Table
-class DeviceEntity (
+class DeviceEntity(
         @Column @Setter("accessToken")
         val accessToken: String = "",
 
@@ -20,8 +20,5 @@ class DeviceEntity (
         val deviceToken: String = "",
 
         @Column @Setter("grantPushNotification")
-        val grantPushNotification: Boolean = false,
-
-        @Column @Setter("grantEmailNotification")
-        val grantEmailNotification: Boolean = false
+        val grantPushNotification: Boolean = false
 )

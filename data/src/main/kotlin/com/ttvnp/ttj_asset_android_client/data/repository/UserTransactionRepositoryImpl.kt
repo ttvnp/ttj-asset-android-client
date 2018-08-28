@@ -101,7 +101,10 @@ class UserTransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun createTransaction(sendInfoModel: SendInfoModel, onReceiveBalances: (Collection<BalanceModel>) -> Unit): Single<ModelWrapper<UserTransactionModel?>> {
+    override fun createTransaction(sendInfoModel: SendInfoModel,
+                                   password: String,
+                                   onReceiveBalances: (Collection<BalanceModel>) -> Unit
+    ): Single<ModelWrapper<UserTransactionModel?>> {
 
         return Single.create { subscriber ->
             try {
@@ -110,7 +113,8 @@ class UserTransactionRepositoryImpl @Inject constructor(
                         deviceInfo?.credential?: "",
                         sendInfoModel.targetUserEmailAddress,
                         sendInfoModel.assetType.rawValue,
-                        sendInfoModel.amount
+                        sendInfoModel.amount,
+                        password
                 ).execute()
                 if (!createTransactionResponse.isSuccessful) {
                     subscriber.onError(HttpException(createTransactionResponse))
@@ -120,6 +124,7 @@ class UserTransactionRepositoryImpl @Inject constructor(
                     val response = it
                     if (response.hasError()) {
                         val errorCode: ErrorCode = when (response.errorCode) {
+                            ServiceErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT.rawValue -> ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT
                             ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
                             ServiceErrorCode.ERROR_LOCKED_OUT.rawValue -> ErrorCode.ERROR_LOCKED_OUT
                             ServiceErrorCode.ERROR_TOO_MUCH_AMOUNT.rawValue -> ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT
