@@ -17,6 +17,9 @@ class DataModule {
     fun deviceDataStore(ormaHolder: OrmaHolder): DeviceDataStore = DeviceDataStoreImpl(ormaHolder)
 
     @Provides
+    fun stellarAccountDataStore(ormaHolder: OrmaHolder): StellarAccountDataStore = StellarAccountDataStoreImpl(ormaHolder)
+
+    @Provides
     fun userDataStore(ormaHolder: OrmaHolder): UserDataStore = UserDataStoreImpl(ormaHolder)
 
     @Provides

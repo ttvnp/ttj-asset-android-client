@@ -12,15 +12,10 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
-import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.presentation.R
-import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
-import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.*
 import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendAmountFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
@@ -28,7 +23,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
 
-class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
+class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
 
     @Inject
     lateinit var sendAmountFormPresenter: SendAmountFormPresenter
@@ -46,7 +41,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
     var cancelButtonClickHandler: View.OnClickListener? = null
 
     companion object {
-        val QR_CODE_INFO_ARG_KEY = "qr_code_info"
+        const val QR_CODE_INFO_ARG_KEY = "qr_code_info"
         fun getInstance() : SendAmountFormFragment {
             return SendAmountFormFragment()
         }
@@ -122,7 +117,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
         this.sendInfoModel = sendInfoModel
-        if (0 < sendInfoModel.targetUserProfileImageURL.length) {
+        if (sendInfoModel.targetUserProfileImageURL.isNotEmpty()) {
             Picasso.with(context).load(sendInfoModel.targetUserProfileImageURL).into(imageSendTargetUserProfile)
         }
         textSendTargetUser.text = buildTargetUserText(sendInfoModel)
@@ -157,7 +152,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
             ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
             ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
             else -> {
-                showErrorDialog(msg, onClick = { dialog, whichButton ->
+                showErrorDialog(msg, onClick = { _, whichButton ->
                     if (whichButton == DialogInterface.BUTTON_POSITIVE) {
                         this.activity.finish()
                     }
@@ -166,7 +161,7 @@ class SendAmountFormFragment() : BaseFragment(), SendAmountFormPresenterTarget {
         }
     }
 
-    fun showAmountValidationError(msg: String) {
+    private fun showAmountValidationError(msg: String) {
         textInputLayoutSendAmount.isErrorEnabled = true
         textInputLayoutSendAmount.error = msg
     }

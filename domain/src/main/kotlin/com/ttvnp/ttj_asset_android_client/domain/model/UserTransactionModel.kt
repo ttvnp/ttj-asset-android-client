@@ -15,6 +15,8 @@ class UserTransactionModel (
         val targetUserFirstName: String = "",
         val targetUserMiddleName: String = "",
         val targetUserLastName: String = "",
+        val targetUserStrAccountID: String = "",
+        val targetUserMemoText: String = "",
         val assetType: AssetType = AssetType.ASSET_TYPE_POINT,
         val amount: Long = 0L
 ) : BaseModel()

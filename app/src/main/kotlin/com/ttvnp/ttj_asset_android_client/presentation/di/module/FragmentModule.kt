@@ -41,6 +41,11 @@ class FragmentModule {
     }
 
     @Provides
+    fun sendAmountFormByStellarPresenter(userUseCase: UserUseCase): SendAmountFormByStellarPresenter {
+        return SendAmountFormByStellarPresenterImpl(userUseCase)
+    }
+
+    @Provides
     fun sendAmountConfirmPresenter(userUseCase: UserUseCase): SendAmountConfirmPresenter {
         return SendAmountConfirmPresenterImpl(userUseCase)
     }

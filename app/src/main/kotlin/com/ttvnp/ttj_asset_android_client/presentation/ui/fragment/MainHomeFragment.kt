@@ -85,7 +85,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         }
         swipeLayoutPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
         swipeLayoutEmptyPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
-        emptyTextViewPaymentHistory = view.findViewById<TextView>(R.id.empty_text_view_payment_history)
+        emptyTextViewPaymentHistory = view.findViewById(R.id.empty_text_view_payment_history)
         emptyViewPaymentHistory?.emptyView = emptyTextViewPaymentHistory
 
         textEmailAddress?.setOnClickListener {

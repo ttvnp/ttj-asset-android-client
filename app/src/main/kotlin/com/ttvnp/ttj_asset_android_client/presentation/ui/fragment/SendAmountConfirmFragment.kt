@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
@@ -75,7 +76,16 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
                 if (it.requirePasswordOnSend) {
                     if (!sendAmountConfirmPresenter.isValidated(textInputPassword.text.toString())) return@setOnClickListener
                 }
-                sendAmountConfirmPresenter.createTransaction(sendInfoModel!!, textInputPassword.text.toString())
+                sendInfoModel?.let {
+                    if (it.targetUserStrAccountID.isBlank()) {
+                        sendAmountConfirmPresenter.createTransaction(it, textInputPassword.text.toString())
+                        return@setOnClickListener
+                    }
+                    sendAmountConfirmPresenter.createExternalTransaction(
+                            it,
+                            textInputPassword.text.toString()
+                    )
+                }
             }
         }
         sendAmountConfirmPresenter.initialize(this, this.sendInfoModel!!)
@@ -95,16 +105,29 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
         this.sendInfoModel = sendInfoModel
-        if (0 < sendInfoModel.targetUserProfileImageURL.length) {
+        if (sendInfoModel.targetUserProfileImageURL.isNotEmpty()) {
             Picasso.with(context).load(sendInfoModel.targetUserProfileImageURL).into(imageSendTargetUserProfile)
         }
         val targetUserName = buildTargetUserText(sendInfoModel)
-        textSendTargetUser.text = targetUserName
-        textSendConfirmDesc.text = getString(R.string.send_confirm_desc_format).format(
+        var confirmDesc = getString(R.string.send_confirm_desc_format).format(
                 sendInfoModel.amount,
                 sendInfoModel.assetType.rawValue,
                 targetUserName
         )
+        var visibility = View.VISIBLE
+        if (sendInfoModel.targetUserStrAccountID.isNotBlank()) {
+            visibility = View.GONE
+            confirmDesc = getString(R.string.send_confirm_desc_format_for_stellar).format(
+                    sendInfoModel.amount,
+                    sendInfoModel.assetType.rawValue,
+                    sendInfoModel.targetUserStrAccountID,
+                    sendInfoModel.targetUserStrMemoText
+            )
+        }
+        imageSendTargetUserProfile.visibility = visibility
+        textSendTargetUser.visibility = visibility
+        textSendTargetUser.text = targetUserName
+        textSendConfirmDesc.text = confirmDesc
     }
 
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {
@@ -122,6 +145,23 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
     }
 
     override fun onTransactionSuccess(sendInfoModel: SendInfoModel) {
+        showMessagePaymentSuccessfully(sendInfoModel)
+    }
+
+    override fun onExternalTransactionSuccess(sendInfoModel: SendInfoModel) {
+        showMessagePaymentSuccessfully(sendInfoModel)
+    }
+
+    override fun onDestroy() {
+        popup?.let {
+            if (it.isShowing) {
+                it.dismiss()
+            }
+        }
+        super.onDestroy()
+    }
+
+    private fun showMessagePaymentSuccessfully(sendInfoModel: SendInfoModel) {
         popup = PopupWindow(activity)
         popup?.apply {
             val popupView = View.inflate(this@SendAmountConfirmFragment.context, R.layout.view_popup, null)
@@ -138,17 +178,9 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
             val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics)
             this.width = width.toInt()
             this.height = WindowManager.LayoutParams.WRAP_CONTENT
-            this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0);
+            this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0)
         }
         firebaseAnalyticsHelper?.logAssetSendEvent(sendInfoModel.assetType, sendInfoModel.amount)
     }
 
-    override fun onDestroy() {
-        popup?.let {
-            if (it.isShowing) {
-                it.dismiss()
-            }
-        }
-        super.onDestroy()
-    }
 }

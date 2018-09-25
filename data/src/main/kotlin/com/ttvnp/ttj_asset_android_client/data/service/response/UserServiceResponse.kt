@@ -3,6 +3,12 @@ package com.ttvnp.ttj_asset_android_client.data.service.response
 import com.squareup.moshi.Json
 import java.util.*
 
+class GetStellarAccountResponse(
+        @Json(name = "strAccountID") val strAccountID: String = "",
+        @Json(name = "strDepositMemoText") val strDepositMemoText: String = "",
+        @Json(name = "message") val message: String = ""
+) : BaseResponse()
+
 class GetUserResponse(
         @Json(name = "emailAddress") val emailAddress: String = "",
         @Json(name = "profileImageID") val profileImageID: Long = 0L,
@@ -81,6 +87,8 @@ class TransactionResponse(
         @Json(name = "targetUserFirstName") val targetUserFirstName: String = "",
         @Json(name = "targetUserMiddleName") val targetUserMiddleName: String = "",
         @Json(name = "targetUserLastName") val targetUserLastName: String = "",
+        @Json(name = "targetStrAccountID") val targetStrAccountID: String = "",
+        @Json(name = "strMemoText") val strMemoText: String = "",
         @Json(name = "assetType") val assetType: String = "",
         @Json(name = "amount") val amount: Long = 0L
 )
@@ -89,3 +97,4 @@ class CreateTransactionResponse(
         @Json(name = "userTransaction") val userTransaction: TransactionResponse,
         @Json(name = "balances") val balances: List<BalanceResponse>
 ) : BaseResponse()
+

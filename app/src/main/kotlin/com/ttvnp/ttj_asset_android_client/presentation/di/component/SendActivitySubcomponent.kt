@@ -11,6 +11,7 @@ import dagger.android.AndroidInjector
         DomainModule::class,
         SendEmailFormFragmentModule::class,
         SendAmountFormFragmentModule::class,
+        SendAmountFormByStellarFragmentModule::class,
         SendAmountConfirmFragmentModule::class
 ))
 interface SendActivitySubcomponent : AndroidInjector<SendActivity> {
