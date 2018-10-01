@@ -16,6 +16,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface UserService {
+
+    @Headers("Accept: application/json")
+    @GET("users/str_receive_account")
+    fun getStellarAccount(): Call<GetStellarAccountResponse>
+
     @Headers("Accept: application/json")
     @GET("users")
     fun getUser(): Call<GetUserResponse>
@@ -67,6 +72,18 @@ interface UserService {
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
+    @POST("users/transactions_external")
+    fun createExternalTransaction(
+            @Header("credential") credential: String,
+            @Field("strAccountID") strAccountID: String,
+            @Field("strMemoText") strMemoText: String,
+            @Field("assetType") assetType: String,
+            @Field("amount") amount: Long,
+            @Field("password") password: String
+    ): Call<CreateTransactionResponse>
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
     @PATCH("users/password_on_import")
     fun changePassword(@Field("current_password") oldPassword: String,
                        @Field("new_password") newPassword: String,
@@ -114,6 +131,10 @@ class UserServiceImpl(
         service = builder.create(UserService::class.java)
     }
 
+    override fun getStellarAccount(): Call<GetStellarAccountResponse> {
+        return service.getStellarAccount()
+    }
+
     override fun getUser(): Call<GetUserResponse> {
         return service.getUser()
     }
@@ -155,6 +176,10 @@ class UserServiceImpl(
                                    password: String
     ): Call<CreateTransactionResponse> {
         return service.createTransaction(ServerCryptoUtil.encrypt(credential), emailAddress, assetType, amount, password)
+    }
+
+    override fun createExternalTransaction(credential: String, strAccountID: String, strMemoText: String, assetType: String, amount: Long, password: String): Call<CreateTransactionResponse> {
+        return service.createExternalTransaction(ServerCryptoUtil.encrypt(credential), strAccountID, strMemoText, assetType, amount, password)
     }
 
     override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Call<UserResponse> {

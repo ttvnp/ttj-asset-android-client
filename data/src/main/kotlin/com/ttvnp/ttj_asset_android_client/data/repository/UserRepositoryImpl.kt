@@ -1,17 +1,17 @@
 package com.ttvnp.ttj_asset_android_client.data.repository
 
 import com.ttvnp.ttj_asset_android_client.data.entity.OtherUserEntity
+import com.ttvnp.ttj_asset_android_client.data.entity.StellarAccountEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserEntity
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.OtherUserDataStore
+import com.ttvnp.ttj_asset_android_client.data.store.StellarAccountDataStore
 import com.ttvnp.ttj_asset_android_client.data.store.UserDataStore
 import com.ttvnp.ttj_asset_android_client.data.translator.OtherUserTranslator
+import com.ttvnp.ttj_asset_android_client.data.translator.StellarAccountTranslator
 import com.ttvnp.ttj_asset_android_client.data.translator.UserTranslator
-import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.model.OtherUserModel
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.UserRepository
 import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import com.ttvnp.ttj_asset_android_client.domain.util.addHour
@@ -27,8 +27,52 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
         private val userService: UserService,
         private val userDataStore: UserDataStore,
-        private val otherUserDataStore: OtherUserDataStore
+        private val otherUserDataStore: OtherUserDataStore,
+        private val stellarAccountDataStore: StellarAccountDataStore
 ) : UserRepository {
+
+    override fun getStellarAccount(): Single<StellarAccountModel> {
+        return Single.create { subscriber ->
+            var stellarAccountModel: StellarAccountModel? = null
+            var refresh = false
+            var stellarAccountEntity = stellarAccountDataStore.get()
+            if (stellarAccountEntity == null) {
+                refresh = true
+            } else {
+                val localCacheExpiry = stellarAccountEntity.updatedAt.addHour(24 * 7)
+                refresh = Now().after(localCacheExpiry)
+                if (!refresh) {
+                    stellarAccountModel = StellarAccountTranslator().translate(stellarAccountEntity)
+                }
+            }
+
+            if (refresh) {
+                try {
+                    val stellarAccountResponse = userService.getStellarAccount().execute()
+                    if (!stellarAccountResponse.isSuccessful) {
+                        subscriber.onError(HttpException(stellarAccountResponse))
+                        return@create
+                    }
+                    stellarAccountResponse.body()?.let {
+                        if (it.hasError()) return@let
+                        val entity = StellarAccountEntity(
+                                strAccountID = it.strAccountID,
+                                strDepositMemoText = it.strDepositMemoText
+                        )
+                        stellarAccountEntity = stellarAccountDataStore.update(entity = entity)
+                        stellarAccountModel = StellarAccountTranslator().translate(entity)
+                    }
+                } catch (e: IOException) {
+                    //ignore connection exception
+                }
+            }
+            if (stellarAccountModel == null) {
+                // get from local db
+                stellarAccountModel = StellarAccountTranslator().translate(stellarAccountDataStore.get())
+            }
+            subscriber.onSuccess(stellarAccountModel ?: StellarAccountModel())
+        }
+    }
 
     override fun getUser(forceRefresh: Boolean): Single<UserModel> {
         return Single.create { subscriber ->

@@ -62,9 +62,10 @@ class DomainModule {
     fun userRepository(
             userService: UserService,
             userDataStore: UserDataStore,
-            otherUserDataStore: OtherUserDataStore
+            otherUserDataStore: OtherUserDataStore,
+            stellarAccountDataStore: StellarAccountDataStore
     ): UserRepository {
-        return UserRepositoryImpl(userService, userDataStore, otherUserDataStore)
+        return UserRepositoryImpl(userService, userDataStore, otherUserDataStore, stellarAccountDataStore)
     }
 
     @Provides

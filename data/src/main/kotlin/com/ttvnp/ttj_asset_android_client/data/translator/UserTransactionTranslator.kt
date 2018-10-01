@@ -27,6 +27,8 @@ internal class UserTransactionTranslator : BaseTranslator<UserTransactionModel, 
                 targetUserFirstName = entity.targetUserFirstName,
                 targetUserMiddleName = entity.targetUserMiddleName,
                 targetUserLastName = entity.targetUserLastName,
+                targetUserStrAccountID =  entity.targetStrAccountID,
+                targetUserMemoText = entity.targetMemoText,
                 assetType = assetType,
                 amount = entity.amount
         )
