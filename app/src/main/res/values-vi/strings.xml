@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="receive_options">
+        <item>Bằng Email</item>
+        <item>Bằng Địa chỉ Stellar</item>
+    </string-array>
+    <!-- stellar -->
+    <string name="memo">Ghi chú (không bắt buộc)</string>
+    <string name="str_note">Chú ý:\tkhông gửi bất kỳ cái gì trừ \"SNC\" vả \"SNP\".</string>
+    <string name="str_memo">Ghi chú</string>
+
     <!-- general -->
     <string name="logout">Đăng xuất</string>
     <string name="logout_message">Bạn có chắc chắn muốn đăng xuất không?</string>
@@ -44,7 +53,7 @@
     <string name="terms_and_conditions_description">The software you are about to use functions as a free, and open source.\n\nWhile the software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, we cannot guarantee that there will be no bugs in the software. You acknowledge that your use of this software is at your own discretion and in compliance with all applicable laws. You are responsible for safekeeping your passwords, and any other codes you use to access the software.\n\nTo the fullest extent permitted by law, this software is provided as is and no representations or warranties can be made of any kind, express or implied, including but not limited to the warranties of merchantability, fitness or a particular purpose and noninfringement. You assume any and all risks associated with the use of the software. In no event shall the authors of the software, employees and affiliates of Truong Thanh JAPAN, copyright holders, or Truong Thanh JAPAN, Co,.Ltd. be held liable for any claim, damages or other liability, whether in an action of contract, tort, or otherwise, arising from, out of or in connection with the software. We reserve the right to modify this disclaimer from time to time.</string>
     <string name="terms_of_services_pre">Tôi đồng ý</string>
     <string name="terms_of_services"><u>Điều khoản dịch vụ</u></string>
-    <string name="terms_of_services_post"></string>
+    <string name="terms_of_services_post"/>
     <string name="close">Đóng</string>
 
     <!-- tutorial -->
@@ -161,6 +170,11 @@
     <!-- format -->
     <string name="any">%s</string>
     <string name="send_confirm_desc_format">Bạn có chắc muốn gửi %d %s tới %s?</string>
+    <string name="send_confirm_desc_format_for_stellar">
+        Bạn có chắc chắn muốn gửi %d %s tới tài khoản Stellar này không?\nMã Tài Khoản(Địa chỉ): %s\nGhi chú: %s
+    </string>
+    <string name="history_accountID">Mã Tài Khoản(Địa chỉ): %s</string>
+    <string name="history_memo">Ghi chú: %s</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">Nhận thanh toán</string>
     <string name="notification_body_receive_payment_notification">Bạn đã nhận %s %s từ %s.</string>
