@@ -7,6 +7,7 @@
     <string name="memo">メモ（オプション)</string>
     <string name="str_note">備考:\tSNCとSNP以外は送信しないでください</string>
     <string name="str_memo">メモ</string>
+    <string name="please_input_address">アドレスを入力してください。</string>
 
     <!-- general -->
     <string name="logout">ログアウト</string>
@@ -96,6 +97,7 @@
     <string name="hint_send_amount">送信額を設定してください</string>
     <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
+    <string name="send_by_stellar"> Stellarアドレス</string>
     <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください</string>
     <string name="send_successfully_executed">送信が完了しました。\n取引が反映されるまで少々時間が掛かりますので、暫く経ってから再度ご確認ください。</string>
     <string name="profile_successfully_updated">ユーザー情報を保存しました</string>

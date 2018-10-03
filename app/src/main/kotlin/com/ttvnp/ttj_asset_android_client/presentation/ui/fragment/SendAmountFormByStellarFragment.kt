@@ -48,6 +48,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        if (arguments == null) return
         val arg = arguments.getSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY)
         if (arg is QRCodeInfoStellarBridgeData) {
             mQrCodeByStellarInfo = QRCodeInfoStellarBirdgeDataTranslator().translate(arg)
@@ -101,6 +102,10 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         }
     }
 
+    override fun onValidation(addressError: Int?) {
+        addressError?.let {  mTextInputStrAccountId.error = context.getString(addressError) }
+    }
+
     private fun initView(view: View) {
         mTextInputStrAccountId = view.findViewById(R.id.text_input_str_account_id)
         mTextInputMemo = view.findViewById(R.id.text_input_memo)
@@ -116,6 +121,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
 
         mBtnCancel.setOnClickListener(cancelButtonClickHandler)
         mBtnSubmit.setOnClickListener {
+            if (mPresenter.validateAddress(mTextInputStrAccountId.text.toString())) return@setOnClickListener
             val selectedAssetType
                     = if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
             val amountString = mTextSendAmount.text.toString()

@@ -7,6 +7,7 @@
     <string name="memo">Memo (optional)</string>
     <string name="str_note">Note\tDon\'t send any asset except \"SNC\" and \"SNP\".</string>
     <string name="str_memo">Memo</string>
+    <string name="please_input_address">Please input address.</string>
 
     <!-- general -->
     <string name="logout">Logout</string>
@@ -96,6 +97,7 @@
     <string name="hint_send_amount">amount</string>
     <string name="send_by_qr">Scan Code</string>
     <string name="send_by_email">By Email Address</string>
+    <string name="send_by_stellar">By Stellar Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
     <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed.</string>
     <string name="profile_successfully_updated">Your profile has been updated successfully.</string>

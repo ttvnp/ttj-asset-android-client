@@ -56,6 +56,18 @@
             android:text="@string/send_by_email"
             android:textColor="@color/md_grey_500" />
 
+        <Button
+            android:visibility="invisible"
+            android:id="@+id/button_send_stellar"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/middle_margin"
+            android:background="@drawable/button_primary"
+            android:enabled="false"
+            android:text="@string/send_by_stellar"
+            android:textColor="@color/md_grey_500" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
