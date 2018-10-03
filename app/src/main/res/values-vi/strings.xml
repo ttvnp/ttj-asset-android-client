@@ -8,6 +8,7 @@
     <string name="memo">Ghi chú (không bắt buộc)</string>
     <string name="str_note">Chú ý:\tkhông gửi bất kỳ cái gì trừ \"SNC\" vả \"SNP\".</string>
     <string name="str_memo">Ghi chú</string>
+    <string name="please_input_address">Hãy nhập địa chỉ.</string>
 
     <!-- general -->
     <string name="logout">Đăng xuất</string>
@@ -97,6 +98,7 @@
     <string name="hint_send_amount">Số lượng</string>
     <string name="send_by_qr">Mã quét</string>
     <string name="send_by_email">Gửi bằng mail</string>
+    <string name="send_by_stellar">Bằng Địa chỉ Stellar</string>
     <string name="send_email_form_desc">* Nhập địa chỉ mail bạn muốn gửi điểm/tiền xu đến.</string>
     <string name="send_successfully_executed">Gửi xong\n</string>
     <string name="profile_successfully_updated">Thông tin người dùng đã được cập nhật thành công.</string>

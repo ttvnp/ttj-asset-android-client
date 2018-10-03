@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -27,7 +28,15 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
 
     companion object {
         val INTENT_EXTRA_KEY = "qr_string"
+        private const val INTENT_EXTRA_KEY_IS_STELLAR = "is_stellar"
+        fun start(context: Context, isStellar: Boolean = false) {
+            val intent = Intent(context, SendActivity::class.java)
+            intent.putExtra(INTENT_EXTRA_KEY_IS_STELLAR, isStellar)
+            context.startActivity(intent)
+        }
     }
+
+    private val isStellar by lazy { intent.getBooleanExtra(INTENT_EXTRA_KEY_IS_STELLAR, false) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -52,12 +61,15 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
         val qrString: String? = intent.getStringExtra(INTENT_EXTRA_KEY)
 
         if (qrString == null || qrString.isBlank()) {
-            val formFragment = SendEmailFormFragment.getInstance()
-            formFragment.cancelButtonClickHandler = View.OnClickListener { cancel() }
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.send_activity_fragment_container, formFragment)
-                    .commit()
+            if (!isStellar) {
+                val formFragment = SendEmailFormFragment.getInstance()
+                formFragment.cancelButtonClickHandler = View.OnClickListener { cancel() }
+                this.addFragment(formFragment)
+                return
+            }
+            val formByStellarFragment = SendAmountFormByStellarFragment.getInstance()
+            formByStellarFragment.cancelButtonClickHandler = View.OnClickListener { cancel() }
+            this.addFragment(formByStellarFragment)
         } else {
             val bundle = Bundle()
             val formFragment: Fragment
@@ -83,4 +95,12 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
                     .commit()
         }
     }
+
+    private fun addFragment(fragment: Fragment) {
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.send_activity_fragment_container, fragment)
+                .commit()
+    }
+
 }

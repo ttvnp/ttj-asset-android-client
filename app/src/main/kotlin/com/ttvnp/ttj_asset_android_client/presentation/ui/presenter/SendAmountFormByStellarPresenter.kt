@@ -1,9 +1,12 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
+import android.content.Context
 import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.domain.util.toAmount
+import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.R.string.address
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormByStellarPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,10 +17,12 @@ import javax.inject.Inject
 interface SendAmountFormByStellarPresenter {
     fun initialize(target: SendAmountFormByStellarPresenterTarget)
     fun checkSendAmount(assetType: AssetType, amountString: String)
+    fun validateAddress(address: String): Boolean
 }
 
-class SendAmountFormByStellarPresenterImpl @Inject constructor(val userUseCase: UserUseCase)
-    : SendAmountFormByStellarPresenter, BasePresenter() {
+class SendAmountFormByStellarPresenterImpl @Inject constructor(
+        val userUseCase: UserUseCase
+) : SendAmountFormByStellarPresenter, BasePresenter() {
 
     private lateinit var target: SendAmountFormByStellarPresenterTarget
 
@@ -48,4 +53,14 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(val userUseCase: 
 
                 }).addTo(this.disposables)
     }
+
+    override fun validateAddress(address: String): Boolean {
+        var addressError: Int? = null
+        if (address.isEmpty()) {
+            addressError = R.string.please_input_address
+        }
+        target.onValidation(addressError)
+        return address.isEmpty()
+    }
+
 }
