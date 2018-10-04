@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">domain</string>
+    <string name="app_name" translatable="false">domain</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
 </resources>

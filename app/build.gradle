@@ -13,7 +13,6 @@ android {
     def globalConfiguration = rootProject.ext
 
     compileSdkVersion globalConfiguration.androidCompileSdkVersion
-    buildToolsVersion globalConfiguration.androidBuildToolsVersion
 
     Properties properties = new Properties()
     def localPropertyFile = project.rootProject.file('local.properties')
@@ -98,6 +97,7 @@ android {
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
+    buildToolsVersion '28.0.2'
 }
 
 repositories {
