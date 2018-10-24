@@ -115,7 +115,7 @@
                         android:text="@string/sample"
                         android:textColor="@color/md_black_1000" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="89dp"
                         android:layout_height="125dp"
                         android:layout_gravity="center_vertical"
@@ -231,7 +231,7 @@
                         android:text="@string/sample"
                         android:textColor="@color/md_black_1000" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="82dp"
                         android:layout_height="125dp"
                         android:src="@drawable/passport_sample_address" />

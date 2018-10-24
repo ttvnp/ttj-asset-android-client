@@ -71,6 +71,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     }
 
     override fun navigateToConfirm(assetType: AssetType, amount: Long) {
+        mTextInputStrAccountId.error = ""
         val bundle = Bundle()
         val confirmFragment = SendAmountConfirmFragment.getInstance()
         val data = SendInfoBridgeData(
@@ -90,6 +91,8 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
         val msg = errorMessageGenerator.generate(errorCode, throwable)
         when (errorCode) {
+            ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT -> mTextInputStrAccountId.error = msg
+            ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE -> mTextInputStrAccountId.error = msg
             ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
             ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
             else -> {
@@ -125,7 +128,10 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
             val selectedAssetType
                     = if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
             val amountString = mTextSendAmount.text.toString()
-            mPresenter.checkSendAmount(selectedAssetType, amountString)
+            mPresenter.checkValidationStellar(
+                    mTextInputStrAccountId.text.toString(),
+                    amountString,
+                    selectedAssetType)
         }
     }
 

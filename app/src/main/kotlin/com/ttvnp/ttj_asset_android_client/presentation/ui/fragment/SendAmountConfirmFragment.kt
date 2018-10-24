@@ -12,7 +12,6 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
-import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionModel
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
@@ -71,8 +70,8 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
             }
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
-        buttonSendAmountSubmit.setOnClickListener {
-            userModel?.let {
+        buttonSendAmountSubmit.setOnClickListener { _ ->
+            userModel?.let { it ->
                 if (it.requirePasswordOnSend) {
                     if (!sendAmountConfirmPresenter.isValidated(textInputPassword.text.toString())) return@setOnClickListener
                 }

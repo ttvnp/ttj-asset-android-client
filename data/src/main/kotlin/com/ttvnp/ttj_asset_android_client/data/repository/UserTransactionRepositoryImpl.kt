@@ -202,9 +202,8 @@ class UserTransactionRepositoryImpl @Inject constructor(
                         return@let
                     }
                     createExternalTransactionResponse.body()?.let {
-                        val response = it
-                        if (response.hasError()) {
-                            val errorCode: ErrorCode = when (response.errorCode) {
+                        if (it.hasError()) {
+                            val errorCode: ErrorCode = when (it.errorCode) {
                                 ServiceErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT.rawValue -> ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT
                                 ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
                                 ServiceErrorCode.ERROR_LOCKED_OUT.rawValue -> ErrorCode.ERROR_LOCKED_OUT

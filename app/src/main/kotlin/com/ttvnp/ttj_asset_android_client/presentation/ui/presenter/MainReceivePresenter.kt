@@ -1,6 +1,9 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
-import com.ttvnp.ttj_asset_android_client.domain.model.*
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoStellarInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.StellarAccountModel
+import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainReceivePresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
@@ -84,6 +87,6 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
                         target?.dismissProgressDialog()
                         target?.setQRCode(QRCodeInfoStellarInfoModel(strAccountId = model.strAccountID).toQRString())
                     }
-                })
+                }).addTo(this.disposables)
     }
 }

@@ -1,6 +1,5 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -36,7 +35,7 @@ class SettingMenuViewAdapter(
 
         if (item.isBlank()) {
             holder.linearLayoutMenu.setBackgroundColor(
-                    ContextCompat.getColor(holder.linearLayoutMenu.context, R.color.material_grey_100)
+                    ContextCompat.getColor(holder.linearLayoutMenu.context, R.color.md_white_1000)
             )
             return
         }

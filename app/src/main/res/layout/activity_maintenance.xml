@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/imageView2"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -27,9 +27,9 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/middle_margin"
+            android:layout_marginStart="@dimen/middle_margin"
+            android:layout_marginTop="@dimen/middle_margin"
             android:text="@string/maintenance"
             android:textAlignment="center"
             android:textColor="@color/md_white_1000"

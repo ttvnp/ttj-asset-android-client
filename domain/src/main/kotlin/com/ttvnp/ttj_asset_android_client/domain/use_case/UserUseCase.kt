@@ -28,6 +28,8 @@ interface UserUseCase {
 
     fun getBalances(forceRefresh: Boolean): Single<BalancesModel>
 
+    fun checkValidationStellar(accountId: String, assetType: AssetType): Single<ErrorCode>
+
     fun checkSendAmount(assetType: AssetType, amountString: String): Single<ErrorCode>
 
     fun getTopTransactionsByUserID(upperID: Long, limit: Long, forceRefresh: Boolean): Single<UserTransactionsModel>
@@ -80,6 +82,10 @@ class UserUseCaseImpl @Inject constructor(
         return balanceRepository.getBalances(forceRefresh)
     }
 
+    override fun checkValidationStellar(accountId: String, assetType: AssetType): Single<ErrorCode> {
+        return userRepository.checkValidationStellar(accountId, assetType)
+    }
+
     override fun checkSendAmount(assetType: AssetType, amountString: String): Single<ErrorCode> {
         return Single.create { subscriber ->
             if (!amountString.isValidAmount()) {
@@ -109,7 +115,7 @@ class UserUseCaseImpl @Inject constructor(
     }
 
     override fun createTransaction(sendInfoModel: SendInfoModel, password: String): Single<ModelWrapper<UserTransactionModel?>> {
-        return userTransactionRepository.createTransaction(sendInfoModel, password, { balanceModels ->
+        return userTransactionRepository.createTransaction(sendInfoModel, password) { balanceModels ->
             val disposables = CompositeDisposable()
             this.balanceRepository.updateBalances(balanceModels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
                 override fun onSuccess(t: BalancesModel) {
@@ -118,11 +124,11 @@ class UserUseCaseImpl @Inject constructor(
                 override fun onError(e: Throwable) {
                 }
             }).addTo(disposables)
-        })
+        }
     }
 
     override fun createExternalTransaction(strAccountID: String, strMemoText: String, assetType: AssetType, amount: Long, password: String): Single<ModelWrapper<UserTransactionModel?>> {
-        return userTransactionRepository.createExternalTransaction(strAccountID, strMemoText, assetType, amount, password, { balanceModels ->
+        return userTransactionRepository.createExternalTransaction(strAccountID, strMemoText, assetType, amount, password) { balanceModels ->
             val disposables = CompositeDisposable()
             this.balanceRepository.updateBalances(balanceModels).subscribeWith(object : DisposableSingleObserver<BalancesModel>() {
                 override fun onSuccess(t: BalancesModel) {
@@ -131,7 +137,7 @@ class UserUseCaseImpl @Inject constructor(
                 override fun onError(e: Throwable) {
                 }
             }).addTo(disposables)
-        })
+        }
     }
 
     override fun changePassword(oldPassword: String, newPassword: String, retypePassword: String): Single<ModelWrapper<UserModel?>> {

@@ -68,14 +68,14 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         textProfileCellPhone = view.findViewById(R.id.text_profile_cell_phome_number)
         textDocumentId = view.findViewById(R.id.text_document_id)
         buttonUploadDocumentID = view.findViewById(R.id.buttonUploadDocumentID)
-        buttonUploadDocumentID.setOnClickListener({
+        buttonUploadDocumentID.setOnClickListener {
             val uploadDocumentIDFragment = SettingsProfileUploadDocumentIDFragment()
             fragmentManager.beginTransaction()
                     .addToBackStack("")
                     .replace(R.id.settings_profile_activity_fragment_container, uploadDocumentIDFragment)
                     .commit()
-        })
-        buttonProfileEdit = view.findViewById<FloatingActionButton>(R.id.button_profile_edit)
+        }
+        buttonProfileEdit = view.findViewById(R.id.button_profile_edit)
         buttonProfileEdit.visibility = INVISIBLE
         buttonProfileEdit.setOnClickListener {
             val editFragment = SettingsProfileEditFragment.getInstance()
@@ -118,7 +118,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
     }
 
     private fun checkIdentificationStatus(status: IdentificationStatus) {
-        var value = ""
+        val value: String
         buttonUploadDocumentID.isEnabled = true
         buttonProfileEdit.visibility = VISIBLE
 

@@ -31,7 +31,8 @@ android {
     productFlavors {
         local {
             dimension "env"
-            buildConfigField "String", "SERVER_URL", '"http://192.168.11.5:1324"' // http://10.0.2.2:1324
+            buildConfigField "String", "SERVER_URL", '"http://192.168.11.5:1324"'
+            // http://10.0.2.2:1324
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
                     '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +
@@ -44,6 +45,8 @@ android {
         }
         dev {
             dimension "env"
+            buildConfigField "String", "HORIZON_URL", '"https://horizon-testnet.stellar.org"'
+            buildConfigField "String", "ISSUER_ACCOUNT_ID", '"GDNIKJNWHONPWZ2C4EAUKNO3BPGLT3AR6SOQRFMN57UZYEKC4CQXXXS3"'
             buildConfigField "String", "SERVER_URL", '"https://api-testnet.sencoin.com"'
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
@@ -57,6 +60,8 @@ android {
         }
         prod {
             dimension "env"
+            buildConfigField "String", "HORIZON_URL", '"https://horizon.stellar.org"'
+            buildConfigField "String", "ISSUER_ACCOUNT_ID", '"GDPOR42X2YKWL74CCOLTZKWP4RZYYPN3JBYBJF4QVXHVVRQQNPX34O67"'
             buildConfigField "String", "SERVER_URL", '"https://api.sencoin.com"'
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2RHR14zkJbNTloI1YD9c\\n" +\n' +
@@ -98,19 +103,19 @@ dependencies {
 
     // Common
     def commonDependencies = rootProject.ext.commonDependencies
-    for (dependency in commonDependencies){
+    for (dependency in commonDependencies) {
         implementation dependency.value
     }
 
     // Data
     def dataDependencies = rootProject.ext.dataDependencies
-    for (dependency in dataDependencies){
+    for (dependency in dataDependencies) {
         implementation dependency.value
     }
 
     // Test
     def testDependencies = rootProject.ext.testDependencies
-    for (dependency in testDependencies){
+    for (dependency in testDependencies) {
         testImplementation dependency.value
     }
 

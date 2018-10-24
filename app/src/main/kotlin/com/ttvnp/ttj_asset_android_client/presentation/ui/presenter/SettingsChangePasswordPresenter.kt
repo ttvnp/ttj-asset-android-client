@@ -9,6 +9,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsChangePasswordPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -48,9 +49,9 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
                         target.showMaintenance()
                     }
 
-                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
+                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target.dismissProgressDialog()
-                        wrapper?.let {
+                        wrapper.let {
                             when (it.errorCode) {
                                 ErrorCode.NO_ERROR -> target.onChangePasswordSuccessful()
                                 ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT -> target.showError(it.errorCode, it.error)
@@ -58,7 +59,7 @@ class SettingsChangePasswordPresenterImpl @Inject constructor(
                             }
                         }
                     }
-                })
+                }).addTo(this.disposables)
     }
 
     override fun isValidated(

@@ -54,9 +54,9 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserModel?>>() {
 
-                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
+                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target?.dismissProgressDialog()
-                        when (wrapper?.errorCode) {
+                        when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> {
                                 wrapper.model?.let {
                                     target?.showMessageOnUploadSuccessfullyCompleted()
@@ -64,7 +64,7 @@ class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userU
                                 }
                             }
                             else -> {
-                                wrapper?.let {
+                                wrapper.let {
                                     target?.showError(it.errorCode, it.error)
                                 }
                             }

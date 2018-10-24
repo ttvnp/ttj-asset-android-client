@@ -16,7 +16,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface UserService {
-
     @Headers("Accept: application/json")
     @GET("users/str_receive_account")
     fun getStellarAccount(): Call<GetStellarAccountResponse>
@@ -146,11 +145,11 @@ class UserServiceImpl(
             lastName: RequestBody,
             address: RequestBody,
             genderType: RequestBody,
-            dob: RequestBody,
+            dateOfBirth: RequestBody,
             cellphoneNumberNationalCode: RequestBody,
             cellphoneNumber: RequestBody
     ): Call<UpdateUserResponse> {
-        return service.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dob, cellphoneNumberNationalCode, cellphoneNumber)
+        return service.updateUser(profileImageFile, firstName, middleName, lastName, address, genderType, dateOfBirth, cellphoneNumberNationalCode, cellphoneNumber)
     }
 
     override fun uploadIdDocument(faceImageFile: MultipartBody.Part, addressImageFile: MultipartBody.Part): Call<UpdateUserResponse> {
