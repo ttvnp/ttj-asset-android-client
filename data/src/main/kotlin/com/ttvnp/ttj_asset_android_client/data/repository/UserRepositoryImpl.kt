@@ -1,8 +1,10 @@
 package com.ttvnp.ttj_asset_android_client.data.repository
 
+import com.ttvnp.ttj_asset_android_client.data.BuildConfig
 import com.ttvnp.ttj_asset_android_client.data.entity.OtherUserEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.StellarAccountEntity
 import com.ttvnp.ttj_asset_android_client.data.entity.UserEntity
+import com.ttvnp.ttj_asset_android_client.data.service.StellarService
 import com.ttvnp.ttj_asset_android_client.data.service.UserService
 import com.ttvnp.ttj_asset_android_client.data.service.response.ServiceErrorCode
 import com.ttvnp.ttj_asset_android_client.data.store.OtherUserDataStore
@@ -26,15 +28,42 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
         private val userService: UserService,
+        private val stellarService: StellarService,
         private val userDataStore: UserDataStore,
         private val otherUserDataStore: OtherUserDataStore,
         private val stellarAccountDataStore: StellarAccountDataStore
 ) : UserRepository {
 
+    override fun checkValidationStellar(accountId: String, assetType: AssetType): Single<ErrorCode> {
+        return Single.create { subscriber ->
+            val singleAccountExecute = stellarService.getSingleAccount(accountId).execute()
+            if (!singleAccountExecute.isSuccessful) {
+                subscriber.onSuccess(ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT)
+                return@create
+            }
+            val singleAccount = singleAccountExecute.body()
+            singleAccount?.let { it ->
+                try {
+                    val target = it.balances.first {
+                        BuildConfig.ISSUER_ACCOUNT_ID == it.asset_issuer && assetType.rawValue == it.asset_code
+                    }
+                    val trustLimit = stellarService.removeDecimal(target.limit ?: "0")
+                    if (trustLimit == 0.toLong()) {
+                        subscriber.onSuccess(ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE)
+                        return@create
+                    }
+                } catch (e: Exception) {
+                    subscriber.onSuccess(ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE)
+                }
+            }
+            subscriber.onSuccess(ErrorCode.NO_ERROR)
+        }
+    }
+
     override fun getStellarAccount(): Single<StellarAccountModel> {
         return Single.create { subscriber ->
             var stellarAccountModel: StellarAccountModel? = null
-            var refresh = false
+            var refresh: Boolean
             var stellarAccountEntity = stellarAccountDataStore.get()
             if (stellarAccountEntity == null) {
                 refresh = true
@@ -340,7 +369,7 @@ class UserRepositoryImpl @Inject constructor(
                     subscriber.onError(HttpException(changePasswordResponse))
                     return@create
                 }
-                changePasswordResponse.body()?.let {
+                changePasswordResponse.body()?.let { it ->
                     if (it.hasError()) {
                         errCode = when (it.errorCode) {
                             ServiceErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT.rawValue -> ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT

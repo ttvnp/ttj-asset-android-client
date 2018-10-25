@@ -36,12 +36,10 @@ class SettingsSecurityPresenterImpl @Inject constructor(
                         target.showMaintenance()
                     }
 
-                    override fun onSuccess(userModel: UserModel?) {
-                        userModel?.let {
-                            target.bindUserInfo(it)
-                        }
+                    override fun onSuccess(userModel: UserModel) {
+                        target.bindUserInfo(userModel)
                     }
-                })
+                }).addTo(this.disposables)
     }
 
     override fun updateSecuritySettings(requirePasswordOnSend: Boolean) {
@@ -61,9 +59,9 @@ class SettingsSecurityPresenterImpl @Inject constructor(
                         target.showMaintenance()
                     }
 
-                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>?) {
+                    override fun onSuccess(wrapper: ModelWrapper<UserModel?>) {
                         target.dismissProgressDialog()
-                        wrapper?.let {
+                        wrapper.let { it ->
                             when (it.errorCode) {
                                 ErrorCode.NO_ERROR -> {
                                     it.model?.let {

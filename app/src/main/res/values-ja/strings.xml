@@ -8,6 +8,8 @@
     <string name="str_note">備考:\tSNCとSNP以外は送信しないでください</string>
     <string name="str_memo">メモ</string>
     <string name="please_input_address">アドレスを入力してください。</string>
+    <string name="address_must_be_valid">アドレスが正しくありません。</string>
+    <string name="insufficient_trust_limit">送信先のアカウントのTrust lineが正しく設定されていません。</string>
 
     <!-- general -->
     <string name="logout">ログアウト</string>

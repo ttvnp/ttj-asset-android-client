@@ -7,6 +7,7 @@ import com.ttvnp.ttj_asset_android_client.domain.use_case.DeviceUseCase
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainSettingsPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -15,7 +16,10 @@ interface MainSettingsPresenter {
     fun saveLanguage(language: String)
     fun logout()
 }
-class MainSettingsPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) : MainSettingsPresenter{
+
+class MainSettingsPresenterImpl @Inject constructor(
+        val deviceUseCase: DeviceUseCase
+) : BasePresenter(), MainSettingsPresenter {
 
     private lateinit var target: MainSettingsPresenterTarget
 
@@ -45,9 +49,9 @@ class MainSettingsPresenterImpl @Inject constructor(val deviceUseCase: DeviceUse
                         target.showMaintenance()
                     }
 
-                    override fun onSuccess(wrapper: ModelWrapper<LogoutModel?>?) {
+                    override fun onSuccess(wrapper: ModelWrapper<LogoutModel?>) {
                         target.dismissProgressDialog()
-                        wrapper?.let {
+                        wrapper.let {
                             when (it.errorCode) {
                                 ErrorCode.NO_ERROR -> {
                                     target.onLogoutSuccessfully(it.model?.isLogout ?: false)
@@ -58,6 +62,6 @@ class MainSettingsPresenterImpl @Inject constructor(val deviceUseCase: DeviceUse
                             }
                         }
                     }
-                })
+                }).addTo(this.disposables)
     }
 }

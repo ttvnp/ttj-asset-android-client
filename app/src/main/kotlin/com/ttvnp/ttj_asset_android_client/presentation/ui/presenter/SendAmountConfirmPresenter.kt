@@ -40,12 +40,12 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                         target?.showMaintenance()
                     }
 
-                    override fun onSuccess(userModel: UserModel?) {
-                        userModel?.let {
+                    override fun onSuccess(userModel: UserModel) {
+                        userModel.let {
                             target?.onBindUserInfo(it)
                         }
                     }
-                })
+                }).addTo(this.disposables)
     }
 
     override fun createTransaction(sendInfoModel: SendInfoModel, password: String) {

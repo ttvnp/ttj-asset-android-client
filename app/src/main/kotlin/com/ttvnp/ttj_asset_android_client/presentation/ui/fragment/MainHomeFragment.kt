@@ -14,20 +14,19 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionsModel
+import com.ttvnp.ttj_asset_android_client.domain.util.formatString
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.PaymentHistoryViewAdapter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.EndlessScrollListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainHomePresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
-import com.ttvnp.ttj_asset_android_client.domain.util.formatString
-import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.PaymentHistoryViewAdapter
-import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.EndlessScrollListener
 
 class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 

@@ -60,8 +60,8 @@ class SettingsNotificationPresenterImpl @Inject constructor(
                         target.showMaintenance()
                     }
 
-                    override fun onSuccess(userModel: UserModel?) {
-                        userModel?.let {
+                    override fun onSuccess(userModel: UserModel) {
+                        userModel.let {
                             target.bindUserInfo(it)
                         }
                     }
