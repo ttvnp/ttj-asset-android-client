@@ -12,10 +12,15 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import com.ttvnp.ttj_asset_android_client.domain.model.*
+import com.ttvnp.ttj_asset_android_client.domain.model.AssetType
+import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.SendInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.util.prependIfNotBlank
 import com.ttvnp.ttj_asset_android_client.presentation.R
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.*
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.SendInfoBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendAmountFormPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
@@ -42,7 +47,7 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
 
     companion object {
         const val QR_CODE_INFO_ARG_KEY = "qr_code_info"
-        fun getInstance() : SendAmountFormFragment {
+        fun getInstance(): SendAmountFormFragment {
             return SendAmountFormFragment()
         }
     }
@@ -51,15 +56,15 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
-        val data = arguments.getSerializable(QR_CODE_INFO_ARG_KEY)
+        val data = arguments?.getSerializable(QR_CODE_INFO_ARG_KEY)
         if (data is QRCodeInfoBridgeData) {
             qrCodeInfo = QRCodeInfoBridgeDataTranslator().translate(data)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         qrCodeInfo?.let {
-            outState?.putSerializable(QR_CODE_INFO_ARG_KEY, QRCodeInfoBridgeDataTranslator().translate(it))
+            outState.putSerializable(QR_CODE_INFO_ARG_KEY, QRCodeInfoBridgeDataTranslator().translate(it))
         }
         super.onSaveInstanceState(outState)
     }
@@ -82,8 +87,7 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_amount_submit)
         buttonSendAmountSubmit.setOnClickListener {
             sendInfoModel?.let {
-                val selectedAssetType
-                        = if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
+                val selectedAssetType = if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
                 val amountString = textSendAmount.text.toString()
                 sendAmountFormPresenter.checkSendAmount(selectedAssetType, amountString)
             }
@@ -108,10 +112,10 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
                 )
                 this.putSerializable(SendAmountConfirmFragment.SEND_INFO_KEY, data)
             }
-            fragmentManager.beginTransaction()
-                    .addToBackStack("")
-                    .replace(R.id.send_activity_fragment_container, confirmFragment)
-                    .commit()
+            fragmentManager?.beginTransaction()
+                    ?.addToBackStack("")
+                    ?.replace(R.id.send_activity_fragment_container, confirmFragment)
+                    ?.commit()
         }
     }
 
@@ -154,7 +158,7 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
             else -> {
                 showErrorDialog(msg, onClick = { _, whichButton ->
                     if (whichButton == DialogInterface.BUTTON_POSITIVE) {
-                        this.activity.finish()
+                        activity?.finish()
                     }
                 })
             }

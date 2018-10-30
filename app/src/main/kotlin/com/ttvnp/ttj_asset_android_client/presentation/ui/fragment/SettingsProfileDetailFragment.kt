@@ -70,19 +70,21 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         buttonUploadDocumentID = view.findViewById(R.id.buttonUploadDocumentID)
         buttonUploadDocumentID.setOnClickListener {
             val uploadDocumentIDFragment = SettingsProfileUploadDocumentIDFragment()
-            fragmentManager.beginTransaction()
-                    .addToBackStack("")
-                    .replace(R.id.settings_profile_activity_fragment_container, uploadDocumentIDFragment)
-                    .commit()
+            fragmentManager
+                    ?.beginTransaction()
+                    ?.addToBackStack("")
+                    ?.replace(R.id.settings_profile_activity_fragment_container, uploadDocumentIDFragment)
+                    ?.commit()
         }
         buttonProfileEdit = view.findViewById(R.id.button_profile_edit)
         buttonProfileEdit.visibility = INVISIBLE
         buttonProfileEdit.setOnClickListener {
             val editFragment = SettingsProfileEditFragment.getInstance()
-            fragmentManager.beginTransaction()
-                    .addToBackStack("")
-                    .replace(R.id.settings_profile_activity_fragment_container, editFragment)
-                    .commit()
+            fragmentManager
+                    ?.beginTransaction()
+                    ?.addToBackStack("")
+                    ?.replace(R.id.settings_profile_activity_fragment_container, editFragment)
+                    ?.commit()
         }
         if (activity is SettingsProfileActivity) {
             val a = activity as SettingsProfileActivity

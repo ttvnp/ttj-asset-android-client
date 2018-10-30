@@ -15,9 +15,9 @@ import javax.inject.Inject
 class SettingsChangePasswordActivity : BaseActivity(), SettingsChangePasswordPresenterTarget {
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context?) {
             val intent = Intent(context, SettingsChangePasswordActivity::class.java)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 

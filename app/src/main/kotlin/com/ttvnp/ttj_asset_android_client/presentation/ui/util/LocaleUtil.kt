@@ -4,11 +4,11 @@ import android.content.res.Resources
 import android.os.Build
 import java.util.*
 
-fun changeLocale(resources: Resources, locale: Locale) {
+fun changeLocale(resources: Resources?, locale: Locale) {
     Locale.setDefault(locale)
-    val config = resources.configuration
-    config.setLocale(locale)
-    resources.updateConfiguration(config, resources.displayMetrics)
+    val config = resources?.configuration
+    config?.setLocale(locale)
+    resources?.updateConfiguration(config, resources.displayMetrics)
 }
 
 fun getCurrentLocale(resources: Resources): Locale {

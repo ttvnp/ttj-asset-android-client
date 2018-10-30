@@ -7,10 +7,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.net.Uri
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.text.TextUtils
@@ -29,7 +29,7 @@ abstract class BaseMainFragment : BaseFragment() {
         // Make a bitmap to get original sizes
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
-        BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri), null, options)
+        BitmapFactory.decodeStream(context?.contentResolver?.openInputStream(uri), null, options)
 
         var tmpWidth = options.outWidth
         var tmpHeight = options.outHeight
@@ -45,7 +45,7 @@ abstract class BaseMainFragment : BaseFragment() {
 
         val secondOptions = BitmapFactory.Options()
         secondOptions.inSampleSize = scale
-        return BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri), null, secondOptions)
+        return BitmapFactory.decodeStream(context?.contentResolver?.openInputStream(uri), null, secondOptions)
     }
 
     fun openGallery(requestCode: Int) {
@@ -54,11 +54,11 @@ abstract class BaseMainFragment : BaseFragment() {
         startActivityForResult(intent, requestCode)
     }
 
-    fun launchCamera(requestCode: Int): Uri {
+    fun launchCamera(requestCode: Int): Uri? {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        val pictureUri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        val pictureUri = context?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
         startActivityForResult(intent, requestCode)
 
@@ -94,8 +94,8 @@ abstract class BaseMainFragment : BaseFragment() {
         return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
     }
 
-    fun createUploadFile(context: Context, bitmap: Bitmap, tmpFileName: String): File {
-        val file = File(context.externalCacheDir, tmpFileName)
+    fun createUploadFile(context: Context?, bitmap: Bitmap, tmpFileName: String): File {
+        val file = File(context?.externalCacheDir, tmpFileName)
         var fos: FileOutputStream? = null
         try {
             file.createNewFile()
@@ -142,14 +142,12 @@ abstract class BaseMainFragment : BaseFragment() {
         var cursor: Cursor? = null
         return try {
             val projection = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = context.contentResolver.query(uri, projection, null, null, null)
-            val index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            cursor.getString(index)
+            cursor = context?.contentResolver?.query(uri, projection, null, null, null)
+            val index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToFirst()
+            cursor?.getString(index ?: 0).toString()
         } finally {
-            if (cursor != null) {
-                cursor.close()
-            }
+            cursor?.close()
         }
     }
 
@@ -160,7 +158,9 @@ abstract class BaseMainFragment : BaseFragment() {
     }
 
     private fun hasSelfPermissions(vararg permissions: String): Boolean {
-        return permissions.none { ActivityCompat.checkSelfPermission(this.context, it) != PackageManager.PERMISSION_GRANTED }
+        context?.let { context ->
+            return permissions.none { ActivityCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED }
+        } ?: return false
     }
 
 }

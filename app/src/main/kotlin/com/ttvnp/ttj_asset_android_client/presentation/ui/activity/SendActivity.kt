@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.view.View
-import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoStellarInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeType
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.*
+import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoStellarBirdgeDataTranslator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormByStellarFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendEmailFormFragment
@@ -29,10 +30,10 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
     companion object {
         val INTENT_EXTRA_KEY = "qr_string"
         private const val INTENT_EXTRA_KEY_IS_STELLAR = "is_stellar"
-        fun start(context: Context, isStellar: Boolean = false) {
+        fun start(context: Context?, isStellar: Boolean = false) {
             val intent = Intent(context, SendActivity::class.java)
             intent.putExtra(INTENT_EXTRA_KEY_IS_STELLAR, isStellar)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 

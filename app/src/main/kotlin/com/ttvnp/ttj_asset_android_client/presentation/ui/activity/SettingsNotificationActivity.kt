@@ -16,9 +16,9 @@ import javax.inject.Inject
 class SettingsNotificationActivity : BaseActivity(), SettingsNotificationPresenterTarget {
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context?) {
             val intent = Intent(context, SettingsNotificationActivity::class.java)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 
