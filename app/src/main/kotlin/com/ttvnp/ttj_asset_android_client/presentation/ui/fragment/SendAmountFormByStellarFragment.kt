@@ -24,7 +24,7 @@ import javax.inject.Inject
 class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarPresenterTarget {
 
     companion object {
-        fun getInstance() : SendAmountFormByStellarFragment {
+        fun getInstance(): SendAmountFormByStellarFragment {
             return SendAmountFormByStellarFragment()
         }
     }
@@ -48,16 +48,17 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        if (arguments == null) return
-        val arg = arguments.getSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY)
-        if (arg is QRCodeInfoStellarBridgeData) {
-            mQrCodeByStellarInfo = QRCodeInfoStellarBirdgeDataTranslator().translate(arg)
+        arguments?.let {
+            val arg = it.getSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY)
+            if (arg is QRCodeInfoStellarBridgeData) {
+                mQrCodeByStellarInfo = QRCodeInfoStellarBirdgeDataTranslator().translate(arg)
+            }
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         mQrCodeByStellarInfo?.let {
-            outState?.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, QRCodeInfoStellarBirdgeDataTranslator().translate(it))
+            outState.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, QRCodeInfoStellarBirdgeDataTranslator().translate(it))
         }
         super.onSaveInstanceState(outState)
     }
@@ -82,10 +83,10 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         )
         bundle.putSerializable(SendAmountConfirmFragment.SEND_INFO_KEY, data)
         confirmFragment.arguments = bundle
-        fragmentManager.beginTransaction()
-                .addToBackStack("")
-                .replace(R.id.send_activity_fragment_container, confirmFragment)
-                .commit()
+        fragmentManager?.beginTransaction()
+                ?.addToBackStack("")
+                ?.replace(R.id.send_activity_fragment_container, confirmFragment)
+                ?.commit()
     }
 
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
@@ -98,7 +99,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
             else -> {
                 showErrorDialog(msg, onClick = { _, whichButton ->
                     if (whichButton == DialogInterface.BUTTON_POSITIVE) {
-                        this.activity.finish()
+                        activity?.finish()
                     }
                 })
             }
@@ -106,7 +107,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     }
 
     override fun onValidation(addressError: Int?) {
-        addressError?.let {  mTextInputStrAccountId.error = context.getString(addressError) }
+        addressError?.let { mTextInputStrAccountId.error = context?.getString(addressError) }
     }
 
     private fun initView(view: View) {
@@ -125,8 +126,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         mBtnCancel.setOnClickListener(cancelButtonClickHandler)
         mBtnSubmit.setOnClickListener {
             if (mPresenter.validateAddress(mTextInputStrAccountId.text.toString())) return@setOnClickListener
-            val selectedAssetType
-                    = if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
+            val selectedAssetType = if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
             val amountString = mTextSendAmount.text.toString()
             mPresenter.checkValidationStellar(
                     mTextInputStrAccountId.text.toString(),

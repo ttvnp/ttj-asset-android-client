@@ -39,7 +39,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
 
     companion object {
         const val SEND_INFO_KEY = "send_info"
-        fun getInstance() : SendAmountConfirmFragment {
+        fun getInstance(): SendAmountConfirmFragment {
             return SendAmountConfirmFragment()
         }
     }
@@ -47,12 +47,12 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        val data = arguments.getSerializable(SEND_INFO_KEY) as SendInfoBridgeData
+        val data = arguments?.getSerializable(SEND_INFO_KEY) as SendInfoBridgeData
         sendInfoModel = SendInfoBridgeDataTranslator().translate(data)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable(SEND_INFO_KEY, SendInfoBridgeDataTranslator().translate(sendInfoModel!!))
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(SEND_INFO_KEY, SendInfoBridgeDataTranslator().translate(sendInfoModel!!))
         super.onSaveInstanceState(outState)
     }
 
@@ -65,8 +65,8 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         textSendConfirmDesc = view.findViewById(R.id.text_send_confirm_desc)
         val buttonSendAmountCancel = view.findViewById<Button>(R.id.button_send_confirm_cancel)
         buttonSendAmountCancel.setOnClickListener {
-            if (0 < fragmentManager.backStackEntryCount) {
-                fragmentManager.popBackStack()
+            if (0 < (fragmentManager?.backStackEntryCount ?: 0)) {
+                fragmentManager?.popBackStack()
             }
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
@@ -167,7 +167,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
             popupView.findViewById<Button>(R.id.button_popup_close).setOnClickListener {
                 if (this.isShowing) {
                     this.dismiss()
-                    activity.finish()
+                    activity?.finish()
                 }
             }
             popupView.findViewById<TextView>(R.id.text_popup_content).text = getString(R.string.send_successfully_executed)

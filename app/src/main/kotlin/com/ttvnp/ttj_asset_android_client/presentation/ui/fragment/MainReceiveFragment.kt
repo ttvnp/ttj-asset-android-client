@@ -4,24 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.google.zxing.qrcode.encoder.Encoder
+import com.ttvnp.ttj_asset_android_client.domain.model.StellarAccountModel
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.ReceiveSetAmountActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainReceivePresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainReceivePresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
-import android.graphics.Color
-import android.opengl.Visibility
-import android.widget.*
-import com.ttvnp.ttj_asset_android_client.domain.model.StellarAccountModel
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
 
 class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
 
@@ -63,7 +61,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
 
         buttonSetAmount.setOnClickListener {
             val intent = Intent(activity, ReceiveSetAmountActivity::class.java)
-            activity.startActivityForResult(intent, RequestCode.SET_AMOUNT_ACTIVITY.rawValue)
+            activity?.startActivityForResult(intent, RequestCode.SET_AMOUNT_ACTIVITY.rawValue)
         }
         mainReceivePresenter.setupDefault()
         val spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.receive_options, android.R.layout.simple_spinner_item)

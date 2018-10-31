@@ -21,7 +21,7 @@ class UserModel(
         val grantEmailNotification: Boolean = false,
         val requirePasswordOnSend: Boolean = false
 ) : BaseModel() {
-    fun hasAllNecessaryInfo(context: Context): Boolean {
+    fun hasAllNecessaryInfo(context: Context?): Boolean {
         return (
                 this.firstName.isNotEmpty()
                 && this.lastName.isNotEmpty()

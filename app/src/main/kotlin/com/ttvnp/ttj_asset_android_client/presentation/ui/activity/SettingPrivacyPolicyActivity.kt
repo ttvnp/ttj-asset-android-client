@@ -12,9 +12,9 @@ import java.util.*
 class SettingPrivacyPolicyActivity : BaseActivity() {
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context?) {
             val intent = Intent(context, SettingPrivacyPolicyActivity::class.java)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 

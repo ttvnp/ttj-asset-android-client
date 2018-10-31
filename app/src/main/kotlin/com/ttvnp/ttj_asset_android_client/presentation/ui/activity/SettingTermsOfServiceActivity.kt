@@ -12,9 +12,9 @@ import java.util.*
 class SettingTermsOfServiceActivity : BaseActivity() {
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context?) {
             val intent = Intent(context, SettingTermsOfServiceActivity::class.java)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 

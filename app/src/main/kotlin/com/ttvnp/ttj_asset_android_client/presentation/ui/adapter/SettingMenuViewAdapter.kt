@@ -18,8 +18,8 @@ class SettingMenuViewAdapter(
     private var itemOnClickListener: View.OnClickListener? = null
     private val linearLayoutMenus = arrayListOf<LinearLayout>()
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SettingMenuViewHolder {
-        context = parent!!.context
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingMenuViewHolder {
+        context = parent.context
         val inflater = LayoutInflater.from(parent.context).
                 inflate(R.layout.view_setting_menu_row, parent, false)
         return SettingMenuViewHolder(inflater)

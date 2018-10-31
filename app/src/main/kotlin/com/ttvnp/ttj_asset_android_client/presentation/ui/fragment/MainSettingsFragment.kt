@@ -168,21 +168,21 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
     }
 
     private fun changeLanguage(dialog: Dialog, locale: Locale) {
-        changeLocale(context.resources, locale)
+        changeLocale(context?.resources, locale)
         val fragment = MainSettingsFragment@ this
         fragment
                 .fragmentManager
-                .beginTransaction()
-                .detach(fragment)
-                .attach(fragment)
-                .commit()
+                ?.beginTransaction()
+                ?.detach(fragment)
+                ?.attach(fragment)
+                ?.commit()
         val nearbyFragment = (activity as MainActivity).adapter.getItem(2) as MainSendFragment
         nearbyFragment
                 .fragmentManager
-                .beginTransaction()
-                .detach(nearbyFragment)
-                .attach(nearbyFragment)
-                .commit()
+                ?.beginTransaction()
+                ?.detach(nearbyFragment)
+                ?.attach(nearbyFragment)
+                ?.commit()
         mainSettingsPresenter.saveLanguage(locale.language)
         dialog.dismiss()
     }
