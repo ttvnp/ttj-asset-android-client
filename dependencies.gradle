@@ -22,7 +22,7 @@ ext {
     rxAndroidVersion = '2.0.1'
     rxKotlinVersion = '2.0.0-RC1'
     constraintLayoutVersion = '1.0.2'
-    okhttpVersion = '3.9.0'
+    okhttpVersion = '3.8.0'
     retroitVersion = '2.3.0'
     moshiVersion = '1.5.0'
     ormaVersion = '4.2.5'
