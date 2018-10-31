@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ttvnp.ttj_asset_android_client.presentation">
-    <application tools:replace="android:name">
+
+    <application
+        tools:replace="android:name"
+        android:name=".LocalAndroidApplication">
     </application>
 </manifest>
