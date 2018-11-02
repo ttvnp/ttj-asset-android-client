@@ -9,7 +9,7 @@
     <string name="str_memo">メモ</string>
     <string name="please_input_address">アドレスを入力してください。</string>
     <string name="address_must_be_valid">アドレスが正しくありません。</string>
-    <string name="insufficient_trust_limit">送信先のアカウントのTrust lineが正しく設定されていません。</string>
+    <string name="insufficient_trust_limit">送信先のアカウントのTrustlineが正しく設定されていません。</string>
 
     <!-- general -->
     <string name="logout">ログアウト</string>
@@ -173,9 +173,9 @@
     <string name="any">%s</string>
     <string name="send_confirm_desc_format">%d %s を %s に送信しますか?</string>
     <string name="send_confirm_desc_format_for_stellar">
-        %d %s を以下のstellarアカウントに送信しますか？\nアカウントID(住所): %s\nメモ: %s
+        %d %s を以下のstellarアカウントに送信しますか？\nアカウントID(アドレス): %s\nメモ: %s
     </string>
-    <string name="history_accountID">アカウントID(住所): %s</string>
+    <string name="history_accountID">アカウントID(アドレス): %s</string>
     <string name="history_memo">メモ: %s</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">受信</string>
