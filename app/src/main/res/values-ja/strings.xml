@@ -4,6 +4,7 @@
         <item>Stellarアドレス</item>
     </string-array>
     <!-- stellar -->
+    <string name="stellar_address">アドレス</string>
     <string name="memo">メモ（オプション)</string>
     <string name="str_note">備考:\tSNCとSNP以外は送信しないでください</string>
     <string name="str_memo">メモ</string>

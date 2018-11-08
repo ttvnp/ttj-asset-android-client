@@ -63,7 +63,8 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_send_amount_form_by_stellar, container, false)
         mPresenter.initialize(this)
@@ -107,12 +108,16 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     }
 
     override fun onValidation(addressError: Int?) {
-        addressError?.let { mTextInputStrAccountId.error = context?.getString(addressError) }
+        addressError?.let {
+            mTextInputStrAccountId.error = context?.getString(addressError)
+        }
     }
 
     private fun initView(view: View) {
         mTextInputStrAccountId = view.findViewById(R.id.text_input_str_account_id)
+        mTextInputStrAccountId.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.stellar_address))
         mTextInputMemo = view.findViewById(R.id.text_input_memo)
+        mTextInputMemo.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.memo))
         mRadioGroupSend = view.findViewById(R.id.radio_group_send)
         mRadioSendPoint = view.findViewById(R.id.radio_send_point)
         mRadioSendCoin = view.findViewById(R.id.radio_send_coin)
