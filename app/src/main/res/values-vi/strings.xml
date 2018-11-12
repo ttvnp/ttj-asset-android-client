@@ -5,6 +5,7 @@
         <item>Bằng Địa chỉ Stellar</item>
     </string-array>
     <!-- stellar -->
+    <string name="stellar_address">Địa chỉ</string>
     <string name="memo">Ghi chú (không bắt buộc)</string>
     <string name="str_note">Chú ý:\tkhông gửi bất kỳ cái gì trừ \"SNC\" vả \"SNP\".</string>
     <string name="str_memo">Ghi chú</string>

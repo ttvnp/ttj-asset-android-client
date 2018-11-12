@@ -4,6 +4,7 @@
         <item>By Stellar Address</item>
     </string-array>
     <!-- stellar -->
+    <string name="stellar_address">Address</string>
     <string name="memo">Memo (optional)</string>
     <string name="str_note">Note\tDon\'t send any asset except \"SNC\" and \"SNP\".</string>
     <string name="str_memo">Memo</string>
