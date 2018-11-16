@@ -90,7 +90,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
 
     @SuppressLint("SetTextI18n")
     override fun onGettingStellarAccount(stellarAccountModel: StellarAccountModel) {
-        mTextStellarAccountId.text = getString(R.string.address) + "\t" + stellarAccountModel.strAccountID
+        mTextStellarAccountId.text = getString(R.string.stellar_address) + "\t" + stellarAccountModel.strAccountID
         mTextStellarMemoText.text = getString(R.string.str_memo) + "\t" + stellarAccountModel.strDepositMemoText
     }
 
