@@ -11,22 +11,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import com.ttvnp.ttj_asset_android_client.domain.model.BalancesModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
 import com.ttvnp.ttj_asset_android_client.domain.model.UserTransactionsModel
+import com.ttvnp.ttj_asset_android_client.domain.util.formatString
 import com.ttvnp.ttj_asset_android_client.presentation.R
+import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
+import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.PaymentHistoryViewAdapter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.EndlessScrollListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainHomePresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainHomePresenterTarget
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
 import javax.inject.Inject
-import com.ttvnp.ttj_asset_android_client.domain.util.formatString
-import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsProfileActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.PaymentHistoryViewAdapter
-import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.EndlessScrollListener
 
 class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
@@ -42,6 +42,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     private var recyclerViewPaymentHistory: RecyclerView? = null
     private var emptyViewPaymentHistory: ListView? = null
     private var emptyTextViewPaymentHistory: TextView? = null
+    private lateinit var progressBar: ProgressBar
 
     companion object {
         fun getInstance(): MainHomeFragment {
@@ -69,6 +70,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         swipeLayoutEmptyPaymentHistory = view.findViewById(R.id.swipe_layout_empty_payment_history)
         recyclerViewPaymentHistory = view.findViewById(R.id.recycler_view_payment_history)
         emptyViewPaymentHistory = view.findViewById(R.id.empty_view_payment_history)
+        progressBar = view.findViewById(R.id.progress_bar)
 
         val layoutManager = LinearLayoutManager(this.context)
         recyclerViewPaymentHistory?.layoutManager = layoutManager
@@ -85,8 +87,9 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         }
         swipeLayoutPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
         swipeLayoutEmptyPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
-        emptyTextViewPaymentHistory = view.findViewById<TextView>(R.id.empty_text_view_payment_history)
+        emptyTextViewPaymentHistory = view.findViewById(R.id.empty_text_view_payment_history)
         emptyViewPaymentHistory?.emptyView = emptyTextViewPaymentHistory
+        emptyViewPaymentHistory?.emptyView?.visibility = View.GONE
 
         textEmailAddress?.setOnClickListener {
             mainHomePresenter.onProfileAreaClicked()
@@ -120,6 +123,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
     override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean) {
         stopSwipeLayoutRefreshing()
+        progressBar.visibility = View.GONE
         if (userTransactionsModel.userTransactions.isEmpty()) {
             // case empty
             swipeLayoutPaymentHistory?.visibility = View.GONE

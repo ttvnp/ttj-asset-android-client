@@ -1,4 +1,17 @@
 <resources>
+    <string-array name="receive_options">
+        <item>メールアドレス</item>
+        <item>Stellarアドレス</item>
+    </string-array>
+    <!-- stellar -->
+    <string name="stellar_address">アドレス</string>
+    <string name="memo">メモ（オプション)</string>
+    <string name="str_note">備考:\tSNCとSNP以外は送信しないでください</string>
+    <string name="str_memo">メモ</string>
+    <string name="please_input_address">アドレスを入力してください。</string>
+    <string name="address_must_be_valid">アドレスが正しくありません。</string>
+    <string name="insufficient_trust_limit">送信先のアカウントのTrustlineが正しく設定されていません。</string>
+
     <!-- general -->
     <string name="logout">ログアウト</string>
     <string name="logout_message">ログアウトしてもよろしいですか？</string>
@@ -41,7 +54,7 @@
 
     <!-- terms and conditions -->
     <string name="terms_and_conditions_description">The software you are about to use functions as a free, and open source.\n\nWhile the software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, we cannot guarantee that there will be no bugs in the software. You acknowledge that your use of this software is at your own discretion and in compliance with all applicable laws. You are responsible for safekeeping your passwords, and any other codes you use to access the software.\n\nTo the fullest extent permitted by law, this software is provided as is and no representations or warranties can be made of any kind, express or implied, including but not limited to the warranties of merchantability, fitness or a particular purpose and noninfringement. You assume any and all risks associated with the use of the software. In no event shall the authors of the software, employees and affiliates of Truong Thanh JAPAN, copyright holders, or Truong Thanh JAPAN, Co,.Ltd. be held liable for any claim, damages or other liability, whether in an action of contract, tort, or otherwise, arising from, out of or in connection with the software. We reserve the right to modify this disclaimer from time to time.</string>
-    <string name="terms_of_services_pre"></string>
+    <string name="terms_of_services_pre"/>
     <string name="terms_of_services"><u>利用規約</u></string>
     <string name="terms_of_services_post">に同意する</string>
     <string name="close">閉じる</string>
@@ -87,6 +100,7 @@
     <string name="hint_send_amount">送信額を設定してください</string>
     <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
+    <string name="send_by_stellar"> Stellarアドレス</string>
     <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください</string>
     <string name="send_successfully_executed">送信が完了しました。\n取引が反映されるまで少々時間が掛かりますので、暫く経ってから再度ご確認ください。</string>
     <string name="profile_successfully_updated">ユーザー情報を保存しました</string>
@@ -159,6 +173,11 @@
     <!-- format -->
     <string name="any">%s</string>
     <string name="send_confirm_desc_format">%d %s を %s に送信しますか?</string>
+    <string name="send_confirm_desc_format_for_stellar">
+        %d %s を以下のstellarアカウントに送信しますか？\nアカウントID(アドレス): %s\nメモ: %s
+    </string>
+    <string name="history_accountID">アカウントID(アドレス): %s</string>
+    <string name="history_memo">メモ: %s</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">受信</string>
     <string name="notification_body_receive_payment_notification">%s %s を %sから 受信しました。</string>

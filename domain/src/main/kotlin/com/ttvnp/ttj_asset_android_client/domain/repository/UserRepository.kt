@@ -1,14 +1,16 @@
 package com.ttvnp.ttj_asset_android_client.domain.repository
 
-import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
-import com.ttvnp.ttj_asset_android_client.domain.model.OtherUserModel
-import com.ttvnp.ttj_asset_android_client.domain.model.UserModel
+import com.ttvnp.ttj_asset_android_client.domain.model.*
 import io.reactivex.Single
 import java.io.File
 
 interface UserRepository {
 
+    fun getStellarAccount(): Single<StellarAccountModel>
+
     fun getUser(forceRefresh: Boolean): Single<UserModel>
+
+    fun checkValidationStellar(accountId: String, assetType: AssetType): Single<ErrorCode>
 
     fun updateUser(profileImageFile: File?,
                    firstName: String,

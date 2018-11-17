@@ -63,21 +63,25 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected open fun showErrorDialog(errorMessage: String) {
-        AlertDialog
-                .Builder(this.context)
-                .setTitle(resources.getString(R.string.error_dialog_title))
-                .setMessage(errorMessage)
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
-                .show()
+        context?.let {
+            AlertDialog
+                    .Builder(it)
+                    .setTitle(resources.getString(R.string.error_dialog_title))
+                    .setMessage(errorMessage)
+                    .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                    .show()
+        }
     }
 
     protected open fun showErrorDialog(errorMessage: String, onClick: (dialog: DialogInterface?, whichButton: Int) -> Unit) {
-        AlertDialog
-                .Builder(this.context)
-                .setTitle(resources.getString(R.string.error_dialog_title))
-                .setMessage(errorMessage)
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), onClick)
-                .show()
+        context?.let {
+            AlertDialog
+                    .Builder(it)
+                    .setTitle(resources.getString(R.string.error_dialog_title))
+                    .setMessage(errorMessage)
+                    .setPositiveButton(resources.getString(R.string.default_positive_button_text), onClick)
+                    .show()
+        }
     }
 
     open fun showError(throwable: Throwable) {

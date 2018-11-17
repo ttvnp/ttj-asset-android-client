@@ -7,22 +7,22 @@ allprojects {
 
 ext {
     // Android
-    androidBuildToolsVersion = "27.0.3"
+    androidBuildToolsVersion = "28.0.3"
     androidMinSdkVersion = 21
-    androidTargetSdkVersion = 26
-    androidCompileSdkVersion = 26
-    supportLibraryVersion = '26.1.0'
+    androidTargetSdkVersion = 27
+    androidCompileSdkVersion = 27
+    supportLibraryVersion = '27.1.1'
 
     // 3rd party
     daggerVersion = '2.11'
     javaxAnnotationVersion = '1.0'
     javaxInjectVersion = '1'
     ankoVersion = '0.10.2'
-    rxJavaVersion = '2.0.7'
+    rxJavaVersion = '2.0.9'
     rxAndroidVersion = '2.0.1'
     rxKotlinVersion = '2.0.0-RC1'
     constraintLayoutVersion = '1.0.2'
-    okhttpVersion = '3.9.0'
+    okhttpVersion = '3.8.0'
     retroitVersion = '2.3.0'
     moshiVersion = '1.5.0'
     ormaVersion = '4.2.5'
@@ -31,6 +31,7 @@ ext {
     zxingCoreVersion = '3.3.1'
     zxingEmbeddedVersion = '3.5.0'
     googleServiceVersion = '11.0.4'
+    glideVersion = '3.8.0'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -47,7 +48,7 @@ ext {
     ]
 
     commonDependencies = [
-            kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}",
+            kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}",
             retroit: "com.squareup.retrofit2:retrofit:${retroitVersion}",
             rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             rxAndroid: "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
@@ -79,6 +80,7 @@ ext {
             constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             circleimageview: "de.hdodenhof:circleimageview:${circleimageviewVersion}",
             picasso: "com.squareup.picasso:picasso:${picassoVersion}",
+            glide: "com.github.bumptech.glide:glide:${glideVersion}",
             zxingEmbedded: "com.journeyapps:zxing-android-embedded:${zxingEmbeddedVersion}",
             firebaseMessaging: "com.google.firebase:firebase-messaging:${googleServiceVersion}",
             firebaseCrash: "com.google.firebase:firebase-crash:${googleServiceVersion}",

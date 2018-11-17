@@ -72,7 +72,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
         findViewById<ScrollControllViewPager>(R.id.view_pager).let {
             viewPager = it
             it.scrollDirection = ScrollControllViewPager.SCROLL_NONE
-            val fragmentManager = getSupportFragmentManager()
+            val fragmentManager = supportFragmentManager
             val adapter = TutorialViewPagerAdapter(fragmentManager)
             val firstFragment = TutorialFirstFragment.getInstance()
             firstFragment.startButtonClickHandler = View.OnClickListener { tutorialPresenter.start() }
@@ -82,7 +82,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
             emailFragment?.let { fragment ->
                 fragment.submitButtonClickHandler = View.OnClickListener { tutorialPresenter.submitEmailAddress(fragment.getEmailAddressText()) }
 
-                val dialogInterface = { dialogInterface: DialogInterface, i: Int ->
+                val dialogInterface = { dialogInterface: DialogInterface, _: Int ->
                     dialogInterface.dismiss()
                 }
 

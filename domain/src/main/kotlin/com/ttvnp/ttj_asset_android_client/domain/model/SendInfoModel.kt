@@ -8,6 +8,8 @@ class SendInfoModel(
         val targetUserFirstName: String = "",
         val targetUserMiddleName: String = "",
         val targetUserLastName: String = "",
+        val targetUserStrAccountID: String = "",
+        val targetUserStrMemoText: String = "",
         val assetType: AssetType = AssetType.ASSET_TYPE_POINT,
         val amount: Long = 0L
 ) : BaseModel()

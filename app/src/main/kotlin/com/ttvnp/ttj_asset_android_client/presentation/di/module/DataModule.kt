@@ -1,9 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
-import com.ttvnp.ttj_asset_android_client.data.driver.CryptDriver
 import com.ttvnp.ttj_asset_android_client.data.driver.OrmaHolder
 import com.ttvnp.ttj_asset_android_client.data.driver.SafetyNetClient
-import com.ttvnp.ttj_asset_android_client.data.driver.SharedPreferencesDriver
 import com.ttvnp.ttj_asset_android_client.data.service.*
 import com.ttvnp.ttj_asset_android_client.data.store.*
 import dagger.Module
@@ -15,6 +13,9 @@ class DataModule {
     // DataStore except DeviceInfoDataStore(which you can find it in application module.)
     @Provides
     fun deviceDataStore(ormaHolder: OrmaHolder): DeviceDataStore = DeviceDataStoreImpl(ormaHolder)
+
+    @Provides
+    fun stellarAccountDataStore(ormaHolder: OrmaHolder): StellarAccountDataStore = StellarAccountDataStoreImpl(ormaHolder)
 
     @Provides
     fun userDataStore(ormaHolder: OrmaHolder): UserDataStore = UserDataStoreImpl(ormaHolder)
@@ -48,4 +49,7 @@ class DataModule {
 
     @Provides
     fun recaptchaService(safetyNetClient: SafetyNetClient): RecaptchaService = RecaptchaServiceImpl(safetyNetClient)
+
+    @Provides
+    fun stellarService(): StellarService = StellarServiceImpl()
 }

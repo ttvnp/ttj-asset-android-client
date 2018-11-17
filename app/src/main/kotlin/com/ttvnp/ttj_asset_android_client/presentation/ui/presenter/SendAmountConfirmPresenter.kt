@@ -14,6 +14,7 @@ interface SendAmountConfirmPresenter {
     fun initialize(target: SendAmountConfirmPresenterTarget, sendInfoModel: SendInfoModel)
     fun getUserInfo()
     fun createTransaction(sendInfoModel: SendInfoModel, password: String)
+    fun createExternalTransaction(sendInfoModel: SendInfoModel, password: String)
     fun isValidated(password: String): Boolean
 }
 
@@ -39,12 +40,12 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                         target?.showMaintenance()
                     }
 
-                    override fun onSuccess(userModel: UserModel?) {
-                        userModel?.let {
+                    override fun onSuccess(userModel: UserModel) {
+                        userModel.let {
                             target?.onBindUserInfo(it)
                         }
                     }
-                })
+                }).addTo(this.disposables)
     }
 
     override fun createTransaction(sendInfoModel: SendInfoModel, password: String) {
@@ -58,6 +59,37 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                         target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> target?.onTransactionSuccess(sendInfoModel)
+                            else -> target?.showError(wrapper.errorCode, wrapper.error)
+                        }
+                    }
+
+                    override fun onOtherError(error: Throwable?) {
+                        target?.dismissProgressDialog()
+                        error?.let { target?.showError(error) }
+                    }
+
+                    override fun onMaintenance() {
+                        target?.showMaintenance()
+                    }
+
+                }).addTo(this.disposables)
+    }
+
+    override fun createExternalTransaction(sendInfoModel: SendInfoModel, password: String) {
+        target?.showProgressDialog()
+        userUseCase.createExternalTransaction(
+                sendInfoModel.targetUserStrAccountID,
+                sendInfoModel.targetUserStrMemoText,
+                sendInfoModel.assetType,
+                sendInfoModel.amount, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserTransactionModel?>>() {
+
+                    override fun onSuccess(wrapper: ModelWrapper<UserTransactionModel?>) {
+                        target?.dismissProgressDialog()
+                        when (wrapper.errorCode) {
+                            ErrorCode.NO_ERROR -> target?.onExternalTransactionSuccess(sendInfoModel)
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
                         }
                     }

@@ -1,3 +1,1 @@
-- Add change password
-- Add logout
-- Add require password to send assets
+- Add send to or receive from any stellar account ID feature.

@@ -64,38 +64,41 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
         imageFacePhoto = view.findViewById(R.id.image_face_photo)
         frameFacePhoto = view.findViewById(R.id.frame_face_photo)
-        frameFacePhoto.setOnClickListener({
+        frameFacePhoto.setOnClickListener { _ ->
             isFacePhoto = true
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
-        })
+        }
 
         imageAddress = view.findViewById(R.id.image_address)
         frameAddress = view.findViewById(R.id.frame_address)
-        frameAddress.setOnClickListener({
+        frameAddress.setOnClickListener { _ ->
             isFacePhoto = false
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
-        })
+        }
         buttonSave = view.findViewById(R.id.button_save)
-        buttonSave.setOnClickListener({
+        buttonSave.setOnClickListener { it ->
             userModel?.let {
                 if (!it.hasAllNecessaryInfo(context)) {
                     AlertDialog
                             .Builder(context)
                             .setMessage(getString(R.string.validate_profile_for_id_document))
-                            .setPositiveButton(android.R.string.yes, { dialogInterface, _ ->
+                            .setPositiveButton(android.R.string.yes) { dialogInterface, _ ->
                                 dialogInterface.dismiss()
-                            })
+                            }
                             .show()
                     return@setOnClickListener
                 }
-                settingsProfileUploadDocumentIDPresenter.uploadIdDocument(faceImageFile = facePhotoFile, addressImageFile = addressFile)
+                settingsProfileUploadDocumentIDPresenter.uploadIdDocument(
+                        faceImageFile = facePhotoFile,
+                        addressImageFile = addressFile
+                )
             }
-        })
+        }
 
         bottomSheetDialogFragment = SettingsProfileEditBottomSheetDialogFragment.getInstance()
         bottomSheetDialogFragment.setFolderOnClickListener(View.OnClickListener {
             isCamera = false
-            checkPermission(requestCode,isCamera)
+            checkPermission(requestCode, isCamera)
         })
         bottomSheetDialogFragment.setCameraOnClickListener(View.OnClickListener {
             isCamera = true
@@ -107,8 +110,8 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
             a.toolbar.title = getString(R.string.upload_your_id_document)
             a.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             a.toolbar.setNavigationOnClickListener {
-                if (0 < fragmentManager.backStackEntryCount) {
-                    fragmentManager.popBackStack()
+                if (0 < (fragmentManager?.backStackEntryCount ?: 0)) {
+                    fragmentManager?.popBackStack()
                 }
             }
         }
@@ -147,8 +150,12 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
     override fun setDocumentID(userModel: UserModel) {
         this.userModel = userModel
-        if (userModel.isDocument1ImageURL.isNotBlank()) Glide.with(this.context).load(userModel.isDocument1ImageURL).into(imageFacePhoto)
-        if (userModel.isDocument2ImageURL.isNotBlank()) Glide.with(this.context).load(userModel.isDocument2ImageURL).into(imageAddress)
+        if (userModel.isDocument1ImageURL.isNotBlank()) {
+            Glide.with(this.context).load(userModel.isDocument1ImageURL).into(imageFacePhoto)
+        }
+        if (userModel.isDocument2ImageURL.isNotBlank()) {
+            Glide.with(this.context).load(userModel.isDocument2ImageURL).into(imageAddress)
+        }
     }
 
     override fun showMessageOnUploadSuccessfullyCompleted() {
@@ -157,7 +164,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
                 getString(R.string.successfully_uploaded),
                 Toast.LENGTH_SHORT
         ).show()
-        fragmentManager.popBackStack()
+        fragmentManager?.popBackStack()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

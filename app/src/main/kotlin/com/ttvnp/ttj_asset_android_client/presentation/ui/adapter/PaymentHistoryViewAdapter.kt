@@ -50,11 +50,28 @@ class PaymentHistoryViewAdapter(
                 holder.imageTransactionType.setImageResource(R.drawable.ic_send_arrow)
             }
         }
-        holder.textHistoryTargetUser.text = buildTargetUserText(model)
-        holder.textHistoryDetail.text = "%s %s".format(
+        var historyDetail = "%s %s".format(
                 model.amount.formatString(),
                 model.assetType.rawValue
         )
+        holder.textHistoryTargetUser.text = buildTargetUserText(model)
+        if (model.targetUserStrAccountID.isNotBlank()) {
+            holder.textHistoryTargetUser.visibility = View.GONE
+            model.targetUserMemoText.let {
+                if (it.isBlank()) {
+                    if (model.targetUserMemoText.isBlank()) {
+                        historyDetail = context.getString(R.string.history_accountID).format(model.targetUserStrAccountID) +
+                                "\n" + historyDetail
+                    }
+                    return@let
+                }
+                historyDetail =
+                        context.getString(R.string.history_accountID).format(model.targetUserStrAccountID) +
+                        "\n" + context.getString(R.string.history_memo).format(model.targetUserMemoText) +
+                        "\n" + historyDetail
+            }
+        }
+        holder.textHistoryDetail.text = historyDetail
         when (model.transactionStatus) {
             TransactionStatus.Unprocessed -> {
                 holder.layoutPaymentHistory.setBackgroundColor(ContextCompat.getColor(holder.layoutPaymentHistory.context, R.color.md_yellow_100))

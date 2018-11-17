@@ -1,13 +1,10 @@
 package com.ttvnp.ttj_asset_android_client.presentation.di.module
 
+import com.ttvnp.ttj_asset_android_client.data.repository.BalanceRepositoryImpl
 import com.ttvnp.ttj_asset_android_client.data.repository.DeviceRepositoryImpl
 import com.ttvnp.ttj_asset_android_client.data.repository.UserRepositoryImpl
-import com.ttvnp.ttj_asset_android_client.data.repository.BalanceRepositoryImpl
 import com.ttvnp.ttj_asset_android_client.data.repository.UserTransactionRepositoryImpl
-import com.ttvnp.ttj_asset_android_client.data.service.DeviceService
-import com.ttvnp.ttj_asset_android_client.data.service.DeviceServiceWithNoAuth
-import com.ttvnp.ttj_asset_android_client.data.service.RecaptchaService
-import com.ttvnp.ttj_asset_android_client.data.service.UserService
+import com.ttvnp.ttj_asset_android_client.data.service.*
 import com.ttvnp.ttj_asset_android_client.data.store.*
 import com.ttvnp.ttj_asset_android_client.domain.repository.BalanceRepository
 import com.ttvnp.ttj_asset_android_client.domain.repository.DeviceRepository
@@ -62,9 +59,11 @@ class DomainModule {
     fun userRepository(
             userService: UserService,
             userDataStore: UserDataStore,
-            otherUserDataStore: OtherUserDataStore
+            stellarService: StellarService,
+            otherUserDataStore: OtherUserDataStore,
+            stellarAccountDataStore: StellarAccountDataStore
     ): UserRepository {
-        return UserRepositoryImpl(userService, userDataStore, otherUserDataStore)
+        return UserRepositoryImpl(userService, stellarService, userDataStore, otherUserDataStore, stellarAccountDataStore)
     }
 
     @Provides
@@ -80,7 +79,7 @@ class DomainModule {
             userService: UserService,
             userTransactionDataStore: UserTransactionDataStore,
             appDataStore: AppDataStore,
-            deviceInfoDataStore : DeviceInfoDataStore
+            deviceInfoDataStore: DeviceInfoDataStore
     ): UserTransactionRepository {
         return UserTransactionRepositoryImpl(userService, userTransactionDataStore, appDataStore, deviceInfoDataStore)
     }
