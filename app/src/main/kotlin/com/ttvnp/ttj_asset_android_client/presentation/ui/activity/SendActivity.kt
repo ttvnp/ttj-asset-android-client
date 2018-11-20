@@ -1,13 +1,18 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.view.View
-import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoStellarInfoModel
+import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeType
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeDataTranslator
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoStellarBirdgeDataTranslator
+import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormByStellarFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountFormFragment
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendEmailFormFragment
 import dagger.android.AndroidInjection
@@ -24,7 +29,15 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
 
     companion object {
         val INTENT_EXTRA_KEY = "qr_string"
+        private const val INTENT_EXTRA_KEY_IS_STELLAR = "is_stellar"
+        fun start(context: Context?, isStellar: Boolean = false) {
+            val intent = Intent(context, SendActivity::class.java)
+            intent.putExtra(INTENT_EXTRA_KEY_IS_STELLAR, isStellar)
+            context?.startActivity(intent)
+        }
     }
+
+    private val isStellar by lazy { intent.getBooleanExtra(INTENT_EXTRA_KEY_IS_STELLAR, false) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -37,7 +50,7 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
 
         val cancel: () -> Unit = {
             val intent = Intent()
-            setResult(RESULT_CANCELED, intent);
+            setResult(RESULT_CANCELED, intent)
             finish()
         }
 
@@ -46,32 +59,36 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
         }
 
         if (savedInstanceState != null) return
-        val intent = getIntent()
         val qrString: String? = intent.getStringExtra(INTENT_EXTRA_KEY)
 
         if (qrString == null || qrString.isBlank()) {
-            val formFragment = SendEmailFormFragment.getInstance()
-            formFragment.cancelButtonClickHandler = object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    cancel()
-                }
+            if (!isStellar) {
+                val formFragment = SendEmailFormFragment.getInstance()
+                formFragment.cancelButtonClickHandler = View.OnClickListener { cancel() }
+                this.addFragment(formFragment)
+                return
             }
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.send_activity_fragment_container, formFragment)
-                    .commit()
+            val formByStellarFragment = SendAmountFormByStellarFragment.getInstance()
+            formByStellarFragment.cancelButtonClickHandler = View.OnClickListener { cancel() }
+            this.addFragment(formByStellarFragment)
         } else {
-            val formFragment = SendAmountFormFragment.getInstance()
-            formFragment.arguments = Bundle().apply {
-                // load model from qrString
-                val model = QRCodeInfoModel.load(qrString)
-                val data = QRCodeInfoBridgeDataTranslator().translate(model)
-                this.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
-            }
-            formFragment.cancelButtonClickHandler = object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    cancel()
-                }
+            val bundle = Bundle()
+            val formFragment: Fragment
+            val onClickListener = View.OnClickListener { cancel() }
+            // load model from qrString
+            if (qrString.split(";")[0].toInt() == QRCodeType.BY_STELLAR_ACCOUNT.rawValue) {
+                val data = QRCodeInfoStellarBirdgeDataTranslator().translate(QRCodeInfoStellarInfoModel.load(qrString))
+                formFragment = SendAmountFormByStellarFragment.getInstance()
+                bundle.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
+                formFragment.arguments = bundle
+                formFragment.cancelButtonClickHandler = onClickListener
+
+            } else {
+                val data = QRCodeInfoBridgeDataTranslator().translate(QRCodeInfoModel.load(qrString))
+                formFragment = SendAmountFormFragment.getInstance()
+                bundle.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
+                formFragment.arguments = bundle
+                formFragment.cancelButtonClickHandler = onClickListener
             }
             supportFragmentManager
                     .beginTransaction()
@@ -79,4 +96,12 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
                     .commit()
         }
     }
+
+    private fun addFragment(fragment: Fragment) {
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.send_activity_fragment_container, fragment)
+                .commit()
+    }
+
 }

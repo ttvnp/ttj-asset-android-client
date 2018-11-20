@@ -55,6 +55,21 @@
             android:name=".ui.activity.SettingsNotificationActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.SettingTermsOfServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SettingPrivacyPolicyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MaintenanceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SettingsChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SettingsSecurityActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.PushReceiveActivity"
             android:launchMode="singleTask">
             <intent-filter>
@@ -82,12 +97,6 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabric_api_key}" />
-
-        <activity android:name=".ui.activity.SettingTermsOfServiceActivity" />
-        <activity android:name=".ui.activity.SettingPrivacyPolicyActivity" />
-        <activity android:name=".ui.activity.MaintenanceActivity" />
-        <activity android:name=".ui.activity.SettingsChangePasswordActivity" />
-        <activity android:name=".ui.activity.SettingsSecurityActivity"></activity>
     </application>
 
 </manifest>

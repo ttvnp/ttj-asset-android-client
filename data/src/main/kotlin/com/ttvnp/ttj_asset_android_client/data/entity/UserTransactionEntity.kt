@@ -8,7 +8,7 @@ import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import java.util.*
 
 @Table
-class UserTransactionEntity (
+class UserTransactionEntity(
 
         @PrimaryKey(auto = false, autoincrement = false)
         @Setter("id")
@@ -53,6 +53,14 @@ class UserTransactionEntity (
         @Column
         @Setter("targetUserLastName")
         val targetUserLastName: String = "",
+
+        @Column
+        @Setter("targetStrAccountID")
+        val targetStrAccountID: String = "",
+
+        @Column
+        @Setter("targetMemoText")
+        val targetMemoText: String = "",
 
         @Column
         @Setter("assetType")

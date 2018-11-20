@@ -16,9 +16,9 @@ import javax.inject.Inject
 class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context?) {
             val intent = Intent(context, SettingsProfileActivity::class.java)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 

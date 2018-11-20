@@ -46,8 +46,8 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tabLayout = findViewById<TabLayout>(R.id.tab_layout_main)
-        viewPager = findViewById<ViewPager>(R.id.view_pager_main)
+        tabLayout = findViewById(R.id.tab_layout_main)
+        viewPager = findViewById(R.id.view_pager_main)
 
         // set up view pager
         val fragmentManager = supportFragmentManager
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
 
     private fun handleNotified() {
         val data = intent.getSerializableExtra(PushNotificationBridgeData.INTENT_KEY)
-        if (data == null || !(data is PushNotificationBridgeData)) {
+        if (data == null || (data !is PushNotificationBridgeData)) {
             return
         }
         try {

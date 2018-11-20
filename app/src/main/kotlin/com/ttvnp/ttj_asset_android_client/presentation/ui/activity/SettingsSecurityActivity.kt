@@ -15,11 +15,9 @@ import javax.inject.Inject
 class SettingsSecurityActivity : BaseActivity(), SettingsSecurityPresenterTarget {
 
     companion object {
-        fun start(
-                context: Context
-        ) {
+        fun start(context: Context?) {
             val intent = Intent(context, SettingsSecurityActivity::class.java)
-            context.startActivity(intent)
+            context?.startActivity(intent)
         }
     }
 

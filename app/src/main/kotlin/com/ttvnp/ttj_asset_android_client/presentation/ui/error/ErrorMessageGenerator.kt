@@ -28,6 +28,8 @@ class ErrorMessageGenerator @Inject constructor(val context: Context) {
             ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> R.string.error_cannot_send_that_amount
             ErrorCode.ERROR_CANNOT_FIND_TARGET_USER -> R.string.error_message_no_such_email_address_user
             ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT -> R.string.old_password_is_not_correct
+            ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT -> R.string.address_must_be_valid
+            ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE -> R.string.insufficient_trust_limit
             else -> R.string.error_default_message
         }
     }

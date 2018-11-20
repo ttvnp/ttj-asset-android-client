@@ -39,7 +39,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
 
     companion object {
         const val SEND_INFO_KEY = "send_info"
-        fun getInstance() : SendAmountConfirmFragment {
+        fun getInstance(): SendAmountConfirmFragment {
             return SendAmountConfirmFragment()
         }
     }
@@ -47,12 +47,12 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        val data = arguments.getSerializable(SEND_INFO_KEY) as SendInfoBridgeData
+        val data = arguments?.getSerializable(SEND_INFO_KEY) as SendInfoBridgeData
         sendInfoModel = SendInfoBridgeDataTranslator().translate(data)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable(SEND_INFO_KEY, SendInfoBridgeDataTranslator().translate(sendInfoModel!!))
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(SEND_INFO_KEY, SendInfoBridgeDataTranslator().translate(sendInfoModel!!))
         super.onSaveInstanceState(outState)
     }
 
@@ -65,17 +65,26 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         textSendConfirmDesc = view.findViewById(R.id.text_send_confirm_desc)
         val buttonSendAmountCancel = view.findViewById<Button>(R.id.button_send_confirm_cancel)
         buttonSendAmountCancel.setOnClickListener {
-            if (0 < fragmentManager.backStackEntryCount) {
-                fragmentManager.popBackStack()
+            if (0 < (fragmentManager?.backStackEntryCount ?: 0)) {
+                fragmentManager?.popBackStack()
             }
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
-        buttonSendAmountSubmit.setOnClickListener {
-            userModel?.let {
+        buttonSendAmountSubmit.setOnClickListener { _ ->
+            userModel?.let { it ->
                 if (it.requirePasswordOnSend) {
                     if (!sendAmountConfirmPresenter.isValidated(textInputPassword.text.toString())) return@setOnClickListener
                 }
-                sendAmountConfirmPresenter.createTransaction(sendInfoModel!!, textInputPassword.text.toString())
+                sendInfoModel?.let {
+                    if (it.targetUserStrAccountID.isBlank()) {
+                        sendAmountConfirmPresenter.createTransaction(it, textInputPassword.text.toString())
+                        return@setOnClickListener
+                    }
+                    sendAmountConfirmPresenter.createExternalTransaction(
+                            it,
+                            textInputPassword.text.toString()
+                    )
+                }
             }
         }
         sendAmountConfirmPresenter.initialize(this, this.sendInfoModel!!)
@@ -95,16 +104,29 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
         this.sendInfoModel = sendInfoModel
-        if (0 < sendInfoModel.targetUserProfileImageURL.length) {
+        if (sendInfoModel.targetUserProfileImageURL.isNotEmpty()) {
             Picasso.with(context).load(sendInfoModel.targetUserProfileImageURL).into(imageSendTargetUserProfile)
         }
         val targetUserName = buildTargetUserText(sendInfoModel)
-        textSendTargetUser.text = targetUserName
-        textSendConfirmDesc.text = getString(R.string.send_confirm_desc_format).format(
+        var confirmDesc = getString(R.string.send_confirm_desc_format).format(
                 sendInfoModel.amount,
                 sendInfoModel.assetType.rawValue,
                 targetUserName
         )
+        var visibility = View.VISIBLE
+        if (sendInfoModel.targetUserStrAccountID.isNotBlank()) {
+            visibility = View.GONE
+            confirmDesc = getString(R.string.send_confirm_desc_format_for_stellar).format(
+                    sendInfoModel.amount,
+                    sendInfoModel.assetType.rawValue,
+                    sendInfoModel.targetUserStrAccountID,
+                    sendInfoModel.targetUserStrMemoText
+            )
+        }
+        imageSendTargetUserProfile.visibility = visibility
+        textSendTargetUser.visibility = visibility
+        textSendTargetUser.text = targetUserName
+        textSendConfirmDesc.text = confirmDesc
     }
 
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {
@@ -122,25 +144,11 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
     }
 
     override fun onTransactionSuccess(sendInfoModel: SendInfoModel) {
-        popup = PopupWindow(activity)
-        popup?.apply {
-            val popupView = View.inflate(this@SendAmountConfirmFragment.context, R.layout.view_popup, null)
-            popupView.findViewById<Button>(R.id.button_popup_close).setOnClickListener {
-                if (this.isShowing) {
-                    this.dismiss()
-                    activity.finish()
-                }
-            }
-            popupView.findViewById<TextView>(R.id.text_popup_content).text = getString(R.string.send_successfully_executed)
-            this.contentView = popupView
-            this.isOutsideTouchable = true
-            this.isFocusable = true
-            val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics)
-            this.width = width.toInt()
-            this.height = WindowManager.LayoutParams.WRAP_CONTENT
-            this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0);
-        }
-        firebaseAnalyticsHelper?.logAssetSendEvent(sendInfoModel.assetType, sendInfoModel.amount)
+        showMessagePaymentSuccessfully(sendInfoModel)
+    }
+
+    override fun onExternalTransactionSuccess(sendInfoModel: SendInfoModel) {
+        showMessagePaymentSuccessfully(sendInfoModel)
     }
 
     override fun onDestroy() {
@@ -151,4 +159,27 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         }
         super.onDestroy()
     }
+
+    private fun showMessagePaymentSuccessfully(sendInfoModel: SendInfoModel) {
+        popup = PopupWindow(activity)
+        popup?.apply {
+            val popupView = View.inflate(this@SendAmountConfirmFragment.context, R.layout.view_popup, null)
+            popupView.findViewById<Button>(R.id.button_popup_close).setOnClickListener {
+                if (this.isShowing) {
+                    this.dismiss()
+                    activity?.finish()
+                }
+            }
+            popupView.findViewById<TextView>(R.id.text_popup_content).text = getString(R.string.send_successfully_executed)
+            this.contentView = popupView
+            this.isOutsideTouchable = true
+            this.isFocusable = true
+            val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics)
+            this.width = width.toInt()
+            this.height = WindowManager.LayoutParams.WRAP_CONTENT
+            this.showAtLocation(textSendConfirmDesc, Gravity.CENTER, 0, 0)
+        }
+        firebaseAnalyticsHelper?.logAssetSendEvent(sendInfoModel.assetType, sendInfoModel.amount)
+    }
+
 }

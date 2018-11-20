@@ -12,6 +12,8 @@ data class SendInfoBridgeData(
         val targetUserFirstName: String = "",
         val targetUserMiddleName: String = "",
         val targetUserLastName: String = "",
+        val targetStrAccountID: String = "",
+        val targetStrMemoText: String = "",
         val assetType: String = "",
         val amount: Long = 0L
 ) : Serializable
@@ -26,6 +28,7 @@ class SendInfoBridgeDataTranslator {
                 targetUserFirstName = model.targetUserFirstName,
                 targetUserMiddleName = model.targetUserMiddleName,
                 targetUserLastName = model.targetUserLastName,
+                targetStrAccountID = model.targetUserStrMemoText,
                 assetType = model.assetType.rawValue,
                 amount = model.amount
         )
@@ -39,6 +42,8 @@ class SendInfoBridgeDataTranslator {
                 targetUserFirstName = data.targetUserFirstName,
                 targetUserMiddleName = data.targetUserMiddleName,
                 targetUserLastName = data.targetUserLastName,
+                targetUserStrAccountID = data.targetStrAccountID,
+                targetUserStrMemoText = data.targetStrMemoText,
                 assetType = AssetType.values().firstOrNull {
                     it.rawValue == data.assetType
                 }?:AssetType.ASSET_TYPE_POINT,

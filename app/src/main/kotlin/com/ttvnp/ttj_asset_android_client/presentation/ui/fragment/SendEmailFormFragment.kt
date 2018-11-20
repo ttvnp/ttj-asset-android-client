@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.QRCodeInfoBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SendEmailFormPresenter
@@ -17,7 +17,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendE
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
+class SendEmailFormFragment : BaseFragment(), SendEmailFormPresenterTarget {
 
     @Inject
     lateinit var sendEmailFormPresenter: SendEmailFormPresenter
@@ -28,8 +28,8 @@ class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
     var cancelButtonClickHandler: View.OnClickListener? = null
 
     companion object {
-        val QR_STRING_ARG_KEY = "qr_string"
-        fun getInstance() : SendEmailFormFragment {
+        const val QR_STRING_ARG_KEY = "qr_string"
+        fun getInstance(): SendEmailFormFragment {
             return SendEmailFormFragment()
         }
     }
@@ -49,25 +49,23 @@ class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
         val buttonSubmit = view.findViewById<Button>(R.id.button_send_email_submit)
         buttonSubmit.setOnClickListener {
             val emailAddress = textSendEmail.text.toString()
-            sendEmailFormPresenter.checkEmailAddress(emailAddress, { _ ->
+            sendEmailFormPresenter.checkEmailAddress(emailAddress) { _ ->
                 val formFragment = SendAmountFormFragment.getInstance()
                 formFragment.arguments = Bundle().apply {
                     val data = QRCodeInfoBridgeData(emailAddress = emailAddress)
                     this.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
                 }
-                formFragment.cancelButtonClickHandler = object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        if (0 < fragmentManager.backStackEntryCount) {
-                            fragmentManager.popBackStack()
-                        }
+                formFragment.cancelButtonClickHandler = View.OnClickListener { _ ->
+                    if (0 < (fragmentManager?.backStackEntryCount ?: 0)) {
+                        fragmentManager?.popBackStack()
                     }
                 }
                 fragmentManager
-                        .beginTransaction()
-                        .addToBackStack("")
-                        .replace(R.id.send_activity_fragment_container, formFragment)
-                        .commit()
-            })
+                        ?.beginTransaction()
+                        ?.addToBackStack("")
+                        ?.replace(R.id.send_activity_fragment_container, formFragment)
+                        ?.commit()
+            }
         }
         sendEmailFormPresenter.initialize(this)
         return view
@@ -83,7 +81,7 @@ class SendEmailFormFragment() : BaseFragment(), SendEmailFormPresenterTarget {
         }
     }
 
-    fun showValidationError(msg: String) {
+    private fun showValidationError(msg: String) {
         textInputLayoutSendEmail.isErrorEnabled = true
         textInputLayoutSendEmail.error = msg
     }

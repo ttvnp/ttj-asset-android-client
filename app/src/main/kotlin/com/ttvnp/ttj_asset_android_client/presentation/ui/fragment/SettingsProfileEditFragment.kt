@@ -7,18 +7,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.IBinder
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
@@ -31,10 +27,8 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NationalCode
 import com.ttvnp.ttj_asset_android_client.presentation.ui.listener.getOnFocusChangeListener
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.SettingsProfileEditPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SettingsProfileEditPresenterTarget
-import com.ttvnp.ttj_asset_android_client.presentation.ui.util.hideKeyboard
 import dagger.android.support.AndroidSupportInjection
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.fragment_settings_profile_detail.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -134,8 +128,8 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             a.toolbar.title = getString(R.string.title_settings_edit_profile)
             a.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             a.toolbar.setNavigationOnClickListener {
-                if (0 < fragmentManager.backStackEntryCount) {
-                    fragmentManager.popBackStack()
+                if (0 < (fragmentManager?.backStackEntryCount ?: 0)) {
+                    fragmentManager?.popBackStack()
                 }
             }
         }
@@ -214,7 +208,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             firebaseAnalyticsHelper?.setHasSetProfileImageUserPropertyOn()
         }
 
-        activity.onBackPressed()
+        activity?.onBackPressed()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

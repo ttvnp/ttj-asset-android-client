@@ -27,6 +27,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     private lateinit var textCannotSend: TextView
     private lateinit var buttonSendQR: Button
     private lateinit var buttonSendEmail: Button
+    private lateinit var buttonSendStellar: Button
 
     private var isInit = false
 
@@ -61,8 +62,12 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
 
         buttonSendEmail = view.findViewById(R.id.button_send_email)
         buttonSendEmail.setOnClickListener {
-            val intent = Intent(activity, SendActivity::class.java)
-            startActivity(intent)
+            SendActivity.start(context)
+        }
+
+        buttonSendStellar = view.findViewById(R.id.button_send_stellar)
+        buttonSendStellar.setOnClickListener {
+            SendActivity.start(context, true)
         }
 
         mainSendPresenter.setupDefault()
@@ -103,6 +108,10 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         buttonSendEmail.isEnabled = value
         buttonSendEmail.setTextColor(ContextCompat.getColor(buttonSendEmail.context, textColor))
         buttonSendEmail.visibility = View.VISIBLE
+
+        buttonSendStellar.isEnabled = value
+        buttonSendStellar.setTextColor(ContextCompat.getColor(buttonSendEmail.context, textColor))
+        buttonSendStellar.visibility = View.VISIBLE
     }
 
 }
