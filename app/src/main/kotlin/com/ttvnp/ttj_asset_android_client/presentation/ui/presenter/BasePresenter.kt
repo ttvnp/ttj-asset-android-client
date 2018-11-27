@@ -1,8 +1,8 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
+import dagger.internal.Preconditions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import dagger.internal.Preconditions
 
 abstract class BasePresenter {
 
@@ -11,7 +11,7 @@ abstract class BasePresenter {
     /**
      * Dispose from current [CompositeDisposable].
      */
-    fun dispose() {
+    open fun dispose() {
         if (!disposables.isDisposed()) {
             disposables.dispose()
         }

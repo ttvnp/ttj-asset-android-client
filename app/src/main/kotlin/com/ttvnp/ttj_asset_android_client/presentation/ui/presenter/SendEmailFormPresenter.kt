@@ -14,6 +14,7 @@ import javax.inject.Inject
 interface SendEmailFormPresenter {
     fun initialize(target: SendEmailFormPresenterTarget)
     fun checkEmailAddress(emailAddress: String, handleSuccess: (OtherUserModel) -> Unit)
+    fun dispose()
 }
 
 class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SendEmailFormPresenter {

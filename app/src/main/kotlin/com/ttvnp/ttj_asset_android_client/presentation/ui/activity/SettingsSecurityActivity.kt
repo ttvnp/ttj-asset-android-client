@@ -35,6 +35,11 @@ class SettingsSecurityActivity : BaseActivity(), SettingsSecurityPresenterTarget
         mPresenter.init(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.dispose()
+    }
+
     override fun bindUserInfo(userModel: UserModel) {
         mRequirePasswordOnSendSwitch.isChecked = userModel.requirePasswordOnSend
     }

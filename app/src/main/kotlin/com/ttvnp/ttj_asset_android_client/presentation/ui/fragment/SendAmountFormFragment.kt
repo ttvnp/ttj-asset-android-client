@@ -86,13 +86,22 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
         buttonSendAmountCancel.setOnClickListener(cancelButtonClickHandler)
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_amount_submit)
         buttonSendAmountSubmit.setOnClickListener {
-            sendInfoModel?.let {
-                val selectedAssetType = if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
+            sendInfoModel?.let { _ ->
+                val selectedAssetType =
+                        if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
+                            AssetType.ASSET_TYPE_COIN
+                        else
+                            AssetType.ASSET_TYPE_POINT
                 val amountString = textSendAmount.text.toString()
                 sendAmountFormPresenter.checkSendAmount(selectedAssetType, amountString)
             }
         }
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sendAmountFormPresenter.dispose()
     }
 
     override fun navigateToConfirm(assetType: AssetType, amount: Long) {

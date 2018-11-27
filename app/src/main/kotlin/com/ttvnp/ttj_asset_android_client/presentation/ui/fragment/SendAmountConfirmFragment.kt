@@ -92,6 +92,16 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         return view
     }
 
+    override fun onDestroy() {
+        popup?.let {
+            if (it.isShowing) {
+                it.dismiss()
+            }
+        }
+        super.onDestroy()
+        sendAmountConfirmPresenter.dispose()
+    }
+
     override fun onBindUserInfo(userModel: UserModel) {
         this.userModel = userModel
         if (userModel.requirePasswordOnSend) return
@@ -149,15 +159,6 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
 
     override fun onExternalTransactionSuccess(sendInfoModel: SendInfoModel) {
         showMessagePaymentSuccessfully(sendInfoModel)
-    }
-
-    override fun onDestroy() {
-        popup?.let {
-            if (it.isShowing) {
-                it.dismiss()
-            }
-        }
-        super.onDestroy()
     }
 
     private fun showMessagePaymentSuccessfully(sendInfoModel: SendInfoModel) {
