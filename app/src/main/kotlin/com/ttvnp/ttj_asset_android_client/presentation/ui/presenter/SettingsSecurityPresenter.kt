@@ -14,6 +14,7 @@ import javax.inject.Inject
 interface SettingsSecurityPresenter {
     fun init(target: SettingsSecurityPresenterTarget)
     fun updateSecuritySettings(requirePasswordOnSend: Boolean)
+    fun dispose()
 }
 
 class SettingsSecurityPresenterImpl @Inject constructor(

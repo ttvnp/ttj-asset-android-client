@@ -17,6 +17,8 @@ interface ReceiveSetAmountPresenter {
             handleSuccess: (QRCodeInfoModel) -> Unit,
             handleValidationError: (Throwable) -> Unit
     )
+
+    fun dispose()
 }
 
 class ReceiveSetAmountPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), ReceiveSetAmountPresenter {

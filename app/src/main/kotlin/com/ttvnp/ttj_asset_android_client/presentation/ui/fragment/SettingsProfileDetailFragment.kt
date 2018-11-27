@@ -98,6 +98,11 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsProfileDetailPresenter.dispose()
+    }
+
     override fun bindUserInfo(userModel: UserModel) {
         if (userModel.profileImageURL.isNotEmpty()) {
             Glide

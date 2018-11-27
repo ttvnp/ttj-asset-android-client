@@ -12,9 +12,12 @@ import javax.inject.Inject
 interface SettingsProfileDetailPresenter {
     fun initialize(target: SettingsProfileDetailPresenterTarget)
     fun setupUserInfo()
+    fun dispose()
 }
 
-class SettingsProfileDetailPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SettingsProfileDetailPresenter {
+class SettingsProfileDetailPresenterImpl @Inject constructor(
+        val userUseCase: UserUseCase
+) : BasePresenter(), SettingsProfileDetailPresenter {
 
     private var target: SettingsProfileDetailPresenterTarget? = null
 
@@ -42,4 +45,5 @@ class SettingsProfileDetailPresenterImpl @Inject constructor(val userUseCase: Us
 
                 }).addTo(this.disposables)
     }
+
 }

@@ -3,15 +3,15 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NotificationType
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeDataFactory
 
 // This activity act as push notification hub.
 class PushReceiveActivity : AppCompatActivity() {
 
     companion object {
-        val PUSH_NOTIFICATION_ACTION = "push_notification"
+        const val PUSH_NOTIFICATION_ACTION = "push_notification"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

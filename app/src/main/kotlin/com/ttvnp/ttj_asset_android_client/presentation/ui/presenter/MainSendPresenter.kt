@@ -12,6 +12,7 @@ import javax.inject.Inject
 interface MainSendPresenter {
     fun init(target: MainSendPresenterTarget)
     fun setupDefault()
+    fun dispose()
 }
 
 class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), MainSendPresenter {

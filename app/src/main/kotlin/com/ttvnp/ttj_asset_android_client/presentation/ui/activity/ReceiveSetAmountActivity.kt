@@ -44,7 +44,7 @@ class ReceiveSetAmountActivity : BaseActivity() {
 
         // set on click
         val buttonTutorialSubmit = findViewById<Button>(R.id.button_tutorial_submit)
-        buttonTutorialSubmit.setOnClickListener {
+        buttonTutorialSubmit.setOnClickListener { it ->
             val checkedId = radioGroupReceive.checkedRadioButtonId
             val selectedAssetType = if (checkedId == R.id.radio_receive_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
             var amountString = textReceiveAmount.text.toString()
@@ -68,4 +68,10 @@ class ReceiveSetAmountActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        receiveSetAmountPresenter.dispose()
+    }
+
 }

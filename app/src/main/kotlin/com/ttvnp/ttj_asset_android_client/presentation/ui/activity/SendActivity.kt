@@ -28,7 +28,7 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     companion object {
-        val INTENT_EXTRA_KEY = "qr_string"
+        const val INTENT_EXTRA_KEY = "qr_string"
         private const val INTENT_EXTRA_KEY_IS_STELLAR = "is_stellar"
         fun start(context: Context?, isStellar: Boolean = false) {
             val intent = Intent(context, SendActivity::class.java)

@@ -17,6 +17,7 @@ interface SettingsChangePasswordPresenter {
     fun init(target: SettingsChangePasswordPresenterTarget)
     fun changePassword(oldPassword: String, newPassword: String, retypePassword: String)
     fun isValidated(context: Context, oldPassword: String, newPassword: String, retypePassword: String): Boolean
+    fun dispose()
 }
 
 class SettingsChangePasswordPresenterImpl @Inject constructor(

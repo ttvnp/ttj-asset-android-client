@@ -17,6 +17,7 @@ interface SendAmountFormByStellarPresenter {
     fun checkValidationStellar(accountId: String, amountString: String, assetType: AssetType)
     fun checkSendAmount(assetType: AssetType, amountString: String)
     fun validateAddress(address: String): Boolean
+    fun dispose()
 }
 
 class SendAmountFormByStellarPresenterImpl @Inject constructor(
