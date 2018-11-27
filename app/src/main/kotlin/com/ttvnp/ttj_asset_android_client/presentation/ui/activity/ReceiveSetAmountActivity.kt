@@ -21,7 +21,7 @@ class ReceiveSetAmountActivity : BaseActivity() {
     }
 
     @Inject
-    lateinit var receiveSetAmountPresenter : ReceiveSetAmountPresenter
+    lateinit var receiveSetAmountPresenter: ReceiveSetAmountPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -44,7 +44,7 @@ class ReceiveSetAmountActivity : BaseActivity() {
 
         // set on click
         val buttonTutorialSubmit = findViewById<Button>(R.id.button_tutorial_submit)
-        buttonTutorialSubmit.setOnClickListener { it ->
+        buttonTutorialSubmit.setOnClickListener { _ ->
             val checkedId = radioGroupReceive.checkedRadioButtonId
             val selectedAssetType = if (checkedId == R.id.radio_receive_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
             var amountString = textReceiveAmount.text.toString()
