@@ -15,10 +15,24 @@ import javax.inject.Inject
 interface SettingsProfileEditPresenter {
     fun initialize(target: SettingsProfileEditPresenterTarget)
     fun setupUserInfo()
-    fun updateUserInfo(profileImageFile: File?, firstName: String, middleName: String, lastName: String, address: String, genderType: Int, dob: String, cellphoneNumberNationalCode: String, cellphoneNumber: String)
+    fun updateUserInfo(
+            profileImageFile: File?,
+            firstName: String,
+            middleName: String,
+            lastName: String,
+            address: String,
+            genderType: Int,
+            dob: String,
+            cellphoneNumberNationalCode: String,
+            cellphoneNumber: String
+    )
+
+    fun dispose()
 }
 
-class SettingsProfileEditPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SettingsProfileEditPresenter {
+class SettingsProfileEditPresenterImpl @Inject constructor(
+        val userUseCase: UserUseCase
+) : BasePresenter(), SettingsProfileEditPresenter {
 
     private var target: SettingsProfileEditPresenterTarget? = null
 

@@ -71,6 +71,11 @@ class SendEmailFormFragment : BaseFragment(), SendEmailFormPresenterTarget {
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        sendEmailFormPresenter.dispose()
+    }
+
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
         val msg = errorMessageGenerator.generate(errorCode, throwable)
         when (errorCode) {

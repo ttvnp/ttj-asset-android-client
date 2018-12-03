@@ -54,11 +54,11 @@ class UserTransactionEntity(
         @Setter("targetUserLastName")
         val targetUserLastName: String = "",
 
-        @Column
+        @Column(defaultExpr = "")
         @Setter("targetStrAccountID")
         val targetStrAccountID: String = "",
 
-        @Column
+        @Column(defaultExpr = "")
         @Setter("targetMemoText")
         val targetMemoText: String = "",
 

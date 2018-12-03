@@ -29,21 +29,29 @@
                         android:id="@+id/button_profile_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/middle_margin"
+                        android:layout_marginTop="@dimen/middle_margin"
                         android:clickable="true"
                         android:focusable="true"
                         app:fabSize="mini"
-                        app:layout_constraintEnd_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_edit" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/small_margin"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_marginEnd="@dimen/small_margin"
+                        android:layout_marginBottom="@dimen/small_margin"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal"
-                        android:padding="@dimen/middle_margin">
+                        android:padding="@dimen/middle_margin"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/button_profile_edit"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/profile_image"
@@ -52,6 +60,7 @@
                             android:src="@drawable/ic_user_default_profile_grey"
                             app:civ_border_color="@color/colorSecondaryText"
                             app:civ_border_width="1dp" />
+
                     </LinearLayout>
 
                 </android.support.constraint.ConstraintLayout>

@@ -13,6 +13,7 @@ import javax.inject.Inject
 interface SendAmountFormPresenter {
     fun initialize(target: SendAmountFormPresenterTarget, qrCodeInfo: QRCodeInfoModel)
     fun checkSendAmount(assetType: AssetType, amountString: String)
+    fun dispose()
 }
 
 class SendAmountFormPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SendAmountFormPresenter {

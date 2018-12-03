@@ -2,7 +2,6 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -72,6 +71,11 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
 
         mainSendPresenter.setupDefault()
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainSendPresenter.dispose()
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

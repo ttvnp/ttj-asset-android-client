@@ -15,6 +15,7 @@ interface MainSettingsPresenter {
     fun init(target: MainSettingsPresenterTarget)
     fun saveLanguage(language: String)
     fun logout()
+    fun dispose()
 }
 
 class MainSettingsPresenterImpl @Inject constructor(

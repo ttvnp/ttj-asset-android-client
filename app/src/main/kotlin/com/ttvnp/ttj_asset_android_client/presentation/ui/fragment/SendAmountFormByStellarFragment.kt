@@ -72,6 +72,11 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.dispose()
+    }
+
     override fun navigateToConfirm(assetType: AssetType, amount: Long) {
         mTextInputStrAccountId.error = ""
         val bundle = Bundle()

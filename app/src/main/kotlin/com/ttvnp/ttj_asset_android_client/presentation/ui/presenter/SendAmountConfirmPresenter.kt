@@ -16,6 +16,7 @@ interface SendAmountConfirmPresenter {
     fun createTransaction(sendInfoModel: SendInfoModel, password: String)
     fun createExternalTransaction(sendInfoModel: SendInfoModel, password: String)
     fun isValidated(password: String): Boolean
+    fun dispose()
 }
 
 class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SendAmountConfirmPresenter {

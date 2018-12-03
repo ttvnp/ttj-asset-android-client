@@ -17,6 +17,7 @@ interface SettingsNotificationPresenter {
     fun setupNotificationInfo(target: SettingsNotificationPresenterTarget)
     fun updateGrantPushNotification(grantPushNotification: Boolean)
     fun updateGrantEmailNotification(grantEmailNotification: Boolean)
+    fun dispose()
 }
 
 class SettingsNotificationPresenterImpl @Inject constructor(

@@ -39,6 +39,11 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
         tutorialPresenter.onCreate(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        tutorialPresenter.dispose()
+    }
+
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
         val errMsg = getString(errorMessageGenerator.convert(errorCode))
         when (errorCode) {
@@ -69,7 +74,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
     }
 
     private fun initViewPager() {
-        findViewById<ScrollControllViewPager>(R.id.view_pager).let {
+        findViewById<ScrollControllViewPager>(R.id.view_pager).let { it ->
             viewPager = it
             it.scrollDirection = ScrollControllViewPager.SCROLL_NONE
             val fragmentManager = supportFragmentManager
@@ -80,13 +85,15 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
 
             emailFragment = TutorialEmailFragment.getInstance()
             emailFragment?.let { fragment ->
-                fragment.submitButtonClickHandler = View.OnClickListener { tutorialPresenter.submitEmailAddress(fragment.getEmailAddressText()) }
+                fragment.submitButtonClickHandler = View.OnClickListener { _ ->
+                    tutorialPresenter.submitEmailAddress(fragment.getEmailAddressText())
+                }
 
                 val dialogInterface = { dialogInterface: DialogInterface, _: Int ->
                     dialogInterface.dismiss()
                 }
 
-                fragment.termsOfServiceListener = View.OnClickListener {
+                fragment.termsOfServiceListener = View.OnClickListener { _ ->
                     val dialog = AlertDialog.Builder(this)
                     dialog.setTitle(null)
                     val webView = WebView(this)
@@ -101,7 +108,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
 
             codeFragment = TutorialCodeFragment.getInstance()
             codeFragment?.let { fragment ->
-                fragment.submitButtonClickHandler = View.OnClickListener {
+                fragment.submitButtonClickHandler = View.OnClickListener { _ ->
                     tutorialPresenter.verifyEmailAddress(fragment.getVerificationCode(), fragment.getPasswordOnImport())
                 }
                 adapter.addFragment(fragment)
@@ -109,7 +116,7 @@ class TutorialActivity : BaseActivity(), ViewPager.OnPageChangeListener, Tutoria
 
             endFragment = TutorialEndFragment.getInstance()
             endFragment?.let { fragment ->
-                fragment.appStartButtonClickHandler = View.OnClickListener {
+                fragment.appStartButtonClickHandler = View.OnClickListener { _ ->
                     val intent = Intent(this@TutorialActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
