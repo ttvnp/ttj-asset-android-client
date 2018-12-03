@@ -14,9 +14,12 @@ interface TutorialPresenter {
     fun start()
     fun submitEmailAddress(emailAddress: String)
     fun verifyEmailAddress(verificationCode: String, passwordOnImport: String)
+    fun dispose()
 }
 
-class TutorialPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) : BasePresenter(), TutorialPresenter {
+class TutorialPresenterImpl @Inject constructor(
+        val deviceUseCase: DeviceUseCase
+) : BasePresenter(), TutorialPresenter {
 
     private var target: TutorialPresenterTarget? = null
 

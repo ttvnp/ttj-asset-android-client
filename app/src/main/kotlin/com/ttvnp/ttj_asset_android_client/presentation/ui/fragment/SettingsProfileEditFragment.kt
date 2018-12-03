@@ -112,7 +112,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateDOB()
         }
-        textDOB.setOnClickListener({
+        textDOB.setOnClickListener {
             DatePickerDialog(
                     context,
                     date,
@@ -120,7 +120,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
                     0,
                     1)
                     .show()
-        })
+        }
         val buttonProfileSave = view.findViewById<Button>(R.id.button_profile_save)
 
         if (activity is SettingsProfileActivity) {
@@ -168,6 +168,11 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         settingsProfileEditPresenter.setupUserInfo()
 
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsProfileEditPresenter.dispose()
     }
 
     override fun bindUserInfo(userModel: UserModel) {
@@ -271,31 +276,31 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
 
     private fun checkUnderReviewing(status: Int) {
         if (status == IdentificationStatus.Applied.rawValue) {
-            var view:View? = null
+            var view: View? = null
             context?.let {
                 val textColor = ContextCompat.getColor(it, R.color.md_grey_400)
                 textProfileFirstName.setTextColor(textColor)
-                textProfileFirstName.onFocusChangeListener = onFocusChangeListener { v ->
+                textProfileFirstName.setOnFocusChangeListener { v, _ ->
                     clearUnderReviewMessage(view)
                     view = v
                 }
                 textProfileMiddleName.setTextColor(textColor)
-                textProfileMiddleName.onFocusChangeListener = onFocusChangeListener { v ->
+                textProfileMiddleName.setOnFocusChangeListener { v, _ ->
                     clearUnderReviewMessage(view)
                     view = v
                 }
                 textProfileLastName.setTextColor(textColor)
-                textProfileLastName.onFocusChangeListener = onFocusChangeListener { v ->
+                textProfileLastName.setOnFocusChangeListener { v, _ ->
                     clearUnderReviewMessage(view)
                     view = v
                 }
                 textProfileAddress.setTextColor(textColor)
-                textProfileAddress.onFocusChangeListener = onFocusChangeListener { v ->
+                textProfileAddress.setOnFocusChangeListener { v, _ ->
                     clearUnderReviewMessage(view)
                     view = v
                 }
                 textProfileCellPhoneNumberNationalCode.setTextColor(textColor)
-                textProfileCellPhoneNumberNationalCode.onFocusChangeListener = onFocusChangeListener {
+                textProfileCellPhoneNumberNationalCode.setOnFocusChangeListener { _, _ ->
                     clearUnderReviewMessage(view)
                     textProfileCellPhoneNumberNationalCode.error = null
                     textProfileCellPhoneNumber.error = getString(R.string.message_under_review)
@@ -303,19 +308,19 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
                     view = textProfileCellPhoneNumber
                 }
                 textProfileCellPhoneNumber.setTextColor(textColor)
-                textProfileCellPhoneNumber.onFocusChangeListener = onFocusChangeListener {
+                textProfileCellPhoneNumber.setOnFocusChangeListener { v, _ ->
                     clearUnderReviewMessage(view)
                     textProfileCellPhoneNumber.error = getString(R.string.message_under_review)
-                    view = it
+                    view = v
                 }
-                radioGroupGender.setOnClickListener {
+                radioGroupGender.setOnClickListener { _ ->
                     clearUnderReviewMessage(view)
                     Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()
                 }
                 radioFemale.isEnabled = false
                 radioMale.isEnabled = false
                 textDOB.setTextColor(textColor)
-                textDOB.setOnClickListener {
+                textDOB.setOnClickListener { _ ->
                     clearUnderReviewMessage(view)
                     textDOB.requestFocus()
                     Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()

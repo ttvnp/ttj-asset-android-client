@@ -88,6 +88,11 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mainReceivePresenter.dispose()
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onGettingStellarAccount(stellarAccountModel: StellarAccountModel) {
         mTextStellarAccountId.text = getString(R.string.stellar_address) + "\t" + stellarAccountModel.strAccountID

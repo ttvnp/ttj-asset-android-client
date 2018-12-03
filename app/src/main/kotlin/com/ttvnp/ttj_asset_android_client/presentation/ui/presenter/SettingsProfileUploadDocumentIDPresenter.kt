@@ -16,9 +16,12 @@ interface SettingsProfileUploadDocumentIDPresenter {
     fun init(target: SettingsProfileUploadDocumentIDPresenterTarget)
     fun setupDefault()
     fun uploadIdDocument(faceImageFile: File?, addressImageFile: File?)
+    fun dispose()
 }
 
-class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), SettingsProfileUploadDocumentIDPresenter {
+class SettingsProfileUploadDocumentIDPresenterImpl @Inject constructor(
+        val userUseCase: UserUseCase
+) : BasePresenter(), SettingsProfileUploadDocumentIDPresenter {
 
     private var target: SettingsProfileUploadDocumentIDPresenterTarget? = null
 

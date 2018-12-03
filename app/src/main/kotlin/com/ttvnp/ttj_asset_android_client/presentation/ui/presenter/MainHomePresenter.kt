@@ -18,6 +18,7 @@ interface MainHomePresenter {
     fun setupUserTransactions(forceRefresh: Boolean)
     fun loadMoreUserTransactions(lastUserTransactionID: Long, handleLoadedData: (UserTransactionsModel) -> Unit, forceRefresh: Boolean)
     fun onProfileAreaClicked()
+    fun dispose()
 }
 
 class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), MainHomePresenter {
@@ -114,4 +115,5 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
     override fun onProfileAreaClicked() {
         target?.gotoProfileDetail()
     }
+
 }

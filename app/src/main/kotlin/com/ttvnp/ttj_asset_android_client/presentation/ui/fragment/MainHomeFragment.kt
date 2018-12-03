@@ -107,6 +107,11 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mainHomePresenter.dispose()
+    }
+
     override fun bindUserInfo(userModel: UserModel) {
         textEmailAddress?.text = userModel.emailAddress
         if (userModel.profileImageURL.isEmpty()) return
@@ -160,6 +165,12 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         }
     }
 
+    override fun gotoProfileDetail() {
+        // case profile clicked.
+        val intent = Intent(activity, SettingsProfileActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun showError(throwable: Throwable) {
         super.showError(throwable)
         stopSwipeLayoutRefreshing()
@@ -168,11 +179,5 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     private fun stopSwipeLayoutRefreshing() {
         swipeLayoutPaymentHistory?.isRefreshing = false
         swipeLayoutEmptyPaymentHistory?.isRefreshing = false
-    }
-
-    override fun gotoProfileDetail() {
-        // case profile clicked.
-        val intent = Intent(activity, SettingsProfileActivity::class.java)
-        startActivity(intent)
     }
 }

@@ -45,8 +45,8 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     private lateinit var bottomSheetDialogFragment: SettingsProfileEditBottomSheetDialogFragment
 
     companion object {
-        val TMP_FILE_NAME_FACE = "tmp_id_face_image"
-        val TMP_FILE_NAME_ADDRESS = "tmp_id_address_image"
+        const val TMP_FILE_NAME_FACE = "tmp_id_face_image"
+        const val TMP_FILE_NAME_ADDRESS = "tmp_id_address_image"
     }
 
     override fun onAttach(context: Context?) {
@@ -118,6 +118,11 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
         settingsProfileUploadDocumentIDPresenter.setupDefault()
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsProfileUploadDocumentIDPresenter.dispose()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -8,14 +8,15 @@ import java.util.*
 
 @Table
 class StellarAccountEntity(
-    @Column(defaultExpr = "")
+        @Column(defaultExpr = "")
     @Setter("strAccountID")
     var strAccountID: String = "",
 
-    @Column(defaultExpr = "")
+        @Column(defaultExpr = "")
     @Setter("strDepositMemoText")
     var strDepositMemoText: String = "",
 
-    @Column(defaultExpr = "now") @Setter("updatedAt")
+        @Column(defaultExpr = "now")
+        @Setter("updatedAt")
     var updatedAt: Date = Now()
 )

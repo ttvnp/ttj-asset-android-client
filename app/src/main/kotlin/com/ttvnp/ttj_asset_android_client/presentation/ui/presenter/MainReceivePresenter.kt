@@ -16,6 +16,7 @@ interface MainReceivePresenter {
     fun init(target: MainReceivePresenterTarget)
     fun setupDefault()
     fun getStellarAccount()
+    fun dispose()
 }
 
 class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : BasePresenter(), MainReceivePresenter {

@@ -112,6 +112,11 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mainSettingsPresenter.dispose()
+    }
+
     override fun onLogoutSuccessfully(isLogout: Boolean) {
         dismissProgressDialog()
         if (!isLogout) {
@@ -157,19 +162,19 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(getString(R.string.logout))
         builder.setMessage(getString(R.string.logout_message))
-        builder.setPositiveButton(getString(R.string.yes)) {
-            dialogInterface, _ -> dialogInterface.dismiss()
+        builder.setPositiveButton(getString(R.string.yes)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
             mainSettingsPresenter.logout()
         }
-        builder.setNegativeButton(getString(R.string.no)) {
-            dialogInterface, _ -> dialogInterface.dismiss()
+        builder.setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
         }
         builder.show()
     }
 
     private fun changeLanguage(dialog: Dialog, locale: Locale) {
         changeLocale(context?.resources, locale)
-        val fragment = MainSettingsFragment@ this
+        val fragment = this
         fragment
                 .fragmentManager
                 ?.beginTransaction()

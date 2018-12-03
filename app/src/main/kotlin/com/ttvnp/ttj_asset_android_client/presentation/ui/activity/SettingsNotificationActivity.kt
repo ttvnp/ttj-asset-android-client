@@ -53,6 +53,11 @@ class SettingsNotificationActivity : BaseActivity(), SettingsNotificationPresent
         settingsNotificationPresenter.setupNotificationInfo(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsNotificationPresenter.dispose()
+    }
+
     override fun bindDeviceInfo(deviceModel: DeviceModel) {
         switchPushNotification.isChecked = deviceModel.grantPushNotification
     }

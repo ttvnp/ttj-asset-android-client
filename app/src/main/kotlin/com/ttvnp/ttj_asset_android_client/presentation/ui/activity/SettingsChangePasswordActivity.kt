@@ -38,6 +38,11 @@ class SettingsChangePasswordActivity : BaseActivity(), SettingsChangePasswordPre
         initView()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.dispose()
+    }
+
     override fun onChangePasswordSuccessful() {
         finish()
     }
