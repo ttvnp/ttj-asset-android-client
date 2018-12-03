@@ -1,1 +1,2 @@
-- Add send to or receive from any stellar account ID feature.
+- Fixed a bug that app goes down
+- Fixed a bug when updating app version
