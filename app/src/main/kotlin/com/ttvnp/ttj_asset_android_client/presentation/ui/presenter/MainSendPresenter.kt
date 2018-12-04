@@ -24,13 +24,13 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
     }
 
     override fun setupDefault() {
-        userUseCase.getUser(true)
+        userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
 
-                    override fun onSuccess(t: UserModel) {
-                        target?.setIdentify(t.isIdentified)
+                    override fun onSuccess(userModel: UserModel) {
+                        target?.setIdentify(userModel.isIdentified)
                     }
 
                     override fun onOtherError(error: Throwable?) {

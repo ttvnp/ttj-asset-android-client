@@ -61,6 +61,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         val settingsFragment = MainSettingsFragment.getInstance()
         adapter.addFragment(settingsFragment)
         viewPager?.adapter = adapter
+        viewPager?.offscreenPageLimit = adapter.count
         tabLayout?.setupWithViewPager(viewPager)
 
         val homeTabView = View.inflate(this, R.layout.view_main_tab, null)
