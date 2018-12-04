@@ -7,18 +7,23 @@ import java.util.*
 
 @Table
 class DeviceEntity(
-        @Column @Setter("accessToken")
+        @Column
+        @Setter("accessToken")
         val accessToken: String = "",
 
-        @Column @Setter("accessTokenExpiry")
+        @Column
+        @Setter("accessTokenExpiry")
         val accessTokenExpiry: Date? = null,
 
-        @Column @Setter("isActivated")
+        @Column
+        @Setter("isActivated")
         val isActivated: Boolean = false,
 
-        @Column @Setter("deviceToken")
+        @Column
+        @Setter("deviceToken")
         val deviceToken: String = "",
 
-        @Column @Setter("grantPushNotification")
+        @Column
+        @Setter("grantPushNotification")
         val grantPushNotification: Boolean = false
 )

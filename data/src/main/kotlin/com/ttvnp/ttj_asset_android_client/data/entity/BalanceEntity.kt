@@ -8,13 +8,16 @@ import com.ttvnp.ttj_asset_android_client.domain.util.Now
 import java.util.*
 
 @Table
-class BalanceEntity (
-        @PrimaryKey @Setter("assetType")
+class BalanceEntity(
+        @PrimaryKey
+        @Setter("assetType")
         val assetType: String = "",
 
-        @Column @Setter("amount")
+        @Column
+        @Setter("amount")
         val amount: Long = 0L,
 
-        @Column(defaultExpr = "now") @Setter("updatedAt")
+        @Column(defaultExpr = "now")
+        @Setter("updatedAt")
         var updatedAt: Date = Now()
 )

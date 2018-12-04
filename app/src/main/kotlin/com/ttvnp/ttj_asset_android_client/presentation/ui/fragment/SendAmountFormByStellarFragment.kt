@@ -78,7 +78,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     }
 
     override fun navigateToConfirm(assetType: AssetType, amount: Long) {
-        mTextInputStrAccountId.error = ""
+        mTextInputStrAccountId.error = null
         val bundle = Bundle()
         val confirmFragment = SendAmountConfirmFragment.getInstance()
         val data = SendInfoBridgeData(
