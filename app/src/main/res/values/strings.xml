@@ -9,6 +9,7 @@
     <string name="str_note">Note\tDon\'t send any asset except \"SNC\" and \"SNP\".</string>
     <string name="str_memo">Memo</string>
     <string name="please_input_address">Please input address.</string>
+    <string name="please_input_amount">Please input amount.</string>
     <string name="address_must_be_valid">Address must be valid.</string>
     <string name="insufficient_trust_limit">Trustline must be set at receiving account.</string>
 
