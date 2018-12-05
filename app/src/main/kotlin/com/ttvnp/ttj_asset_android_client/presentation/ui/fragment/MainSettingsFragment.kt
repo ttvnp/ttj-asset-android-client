@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,6 +18,7 @@ import android.widget.ListView
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.*
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.SettingMenuViewAdapter
+import com.ttvnp.ttj_asset_android_client.presentation.ui.data.MainFragmentIndex
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.MainSettingsPresenter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.MainSettingsPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.util.changeLocale
@@ -174,22 +176,26 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
 
     private fun changeLanguage(dialog: Dialog, locale: Locale) {
         changeLocale(context?.resources, locale)
-        val fragment = this
+        val mainActivity = (activity as MainActivity)
+        val settingFragment = this
+        refreshFragment(settingFragment)
+        val homeFragment = mainActivity.adapter.getItem(MainFragmentIndex.HOME_FRAGMENT.rawValue) as MainHomeFragment
+        refreshFragment(homeFragment)
+        val qrFragment = mainActivity.adapter.getItem(MainFragmentIndex.RECEIVE_FRAGMENT.rawValue) as MainReceiveFragment
+        refreshFragment(qrFragment)
+        val sendFragment = mainActivity.adapter.getItem(MainFragmentIndex.SEND_FRAGMENT.rawValue) as MainSendFragment
+        refreshFragment(sendFragment)
+        mainSettingsPresenter.saveLanguage(locale.language)
+        dialog.dismiss()
+    }
+
+    private fun refreshFragment(fragment: Fragment) {
         fragment
                 .fragmentManager
                 ?.beginTransaction()
                 ?.detach(fragment)
                 ?.attach(fragment)
                 ?.commit()
-        val nearbyFragment = (activity as MainActivity).adapter.getItem(2) as MainSendFragment
-        nearbyFragment
-                .fragmentManager
-                ?.beginTransaction()
-                ?.detach(nearbyFragment)
-                ?.attach(nearbyFragment)
-                ?.commit()
-        mainSettingsPresenter.saveLanguage(locale.language)
-        dialog.dismiss()
     }
 
 }
