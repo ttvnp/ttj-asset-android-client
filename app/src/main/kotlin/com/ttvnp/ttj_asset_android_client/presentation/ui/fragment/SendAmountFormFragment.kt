@@ -86,6 +86,9 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
         buttonSendAmountCancel.setOnClickListener(cancelButtonClickHandler)
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_amount_submit)
         buttonSendAmountSubmit.setOnClickListener {
+            if (!sendAmountFormPresenter.isValid(
+                            textSendAmount.text.toString()
+                    )) return@setOnClickListener
             sendInfoModel?.let { _ ->
                 val selectedAssetType =
                         if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
@@ -145,6 +148,27 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
         textSendAmount.text = if (0 < sendInfoModel.amount) sendInfoModel.amount.toString() else ""
     }
 
+    override fun onValidation(amountError: Int?) {
+        amountError?.let {
+            textInputLayoutSendAmount.error = getString(it)
+        }
+    }
+
+    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+        val msg = getString(errorMessageGenerator.convert(errorCode))
+        when (errorCode) {
+            ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
+            ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
+            else -> {
+                showErrorDialog(msg, onClick = { _, whichButton ->
+                    if (whichButton == DialogInterface.BUTTON_POSITIVE) {
+                        activity?.finish()
+                    }
+                })
+            }
+        }
+    }
+
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {
         var userName = ""
         if (!sendInfoModel.targetUserFirstName.isBlank()) {
@@ -157,21 +181,6 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
             userName += sendInfoModel.targetUserLastName.prependIfNotBlank(" ")
         }
         return if (userName.isBlank()) sendInfoModel.targetUserEmailAddress else userName
-    }
-
-    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        val msg = errorMessageGenerator.generate(errorCode, throwable)
-        when (errorCode) {
-            ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
-            ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
-            else -> {
-                showErrorDialog(msg, onClick = { _, whichButton ->
-                    if (whichButton == DialogInterface.BUTTON_POSITIVE) {
-                        activity?.finish()
-                    }
-                })
-            }
-        }
     }
 
     private fun showAmountValidationError(msg: String) {

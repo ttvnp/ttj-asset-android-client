@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 import com.ttvnp.ttj_asset_android_client.domain.model.*
 import com.ttvnp.ttj_asset_android_client.domain.use_case.UserUseCase
 import com.ttvnp.ttj_asset_android_client.domain.util.toAmount
+import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.target.SendAmountFormPresenterTarget
 import com.ttvnp.ttj_asset_android_client.presentation.ui.subscriber.DisposableApiSingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,6 +14,7 @@ import javax.inject.Inject
 interface SendAmountFormPresenter {
     fun initialize(target: SendAmountFormPresenterTarget, qrCodeInfo: QRCodeInfoModel)
     fun checkSendAmount(assetType: AssetType, amountString: String)
+    fun isValid(amount: String): Boolean
     fun dispose()
 }
 
@@ -83,4 +85,14 @@ class SendAmountFormPresenterImpl @Inject constructor(val userUseCase: UserUseCa
 
                 }).addTo(this.disposables)
     }
+
+    override fun isValid(amount: String): Boolean {
+        var amountError: Int? = null
+        if (amount.isEmpty()) {
+            amountError = R.string.error_message_invalid_long
+        }
+        target?.onValidation(amountError)
+        return amount.isNotEmpty()
+    }
+
 }

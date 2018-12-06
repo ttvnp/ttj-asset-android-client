@@ -50,6 +50,7 @@ class SendEmailFormFragment : BaseFragment(), SendEmailFormPresenterTarget {
         buttonSubmit.setOnClickListener {
             val emailAddress = textSendEmail.text.toString()
             sendEmailFormPresenter.checkEmailAddress(emailAddress) { _ ->
+                textInputLayoutSendEmail.error = null
                 val formFragment = SendAmountFormFragment.getInstance()
                 formFragment.arguments = Bundle().apply {
                     val data = QRCodeInfoBridgeData(emailAddress = emailAddress)
@@ -77,7 +78,7 @@ class SendEmailFormFragment : BaseFragment(), SendEmailFormPresenterTarget {
     }
 
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        val msg = errorMessageGenerator.generate(errorCode, throwable)
+        val msg = getString(errorMessageGenerator.convert(errorCode))
         when (errorCode) {
             ErrorCode.ERROR_VALIDATION_EMAIL -> showValidationError(msg)
             ErrorCode.ERROR_CANNOT_FIND_TARGET_USER -> showValidationError(msg)
