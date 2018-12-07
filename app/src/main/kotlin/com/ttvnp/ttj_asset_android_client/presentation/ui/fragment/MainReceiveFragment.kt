@@ -110,6 +110,8 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
             }
         }
         bitmap = Bitmap.createScaledBitmap(bitmap, imageQRCode.width, imageQRCode.height, false)
-        imageQRCode.setImageBitmap(bitmap)
+        imageQRCode.post {
+            imageQRCode.setImageBitmap(bitmap)
+        }
     }
 }
