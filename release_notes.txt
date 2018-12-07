@@ -1,2 +1,2 @@
-- Fixed a bug that app goes down
 - Fixed a bug when updating app version
+- Fixed error messages for sending assets
