@@ -35,6 +35,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     private var mQrCodeByStellarInfo: QRCodeInfoStellarInfoModel? = null
     var cancelButtonClickHandler: View.OnClickListener? = null
 
+    private lateinit var mTextLayoutStrAccountId: TextInputLayout
     private lateinit var mTextInputStrAccountId: EditText
     private lateinit var mTextInputMemo: EditText
     private lateinit var mRadioGroupSend: RadioGroup
@@ -78,7 +79,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     }
 
     override fun navigateToConfirm(assetType: AssetType, amount: Long) {
-        mTextInputStrAccountId.error = ""
+        mTextInputStrAccountId.error = null
         val bundle = Bundle()
         val confirmFragment = SendAmountConfirmFragment.getInstance()
         val data = SendInfoBridgeData(
@@ -96,10 +97,10 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     }
 
     override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
-        val msg = errorMessageGenerator.generate(errorCode, throwable)
+        val msg = getString(errorMessageGenerator.convert(errorCode))
         when (errorCode) {
-            ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT -> mTextInputStrAccountId.error = msg
-            ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE -> mTextInputStrAccountId.error = msg
+            ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT -> mTextLayoutStrAccountId.error = msg
+            ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE -> mTextLayoutStrAccountId.error = msg
             ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
             ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
             else -> {
@@ -112,13 +113,17 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         }
     }
 
-    override fun onValidation(addressError: Int?) {
+    override fun onValidation(addressError: Int?, amountError: Int?) {
         addressError?.let {
-            mTextInputStrAccountId.error = context?.getString(addressError)
+            mTextLayoutStrAccountId.error = context?.getString(addressError)
+        }
+        amountError?.let {
+            mTextInputLayoutSendAmount.error = context?.getString(amountError)
         }
     }
 
     private fun initView(view: View) {
+        mTextLayoutStrAccountId = view.findViewById(R.id.text_input_layout_str_account_id)
         mTextInputStrAccountId = view.findViewById(R.id.text_input_str_account_id)
         mTextInputStrAccountId.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.stellar_address))
         mTextInputMemo = view.findViewById(R.id.text_input_memo)
@@ -135,7 +140,11 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
 
         mBtnCancel.setOnClickListener(cancelButtonClickHandler)
         mBtnSubmit.setOnClickListener {
-            if (mPresenter.validateAddress(mTextInputStrAccountId.text.toString())) return@setOnClickListener
+            if (!mPresenter.isValid(
+                            mTextInputStrAccountId.text.toString(),
+                            mTextSendAmount.text.toString()
+                    )) return@setOnClickListener
+            clearError()
             val selectedAssetType = if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
             val amountString = mTextSendAmount.text.toString()
             mPresenter.checkValidationStellar(
@@ -148,6 +157,11 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
     private fun showAmountValidationError(msg: String) {
         mTextInputLayoutSendAmount.isErrorEnabled = true
         mTextInputLayoutSendAmount.error = msg
+    }
+
+    private fun clearError() {
+        mTextLayoutStrAccountId.error = null
+        mTextInputLayoutSendAmount.error = null
     }
 
 }

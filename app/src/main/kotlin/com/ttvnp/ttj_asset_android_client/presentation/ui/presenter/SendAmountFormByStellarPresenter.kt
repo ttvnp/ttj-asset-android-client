@@ -16,7 +16,7 @@ interface SendAmountFormByStellarPresenter {
     fun initialize(target: SendAmountFormByStellarPresenterTarget)
     fun checkValidationStellar(accountId: String, amountString: String, assetType: AssetType)
     fun checkSendAmount(assetType: AssetType, amountString: String)
-    fun validateAddress(address: String): Boolean
+    fun isValid(address: String, amount: String): Boolean
     fun dispose()
 }
 
@@ -34,6 +34,12 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
         userUseCase.checkValidationStellar(accountId, assetType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    target.showProgressDialog()
+                }
+                .doFinally {
+                    target.dismissProgressDialog()
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<ErrorCode>() {
 
                     override fun onOtherError(error: Throwable?) {
@@ -60,6 +66,12 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
         userUseCase.checkSendAmount(assetType, amountString)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    target.showProgressDialog()
+                }
+                .doFinally {
+                    target.dismissProgressDialog()
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<ErrorCode>() {
 
                     override fun onSuccess(errorCode: ErrorCode) {
@@ -80,13 +92,17 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
                 }).addTo(this.disposables)
     }
 
-    override fun validateAddress(address: String): Boolean {
+    override fun isValid(address: String, amount: String): Boolean {
         var addressError: Int? = null
+        var amountError: Int? = null
         if (address.isEmpty()) {
             addressError = R.string.please_input_address
         }
-        target.onValidation(addressError)
-        return address.isEmpty()
+        if (amount.isEmpty()) {
+            amountError = R.string.error_message_invalid_long
+        }
+        target.onValidation(addressError, amountError)
+        return address.isNotEmpty() && amount.isNotEmpty()
     }
 
 }

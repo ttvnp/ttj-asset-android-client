@@ -29,6 +29,12 @@ class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCas
         userUseCase.getTargetUser(emailAddress)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    target?.showProgressDialog()
+                }
+                .doFinally {
+                    target?.dismissProgressDialog()
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<OtherUserModel?>>() {
 
                     override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {

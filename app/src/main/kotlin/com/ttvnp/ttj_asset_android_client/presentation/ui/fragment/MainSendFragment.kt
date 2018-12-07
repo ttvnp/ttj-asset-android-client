@@ -28,7 +28,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     private lateinit var buttonSendEmail: Button
     private lateinit var buttonSendStellar: Button
 
-    private var isInit = false
+    private var isIdentified = false
 
     companion object {
         fun getInstance(): MainSendFragment {
@@ -40,7 +40,6 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         mainSendPresenter.init(this)
-        isInit = true
     }
 
     override fun onCreateView(
@@ -81,13 +80,14 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
 
-        if (isVisibleToUser && isInit) {
+        if (isVisibleToUser && !isIdentified) {
             mainSendPresenter.setupDefault()
         }
     }
 
     override fun setIdentify(identifier: Boolean) {
         if (identifier) {
+            isIdentified = identifier
             setEnableButton(true)
             return
         }

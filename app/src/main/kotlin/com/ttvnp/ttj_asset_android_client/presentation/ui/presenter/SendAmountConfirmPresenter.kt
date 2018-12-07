@@ -15,7 +15,7 @@ interface SendAmountConfirmPresenter {
     fun getUserInfo()
     fun createTransaction(sendInfoModel: SendInfoModel, password: String)
     fun createExternalTransaction(sendInfoModel: SendInfoModel, password: String)
-    fun isValidated(password: String): Boolean
+    fun isValid(password: String): Boolean
     fun dispose()
 }
 
@@ -32,6 +32,12 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
         userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    target?.showProgressDialog()
+                }
+                .doFinally {
+                    target?.dismissProgressDialog()
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
                     override fun onOtherError(error: Throwable?) {
                         // do nothing
@@ -50,14 +56,18 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
     }
 
     override fun createTransaction(sendInfoModel: SendInfoModel, password: String) {
-        target?.showProgressDialog()
         userUseCase.createTransaction(sendInfoModel, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    target?.showProgressDialog()
+                }
+                .doFinally {
+                    target?.dismissProgressDialog()
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserTransactionModel?>>() {
 
                     override fun onSuccess(wrapper: ModelWrapper<UserTransactionModel?>) {
-                        target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> target?.onTransactionSuccess(sendInfoModel)
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
@@ -65,7 +75,6 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                     }
 
                     override fun onOtherError(error: Throwable?) {
-                        target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
 
@@ -77,7 +86,6 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
     }
 
     override fun createExternalTransaction(sendInfoModel: SendInfoModel, password: String) {
-        target?.showProgressDialog()
         userUseCase.createExternalTransaction(
                 sendInfoModel.targetUserStrAccountID,
                 sendInfoModel.targetUserStrMemoText,
@@ -85,10 +93,15 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                 sendInfoModel.amount, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    target?.showProgressDialog()
+                }
+                .doFinally {
+                    target?.dismissProgressDialog()
+                }
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<UserTransactionModel?>>() {
 
                     override fun onSuccess(wrapper: ModelWrapper<UserTransactionModel?>) {
-                        target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> target?.onExternalTransactionSuccess(sendInfoModel)
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
@@ -96,7 +109,6 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                     }
 
                     override fun onOtherError(error: Throwable?) {
-                        target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
 
@@ -107,7 +119,7 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
                 }).addTo(this.disposables)
     }
 
-    override fun isValidated(password: String): Boolean {
+    override fun isValid(password: String): Boolean {
         var passwordError: Int? = null
         if (password.isEmpty()) {
             passwordError = R.string.please_input_password

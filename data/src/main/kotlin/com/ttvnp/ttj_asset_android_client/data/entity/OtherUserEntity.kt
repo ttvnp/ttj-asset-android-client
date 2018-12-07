@@ -7,26 +7,31 @@ import com.github.gfx.android.orma.annotation.Table
 
 @Table
 class OtherUserEntity (
-
         @PrimaryKey(auto = false, autoincrement = false)
         @Setter("id")
         val id: Long = 0L,
 
-        @Column(indexed = true) @Setter("emailAddress")
+        @Column(indexed = true)
+        @Setter("emailAddress")
         var emailAddress: String = "",
 
-        @Column @Setter("profileImageId")
+        @Column
+        @Setter("profileImageId")
         var profileImageID: Long = 0,
 
-        @Column @Setter("profileImageURL")
+        @Column
+        @Setter("profileImageURL")
         var profileImageURL: String = "",
 
-        @Column @Setter("firstName")
+        @Column
+        @Setter("firstName")
         var firstName: String = "",
 
-        @Column @Setter("middleName")
+        @Column
+        @Setter("middleName")
         var middleName: String = "",
 
-        @Column @Setter("lastName")
+        @Column
+        @Setter("lastName")
         var lastName: String = ""
 )
