@@ -17,9 +17,7 @@
             android:id="@+id/text_input_layout_str_account_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/stellar_address"
-            app:errorEnabled="true"
-            app:hintEnabled="true">
+            android:hint="@string/stellar_address">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/text_input_str_account_id"
@@ -33,9 +31,7 @@
             android:id="@+id/text_input_layout_memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/memo"
-            app:errorEnabled="true"
-            app:hintEnabled="true">
+            android:hint="@string/memo">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/text_input_memo"

@@ -44,14 +44,14 @@ class TutorialEmailFragment : Fragment() {
         textTutorialEmailAddress = view.findViewById(R.id.text_tutorial_email_address)
         textTutorialEmailAddress.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.email_address))
         ckTermsOfService = view.findViewById(R.id.chk_terms_of_service)
-        ckTermsOfService.setOnCheckedChangeListener({ _, isChecked ->
+        ckTermsOfService.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 setEnableButton(true)
                 return@setOnCheckedChangeListener
             }
 
             setEnableButton(false)
-        })
+        }
         tvTermsOfService = view.findViewById(R.id.text_terms_of_service)
         tvTermsOfService.setOnClickListener(termsOfServiceListener)
 

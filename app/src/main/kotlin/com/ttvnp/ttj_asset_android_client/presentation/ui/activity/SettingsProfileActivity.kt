@@ -28,7 +28,6 @@ class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     lateinit var toolbar: Toolbar
-        get
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +35,7 @@ class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_profile)
 
-        toolbar = findViewById<Toolbar>(R.id.toolbar_settings_profile)
+        toolbar = findViewById(R.id.toolbar_settings_profile)
 
         if (savedInstanceState != null) return
         val detailFragment = SettingsProfileDetailFragment.getInstance()

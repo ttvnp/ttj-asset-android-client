@@ -199,7 +199,15 @@ class UserTransactionRepositoryImpl @Inject constructor(
                 }
                 createExternalTransactionResponse.body()?.let { response ->
                     if (response.hasError()) {
-                        return@let
+                        val errorCode: ErrorCode = when (response.errorCode) {
+                            ServiceErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT.rawValue -> ErrorCode.ERROR_OLD_PASSWORD_IS_NOT_CORRECT
+                            ServiceErrorCode.ERROR_DATA_NOT_FOUND.rawValue -> ErrorCode.ERROR_CANNOT_FIND_TARGET_USER
+                            ServiceErrorCode.ERROR_LOCKED_OUT.rawValue -> ErrorCode.ERROR_LOCKED_OUT
+                            ServiceErrorCode.ERROR_TOO_MUCH_AMOUNT.rawValue -> ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT
+                            else -> ErrorCode.ERROR_UNKNOWN_SERVER_ERROR
+                        }
+                        subscriber.onSuccess(ModelWrapper(null, errorCode))
+                        return@create
                     }
                     createExternalTransactionResponse.body()?.let {
                         if (it.hasError()) {

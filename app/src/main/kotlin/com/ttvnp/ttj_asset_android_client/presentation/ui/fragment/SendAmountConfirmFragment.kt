@@ -73,8 +73,9 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         buttonSendAmountSubmit.setOnClickListener { _ ->
             userModel?.let { it ->
                 if (it.requirePasswordOnSend) {
-                    if (!sendAmountConfirmPresenter.isValidated(textInputPassword.text.toString())) return@setOnClickListener
+                    if (!sendAmountConfirmPresenter.isValid(textInputPassword.text.toString())) return@setOnClickListener
                 }
+                textInputLayoutPassword.error = null
                 sendInfoModel?.let {
                     if (it.targetUserStrAccountID.isBlank()) {
                         sendAmountConfirmPresenter.createTransaction(it, textInputPassword.text.toString())
@@ -109,7 +110,9 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
     }
 
     override fun validateForm(passwordError: Int?) {
-        passwordError?.let { textInputPassword.error = getString(it) }
+        passwordError?.let {
+            textInputLayoutPassword.error = getString(it)
+        }
     }
 
     override fun setSendInfo(sendInfoModel: SendInfoModel) {
@@ -139,6 +142,14 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         textSendConfirmDesc.text = confirmDesc
     }
 
+    override fun onTransactionSuccess(sendInfoModel: SendInfoModel) {
+        showMessagePaymentSuccessfully(sendInfoModel)
+    }
+
+    override fun onExternalTransactionSuccess(sendInfoModel: SendInfoModel) {
+        showMessagePaymentSuccessfully(sendInfoModel)
+    }
+
     private fun buildTargetUserText(sendInfoModel: SendInfoModel): String {
         var userName = ""
         if (!sendInfoModel.targetUserFirstName.isBlank()) {
@@ -151,14 +162,6 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
             userName += sendInfoModel.targetUserLastName.prependIfNotBlank(" ")
         }
         return if (userName.isBlank()) sendInfoModel.targetUserEmailAddress else userName
-    }
-
-    override fun onTransactionSuccess(sendInfoModel: SendInfoModel) {
-        showMessagePaymentSuccessfully(sendInfoModel)
-    }
-
-    override fun onExternalTransactionSuccess(sendInfoModel: SendInfoModel) {
-        showMessagePaymentSuccessfully(sendInfoModel)
     }
 
     private fun showMessagePaymentSuccessfully(sendInfoModel: SendInfoModel) {
