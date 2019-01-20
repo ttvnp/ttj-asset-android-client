@@ -175,20 +175,20 @@ class UserRepositoryImpl @Inject constructor(
             }
             val profileImageFileBody: MultipartBody.Part
             profileImageFileBody = if (profileImageFile == null) {
-                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOf())
+                val requestFile = RequestBody.create(okhttp3.MultipartBody.FORM, byteArrayOf())
                 MultipartBody.Part.createFormData("profileImageFile", "profile_image", requestFile)
             } else {
-                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), profileImageFile)
+                val requestFile = RequestBody.create(okhttp3.MultipartBody.FORM, profileImageFile)
                 MultipartBody.Part.createFormData("profileImageFile", "profile_image", requestFile)
             }
-            val firstNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), firstName)
-            val middleNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), middleName)
-            val lastNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), lastName)
-            val addressBody = RequestBody.create(MediaType.parse("multipart/form-data"), address)
-            val genderBody = RequestBody.create(MediaType.parse("multipart/form-data"), genderType.toString())
-            val dobBody = RequestBody.create(MediaType.parse("multipart/form-data"), dob)
-            val cellphoneNumberNationalCodeBody = RequestBody.create(MediaType.parse("multipart/form-data"), cellphoneNumberNationalCode)
-            val cellphoneNumberBody = RequestBody.create(MediaType.parse("multipart/form-data"), cellphoneNumber)
+            val firstNameBody = RequestBody.create(null, firstName)
+            val middleNameBody = RequestBody.create(null, middleName)
+            val lastNameBody = RequestBody.create(null, lastName)
+            val addressBody = RequestBody.create(null, address)
+            val genderBody = RequestBody.create(null, genderType.toString())
+            val dobBody = RequestBody.create(null, dob)
+            val cellphoneNumberNationalCodeBody = RequestBody.create(null, cellphoneNumberNationalCode)
+            val cellphoneNumberBody = RequestBody.create(null, cellphoneNumber)
             try {
                 val updateUserResponse = userService.updateUser(profileImageFileBody, firstNameBody, middleNameBody, lastNameBody, addressBody, genderBody, dobBody, cellphoneNumberNationalCodeBody, cellphoneNumberBody).execute()
                 if (!updateUserResponse.isSuccessful) {
