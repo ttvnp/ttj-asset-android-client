@@ -182,10 +182,12 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             context?.let { textDOB.setTextColor(ContextCompat.getColor(it, R.color.md_grey_400)) }
         }
         if (userModel.profileImageURL.isNotEmpty()) {
-            Picasso
-                    .with(this.context)
-                    .load(userModel.profileImageURL)
-                    .into(profileImage)
+            context?.let {
+                Picasso
+                        .with(context)
+                        .load(userModel.profileImageURL)
+                        .into(profileImage)
+            }
         }
         if (userModel.emailAddress.isNotBlank()) textProfileEmailAddress.text = userModel.emailAddress
         if (userModel.firstName.isNotBlank()) textProfileFirstName.setText(userModel.firstName)
