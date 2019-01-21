@@ -60,6 +60,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         mTextStellarAccountId = view.findViewById(R.id.text_str_account_id)
         mTextStellarMemoText = view.findViewById(R.id.text_memo)
 
+        mTextByStellarContainer.visibility = View.INVISIBLE
         buttonSetAmount.setOnClickListener {
             val intent = Intent(activity, ReceiveSetAmountActivity::class.java)
             activity?.startActivityForResult(intent, RequestCode.SET_AMOUNT_ACTIVITY.rawValue)
@@ -74,8 +75,9 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
             }
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (!isAlreadyRequested) return
                 if (position == 0) {
-                    mainReceivePresenter.setupDefault()
+                    mainReceivePresenter.getUserInfo()
                     buttonSetAmount.visibility = View.VISIBLE
                     mTextByStellarContainer.visibility = View.GONE
                     return
@@ -93,11 +95,13 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         mainReceivePresenter.dispose()
     }
 
-    override fun setMenuVisibility(isMenuVisible: Boolean) {
-        super.setMenuVisibility(isMenuVisible)
-        if (!isMenuVisible) return
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (!isVisibleToUser) return
         if (isAlreadyRequested) return
-        mainReceivePresenter.setupDefault()
+        mainReceivePresenter.getUserInfo()
+        buttonSetAmount.visibility = View.VISIBLE
+        mTextByStellarContainer.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")
@@ -121,6 +125,10 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         imageQRCode.post {
             imageQRCode.setImageBitmap(bitmap)
         }
+    }
+
+    override fun onError() {
+        isAlreadyRequested = false
     }
 
 }
