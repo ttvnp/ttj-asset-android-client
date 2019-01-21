@@ -63,7 +63,7 @@ class UserRepositoryImpl @Inject constructor(
     override fun getStellarAccount(): Single<StellarAccountModel> {
         return Single.create { subscriber ->
             var stellarAccountModel: StellarAccountModel? = null
-            var refresh: Boolean
+            val refresh: Boolean
             var stellarAccountEntity = stellarAccountDataStore.get()
             if (stellarAccountEntity == null) {
                 refresh = true
@@ -123,6 +123,7 @@ class UserRepositoryImpl @Inject constructor(
                 try {
                     val userResponse = userService.getUser().execute()
                     if (!userResponse.isSuccessful) {
+                        if (subscriber.isDisposed) return@create
                         subscriber.onError(HttpException(userResponse))
                         return@create
                     }
