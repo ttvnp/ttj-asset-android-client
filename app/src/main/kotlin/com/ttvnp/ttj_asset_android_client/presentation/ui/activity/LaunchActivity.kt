@@ -59,9 +59,9 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
     private fun showErrorDialog(errorMessage: String) {
         AlertDialog
                 .Builder(this)
-                .setTitle(resources.getString(R.string.error_dialog_title))
+                .setTitle(getString(R.string.error_dialog_title))
                 .setMessage(errorMessage)
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                .setPositiveButton(getString(R.string.default_positive_button_text), null)
                 .show()
     }
 

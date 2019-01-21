@@ -35,9 +35,11 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
 
                     override fun onOtherError(error: Throwable?) {
                         // do nothing...
+                        target?.onError()
                     }
 
                     override fun onMaintenance() {
+                        target?.onError()
                         target?.showMaintenance()
                     }
 
