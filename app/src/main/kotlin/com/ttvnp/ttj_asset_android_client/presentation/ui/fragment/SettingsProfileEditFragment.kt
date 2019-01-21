@@ -313,14 +313,14 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
                     textProfileCellPhoneNumber.error = getString(R.string.message_under_review)
                     view = v
                 }
-                radioGroupGender.setOnClickListener { _ ->
+                radioGroupGender.setOnClickListener {
                     clearUnderReviewMessage(view)
                     Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()
                 }
                 radioFemale.isEnabled = false
                 radioMale.isEnabled = false
                 textDOB.setTextColor(textColor)
-                textDOB.setOnClickListener { _ ->
+                textDOB.setOnClickListener {
                     clearUnderReviewMessage(view)
                     textDOB.requestFocus()
                     Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()
