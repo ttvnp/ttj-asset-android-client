@@ -27,20 +27,22 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         launchPresenter.initialize(this)
-        // get user data
         launchPresenter.checkDeviceReady()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        launchPresenter.dispose()
     }
 
     override fun checkLanguage(language: String) {
         WebView(this).destroy()
-
         var locale: Locale = Locale.US
         if (language == "ja") {
             locale = Locale.JAPAN
         } else if (language == "vi") {
             locale = Locale("vi")
         }
-
         changeLocale(resources, locale)
     }
 
