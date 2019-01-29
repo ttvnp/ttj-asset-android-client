@@ -25,6 +25,7 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     companion object {
@@ -76,19 +77,26 @@ class SendActivity : BaseActivity(), HasSupportFragmentInjector {
             val formFragment: Fragment
             val onClickListener = View.OnClickListener { cancel() }
             // load model from qrString
-            if (qrString.split(";")[0].toInt() == QRCodeType.BY_STELLAR_ACCOUNT.rawValue) {
-                val data = QRCodeInfoStellarBirdgeDataTranslator().translate(QRCodeInfoStellarInfoModel.load(qrString))
-                formFragment = SendAmountFormByStellarFragment.getInstance()
-                bundle.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
-                formFragment.arguments = bundle
-                formFragment.cancelButtonClickHandler = onClickListener
-
-            } else {
-                val data = QRCodeInfoBridgeDataTranslator().translate(QRCodeInfoModel.load(qrString))
-                formFragment = SendAmountFormFragment.getInstance()
-                bundle.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
-                formFragment.arguments = bundle
-                formFragment.cancelButtonClickHandler = onClickListener
+            val info = qrString.split(";")[0]
+            when (info) {
+                QRCodeType.BY_STELLAR_ACCOUNT.rawValue -> {
+                    val data = QRCodeInfoStellarBirdgeDataTranslator().translate(QRCodeInfoStellarInfoModel.load(qrString))
+                    formFragment = SendAmountFormByStellarFragment.getInstance()
+                    bundle.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
+                    formFragment.arguments = bundle
+                    formFragment.cancelButtonClickHandler = onClickListener
+                }
+                QRCodeType.BY_EMAIL.rawValue -> {
+                    val data = QRCodeInfoBridgeDataTranslator().translate(QRCodeInfoModel.load(qrString))
+                    formFragment = SendAmountFormFragment.getInstance()
+                    bundle.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, data)
+                    formFragment.arguments = bundle
+                    formFragment.cancelButtonClickHandler = onClickListener
+                }
+                else -> {
+                    finish()
+                    return
+                }
             }
             supportFragmentManager
                     .beginTransaction()
