@@ -9,7 +9,7 @@ class QRCodeInfoStellarInfoModel(
             val info = qrCodeString.split(";")
             return QRCodeInfoStellarInfoModel(
                     qrCodeType = if (info.isNotEmpty()) QRCodeType.values().firstOrNull {
-                        info[0].toInt() == it.rawValue
+                        info[0] == it.rawValue
                     } ?: QRCodeType.BY_EMAIL else QRCodeType.BY_STELLAR_ACCOUNT,
                     strAccountId = info[1]
             )
@@ -18,6 +18,6 @@ class QRCodeInfoStellarInfoModel(
 
 
     fun toQRString(): String {
-        return "%d;%s".format(qrCodeType.rawValue, strAccountId)
+        return "%s;%s".format(qrCodeType.rawValue, strAccountId)
     }
 }

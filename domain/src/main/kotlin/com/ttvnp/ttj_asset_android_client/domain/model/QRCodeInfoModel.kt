@@ -11,7 +11,7 @@ class QRCodeInfoModel(
             val info = qrCodeString.split(";")
             return QRCodeInfoModel(
                     qrCodeType = if (info.isNotEmpty()) QRCodeType.values().firstOrNull {
-                        info[0].toInt() == it.rawValue
+                        info[0] == it.rawValue
                     } ?: QRCodeType.BY_EMAIL else QRCodeType.BY_STELLAR_ACCOUNT,
                     emailAddress = info[1],
                     assetType = if (2 < info.size) AssetType.values().firstOrNull {
@@ -24,6 +24,6 @@ class QRCodeInfoModel(
 
 
     fun toQRString(): String {
-        return "%d;%s;%s;%s".format(qrCodeType.rawValue, emailAddress, assetType.rawValue, amount)
+        return "%s;%s;%s;%s".format(qrCodeType.rawValue, emailAddress, assetType.rawValue, amount)
     }
 }
