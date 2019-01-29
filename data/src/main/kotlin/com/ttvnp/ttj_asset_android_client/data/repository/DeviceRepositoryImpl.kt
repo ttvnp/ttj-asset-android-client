@@ -52,20 +52,21 @@ class DeviceRepositoryImpl @Inject constructor(
         return Single.create<ModelWrapper<DeviceModel?>> { subscriber ->
             val deviceInfo = deviceInfoDataStore.get()
             if (deviceInfo == null) {
-                subscriber.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
+                subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_DEVICE_NOT_REGISTERED))
                 return@create
             }
 
             // get from device info
             val deviceEntity: DeviceEntity? = deviceDataStore.get()
             if (deviceEntity != null && deviceEntity.isActivated) {
-                subscriber.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
+                subscriber.onSuccess(ModelWrapper(DeviceTranslator().translate(deviceEntity), ErrorCode.NO_ERROR))
                 return@create
             }
 
             try {
                 val getResponse = deviceService.get().execute()
                 if (!getResponse.isSuccessful) {
+                    if (subscriber.isDisposed) return@create
                     subscriber.onError(HttpException(getResponse))
                     return@create
                 }
@@ -112,7 +113,7 @@ class DeviceRepositoryImpl @Inject constructor(
                         registerResponse.body()?.let {
                             val response: DeviceResponse = it
                             if (response.hasError()) {
-                                inner.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_REGISTER_DEVICE))
+                                inner.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_REGISTER_DEVICE))
                             } else {
                                 deviceInfoDataStore.save(DeviceInfoEntity(initDeviceCode, initCredential))
                                 var deviceEntity = DeviceEntity(
@@ -123,11 +124,11 @@ class DeviceRepositoryImpl @Inject constructor(
                                         grantPushNotification = response.grantPushNotification
                                 )
                                 deviceEntity = deviceDataStore.update(deviceEntity)
-                                inner.onSuccess(ModelWrapper<DeviceModel?>(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
+                                inner.onSuccess(ModelWrapper(DeviceTranslator().translate(deviceEntity)!!, ErrorCode.NO_ERROR))
                             }
                         }
                     } catch (e: IOException) {
-                        inner.onSuccess(ModelWrapper<DeviceModel?>(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
+                        inner.onSuccess(ModelWrapper(null, ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER, e))
                     }
                 }.subscribeOn(Schedulers.io())
                         .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
@@ -359,7 +360,7 @@ class DeviceRepositoryImpl @Inject constructor(
                         subscriber.onSuccess(ModelWrapper(null, ErrorCode.ERROR_UNKNOWN))
                         return@create
                     }
-                    if(it.logout) {
+                    if (it.logout) {
                         deviceInfoDataStore.removeDeviceInfo()
                         deviceDataStore.removeAll()
                         subscriber.onSuccess(ModelWrapper(LogoutModel(it.logout), ErrorCode.NO_ERROR))

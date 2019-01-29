@@ -15,6 +15,7 @@ import javax.inject.Inject
 interface LaunchPresenter {
     fun initialize(target: LaunchPresenterTarget)
     fun checkDeviceReady()
+    fun dispose()
 }
 
 class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) : LaunchPresenter {
@@ -26,6 +27,10 @@ class LaunchPresenterImpl @Inject constructor(val deviceUseCase: DeviceUseCase) 
         this.target = target
 
         target.checkLanguage(deviceUseCase.getLanguage())
+    }
+
+    override fun dispose() {
+        disposables.clear()
     }
 
     override fun checkDeviceReady() {
