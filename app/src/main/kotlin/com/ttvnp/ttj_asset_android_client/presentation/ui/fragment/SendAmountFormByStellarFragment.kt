@@ -103,6 +103,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
             ErrorCode.ERROR_VALIDATION_STELLAR_TRUST_LINE -> mTextLayoutStrAccountId.error = msg
             ErrorCode.ERROR_VALIDATION_AMOUNT_LONG -> showAmountValidationError(msg)
             ErrorCode.ERROR_VALIDATION_TOO_MUCH_AMOUNT -> showAmountValidationError(msg)
+            ErrorCode.ERROR_CANNOT_CONNECT_TO_SERVER -> showError(errorCode, throwable)
             else -> {
                 showErrorDialog(msg, onClick = { _, whichButton ->
                     if (whichButton == DialogInterface.BUTTON_POSITIVE) {
@@ -145,7 +146,11 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
                             mTextSendAmount.text.toString()
                     )) return@setOnClickListener
             clearError()
-            val selectedAssetType = if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin) AssetType.ASSET_TYPE_COIN else AssetType.ASSET_TYPE_POINT
+            val selectedAssetType =
+                    if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
+                        AssetType.ASSET_TYPE_COIN
+                    else
+                        AssetType.ASSET_TYPE_POINT
             val amountString = mTextSendAmount.text.toString()
             mPresenter.checkValidationStellar(
                     mTextInputStrAccountId.text.toString(),
