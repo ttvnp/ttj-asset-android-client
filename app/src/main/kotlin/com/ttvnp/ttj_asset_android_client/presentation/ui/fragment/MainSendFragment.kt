@@ -29,6 +29,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     private lateinit var buttonSendStellar: Button
 
     private var isIdentified = false
+    private var isAlreadyRequested = false
 
     companion object {
         fun getInstance(): MainSendFragment {
@@ -68,7 +69,6 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
             SendActivity.start(context, true)
         }
 
-        mainSendPresenter.setupDefault()
         return view
     }
 
@@ -79,13 +79,16 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-
-        if (isVisibleToUser && !isIdentified) {
+        if (!isVisibleToUser) return
+        if (!isIdentified) {
             mainSendPresenter.setupDefault()
         }
+        if (isAlreadyRequested) return
+        mainSendPresenter.setupDefault()
     }
 
     override fun setIdentify(identifier: Boolean) {
+        isAlreadyRequested = true
         if (identifier) {
             isIdentified = identifier
             setEnableButton(true)
@@ -93,6 +96,10 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         }
 
         setEnableButton(false)
+    }
+
+    override fun onError() {
+        isAlreadyRequested = false
     }
 
     @SuppressLint("ResourceAsColor")

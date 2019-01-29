@@ -180,4 +180,5 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         swipeLayoutPaymentHistory?.isRefreshing = false
         swipeLayoutEmptyPaymentHistory?.isRefreshing = false
     }
+
 }

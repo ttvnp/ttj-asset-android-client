@@ -1,2 +1,1 @@
-- Fixed a bug when updating app version
-- Fixed error messages for sending assets
+- Fixed a bug that user profile is cleared on updating.

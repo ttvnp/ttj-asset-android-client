@@ -56,6 +56,7 @@ class UserTransactionRepositoryImpl @Inject constructor(
                 try {
                     val transactionResponse = userService.getTransactions(upperID).execute()
                     if (!transactionResponse.isSuccessful) {
+                        if (subscriber.isDisposed) return@create
                         subscriber.onError(HttpException(transactionResponse))
                         return@create
                     }
