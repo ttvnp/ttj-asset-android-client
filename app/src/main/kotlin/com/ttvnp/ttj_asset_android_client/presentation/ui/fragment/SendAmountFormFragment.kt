@@ -89,7 +89,7 @@ class SendAmountFormFragment : BaseFragment(), SendAmountFormPresenterTarget {
             if (!sendAmountFormPresenter.isValid(
                             textSendAmount.text.toString()
                     )) return@setOnClickListener
-            sendInfoModel?.let { _ ->
+            sendInfoModel?.let {
                 val selectedAssetType =
                         if (radioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
                             AssetType.ASSET_TYPE_COIN

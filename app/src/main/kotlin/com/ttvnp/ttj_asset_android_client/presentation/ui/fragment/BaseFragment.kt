@@ -17,6 +17,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.MaintenanceActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
@@ -85,7 +86,11 @@ abstract class BaseFragment : Fragment() {
     }
 
     open fun showError(throwable: Throwable) {
-        showErrorDialog(getString(R.string.error_default_message))
+        if (throwable is UnknownHostException) {
+            showErrorDialog(getString(R.string.error_cannot_connect_to_server))
+        } else {
+            showErrorDialog(getString(R.string.error_default_message))
+        }
         FirebaseCrash.report(throwable)
     }
 

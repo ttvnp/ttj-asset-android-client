@@ -32,12 +32,10 @@ class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCas
                 .doOnSubscribe {
                     target?.showProgressDialog()
                 }
-                .doFinally {
-                    target?.dismissProgressDialog()
-                }
                 .subscribeWith(object : DisposableApiSingleObserver<ModelWrapper<OtherUserModel?>>() {
 
                     override fun onSuccess(wrapper: ModelWrapper<OtherUserModel?>) {
+                        target?.dismissProgressDialog()
                         when (wrapper.errorCode) {
                             ErrorCode.NO_ERROR -> handleSuccess(wrapper.model!!)
                             else -> target?.showError(wrapper.errorCode, wrapper.error)
@@ -45,10 +43,12 @@ class SendEmailFormPresenterImpl @Inject constructor(val userUseCase: UserUseCas
                     }
 
                     override fun onOtherError(error: Throwable?) {
+                        target?.dismissProgressDialog()
                         error?.let { target?.showError(error) }
                     }
 
                     override fun onMaintenance() {
+                        target?.dismissProgressDialog()
                         target?.showMaintenance()
                     }
 

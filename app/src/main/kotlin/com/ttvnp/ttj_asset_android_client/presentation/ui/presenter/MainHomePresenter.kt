@@ -77,6 +77,7 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserTransactionsModel>() {
+
                     override fun onSuccess(model: UserTransactionsModel) {
                         target?.bindUserTransactions(model, forceRefresh)
                     }
@@ -97,6 +98,7 @@ class MainHomePresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserTransactionsModel>() {
+
                     override fun onSuccess(t: UserTransactionsModel) {
                         handleLoadedData(t)
                     }
