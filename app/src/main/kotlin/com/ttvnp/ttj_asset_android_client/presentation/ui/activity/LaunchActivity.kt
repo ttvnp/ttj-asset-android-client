@@ -27,20 +27,22 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         launchPresenter.initialize(this)
-        // get user data
         launchPresenter.checkDeviceReady()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        launchPresenter.dispose()
     }
 
     override fun checkLanguage(language: String) {
         WebView(this).destroy()
-
         var locale: Locale = Locale.US
         if (language == "ja") {
             locale = Locale.JAPAN
         } else if (language == "vi") {
             locale = Locale("vi")
         }
-
         changeLocale(resources, locale)
     }
 
@@ -59,9 +61,9 @@ class LaunchActivity : Activity(), LaunchPresenterTarget {
     private fun showErrorDialog(errorMessage: String) {
         AlertDialog
                 .Builder(this)
-                .setTitle(resources.getString(R.string.error_dialog_title))
+                .setTitle(getString(R.string.error_dialog_title))
                 .setMessage(errorMessage)
-                .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                .setPositiveButton(getString(R.string.default_positive_button_text), null)
                 .show()
     }
 

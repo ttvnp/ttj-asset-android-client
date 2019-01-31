@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -44,7 +45,11 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     private var emptyTextViewPaymentHistory: TextView? = null
     private lateinit var progressBar: ProgressBar
 
+    private var isRequested: Boolean = false
+
     companion object {
+        private const val DELAY_REQUESTING: Long = 500
+
         fun getInstance(): MainHomeFragment {
             return MainHomeFragment()
         }
@@ -82,11 +87,12 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         mainHomePresenter.setupUserTransactions(true)
 
         val swipeLayoutRefreshListener: () -> Unit = fun() {
-            mainHomePresenter.setupBalanceInfo(true)
-            mainHomePresenter.setupUserTransactions(true)
+            Handler().postDelayed({
+                mainHomePresenter.setupBalanceInfo(true)
+                mainHomePresenter.setupUserTransactions(true)
+            }, DELAY_REQUESTING)
         }
         swipeLayoutPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
-        swipeLayoutEmptyPaymentHistory?.setOnRefreshListener(swipeLayoutRefreshListener)
         emptyTextViewPaymentHistory = view.findViewById(R.id.empty_text_view_payment_history)
         emptyViewPaymentHistory?.emptyView = emptyTextViewPaymentHistory
         emptyViewPaymentHistory?.emptyView?.visibility = View.GONE
@@ -134,6 +140,9 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
             swipeLayoutPaymentHistory?.visibility = View.GONE
             swipeLayoutEmptyPaymentHistory?.visibility = View.VISIBLE
             emptyTextViewPaymentHistory?.visibility = View.VISIBLE
+            recyclerViewPaymentHistory?.adapter?.let {
+                (it as PaymentHistoryViewAdapter).progressBar?.visibility = View.GONE
+            }
         } else {
             // has data
             var adapter = recyclerViewPaymentHistory?.adapter
@@ -151,18 +160,30 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
                 recyclerViewPaymentHistory?.addOnScrollListener(object : EndlessScrollListener(recyclerViewPaymentHistory?.layoutManager as LinearLayoutManager) {
                     override fun onLoadMore(currentPage: Int) {
                         // get last item
-                        val sizeBeforeLoad = adapter.itemCount
-                        mainHomePresenter.loadMoreUserTransactions(lastUserTransactionID, { loadedModel ->
-                            if (!loadedModel.hasMore) this.setFinished()
-                            adapter.addAllUserTransactionModel(loadedModel.userTransactions)
-                            val updatedSize = loadedModel.userTransactions.size
-                            recyclerViewPaymentHistory?.post { adapter.notifyItemRangeInserted(sizeBeforeLoad, updatedSize) }
-                            lastUserTransactionID = loadedModel.userTransactions.last().id
-                        }, forceRefresh)
+                        if (isRequested) return
+                        isRequested = true
+                        Handler().postDelayed({
+                            mainHomePresenter.loadMoreUserTransactions(lastUserTransactionID, { loadedModel ->
+                                isRequested = false
+                                if (!loadedModel.hasMore) {
+                                    adapter.progressBar?.visibility = View.GONE
+                                    this.setFinished()
+                                }
+                                adapter.addAllUserTransactionModel(loadedModel.userTransactions)
+                                lastUserTransactionID = loadedModel.userTransactions.last().id
+                            }, forceRefresh)
+                        }, DELAY_REQUESTING)
                     }
                 })
             }
         }
+    }
+
+    override fun showError(throwable: Throwable) {
+        super.showError(throwable)
+        isRequested = true
+        swipeLayoutPaymentHistory?.isRefreshing = false
+        swipeLayoutEmptyPaymentHistory?.isRefreshing = false
     }
 
     override fun gotoProfileDetail() {
@@ -171,13 +192,9 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         startActivity(intent)
     }
 
-    override fun showError(throwable: Throwable) {
-        super.showError(throwable)
-        stopSwipeLayoutRefreshing()
-    }
-
     private fun stopSwipeLayoutRefreshing() {
         swipeLayoutPaymentHistory?.isRefreshing = false
         swipeLayoutEmptyPaymentHistory?.isRefreshing = false
     }
+
 }

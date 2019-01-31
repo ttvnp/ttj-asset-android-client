@@ -182,10 +182,12 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             context?.let { textDOB.setTextColor(ContextCompat.getColor(it, R.color.md_grey_400)) }
         }
         if (userModel.profileImageURL.isNotEmpty()) {
-            Picasso
-                    .with(this.context)
-                    .load(userModel.profileImageURL)
-                    .into(profileImage)
+            context?.let {
+                Picasso
+                        .with(context)
+                        .load(userModel.profileImageURL)
+                        .into(profileImage)
+            }
         }
         if (userModel.emailAddress.isNotBlank()) textProfileEmailAddress.text = userModel.emailAddress
         if (userModel.firstName.isNotBlank()) textProfileFirstName.setText(userModel.firstName)
@@ -313,14 +315,14 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
                     textProfileCellPhoneNumber.error = getString(R.string.message_under_review)
                     view = v
                 }
-                radioGroupGender.setOnClickListener { _ ->
+                radioGroupGender.setOnClickListener {
                     clearUnderReviewMessage(view)
                     Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()
                 }
                 radioFemale.isEnabled = false
                 radioMale.isEnabled = false
                 textDOB.setTextColor(textColor)
-                textDOB.setOnClickListener { _ ->
+                textDOB.setOnClickListener {
                     clearUnderReviewMessage(view)
                     textDOB.requestFocus()
                     Toast.makeText(context, getString(R.string.message_under_review), Toast.LENGTH_SHORT).show()

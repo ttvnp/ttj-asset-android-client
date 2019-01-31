@@ -31,26 +31,24 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
     }
 
     override fun checkValidationStellar(accountId: String, amountString: String, assetType: AssetType) {
+        target.showProgressDialog()
         userUseCase.checkValidationStellar(accountId, assetType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    target.showProgressDialog()
-                }
-                .doFinally {
-                    target.dismissProgressDialog()
-                }
                 .subscribeWith(object : DisposableApiSingleObserver<ErrorCode>() {
 
                     override fun onOtherError(error: Throwable?) {
+                        target.dismissProgressDialog()
                         error?.let { target.showError(error) }
                     }
 
                     override fun onMaintenance() {
+                        target.dismissProgressDialog()
                         target.showMaintenance()
                     }
 
                     override fun onSuccess(errorCode: ErrorCode) {
+                        target.dismissProgressDialog()
                         when (errorCode) {
                             ErrorCode.NO_ERROR -> checkSendAmount(assetType, amountString)
                             ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT -> target.showError(errorCode, null)
@@ -69,12 +67,10 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
                 .doOnSubscribe {
                     target.showProgressDialog()
                 }
-                .doFinally {
-                    target.dismissProgressDialog()
-                }
                 .subscribeWith(object : DisposableApiSingleObserver<ErrorCode>() {
 
                     override fun onSuccess(errorCode: ErrorCode) {
+                        target.dismissProgressDialog()
                         when (errorCode) {
                             ErrorCode.NO_ERROR -> target.navigateToConfirm(assetType, amountString.toAmount())
                             else -> target.showError(errorCode, null)
@@ -82,10 +78,12 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
                     }
 
                     override fun onOtherError(error: Throwable?) {
+                        target.dismissProgressDialog()
                         error?.let { target.showError(error) }
                     }
 
                     override fun onMaintenance() {
+                        target.dismissProgressDialog()
                         target.showMaintenance()
                     }
 

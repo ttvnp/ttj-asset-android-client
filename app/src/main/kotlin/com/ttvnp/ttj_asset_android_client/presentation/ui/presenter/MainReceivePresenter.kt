@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 interface MainReceivePresenter {
     fun init(target: MainReceivePresenterTarget)
-    fun setupDefault()
     fun getStellarAccount()
+    fun getUserInfo()
     fun dispose()
 }
 
@@ -27,7 +27,7 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
         this.target = target
     }
 
-    override fun setupDefault() {
+    override fun getUserInfo() {
         target?.showProgressDialog()
         userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
@@ -37,36 +37,21 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
                     override fun onSuccess(t: UserModel) {
                         target?.dismissProgressDialog()
                         target?.setQRCode(QRCodeInfoModel(
-                                emailAddress = t.emailAddress).toQRString())
+                                emailAddress = t.emailAddress).toQRString()
+                        )
                     }
 
                     override fun onOtherError(error: Throwable?) {
-                        // do nothing...
+                        target?.dismissProgressDialog()
+                        target?.onError()
                     }
 
                     override fun onMaintenance() {
                         target?.dismissProgressDialog()
+                        target?.onError()
                         target?.showMaintenance()
                     }
 
-                }).addTo(this.disposables)
-        userUseCase.getStellarAccount()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableApiSingleObserver<StellarAccountModel>() {
-                    override fun onOtherError(error: Throwable?) {
-                        // do nothing...
-                    }
-
-                    override fun onMaintenance() {
-                        target?.dismissProgressDialog()
-                        target?.showMaintenance()
-                    }
-
-                    override fun onSuccess(stellarAccountModel: StellarAccountModel) {
-                        target?.dismissProgressDialog()
-                        target?.onGettingStellarAccount(stellarAccountModel)
-                    }
                 }).addTo(this.disposables)
     }
 
@@ -76,18 +61,25 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<StellarAccountModel>() {
+
                     override fun onOtherError(error: Throwable?) {
+                        target?.dismissProgressDialog()
+                        target?.onError()
                     }
 
                     override fun onMaintenance() {
                         target?.dismissProgressDialog()
+                        target?.onError()
                         target?.showMaintenance()
                     }
 
                     override fun onSuccess(model: StellarAccountModel) {
                         target?.dismissProgressDialog()
+                        target?.onGettingStellarAccount(model)
                         target?.setQRCode(QRCodeInfoStellarInfoModel(strAccountId = model.strAccountID).toQRString())
                     }
+
                 }).addTo(this.disposables)
     }
+
 }

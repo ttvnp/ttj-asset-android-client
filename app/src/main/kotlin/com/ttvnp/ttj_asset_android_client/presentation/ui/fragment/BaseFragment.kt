@@ -17,6 +17,7 @@ import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.MaintenanceActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.error.ErrorMessageGenerator
 import com.ttvnp.ttj_asset_android_client.presentation.ui.tracking.FirebaseAnalyticsHelper
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
@@ -39,7 +40,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected fun initProgressDialog() {
-        val dialog = Dialog(this.context)
+        val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -66,9 +67,9 @@ abstract class BaseFragment : Fragment() {
         context?.let {
             AlertDialog
                     .Builder(it)
-                    .setTitle(resources.getString(R.string.error_dialog_title))
+                    .setTitle(getString(R.string.error_dialog_title))
                     .setMessage(errorMessage)
-                    .setPositiveButton(resources.getString(R.string.default_positive_button_text), null)
+                    .setPositiveButton(getString(R.string.default_positive_button_text), null)
                     .show()
         }
     }
@@ -77,15 +78,19 @@ abstract class BaseFragment : Fragment() {
         context?.let {
             AlertDialog
                     .Builder(it)
-                    .setTitle(resources.getString(R.string.error_dialog_title))
+                    .setTitle(getString(R.string.error_dialog_title))
                     .setMessage(errorMessage)
-                    .setPositiveButton(resources.getString(R.string.default_positive_button_text), onClick)
+                    .setPositiveButton(getString(R.string.default_positive_button_text), onClick)
                     .show()
         }
     }
 
     open fun showError(throwable: Throwable) {
-        showErrorDialog(getString(R.string.error_default_message))
+        if (throwable is UnknownHostException) {
+            showErrorDialog(getString(R.string.error_cannot_connect_to_server))
+        } else {
+            showErrorDialog(getString(R.string.error_default_message))
+        }
         FirebaseCrash.report(throwable)
     }
 

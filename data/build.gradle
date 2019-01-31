@@ -8,6 +8,11 @@ android {
         disable 'GradleCompatible'
     }
     def globalConfiguration = rootProject.ext
+    def properties = new Properties()
+    def localPropertyFile = project.rootProject.file('local.properties')
+    if (localPropertyFile.exists()) {
+        properties.load(localPropertyFile.newDataInputStream())
+    }
 
     compileSdkVersion globalConfiguration.androidCompileSdkVersion
 
@@ -33,8 +38,8 @@ android {
             dimension "env"
             buildConfigField "String", "HORIZON_URL", '"https://horizon-testnet.stellar.org"'
             buildConfigField "String", "ISSUER_ACCOUNT_ID", '"GDNIKJNWHONPWZ2C4EAUKNO3BPGLT3AR6SOQRFMN57UZYEKC4CQXXXS3"'
-            buildConfigField "String", "SERVER_URL", '"http://192.168.11.5:1324"'
-            // http://10.0.2.2:1324
+            def localServerURL = properties.getProperty("LOCAL_SERVER_URL", "http://10.0.2.2:1324")
+            buildConfigField "String", "SERVER_URL", "\"${localServerURL}\""
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
                     '"CGMMrUTCoJGl1A5G3peDX6RxL6Bv8/A6jLvgEvbmpiVQOoAjq4IqIWJHi1YjLeTn\\n" +\n' +

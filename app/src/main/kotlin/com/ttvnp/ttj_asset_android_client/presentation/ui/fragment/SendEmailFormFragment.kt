@@ -28,7 +28,6 @@ class SendEmailFormFragment : BaseFragment(), SendEmailFormPresenterTarget {
     var cancelButtonClickHandler: View.OnClickListener? = null
 
     companion object {
-        const val QR_STRING_ARG_KEY = "qr_string"
         fun getInstance(): SendEmailFormFragment {
             return SendEmailFormFragment()
         }
