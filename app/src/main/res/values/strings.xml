@@ -1,7 +1,7 @@
 <resources>
     <string-array name="receive_options">
         <item>By Email</item>
-        <item>By Stellar Address</item>
+        <item>By SNC Address</item>
     </string-array>
     <!-- stellar -->
     <string name="stellar_address">Address</string>
@@ -11,6 +11,8 @@
     <string name="please_input_address">Please input address.</string>
     <string name="address_must_be_valid">Address must be valid.</string>
     <string name="insufficient_trust_limit">Trustline must be set at receiving account.</string>
+    <string name="confirm_snc_message">Don\'t send coins to XLM address. Please make sure to send to SNC address.</string>
+    <string name="memo_should_be_required">Memo should be required for this address.</string>
 
     <!-- general -->
     <string name="logout">Logout</string>
@@ -100,7 +102,7 @@
     <string name="hint_send_amount">amount</string>
     <string name="send_by_qr">Scan Code</string>
     <string name="send_by_email">By Email Address</string>
-    <string name="send_by_stellar">By Stellar Address</string>
+    <string name="send_by_stellar">By SNC Address</string>
     <string name="send_email_form_desc">* Provide email address you want to send point/coin to.</string>
     <string name="send_successfully_executed">The payment has been submitted.\nPlease wait a moment until the transaction be processed.</string>
     <string name="profile_successfully_updated">Your profile has been updated successfully.</string>

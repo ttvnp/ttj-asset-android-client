@@ -37,6 +37,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
 
     private lateinit var mTextLayoutStrAccountId: TextInputLayout
     private lateinit var mTextInputStrAccountId: EditText
+    private lateinit var mTextLayoutInputMemo: TextInputLayout
     private lateinit var mTextInputMemo: EditText
     private lateinit var mRadioGroupSend: RadioGroup
     private lateinit var mRadioSendPoint: RadioButton
@@ -59,15 +60,24 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
 
     override fun onSaveInstanceState(outState: Bundle) {
         mQrCodeByStellarInfo?.let {
-            outState.putSerializable(SendAmountFormFragment.QR_CODE_INFO_ARG_KEY, QRCodeInfoStellarBirdgeDataTranslator().translate(it))
+            outState.putSerializable(
+                    SendAmountFormFragment.QR_CODE_INFO_ARG_KEY,
+                    QRCodeInfoStellarBirdgeDataTranslator().translate(it)
+            )
         }
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_send_amount_form_by_stellar, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(
+                R.layout.fragment_send_amount_form_by_stellar,
+                container,
+                false
+        )
         mPresenter.initialize(this)
         initView(view)
         return view
@@ -78,8 +88,11 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         mPresenter.dispose()
     }
 
-    override fun navigateToConfirm(assetType: AssetType, amount: Long) {
-        mTextInputStrAccountId.error = null
+    override fun navigateToConfirm(
+            assetType: AssetType,
+            amount: Long
+    ) {
+        clearError()
         val bundle = Bundle()
         val confirmFragment = SendAmountConfirmFragment.getInstance()
         val data = SendInfoBridgeData(
@@ -96,7 +109,10 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
                 ?.commit()
     }
 
-    override fun showError(errorCode: ErrorCode, throwable: Throwable?) {
+    override fun showError(
+            errorCode: ErrorCode,
+            throwable: Throwable?
+    ) {
         val msg = getString(errorMessageGenerator.convert(errorCode))
         when (errorCode) {
             ErrorCode.ERROR_VALIDATION_STELLAR_ACCOUNT -> mTextLayoutStrAccountId.error = msg
@@ -114,9 +130,16 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         }
     }
 
-    override fun onValidation(addressError: Int?, amountError: Int?) {
+    override fun onValidation(
+            addressError: Int?,
+            memoError: Int?,
+            amountError: Int?
+    ) {
         addressError?.let {
             mTextLayoutStrAccountId.error = context?.getString(addressError)
+        }
+        memoError?.let {
+            mTextLayoutInputMemo.error = context?.getString(memoError)
         }
         amountError?.let {
             mTextInputLayoutSendAmount.error = context?.getString(amountError)
@@ -127,6 +150,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         mTextLayoutStrAccountId = view.findViewById(R.id.text_input_layout_str_account_id)
         mTextInputStrAccountId = view.findViewById(R.id.text_input_str_account_id)
         mTextInputStrAccountId.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.stellar_address))
+        mTextLayoutInputMemo = view.findViewById(R.id.text_input_layout_memo)
         mTextInputMemo = view.findViewById(R.id.text_input_memo)
         mTextInputMemo.onFocusChangeListener = getOnFocusChangeListener(getString(R.string.memo))
         mRadioGroupSend = view.findViewById(R.id.radio_group_send)
@@ -143,8 +167,12 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
         mBtnSubmit.setOnClickListener {
             if (!mPresenter.isValid(
                             mTextInputStrAccountId.text.toString(),
-                            mTextSendAmount.text.toString()
-                    )) return@setOnClickListener
+                            mTextInputMemo.text.toString(),
+                            mTextSendAmount.text.toString(),
+                            getString(R.string.sencoin_admin_address),
+                            getString(R.string.sencoinex_admin_address)
+                    )
+            ) return@setOnClickListener
             clearError()
             val selectedAssetType =
                     if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
@@ -166,6 +194,7 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
 
     private fun clearError() {
         mTextLayoutStrAccountId.error = null
+        mTextLayoutInputMemo.error = null
         mTextInputLayoutSendAmount.error = null
     }
 
