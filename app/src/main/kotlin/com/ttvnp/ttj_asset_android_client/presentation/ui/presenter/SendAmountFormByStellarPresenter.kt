@@ -16,7 +16,7 @@ interface SendAmountFormByStellarPresenter {
     fun initialize(target: SendAmountFormByStellarPresenterTarget)
     fun checkValidationStellar(accountId: String, amountString: String, assetType: AssetType)
     fun checkSendAmount(assetType: AssetType, amountString: String)
-    fun isValid(address: String, amount: String): Boolean
+    fun isValid(address: String, memo: String, amount: String, sencoin: String, sencoinext: String): Boolean
     fun dispose()
 }
 
@@ -39,7 +39,9 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
 
                     override fun onOtherError(error: Throwable?) {
                         target.dismissProgressDialog()
-                        error?.let { target.showError(error) }
+                        error?.let {
+                            target.showError(error)
+                        }
                     }
 
                     override fun onMaintenance() {
@@ -79,7 +81,9 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
 
                     override fun onOtherError(error: Throwable?) {
                         target.dismissProgressDialog()
-                        error?.let { target.showError(error) }
+                        error?.let {
+                            target.showError(error)
+                        }
                     }
 
                     override fun onMaintenance() {
@@ -90,17 +94,21 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
                 }).addTo(this.disposables)
     }
 
-    override fun isValid(address: String, amount: String): Boolean {
+    override fun isValid(address: String, memo: String, amount: String, sencoin: String, sencoinext: String): Boolean {
         var addressError: Int? = null
+        var memoError: Int? = null
         var amountError: Int? = null
         if (address.isEmpty()) {
             addressError = R.string.please_input_address
         }
+        if (memo.isEmpty() && (address == sencoin || address == sencoinext)) {
+            memoError = R.string.memo_should_be_required
+        }
         if (amount.isEmpty()) {
             amountError = R.string.error_message_invalid_long
         }
-        target.onValidation(addressError, amountError)
-        return address.isNotEmpty() && amount.isNotEmpty()
+        target.onValidation(addressError, memoError, amountError)
+        return address.isNotEmpty() && amount.isNotEmpty() && (memo.isNotEmpty() && (address != sencoin || address != sencoinext))
     }
 
 }

@@ -1,7 +1,7 @@
 <resources>
     <string-array name="receive_options">
         <item>メールアドレス</item>
-        <item>Stellarアドレス</item>
+        <item>SNCアドレス</item>
     </string-array>
     <!-- stellar -->
     <string name="stellar_address">アドレス</string>
@@ -11,6 +11,8 @@
     <string name="please_input_address">アドレスを入力してください。</string>
     <string name="address_must_be_valid">アドレスが正しくありません。</string>
     <string name="insufficient_trust_limit">送信先のアカウントのTrustlineが正しく設定されていません。</string>
+    <string name="confirm_snc_message">XLMアドレスには送信できません。SNCアドレスが正しく入力されていることを確認してください。</string>
+    <string name="memo_should_be_required">このアドレスに送信する場合はメモを入力してください。</string>
 
     <!-- general -->
     <string name="logout">ログアウト</string>

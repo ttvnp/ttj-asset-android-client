@@ -129,7 +129,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         var visibility = View.VISIBLE
         if (sendInfoModel.targetUserStrAccountID.isNotBlank()) {
             visibility = View.GONE
-            confirmDesc = getString(R.string.send_confirm_desc_format_for_stellar).format(
+            confirmDesc = getString(R.string.confirm_snc_message).format(
                     sendInfoModel.amount,
                     sendInfoModel.assetType.rawValue,
                     sendInfoModel.targetUserStrAccountID,
