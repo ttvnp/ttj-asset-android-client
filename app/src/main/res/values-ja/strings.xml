@@ -1,16 +1,18 @@
 <resources>
     <string-array name="receive_options">
         <item>メールアドレス</item>
-        <item>Stellarアドレス</item>
+        <item>SNCアドレス</item>
     </string-array>
     <!-- stellar -->
-    <string name="stellar_address">アドレス</string>
+    <string name="stellar_address">アカウントID(SNCアドレス)</string>
     <string name="memo">メモ（オプション)</string>
     <string name="str_note">備考:\tSNCとSNP以外は送信しないでください</string>
     <string name="str_memo">メモ</string>
     <string name="please_input_address">アドレスを入力してください。</string>
     <string name="address_must_be_valid">アドレスが正しくありません。</string>
     <string name="insufficient_trust_limit">送信先のアカウントのTrustlineが正しく設定されていません。</string>
+    <string name="confirm_snc_message">XLMアドレスには送信できません。SNCアドレスが正しく入力されていることを確認してください。</string>
+    <string name="memo_should_be_required">このアドレスに送信する場合はメモを入力してください。</string>
 
     <!-- general -->
     <string name="logout">ログアウト</string>
@@ -176,7 +178,7 @@
     <string name="send_confirm_desc_format_for_stellar">
         %d %s を以下のstellarアカウントに送信しますか？\nアカウントID(アドレス): %s\nメモ: %s
     </string>
-    <string name="history_accountID">アカウントID(アドレス): %s</string>
+    <string name="history_accountID">アカウントID(SNCアドレス): %s</string>
     <string name="history_memo">メモ: %s</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">受信</string>

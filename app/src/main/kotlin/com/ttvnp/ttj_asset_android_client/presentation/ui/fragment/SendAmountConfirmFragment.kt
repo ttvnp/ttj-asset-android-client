@@ -70,7 +70,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
             }
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
-        buttonSendAmountSubmit.setOnClickListener { _ ->
+        buttonSendAmountSubmit.setOnClickListener {
             userModel?.let { it ->
                 if (it.requirePasswordOnSend) {
                     if (!sendAmountConfirmPresenter.isValid(textInputPassword.text.toString())) return@setOnClickListener
