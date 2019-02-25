@@ -1,5 +1,6 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -92,7 +93,6 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
             assetType: AssetType,
             amount: Long
     ) {
-        clearError()
         val bundle = Bundle()
         val confirmFragment = SendAmountConfirmFragment.getInstance()
         val data = SendInfoBridgeData(
@@ -174,16 +174,25 @@ class SendAmountFormByStellarFragment : BaseFragment(), SendAmountFormByStellarP
                     )
             ) return@setOnClickListener
             clearError()
-            val selectedAssetType =
-                    if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
-                        AssetType.ASSET_TYPE_COIN
-                    else
-                        AssetType.ASSET_TYPE_POINT
-            val amountString = mTextSendAmount.text.toString()
-            mPresenter.checkValidationStellar(
-                    mTextInputStrAccountId.text.toString(),
-                    amountString,
-                    selectedAssetType)
+            AlertDialog.Builder(context)
+                    .setMessage(R.string.confirm_snc_message)
+                    .setPositiveButton(R.string.send_button_text) { dialog, _ ->
+                        val selectedAssetType =
+                                if (mRadioGroupSend.checkedRadioButtonId == R.id.radio_send_coin)
+                                    AssetType.ASSET_TYPE_COIN
+                                else
+                                    AssetType.ASSET_TYPE_POINT
+                        val amountString = mTextSendAmount.text.toString()
+                        mPresenter.checkValidationStellar(
+                                mTextInputStrAccountId.text.toString(),
+                                amountString,
+                                selectedAssetType)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(R.string.default_cancel_button_text, null)
+                    .create()
+                    .show()
+
         }
     }
 
