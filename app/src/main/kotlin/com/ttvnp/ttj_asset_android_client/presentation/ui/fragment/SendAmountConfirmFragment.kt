@@ -70,7 +70,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
             }
         }
         val buttonSendAmountSubmit = view.findViewById<Button>(R.id.button_send_confirm_submit)
-        buttonSendAmountSubmit.setOnClickListener { _ ->
+        buttonSendAmountSubmit.setOnClickListener {
             userModel?.let { it ->
                 if (it.requirePasswordOnSend) {
                     if (!sendAmountConfirmPresenter.isValid(textInputPassword.text.toString())) return@setOnClickListener
@@ -129,7 +129,7 @@ class SendAmountConfirmFragment : BaseFragment(), SendAmountConfirmPresenterTarg
         var visibility = View.VISIBLE
         if (sendInfoModel.targetUserStrAccountID.isNotBlank()) {
             visibility = View.GONE
-            confirmDesc = getString(R.string.confirm_snc_message).format(
+            confirmDesc = getString(R.string.send_confirm_desc_format_for_stellar).format(
                     sendInfoModel.amount,
                     sendInfoModel.assetType.rawValue,
                     sendInfoModel.targetUserStrAccountID,

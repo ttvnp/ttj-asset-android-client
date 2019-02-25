@@ -98,17 +98,18 @@ class SendAmountFormByStellarPresenterImpl @Inject constructor(
         var addressError: Int? = null
         var memoError: Int? = null
         var amountError: Int? = null
+        val isMemoRequired = (memo.isEmpty() && (address == sencoin || address == sencoinext))
         if (address.isEmpty()) {
             addressError = R.string.please_input_address
         }
-        if (memo.isEmpty() && (address == sencoin || address == sencoinext)) {
+        if (isMemoRequired) {
             memoError = R.string.memo_should_be_required
         }
         if (amount.isEmpty()) {
             amountError = R.string.error_message_invalid_long
         }
         target.onValidation(addressError, memoError, amountError)
-        return address.isNotEmpty() && amount.isNotEmpty() && (memo.isNotEmpty() && (address != sencoin || address != sencoinext))
+        return address.isNotEmpty() && amount.isNotEmpty() && !isMemoRequired
     }
 
 }
