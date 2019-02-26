@@ -185,7 +185,7 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
         refreshFragment(qrFragment)
         val sendFragment = mainActivity.adapter.getItem(MainFragmentIndex.SEND_FRAGMENT.rawValue) as MainSendFragment
         refreshFragment(sendFragment)
-        sendFragment.mainSendPresenter.setupDefault()
+        sendFragment.isIdentified = false
         mainSettingsPresenter.saveLanguage(locale.language)
         dialog.dismiss()
     }

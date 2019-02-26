@@ -28,7 +28,7 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     private lateinit var buttonSendEmail: Button
     private lateinit var buttonSendStellar: Button
 
-    private var isIdentified = false
+    var isIdentified = false
     private var isAlreadyRequested = false
 
     companion object {
