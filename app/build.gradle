@@ -83,8 +83,8 @@ android {
         prod {
             dimension "env"
             resValue "string", "app_name", "TTJ Wallet"
-            resValue "string", "sencoin_admin_address", "GDAYBQMUNW7OWJ2T5X5CPFWMJKX74DQ6N2U7IUUFOXD7RRRFZCCYLYW4"
-            resValue "string", "sencoinex_admin_address", "GBMD3M5S5XE7MCSFHME5AFRGB6NEYGNTDPHNCYIZOL7KK5CQRI3SYG6R"
+            resValue "string", "sencoin_admin_address", "GBMD3M5S5XE7MCSFHME5AFRGB6NEYGNTDPHNCYIZOL7KK5CQRI3SYG6R"
+            resValue "string", "sencoinex_admin_address", "GAJIPAQB5IWHL7RB5SPRUZNL2U653GCM6SZ77IQ36RYSP3CTVY3LHOJB"
         }
     }
 

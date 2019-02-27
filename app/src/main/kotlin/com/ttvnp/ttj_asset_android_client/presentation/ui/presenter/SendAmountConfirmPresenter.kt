@@ -29,7 +29,7 @@ class SendAmountConfirmPresenterImpl @Inject constructor(val userUseCase: UserUs
     }
 
     override fun getUserInfo() {
-        userUseCase.getUser(false)
+        userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {

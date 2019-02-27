@@ -25,7 +25,7 @@ class SettingsSecurityPresenterImpl @Inject constructor(
 
     override fun init(target: SettingsSecurityPresenterTarget) {
         this.target = target
-        userUseCase.getUser(false)
+        userUseCase.getUser(true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
