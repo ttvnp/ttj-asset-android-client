@@ -71,12 +71,12 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
 
         imageAddress = view.findViewById(R.id.image_address)
         frameAddress = view.findViewById(R.id.frame_address)
-        frameAddress.setOnClickListener { _ ->
+        frameAddress.setOnClickListener {
             isFacePhoto = false
             bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
         }
         buttonSave = view.findViewById(R.id.button_save)
-        buttonSave.setOnClickListener { it ->
+        buttonSave.setOnClickListener {
             userModel?.let {
                 if (!it.hasAllNecessaryInfo(context)) {
                     AlertDialog
