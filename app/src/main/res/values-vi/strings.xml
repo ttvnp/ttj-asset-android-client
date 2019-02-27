@@ -5,12 +5,12 @@
         <item>Bằng Địa chỉ SNC</item>
     </string-array>
     <!-- stellar -->
-    <string name="stellar_address">Địa chỉ</string>
+    <string name="stellar_address">Địa chỉ SNC</string>
     <string name="memo">Ghi chú (không bắt buộc)</string>
     <string name="str_note">Chú ý:\tkhông gửi bất kỳ cái gì trừ \"SNC\" vả \"SNP\".</string>
     <string name="str_memo">Ghi chú</string>
     <string name="please_input_address">Hãy nhập địa chỉ.</string>
-    <string name="address_must_be_valid">Địa chỉ Stellar address không đúng.</string>
+    <string name="address_must_be_valid">Địa chỉ SNC address không đúng.</string>
     <string name="insufficient_trust_limit">Mức tin tưởng phải được cài đặt ở tài khoản người nhận.</string>
     <string name="confirm_snc_message">Vui lòng đừng gửi vào địa chỉ XLM. Hãy đảm bảo rằng bạn gửi vào địa chỉ SNC.</string>
     <string name="memo_should_be_required">Vui lòng nhập Memo cho địa chỉ này.</string>
@@ -178,7 +178,7 @@
     <string name="any">%s</string>
     <string name="send_confirm_desc_format">Bạn có chắc muốn gửi %d %s tới %s?</string>
     <string name="send_confirm_desc_format_for_stellar">
-        Bạn có chắc chắn muốn gửi %d %s tới tài khoản Stellar này không?\nMã Tài Khoản(Địa chỉ): %s\nGhi chú: %s
+        Bạn có chắc chắn muốn gửi %d %s tới tài khoản Stellar này không?\n\nMã Tài Khoản(Địa chỉ): %s\n\nGhi chú: %s
     </string>
     <string name="history_accountID">Mã Tài Khoản(Địa chỉ): %s</string>
     <string name="history_memo">Ghi chú: %s</string>

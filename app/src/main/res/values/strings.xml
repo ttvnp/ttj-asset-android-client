@@ -4,7 +4,7 @@
         <item>By SNC Address</item>
     </string-array>
     <!-- stellar -->
-    <string name="stellar_address">AccountID(SNC Address)</string>
+    <string name="stellar_address">AccountID (SNC Address)</string>
     <string name="memo">Memo (optional)</string>
     <string name="str_note">Note\tDon\'t send any asset except \"SNC\" and \"SNP\".</string>
     <string name="str_memo">Memo</string>
@@ -177,9 +177,9 @@
     <string name="any">%s</string>
     <string name="send_confirm_desc_format">Are you sure you want to send %d %s to %s?</string>
     <string name="send_confirm_desc_format_for_stellar">
-        Are you sure you want to send %d %s to the following stellar account?\nAccountID(SNC Address): %s\nMemo Text: %s
+        Are you sure you want to send %d %s to the following stellar account?\n\nAccountID(SNC Address): %s\n\nMemo Text: %s
     </string>
-    <string name="history_accountID">AccountID(SNC Address): %s</string>
+    <string name="history_accountID">AccountID (SNC Address): %s</string>
     <string name="history_memo">Memo Text: %s</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">Receive Payment</string>
