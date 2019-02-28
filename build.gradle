@@ -3,7 +3,7 @@ apply from: 'dependencies.gradle'
 
 buildscript {
 
-    ext.kotlinVersion = '1.3.11'
+    ext.kotlinVersion = '1.3.20'
 
     repositories {
         google()
@@ -11,7 +11,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'io.fabric.tools:gradle:1.+'
@@ -29,8 +29,8 @@ allprojects {
 
     ext {
         androidApplicationId = "com.ttvnp.ttj_asset_android_client.simple"
-        androidVersionCode = 24
-        androidVersionName = "1.1.4"
+        androidVersionCode = 25
+        androidVersionName = "1.1.5"
 
         dataLibraryVersionCode = 1
         dataLibraryVersionName = "1.0.0"

@@ -69,16 +69,22 @@ android {
             applicationIdSuffix ".testnet"
             versionNameSuffix "-testnet"
             resValue "string", "app_name", "Local TTJ Wallet"
+            resValue "string", "sencoin_admin_address", "GCDRXAESBAQIACAPRLUU46LYYONNDRLXZ6RF6YPCQ7BLJ7EJOIEUWD5Z"
+            resValue "string", "sencoinex_admin_address", "GD3FVZAS2QLSKIR3XXZPZCP3CVTFE2VTKKR5PZLH3TUKTXGBHN3XJZSB"
         }
         dev {
             dimension "env"
             applicationIdSuffix ".testnet"
             versionNameSuffix "-testnet"
             resValue "string", "app_name", "Test TTJ Wallet"
+            resValue "string", "sencoin_admin_address", "GCDRXAESBAQIACAPRLUU46LYYONNDRLXZ6RF6YPCQ7BLJ7EJOIEUWD5Z"
+            resValue "string", "sencoinex_admin_address", "GD3FVZAS2QLSKIR3XXZPZCP3CVTFE2VTKKR5PZLH3TUKTXGBHN3XJZSB"
         }
         prod {
             dimension "env"
             resValue "string", "app_name", "TTJ Wallet"
+            resValue "string", "sencoin_admin_address", "GBMD3M5S5XE7MCSFHME5AFRGB6NEYGNTDPHNCYIZOL7KK5CQRI3SYG6R"
+            resValue "string", "sencoinex_admin_address", "GAJIPAQB5IWHL7RB5SPRUZNL2U653GCM6SZ77IQ36RYSP3CTVY3LHOJB"
         }
     }
 

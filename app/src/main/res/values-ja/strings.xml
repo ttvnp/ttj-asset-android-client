@@ -1,16 +1,18 @@
 <resources>
     <string-array name="receive_options">
         <item>メールアドレス</item>
-        <item>Stellarアドレス</item>
+        <item>SNCアドレス</item>
     </string-array>
     <!-- stellar -->
-    <string name="stellar_address">アドレス</string>
-    <string name="memo">メモ（オプション)</string>
+    <string name="stellar_address">アカウントID (SNCアドレス)</string>
+    <string name="memo">メモ (オプション)</string>
     <string name="str_note">備考:\tSNCとSNP以外は送信しないでください</string>
     <string name="str_memo">メモ</string>
     <string name="please_input_address">アドレスを入力してください。</string>
     <string name="address_must_be_valid">アドレスが正しくありません。</string>
     <string name="insufficient_trust_limit">送信先のアカウントのTrustlineが正しく設定されていません。</string>
+    <string name="confirm_snc_message">XLMアドレスには送信できません。SNCアドレスが正しく入力されていることを確認してください。</string>
+    <string name="memo_should_be_required">このアドレスに送信する場合はメモを入力してください。</string>
 
     <!-- general -->
     <string name="logout">ログアウト</string>
@@ -100,7 +102,7 @@
     <string name="hint_send_amount">送信額を設定してください</string>
     <string name="send_by_qr">QRコードをスキャンする</string>
     <string name="send_by_email">メールで送る</string>
-    <string name="send_by_stellar"> Stellarアドレス</string>
+    <string name="send_by_stellar"> SNC アドレス</string>
     <string name="send_email_form_desc">* Point/Coinの送信先メールアドレスを入力してください</string>
     <string name="send_successfully_executed">送信が完了しました。\n取引が反映されるまで少々時間が掛かりますので、暫く経ってから再度ご確認ください。</string>
     <string name="profile_successfully_updated">ユーザー情報を保存しました</string>
@@ -174,9 +176,9 @@
     <string name="any">%s</string>
     <string name="send_confirm_desc_format">%d %s を %s に送信しますか?</string>
     <string name="send_confirm_desc_format_for_stellar">
-        %d %s を以下のstellarアカウントに送信しますか？\nアカウントID(アドレス): %s\nメモ: %s
+        %d %s を以下のstellarアカウントに送信しますか？\n\nアカウントID (アドレス): %s\n\nメモ: %s
     </string>
-    <string name="history_accountID">アカウントID(アドレス): %s</string>
+    <string name="history_accountID">アカウントID(SNCアドレス): %s</string>
     <string name="history_memo">メモ: %s</string>
     <!-- Push Notification -->
     <string name="notification_title_receive_payment_notification">受信</string>

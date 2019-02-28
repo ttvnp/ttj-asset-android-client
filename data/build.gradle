@@ -54,6 +54,8 @@ android {
             dimension "env"
             buildConfigField "String", "HORIZON_URL", '"https://horizon-testnet.stellar.org"'
             buildConfigField "String", "ISSUER_ACCOUNT_ID", '"GDNIKJNWHONPWZ2C4EAUKNO3BPGLT3AR6SOQRFMN57UZYEKC4CQXXXS3"'
+            buildConfigField "String", "SENCOIN_ADMIN_ADDRESS", '"GCDRXAESBAQIACAPRLUU46LYYONNDRLXZ6RF6YPCQ7BLJ7EJOIEUWD5Z"'
+            buildConfigField "String", "SENCOINEX_ADMIN_ADDRESS", '"GD3FVZAS2QLSKIR3XXZPZCP3CVTFE2VTKKR5PZLH3TUKTXGBHN3XJZSB"'
             buildConfigField "String", "SERVER_URL", '"https://api-testnet.sencoin.com"'
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/PSAOtoTNJZvBQEZj6Y\\n" +\n' +
@@ -69,6 +71,8 @@ android {
             dimension "env"
             buildConfigField "String", "HORIZON_URL", '"https://horizon.stellar.org"'
             buildConfigField "String", "ISSUER_ACCOUNT_ID", '"GDPOR42X2YKWL74CCOLTZKWP4RZYYPN3JBYBJF4QVXHVVRQQNPX34O67"'
+            buildConfigField "String", "SENCOIN_ADMIN_ADDRESS", '"GBMD3M5S5XE7MCSFHME5AFRGB6NEYGNTDPHNCYIZOL7KK5CQRI3SYG6R"'
+            buildConfigField "String", "SENCOINEX_ADMIN_ADDRESS", '"GAJIPAQB5IWHL7RB5SPRUZNL2U653GCM6SZ77IQ36RYSP3CTVY3LHOJB"'
             buildConfigField "String", "SERVER_URL", '"https://api.sencoin.com"'
             buildConfigField "String", "SERVER_PUB_KEY", '"-----BEGIN PUBLIC KEY-----\\n" +\n' +
                     '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2RHR14zkJbNTloI1YD9c\\n" +\n' +
