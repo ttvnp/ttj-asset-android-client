@@ -11,7 +11,7 @@
     <string name="please_input_address">アドレスを入力してください。</string>
     <string name="address_must_be_valid">アドレスが正しくありません。</string>
     <string name="insufficient_trust_limit">送信先のアカウントのTrustlineが正しく設定されていません。</string>
-    <string name="confirm_snc_message">XLMアドレスには送信できません。SNCアドレスが正しく入力されていることを確認してください。</string>
+    <string name="confirm_snc_message">SNCアドレスが正しく入力されていることを確認した上で、送信ボタンを押してください。\n\n<font fgcolor='#FFFF3B30'>※XMLアドレスには送信できません。</font></string>
     <string name="memo_should_be_required">このアドレスに送信する場合はメモを入力してください。</string>
 
     <!-- general -->
