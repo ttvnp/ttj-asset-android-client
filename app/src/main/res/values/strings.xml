@@ -11,7 +11,7 @@
     <string name="please_input_address">Please input address.</string>
     <string name="address_must_be_valid">The address is invalid. Please input the correct address.</string>
     <string name="insufficient_trust_limit">Trustline must be set at receiving account.</string>
-    <string name="confirm_snc_message">Don\'t send coins to XLM address. Please make sure to send to SNC address.</string>
+    <string name="confirm_snc_message">Please make sure to input SNC address correctly and tap SEND button.\n\n<font fgcolor='#FFFF3B30'>* You can not send any assets to XLM address.</font></string>
     <string name="memo_should_be_required">Memo is required for this address.</string>
 
     <!-- general -->
@@ -37,9 +37,7 @@
     <string name="please_input_retype_password">Please input Retype password.</string>
     <string name="old_password_is_not_correct">Password is not correct.</string>
     <string name="new_passwords_are_not_matched">New passwords are not matched.</string>
-    <string name="password_should_be_than_6_characters_or_numbers">
-        Password should be more than 6 characters or numbers.
-    </string>
+    <string name="password_should_be_than_6_characters_or_numbers">Password should be more than 6 characters or numbers.</string>
     <string name="it_has_some_undefined_characters">It has some undefined characters.</string>
 
     <!-- upload id document -->
@@ -132,7 +130,7 @@
     <string name="error_cannot_self_send">You cannot send to yourself.</string>
     <string name="error_cannot_send_that_amount">You cannot send that much.</string>
     <string name="error_message_no_such_email_address_user">Sorry. There is no such user account related with the email address.</string>
-    <string name="error_message_invalid_long">please input valid number of amount.</string>
+    <string name="error_message_invalid_long">Please input valid number of amount.</string>
     <string name="error_permission_denied">Cannot activate camera or choose picture from folder. Please grant authorities to this app.</string>
 
     <!-- button -->
