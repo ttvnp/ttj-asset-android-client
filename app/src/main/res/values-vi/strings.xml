@@ -12,7 +12,7 @@
     <string name="please_input_address">Hãy nhập địa chỉ.</string>
     <string name="address_must_be_valid">Địa chỉ SNC address không đúng.</string>
     <string name="insufficient_trust_limit">Mức tin tưởng phải được cài đặt ở tài khoản người nhận.</string>
-    <string name="confirm_snc_message">Vui lòng đừng gửi vào địa chỉ XLM. Hãy đảm bảo rằng bạn gửi vào địa chỉ SNC.</string>
+    <string name="confirm_snc_message">Vui lòng kiểm tra lại địa chỉ SNC đã chính xác chưa và bấm Gửi.\n\n<font fgcolor='#FFFF3B30'>* Bạn không thể gửi vào địa chỉ XLM.</font></string>
     <string name="memo_should_be_required">Vui lòng nhập Memo cho địa chỉ này.</string>
 
     <!-- general -->
