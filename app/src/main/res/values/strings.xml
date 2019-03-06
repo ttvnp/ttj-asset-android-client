@@ -37,9 +37,7 @@
     <string name="please_input_retype_password">Please input Retype password.</string>
     <string name="old_password_is_not_correct">Password is not correct.</string>
     <string name="new_passwords_are_not_matched">New passwords are not matched.</string>
-    <string name="password_should_be_than_6_characters_or_numbers">
-        Password should be more than 6 characters or numbers.
-    </string>
+    <string name="password_should_be_than_6_characters_or_numbers">Password should be more than 6 characters or numbers.</string>
     <string name="it_has_some_undefined_characters">It has some undefined characters.</string>
 
     <!-- upload id document -->
