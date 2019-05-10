@@ -84,7 +84,6 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
 
         mainHomePresenter.setupUserInfo(false)
         mainHomePresenter.setupBalanceInfo(true)
-        mainHomePresenter.setupUserTransactions(true)
 
         val swipeLayoutRefreshListener: () -> Unit = fun() {
             Handler().postDelayed({
@@ -130,6 +129,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     override fun bindBalanceInfo(balancesModel: BalancesModel) {
         textPointAmount?.text = balancesModel.pointBalance.amount.formatString()
         textCoinAmount?.text = balancesModel.coinBalance.amount.formatString()
+        mainHomePresenter.setupUserTransactions(true)
     }
 
     override fun bindUserTransactions(userTransactionsModel: UserTransactionsModel, forceRefresh: Boolean) {
