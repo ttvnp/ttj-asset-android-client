@@ -113,13 +113,15 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             updateDOB()
         }
         textDOB.setOnClickListener {
-            DatePickerDialog(
-                    context,
-                    date,
-                    1990,
-                    0,
-                    1)
-                    .show()
+            context?.let {
+                DatePickerDialog(
+                        it,
+                        date,
+                        1990,
+                        0,
+                        1)
+                        .show()
+            }
         }
         val buttonProfileSave = view.findViewById<Button>(R.id.button_profile_save)
 
@@ -252,14 +254,16 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             data?.data
         }) ?: return
         val imageRequiredSize = 72
-        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
-        profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
-        Glide.with(context).load(uri).into(profileImage)
+        decodeUri(uri = uri, requiredSize = imageRequiredSize)?.let {
+            val bitmap = getResultImage(it, getPath(uri = uri))
+            profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
+            Glide.with(context).load(uri).into(profileImage)
 
-        // close modal
-        if (!bottomSheetDialogFragment.isHidden) {
-            bottomSheetDialogFragment.dismiss()
-            pictureUri = null
+            // close modal
+            if (!bottomSheetDialogFragment.isHidden) {
+                bottomSheetDialogFragment.dismiss()
+                pictureUri = null
+            }
         }
     }
 
