@@ -140,17 +140,19 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         }
 
         val imageRequiredSize = 800
-        val bitmap = getResultImage(decodeUri(uri = uri, requiredSize = imageRequiredSize), getPath(uri = uri))
-        if (isFacePhoto) {
-            facePhotoFile = createUploadFile(context, bitmap, TMP_FILE_NAME_FACE)
-            Glide.with(context).load(uri).into(imageFacePhoto)
-            hasPhotos()
-            return
-        }
+        decodeUri(uri = uri, requiredSize = imageRequiredSize)?.let {
+            val bitmap = getResultImage(it, getPath(uri = uri))
+            if (isFacePhoto) {
+                facePhotoFile = createUploadFile(context, bitmap, TMP_FILE_NAME_FACE)
+                Glide.with(context).load(uri).into(imageFacePhoto)
+                hasPhotos()
+                return
+            }
 
-        addressFile = createUploadFile(context, bitmap, TMP_FILE_NAME_ADDRESS)
-        Glide.with(context).load(uri).into(imageAddress)
-        hasPhotos()
+            addressFile = createUploadFile(context, bitmap, TMP_FILE_NAME_ADDRESS)
+            Glide.with(context).load(uri).into(imageAddress)
+            hasPhotos()
+        }
     }
 
     override fun setDocumentID(userModel: UserModel) {
