@@ -3,13 +3,12 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
+import com.google.android.material.tabs.TabLayout
+import androidx.viewpager.widget.ViewPager
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import com.google.firebase.crash.FirebaseCrash
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.zxing.integration.android.IntentIntegrator
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.adapter.MainViewPageAdapter
@@ -23,14 +22,14 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.DeviceTokenU
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class MainActivity : BaseActivity(), HasSupportFragmentInjector {
+class MainActivity : BaseActivity(), HasAndroidInjector {
 
     @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
     @Inject
     lateinit var deviceTokenUpdater : DeviceTokenUpdater
@@ -82,10 +81,12 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     }
 
     override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
         handleNotified()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents != null) {
@@ -123,7 +124,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
                     Toast.LENGTH_LONG
             ).show()
         } catch (e: Throwable) {
-            FirebaseCrash.report(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 }

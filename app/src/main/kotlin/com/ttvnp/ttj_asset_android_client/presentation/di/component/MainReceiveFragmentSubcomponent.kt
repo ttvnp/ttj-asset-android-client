@@ -7,12 +7,12 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainReceiveFr
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         FragmentModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 interface MainReceiveFragmentSubcomponent : AndroidInjector<MainReceiveFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<MainReceiveFragment>() {}
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<MainReceiveFragment>
 }

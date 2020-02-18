@@ -1,22 +1,16 @@
 package com.ttvnp.ttj_asset_android_client.presentation
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Service
 import android.content.Context
-import android.support.multidex.MultiDexApplication
-import com.crashlytics.android.Crashlytics
+import androidx.multidex.MultiDexApplication
 import com.ttvnp.ttj_asset_android_client.presentation.di.component.DaggerApplicationComponent
 import com.ttvnp.ttj_asset_android_client.presentation.di.module.ApplicationModule
-import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasServiceInjector
-import io.fabric.sdk.android.Fabric
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
 
-open class AndroidApplication: MultiDexApplication(), HasActivityInjector, HasServiceInjector {
+open class AndroidApplication: MultiDexApplication(), HasAndroidInjector {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -24,12 +18,9 @@ open class AndroidApplication: MultiDexApplication(), HasActivityInjector, HasSe
     }
 
     @Inject
-    lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
-    override fun activityInjector(): AndroidInjector<Activity> = dispatchingActivityInjector
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    override fun androidInjector() = androidInjector
 
-    @Inject
-    lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
-    override fun serviceInjector(): AndroidInjector<Service> = dispatchingServiceInjector
 
     override fun onCreate() {
         super.onCreate()
@@ -37,8 +28,6 @@ open class AndroidApplication: MultiDexApplication(), HasActivityInjector, HasSe
                 .applicationModule(ApplicationModule(this))
                 .build()
                 .inject(this)
-        Fabric.with(this, Crashlytics())
-
         context = applicationContext
     }
 

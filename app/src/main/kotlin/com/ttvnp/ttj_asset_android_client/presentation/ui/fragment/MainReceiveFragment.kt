@@ -41,7 +41,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         mainReceivePresenter.init(this)
@@ -65,7 +65,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
             val intent = Intent(activity, ReceiveSetAmountActivity::class.java)
             activity?.startActivityForResult(intent, RequestCode.SET_AMOUNT_ACTIVITY.rawValue)
         }
-        val spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.receive_options, android.R.layout.simple_spinner_item)
+        val spinnerAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.receive_options, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mReceiveOptionSpinner.adapter = spinnerAdapter
         mReceiveOptionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

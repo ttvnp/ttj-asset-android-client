@@ -3,17 +3,17 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SettingsProfileDetailFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
+class SettingsProfileActivity : BaseActivity(), HasAndroidInjector {
 
     companion object {
         fun start(context: Context?) {
@@ -23,9 +23,8 @@ class SettingsProfileActivity : BaseActivity(), HasSupportFragmentInjector {
     }
 
     @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
     lateinit var toolbar: Toolbar
         private set

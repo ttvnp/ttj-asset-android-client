@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +55,7 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         mainHomePresenter.init(this)
@@ -120,10 +120,11 @@ class MainHomeFragment : BaseMainFragment(), MainHomePresenterTarget {
     override fun bindUserInfo(userModel: UserModel) {
         textEmailAddress?.text = userModel.emailAddress
         if (userModel.profileImageURL.isEmpty()) return
-        Glide
-                .with(this.context)
-                .load(userModel.profileImageURL)
-                .into(profileImage)
+        this.context?.let { context ->
+            profileImage?.let { imageView ->
+                Glide.with(context).load(userModel.profileImageURL).into(imageView)
+            }
+        }
     }
 
     override fun bindBalanceInfo(balancesModel: BalancesModel) {

@@ -1,8 +1,8 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
 class TutorialViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
@@ -12,5 +12,5 @@ class TutorialViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getCount(): Int = fragments.size
 
-    override fun getItem(position: Int): Fragment? = fragments[position]
+    override fun getItem(position: Int): Fragment = fragments[position]
 }
