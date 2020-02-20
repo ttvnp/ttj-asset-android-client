@@ -141,7 +141,9 @@ workflows:
       - beta:
           filters:
             branches:
-              only: develop
+              only:
+                - develop
+                - issue252
       - preprod:
           filters:
             branches:
