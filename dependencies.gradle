@@ -89,7 +89,6 @@ ext {
             firebaseMessaging: "com.google.firebase:firebase-messaging:${googleServiceVersion}",
             firebaseCore: "com.google.firebase:firebase-core:${firebaseCoreVersion}",
             firebaseCrashlytics: "com.google.firebase:firebase-crashlytics:${firebaseCrashlyticsVersion}",
-            firebaseCrashlyticsNdk: "com.google.firebase:firebase-crashlytics-ndk:${firebaseCrashlyticsVersion}",
             firebaseAnalytics: "com.google.firebase:firebase-analytics:${firebaseAnalyticsVersion}",
             zxingCore: "com.google.zxing:core:${zxingCoreVersion}",
     ]

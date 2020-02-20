@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.BaseMainFragment
 
-class MainViewPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class MainViewPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val fragments: MutableList<BaseMainFragment> = mutableListOf()
 

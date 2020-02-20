@@ -8,7 +8,6 @@ platform :android do
   desc "Submit a new Dev Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "assembleDevRelease")
-    # gradle(task: "uploadCrashlyticsSymbolFileDevRelease")
     firebase_app_distribution(
       app: ENV['FIREBASE_TEST_APP_ID'],
       firebase_cli_token: ENV['FIREBASE_TOKEN'],

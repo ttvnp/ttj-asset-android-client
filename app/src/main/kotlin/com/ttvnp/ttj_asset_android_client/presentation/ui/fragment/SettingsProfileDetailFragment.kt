@@ -77,7 +77,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
                     ?.commit()
         }
         buttonProfileEdit = view.findViewById(R.id.button_profile_edit)
-        buttonProfileEdit.visibility = INVISIBLE
+        buttonProfileEdit.hide()
         buttonProfileEdit.setOnClickListener {
             val editFragment = SettingsProfileEditFragment.getInstance()
             fragmentManager
@@ -126,7 +126,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
     private fun checkIdentificationStatus(status: IdentificationStatus) {
         val value: String
         buttonUploadDocumentID.isEnabled = true
-        buttonProfileEdit.visibility = VISIBLE
+        buttonProfileEdit.show()
 
         when (status) {
             IdentificationStatus.Applied -> {
