@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

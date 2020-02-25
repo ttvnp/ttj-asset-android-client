@@ -2,7 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -45,7 +45,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         settingsProfileDetailPresenter.initialize(this)
@@ -77,7 +77,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
                     ?.commit()
         }
         buttonProfileEdit = view.findViewById(R.id.button_profile_edit)
-        buttonProfileEdit.visibility = INVISIBLE
+        buttonProfileEdit.hide()
         buttonProfileEdit.setOnClickListener {
             val editFragment = SettingsProfileEditFragment.getInstance()
             fragmentManager
@@ -105,10 +105,9 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
 
     override fun bindUserInfo(userModel: UserModel) {
         if (userModel.profileImageURL.isNotEmpty()) {
-            Glide
-                    .with(this.context)
-                    .load(userModel.profileImageURL)
-                    .into(profileImage)
+            this.context?.let { context ->
+                Glide.with(context).load(userModel.profileImageURL).into(profileImage)
+            }
         }
 
         val notSet = getString(R.string.not_set)
@@ -127,7 +126,7 @@ class SettingsProfileDetailFragment : BaseFragment(), SettingsProfileDetailPrese
     private fun checkIdentificationStatus(status: IdentificationStatus) {
         val value: String
         buttonUploadDocumentID.isEnabled = true
-        buttonProfileEdit.visibility = VISIBLE
+        buttonProfileEdit.show()
 
         when (status) {
             IdentificationStatus.Applied -> {

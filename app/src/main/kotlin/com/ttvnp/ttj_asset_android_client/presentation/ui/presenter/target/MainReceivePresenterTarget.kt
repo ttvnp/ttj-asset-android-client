@@ -5,5 +5,6 @@ import com.ttvnp.ttj_asset_android_client.domain.model.StellarAccountModel
 interface MainReceivePresenterTarget : BasePresenterTarget {
     fun setQRCode(qrText: String)
     fun onGettingStellarAccount(stellarAccountModel: StellarAccountModel)
-    fun onError()
+    fun preRequest()
+    fun postRequest()
 }

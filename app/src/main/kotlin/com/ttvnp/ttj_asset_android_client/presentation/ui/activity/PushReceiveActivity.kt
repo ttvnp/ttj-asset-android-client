@@ -2,7 +2,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.NotificationType
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeDataFactory
@@ -20,6 +20,7 @@ class PushReceiveActivity : AppCompatActivity() {
     }
 
     override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
         handle()
     }
 

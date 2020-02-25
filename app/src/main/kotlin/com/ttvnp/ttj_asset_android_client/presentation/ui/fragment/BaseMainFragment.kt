@@ -3,6 +3,7 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.fragment
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.CursorLoader
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -12,7 +13,7 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
+import androidx.core.app.ActivityCompat
 import android.text.TextUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -21,11 +22,7 @@ import java.io.IOException
 
 abstract class BaseMainFragment : BaseFragment() {
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
-    fun decodeUri(uri: Uri, requiredSize: Int): Bitmap {
+    fun decodeUri(uri: Uri, requiredSize: Int): Bitmap? {
         // Make a bitmap to get original sizes
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
@@ -118,8 +115,7 @@ abstract class BaseMainFragment : BaseFragment() {
         val exif = ExifInterface(path)
         val rotation = exif.getAttribute(ExifInterface.TAG_ORIENTATION)
         if (!TextUtils.isEmpty(rotation)) {
-            val param = rotation.toInt()
-            when (param) {
+            when (rotation.toInt()) {
                 ExifInterface.ORIENTATION_NORMAL -> {
                     return getRotatedImage(bitmap, 0f)
                 }
@@ -142,10 +138,11 @@ abstract class BaseMainFragment : BaseFragment() {
         var cursor: Cursor? = null
         return try {
             val projection = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = context?.contentResolver?.query(uri, projection, null, null, null)
-            val index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            val loader = CursorLoader(context, uri, projection, null, null, null)
+            cursor = loader.loadInBackground()
+            val index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             cursor?.moveToFirst()
-            cursor?.getString(index ?: 0).toString()
+            cursor?.getString(index).toString()
         } finally {
             cursor?.close()
         }

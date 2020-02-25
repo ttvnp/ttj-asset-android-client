@@ -1,1 +1,3 @@
-- Updated messages to make sure to send to SNC address
+- Upgrade app internal libraries and related codes.
+  - Migrate fabric to firebase.
+  - Migrate to AndroidX.
