@@ -7,12 +7,12 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendAmountCon
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         FragmentModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 interface SendAmountConfirmFragmentSubcomponent : AndroidInjector<SendAmountConfirmFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<SendAmountConfirmFragment>() {}
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<SendAmountConfirmFragment>
 }

@@ -93,7 +93,7 @@
                             android:background="@drawable/dot_vertical"
                             android:layerType="software" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/image_face_photo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -115,7 +115,7 @@
                         android:text="@string/sample"
                         android:textColor="@color/md_black_1000" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="89dp"
                         android:layout_height="125dp"
                         android:layout_gravity="center_vertical"
@@ -206,7 +206,7 @@
                             android:background="@drawable/dot_vertical"
                             android:layerType="software" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/image_address"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -231,7 +231,7 @@
                         android:text="@string/sample"
                         android:textColor="@color/md_black_1000" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="82dp"
                         android:layout_height="125dp"
                         android:src="@drawable/passport_sample_address" />

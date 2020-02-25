@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.presenter
 
 import android.util.Log
-import com.google.firebase.crash.FirebaseCrash
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.ttvnp.ttj_asset_android_client.domain.model.DeviceModel
 import com.ttvnp.ttj_asset_android_client.domain.model.ModelWrapper
@@ -23,30 +23,30 @@ class DeviceTokenUpdater @Inject constructor(val deviceUseCase: DeviceUseCase) {
                 .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
                     override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
                         wrapper.model?.let {
-                            if (it.deviceToken.isBlank() || it.deviceToken != FirebaseInstanceId.getInstance().getToken()) {
-                                updateDeviceToken()
+                            val task = FirebaseInstanceId.getInstance().instanceId
+                            task.addOnSuccessListener { token ->
+                                if (it.deviceToken.isBlank() || it.deviceToken != token.token) {
+                                    updateDeviceToken(token.token)
+                                }
                             }
                         }
                     }
                     override fun onError(e: Throwable) {
-                        FirebaseCrash.report(e)
+                        FirebaseCrashlytics.getInstance().recordException(e)
                     }
                 }).addTo(disposables)
     }
 
-    fun updateDeviceToken() {
-        val refreshedToken = FirebaseInstanceId.getInstance().getToken()
-        refreshedToken?.let { deviceToken ->
-            deviceUseCase.updateDeviceToken(deviceToken)
-                    .subscribeOn(Schedulers.io())
-                    .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
-                        override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
-                            Log.d(javaClass.name, "Refreshed token: " + deviceToken)
-                        }
-                        override fun onError(e: Throwable) {
-                            FirebaseCrash.report(e)
-                        }
-                    }).addTo(disposables)
-        }
+    fun updateDeviceToken(token: String) {
+        deviceUseCase.updateDeviceToken(token)
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(object : DisposableSingleObserver<ModelWrapper<DeviceModel?>>() {
+                    override fun onSuccess(wrapper: ModelWrapper<DeviceModel?>) {
+                        Log.d(javaClass.name, "Refreshed token: ${token}")
+                    }
+                    override fun onError(e: Throwable) {
+                        FirebaseCrashlytics.getInstance().recordException(e)
+                    }
+                }).addTo(disposables)
     }
 }

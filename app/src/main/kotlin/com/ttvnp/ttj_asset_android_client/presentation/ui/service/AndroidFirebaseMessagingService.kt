@@ -2,29 +2,46 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.service
 
 import android.app.*
 import android.content.Context
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import android.content.Intent
-import android.support.v4.content.ContextCompat
-import com.google.firebase.crash.FirebaseCrash
+import androidx.core.content.ContextCompat
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.ttvnp.ttj_asset_android_client.presentation.R
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.PushReceiveActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeData
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.PushNotificationBridgeDataFactory
 import com.ttvnp.ttj_asset_android_client.presentation.ui.data.RequestCode
+import com.ttvnp.ttj_asset_android_client.presentation.ui.presenter.DeviceTokenUpdater
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 
 class AndroidFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var deviceTokenUpdater : DeviceTokenUpdater
 
     companion object {
         private val DEFAULT_CHANNEL_ID = "default_channel"
         private val DEFAULT_NOTIFICATION_ID = 1
     }
 
+    override fun onCreate() {
+        AndroidInjection.inject(this)
+        super.onCreate()
+    }
+
+    override fun onNewToken(token: String?) {
+        token?.let { deviceToken ->
+            deviceTokenUpdater.updateDeviceToken(deviceToken)
+        }
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
-        val clickAction: String = remoteMessage.notification.clickAction?:""
+        val clickAction: String = remoteMessage.notification?.clickAction?:""
         val targetActivity: Class<out Activity>
         when (clickAction) {
             PushReceiveActivity.PUSH_NOTIFICATION_ACTION -> targetActivity = PushReceiveActivity::class.java
@@ -39,26 +56,26 @@ class AndroidFirebaseMessagingService : FirebaseMessagingService() {
                     if (result != 0) id = result
                 }
             } catch (t: Throwable) {
-                FirebaseCrash.log("push: invalid resource key string " + name + " was detected.")
+                FirebaseCrashlytics.getInstance().log("push: invalid resource key string ${name} was detected.")
             }
             id
         }
-        val titleKeyID = getStringResourceIDByName(remoteMessage.notification.titleLocalizationKey)?:R.string.any
-        val titleArgs = remoteMessage.notification.titleLocalizationArgs?: arrayOf(remoteMessage.notification.title?:getString(R.string.app_name))
+        val titleKeyID = getStringResourceIDByName(remoteMessage.notification?.titleLocalizationKey)?:R.string.any
+        val titleArgs = remoteMessage.notification?.titleLocalizationArgs?: arrayOf(remoteMessage.notification?.title?:getString(R.string.app_name))
         var title = ""
         try {
             title = getString(titleKeyID, *titleArgs)
         } catch (e: Throwable) {
-            FirebaseCrash.report(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
 
-        val bodyKeyID = getStringResourceIDByName(remoteMessage.notification.bodyLocalizationKey)?:R.string.any
-        val bodyArgs = remoteMessage.notification.bodyLocalizationArgs?: arrayOf(remoteMessage.notification.body?:"")
+        val bodyKeyID = getStringResourceIDByName(remoteMessage.notification?.bodyLocalizationKey)?:R.string.any
+        val bodyArgs = remoteMessage.notification?.bodyLocalizationArgs?: arrayOf(remoteMessage.notification?.body?:"")
         var body = ""
         try {
             body = getString(bodyKeyID, *bodyArgs)
         } catch (e: Throwable) {
-            FirebaseCrash.report(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
 
         val data = remoteMessage.data

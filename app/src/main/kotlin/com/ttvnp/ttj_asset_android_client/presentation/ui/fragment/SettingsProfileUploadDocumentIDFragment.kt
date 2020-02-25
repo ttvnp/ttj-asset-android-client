@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +49,7 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         const val TMP_FILE_NAME_ADDRESS = "tmp_id_address_image"
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         settingsProfileUploadDocumentIDPresenter.init(this)
@@ -66,14 +66,14 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
         frameFacePhoto = view.findViewById(R.id.frame_face_photo)
         frameFacePhoto.setOnClickListener { _ ->
             isFacePhoto = true
-            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
+            bottomSheetDialogFragment.show(requireFragmentManager(), bottomSheetDialogFragment.tag)
         }
 
         imageAddress = view.findViewById(R.id.image_address)
         frameAddress = view.findViewById(R.id.frame_address)
         frameAddress.setOnClickListener {
             isFacePhoto = false
-            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
+            bottomSheetDialogFragment.show(requireFragmentManager(), bottomSheetDialogFragment.tag)
         }
         buttonSave = view.findViewById(R.id.button_save)
         buttonSave.setOnClickListener {
@@ -144,13 +144,13 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
             val bitmap = getResultImage(it, getPath(uri = uri))
             if (isFacePhoto) {
                 facePhotoFile = createUploadFile(context, bitmap, TMP_FILE_NAME_FACE)
-                Glide.with(context).load(uri).into(imageFacePhoto)
+                Glide.with(requireContext()).load(uri).into(imageFacePhoto)
                 hasPhotos()
                 return
             }
 
             addressFile = createUploadFile(context, bitmap, TMP_FILE_NAME_ADDRESS)
-            Glide.with(context).load(uri).into(imageAddress)
+            Glide.with(requireContext()).load(uri).into(imageAddress)
             hasPhotos()
         }
     }
@@ -158,10 +158,10 @@ class SettingsProfileUploadDocumentIDFragment : BaseMainFragment(), SettingsProf
     override fun setDocumentID(userModel: UserModel) {
         this.userModel = userModel
         if (userModel.isDocument1ImageURL.isNotBlank()) {
-            Glide.with(this.context).load(userModel.isDocument1ImageURL).into(imageFacePhoto)
+            Glide.with(requireContext()).load(userModel.isDocument1ImageURL).into(imageFacePhoto)
         }
         if (userModel.isDocument2ImageURL.isNotBlank()) {
-            Glide.with(this.context).load(userModel.isDocument2ImageURL).into(imageAddress)
+            Glide.with(requireContext()).load(userModel.isDocument2ImageURL).into(imageAddress)
         }
     }
 

@@ -1,4 +1,4 @@
-fastlane_version "2.64.1"
+fastlane_version "2.66.0"
 default_platform :android
 
 platform :android do
@@ -8,10 +8,10 @@ platform :android do
   desc "Submit a new Dev Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "assembleDevRelease")
-    crashlytics(
-      api_token: ENV['CRASHLYTICS_API_KEY'],
-      build_secret: ENV['CRASHLYTICS_SECRET'],
-      notes_path: "release_notes.txt",
+    firebase_app_distribution(
+      app: ENV['FIREBASE_TEST_APP_ID'],
+      firebase_cli_token: ENV['FIREBASE_TOKEN'],
+      release_notes_file: "release_notes.txt",
       groups: "ttj-asset-android-client",
     )
   end
@@ -19,10 +19,10 @@ platform :android do
   desc "Submit a new Prod Build to Crashlytics Beta"
   lane :preprod do
     gradle(task: "assembleProdRelease")
-    crashlytics(
-      api_token: ENV['CRASHLYTICS_API_KEY'],
-      build_secret: ENV['CRASHLYTICS_SECRET'],
-      notes_path: "release_notes.txt",
+    firebase_app_distribution(
+      app: ENV['FIREBASE_LIVE_APP_ID'],
+      firebase_cli_token: ENV['FIREBASE_TOKEN'],
+      release_notes_file: "release_notes.txt",
       groups: "ttj-asset-android-client",
     )
   end

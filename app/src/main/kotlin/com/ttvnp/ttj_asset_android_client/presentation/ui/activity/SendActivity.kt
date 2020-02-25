@@ -3,8 +3,8 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import android.view.View
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoModel
 import com.ttvnp.ttj_asset_android_client.domain.model.QRCodeInfoStellarInfoModel
@@ -18,15 +18,14 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SendEmailForm
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class SendActivity : BaseActivity(), HasSupportFragmentInjector {
+class SendActivity : BaseActivity(), HasAndroidInjector {
 
     @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
     companion object {
         const val INTENT_EXTRA_KEY = "qr_string"

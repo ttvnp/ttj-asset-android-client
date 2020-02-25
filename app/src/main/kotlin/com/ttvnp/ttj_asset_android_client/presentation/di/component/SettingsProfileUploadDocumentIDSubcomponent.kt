@@ -7,13 +7,13 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.SettingsProfi
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         FragmentModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 
 interface SettingsProfileUploadDocumentIDSubcomponent : AndroidInjector<SettingsProfileUploadDocumentIDFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<SettingsProfileUploadDocumentIDFragment>()
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<SettingsProfileUploadDocumentIDFragment>
 }

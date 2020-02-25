@@ -3,8 +3,8 @@ package com.ttvnp.ttj_asset_android_client.presentation.ui.activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.webkit.WebView
 import com.ttvnp.ttj_asset_android_client.domain.model.ErrorCode

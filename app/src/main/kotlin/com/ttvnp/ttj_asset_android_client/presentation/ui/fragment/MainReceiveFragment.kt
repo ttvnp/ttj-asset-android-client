@@ -26,8 +26,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
     @Inject
     lateinit var mainReceivePresenter: MainReceivePresenter
 
-    private var isAlreadyRequested = false
-
     private lateinit var buttonSetAmount: Button
     private lateinit var imageQRCode: ImageView
     private lateinit var mReceiveOptionSpinner: Spinner
@@ -41,7 +39,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         mainReceivePresenter.init(this)
@@ -65,7 +63,7 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
             val intent = Intent(activity, ReceiveSetAmountActivity::class.java)
             activity?.startActivityForResult(intent, RequestCode.SET_AMOUNT_ACTIVITY.rawValue)
         }
-        val spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.receive_options, android.R.layout.simple_spinner_item)
+        val spinnerAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.receive_options, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mReceiveOptionSpinner.adapter = spinnerAdapter
         mReceiveOptionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -75,7 +73,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
             }
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (!isAlreadyRequested) return
                 if (position == 0) {
                     mainReceivePresenter.getUserInfo()
                     buttonSetAmount.visibility = View.VISIBLE
@@ -95,15 +92,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         mainReceivePresenter.dispose()
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (!isVisibleToUser) return
-        if (isAlreadyRequested) return
-        mainReceivePresenter.getUserInfo()
-        buttonSetAmount.visibility = View.VISIBLE
-        mTextByStellarContainer.visibility = View.GONE
-    }
-
     @SuppressLint("SetTextI18n")
     override fun onGettingStellarAccount(stellarAccountModel: StellarAccountModel) {
         mTextStellarAccountId.text = getString(R.string.stellar_address) + "\t" + stellarAccountModel.strAccountID
@@ -111,7 +99,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
     }
 
     override fun setQRCode(qrText: String) {
-        isAlreadyRequested = true
         val qrCode = Encoder.encode(qrText, ErrorCorrectionLevel.H)
         val byteMatrix = qrCode.matrix
         var bitmap = Bitmap.createBitmap(byteMatrix.width, byteMatrix.height, Bitmap.Config.ARGB_8888)
@@ -127,8 +114,16 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         }
     }
 
-    override fun onError() {
-        isAlreadyRequested = false
+    override fun preRequest() {
+        showProgressDialog()
+        mReceiveOptionSpinner.isEnabled = false
+        mReceiveOptionSpinner.isClickable = false
+    }
+
+    override fun postRequest() {
+        mReceiveOptionSpinner.isEnabled = true
+        mReceiveOptionSpinner.isClickable = true
+        dismissProgressDialog()
     }
 
 }

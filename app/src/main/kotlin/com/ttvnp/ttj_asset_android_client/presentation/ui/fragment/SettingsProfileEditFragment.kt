@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.TextInputEditText
-import android.support.design.widget.TextInputLayout
-import android.support.v4.content.ContextCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import androidx.core.content.ContextCompat
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +71,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         settingsProfileEditPresenter.initialize(this)
@@ -146,7 +146,7 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
             pictureUri = checkPermission(requestCode, isCamera)
         })
         buttonProfileImageEdit.setOnClickListener {
-            bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.tag)
+            bottomSheetDialogFragment.show(requireFragmentManager(), bottomSheetDialogFragment.tag)
         }
 
         buttonProfileSave.setOnClickListener {
@@ -257,7 +257,9 @@ class SettingsProfileEditFragment : BaseMainFragment(), SettingsProfileEditPrese
         decodeUri(uri = uri, requiredSize = imageRequiredSize)?.let {
             val bitmap = getResultImage(it, getPath(uri = uri))
             profileImageFile = createUploadFile(context, bitmap, TMP_FILE_NAME)
-            Glide.with(context).load(uri).into(profileImage)
+            context?.let { c ->
+                Glide.with(c).load(uri).into(profileImage)
+            }
 
             // close modal
             if (!bottomSheetDialogFragment.isHidden) {

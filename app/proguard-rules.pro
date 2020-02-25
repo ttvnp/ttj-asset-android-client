@@ -19,6 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
 
 # for picasso
 #   https://github.com/square/picasso#proguard
@@ -61,3 +64,7 @@
 # ok
 -dontwarn okhttp3.**
 -dontwarn okio.**
+
+# for crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
