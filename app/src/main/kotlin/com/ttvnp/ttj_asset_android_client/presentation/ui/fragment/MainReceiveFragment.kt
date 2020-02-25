@@ -26,8 +26,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
     @Inject
     lateinit var mainReceivePresenter: MainReceivePresenter
 
-    private var isAlreadyRequested = false
-
     private lateinit var buttonSetAmount: Button
     private lateinit var imageQRCode: ImageView
     private lateinit var mReceiveOptionSpinner: Spinner
@@ -75,7 +73,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
             }
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (!isAlreadyRequested) return
                 if (position == 0) {
                     mainReceivePresenter.getUserInfo()
                     buttonSetAmount.visibility = View.VISIBLE
@@ -98,7 +95,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (!isVisibleToUser) return
-        if (isAlreadyRequested) return
         mainReceivePresenter.getUserInfo()
         buttonSetAmount.visibility = View.VISIBLE
         mTextByStellarContainer.visibility = View.GONE
@@ -111,7 +107,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
     }
 
     override fun setQRCode(qrText: String) {
-        isAlreadyRequested = true
         val qrCode = Encoder.encode(qrText, ErrorCorrectionLevel.H)
         val byteMatrix = qrCode.matrix
         var bitmap = Bitmap.createBitmap(byteMatrix.width, byteMatrix.height, Bitmap.Config.ARGB_8888)
@@ -127,8 +122,16 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         }
     }
 
-    override fun onError() {
-        isAlreadyRequested = false
+    override fun preRequest() {
+        showProgressDialog()
+        mReceiveOptionSpinner.isEnabled = false;
+        mReceiveOptionSpinner.isClickable = false;
+    }
+
+    override fun postRequest() {
+        mReceiveOptionSpinner.isEnabled = true;
+        mReceiveOptionSpinner.isClickable = true;
+        dismissProgressDialog()
     }
 
 }
