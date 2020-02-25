@@ -143,7 +143,6 @@ workflows:
             branches:
               only:
                 - develop
-                - issue252
       - preprod:
           filters:
             branches:
