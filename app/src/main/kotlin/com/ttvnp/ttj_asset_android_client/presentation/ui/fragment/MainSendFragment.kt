@@ -29,7 +29,6 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
     private lateinit var buttonSendStellar: Button
 
     var isIdentified = false
-    private var isAlreadyRequested = false
 
     companion object {
         fun getInstance(): MainSendFragment {
@@ -77,18 +76,12 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         mainSendPresenter.dispose()
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (!isVisibleToUser) return
-        if (!isIdentified) {
-            mainSendPresenter.setupDefault()
-        }
-        if (isAlreadyRequested) return
+    override fun onResume() {
+        super.onResume()
         mainSendPresenter.setupDefault()
     }
 
     override fun setIdentify(identifier: Boolean) {
-        isAlreadyRequested = true
         if (identifier) {
             isIdentified = identifier
             setEnableButton(true)
@@ -96,10 +89,6 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         }
 
         setEnableButton(false)
-    }
-
-    override fun onError() {
-        isAlreadyRequested = false
     }
 
     @SuppressLint("ResourceAsColor")
@@ -123,6 +112,14 @@ class MainSendFragment : BaseMainFragment(), MainSendPresenterTarget {
         buttonSendStellar.isEnabled = value
         buttonSendStellar.setTextColor(ContextCompat.getColor(buttonSendEmail.context, textColor))
         buttonSendStellar.visibility = View.VISIBLE
+    }
+
+    override fun preRequest() {
+        showProgressDialog()
+    }
+
+    override fun postRequest() {
+        dismissProgressDialog()
     }
 
 }

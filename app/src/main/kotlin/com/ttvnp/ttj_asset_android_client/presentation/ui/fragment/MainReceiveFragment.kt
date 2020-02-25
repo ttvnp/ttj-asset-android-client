@@ -92,14 +92,6 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
         mainReceivePresenter.dispose()
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (!isVisibleToUser) return
-        mainReceivePresenter.getUserInfo()
-        buttonSetAmount.visibility = View.VISIBLE
-        mTextByStellarContainer.visibility = View.GONE
-    }
-
     @SuppressLint("SetTextI18n")
     override fun onGettingStellarAccount(stellarAccountModel: StellarAccountModel) {
         mTextStellarAccountId.text = getString(R.string.stellar_address) + "\t" + stellarAccountModel.strAccountID
@@ -124,13 +116,13 @@ class MainReceiveFragment : BaseMainFragment(), MainReceivePresenterTarget {
 
     override fun preRequest() {
         showProgressDialog()
-        mReceiveOptionSpinner.isEnabled = false;
-        mReceiveOptionSpinner.isClickable = false;
+        mReceiveOptionSpinner.isEnabled = false
+        mReceiveOptionSpinner.isClickable = false
     }
 
     override fun postRequest() {
-        mReceiveOptionSpinner.isEnabled = true;
-        mReceiveOptionSpinner.isClickable = true;
+        mReceiveOptionSpinner.isEnabled = true
+        mReceiveOptionSpinner.isClickable = true
         dismissProgressDialog()
     }
 
