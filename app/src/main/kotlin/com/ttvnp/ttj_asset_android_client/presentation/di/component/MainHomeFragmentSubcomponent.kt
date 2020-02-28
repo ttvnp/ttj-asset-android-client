@@ -7,12 +7,12 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.fragment.MainHomeFragm
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         FragmentModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 interface MainHomeFragmentSubcomponent : AndroidInjector<MainHomeFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<MainHomeFragment>() {}
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<MainHomeFragment>
 }

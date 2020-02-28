@@ -3,18 +3,16 @@ package com.ttvnp.ttj_asset_android_client.presentation.di.component
 import com.ttvnp.ttj_asset_android_client.presentation.di.module.ActivityModule
 import com.ttvnp.ttj_asset_android_client.presentation.di.module.DataModule
 import com.ttvnp.ttj_asset_android_client.presentation.di.module.DomainModule
-import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.ReceiveSetAmountActivity
 import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsNotificationActivity
-import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.TutorialActivity
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         ActivityModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 interface SettingsNotificationActivitySubcomponent : AndroidInjector<SettingsNotificationActivity> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<SettingsNotificationActivity>() {}
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<SettingsNotificationActivity>
 }

@@ -28,27 +28,25 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
     }
 
     override fun getUserInfo() {
-        target?.showProgressDialog()
+        target?.preRequest()
         userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableApiSingleObserver<UserModel>() {
 
                     override fun onSuccess(t: UserModel) {
-                        target?.dismissProgressDialog()
+                        target?.postRequest()
                         target?.setQRCode(QRCodeInfoModel(
                                 emailAddress = t.emailAddress).toQRString()
                         )
                     }
 
                     override fun onOtherError(error: Throwable?) {
-                        target?.dismissProgressDialog()
-                        target?.onError()
+                        target?.postRequest()
                     }
 
                     override fun onMaintenance() {
-                        target?.dismissProgressDialog()
-                        target?.onError()
+                        target?.postRequest()
                         target?.showMaintenance()
                     }
 
@@ -63,18 +61,16 @@ class MainReceivePresenterImpl @Inject constructor(val userUseCase: UserUseCase)
                 .subscribeWith(object : DisposableApiSingleObserver<StellarAccountModel>() {
 
                     override fun onOtherError(error: Throwable?) {
-                        target?.dismissProgressDialog()
-                        target?.onError()
+                        target?.postRequest()
                     }
 
                     override fun onMaintenance() {
-                        target?.dismissProgressDialog()
-                        target?.onError()
+                        target?.postRequest()
                         target?.showMaintenance()
                     }
 
                     override fun onSuccess(model: StellarAccountModel) {
-                        target?.dismissProgressDialog()
+                        target?.postRequest()
                         target?.onGettingStellarAccount(model)
                         target?.setQRCode(QRCodeInfoStellarInfoModel(strAccountId = model.strAccountID).toQRString())
                     }

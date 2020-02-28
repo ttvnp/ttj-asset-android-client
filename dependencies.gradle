@@ -9,12 +9,12 @@ ext {
     // Android
     androidBuildToolsVersion = "28.0.3"
     androidMinSdkVersion = 21
-    androidTargetSdkVersion = 27
-    androidCompileSdkVersion = 27
-    supportLibraryVersion = '27.1.1'
+    androidTargetSdkVersion = 28
+    androidCompileSdkVersion = 28
+    supportLibraryVersion = '28.0.0'
 
     // 3rd party
-    daggerVersion = '2.11'
+    daggerVersion = '2.26'
     javaxAnnotationVersion = '1.0'
     javaxInjectVersion = '1'
     ankoVersion = '0.10.2'
@@ -25,13 +25,17 @@ ext {
     okhttpVersion = '3.8.0'
     retroitVersion = '2.3.0'
     moshiVersion = '1.5.0'
-    ormaVersion = '4.2.5'
+    ormaVersion = '6.0.2'
     circleimageviewVersion = '2.2.0'
     picassoVersion = '2.5.2'
     zxingCoreVersion = '3.3.1'
     zxingEmbeddedVersion = '3.5.0'
-    googleServiceVersion = '11.0.4'
-    glideVersion = '3.8.0'
+    googleServiceVersion = '19.0.0'
+    firebaseCoreVersion = '17.0.0'
+    firebaseCrashlyticsVersion = '17.0.0-beta01'
+    firebaseAnalyticsVersion = '17.2.0'
+    safetynetVersion = '17.0.0'
+    glideVersion = '4.11.0'
 
     // Development
     leakCanaryVersion = '1.5'
@@ -44,7 +48,7 @@ ext {
             daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${daggerVersion}",
             javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             javaxInject: "javax.inject:javax.inject:${javaxInjectVersion}",
-            ormaProcessor: "com.github.gfx.android.orma:orma-processor:${ormaVersion}",
+            ormaProcessor: "com.github.maskarade.android.orma:orma-processor:${ormaVersion}",
     ]
 
     commonDependencies = [
@@ -65,8 +69,8 @@ ext {
             retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:${retroitVersion}",
             moshi: "com.squareup.moshi:moshi-kotlin:${moshiVersion}",
             moshiConverter: "com.squareup.retrofit2:converter-moshi:${retroitVersion}",
-            orma: "com.github.gfx.android.orma:orma:${ormaVersion}",
-            reCAPTCHA: "com.google.android.gms:play-services-safetynet:${googleServiceVersion}",
+            orma: "com.github.maskarade.android.orma:orma:${ormaVersion}",
+            reCAPTCHA: "com.google.android.gms:play-services-safetynet:${safetynetVersion}",
     ]
 
     domainDependencies = [
@@ -83,7 +87,9 @@ ext {
             glide: "com.github.bumptech.glide:glide:${glideVersion}",
             zxingEmbedded: "com.journeyapps:zxing-android-embedded:${zxingEmbeddedVersion}",
             firebaseMessaging: "com.google.firebase:firebase-messaging:${googleServiceVersion}",
-            firebaseCrash: "com.google.firebase:firebase-crash:${googleServiceVersion}",
+            firebaseCore: "com.google.firebase:firebase-core:${firebaseCoreVersion}",
+            firebaseCrashlytics: "com.google.firebase:firebase-crashlytics:${firebaseCrashlyticsVersion}",
+            firebaseAnalytics: "com.google.firebase:firebase-analytics:${firebaseAnalyticsVersion}",
             zxingCore: "com.google.zxing:core:${zxingCoreVersion}",
     ]
 

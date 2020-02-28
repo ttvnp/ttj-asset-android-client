@@ -7,12 +7,12 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.SettingsChang
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         ActivityModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 interface SettingsChangePasswordActivitySubcomponent : AndroidInjector<SettingsChangePasswordActivity> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<SettingsChangePasswordActivity>()
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<SettingsChangePasswordActivity>
 }

@@ -1,7 +1,7 @@
 package com.ttvnp.ttj_asset_android_client.presentation.ui.listener
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 abstract class EndlessScrollListener(private val layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
 
@@ -13,12 +13,12 @@ abstract class EndlessScrollListener(private val layoutManager: LinearLayoutMana
     private var currentPage: Int = 0
     private var finished: Boolean = false
 
-    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
         if (finished) return
 
-        visibleItemCount = recyclerView?.childCount?:0
+        visibleItemCount = recyclerView.childCount
         totalItemCount = layoutManager.itemCount
         firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 

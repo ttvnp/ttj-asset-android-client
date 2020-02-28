@@ -24,6 +24,7 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
     }
 
     override fun setupDefault() {
+        target?.preRequest()
         userUseCase.getUser(false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -31,15 +32,15 @@ class MainSendPresenterImpl @Inject constructor(val userUseCase: UserUseCase) : 
 
                     override fun onSuccess(userModel: UserModel) {
                         target?.setIdentify(userModel.isIdentified)
+                        target?.postRequest()
                     }
 
                     override fun onOtherError(error: Throwable?) {
-                        // do nothing...
-                        target?.onError()
+                        target?.postRequest()
                     }
 
                     override fun onMaintenance() {
-                        target?.onError()
+                        target?.postRequest()
                         target?.showMaintenance()
                     }
 

@@ -11,6 +11,11 @@ data/build/
 domain/build/
 /.envrc
 /.java-version
-fabric.properties
 /fastlane/report.xml
 buildSystem/release.keystore
+.ruby-version
+.bundle/
+vendor/
+.node-version
+node_modules/
+package-lock.json

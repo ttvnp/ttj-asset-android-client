@@ -5,10 +5,10 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +38,7 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
     @Inject
     lateinit var mainSettingsPresenter: MainSettingsPresenter
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -130,7 +130,7 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
     }
 
     private fun showLanguagesDialog() {
-        val dialog = Dialog(context)
+        val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.view_language_dialog)
         dialog.setTitle(getString(R.string.title_settings_language))
         dialog.setOnCancelListener { dialogInterface ->
@@ -139,7 +139,7 @@ class MainSettingsFragment : BaseMainFragment(), MainSettingsPresenterTarget {
         val languages = resources.getStringArray(R.array.languages)
         val listLanguages: ListView = dialog.findViewById(R.id.list_languages)
         val adapter = ArrayAdapter<String>(
-                context,
+                requireContext(),
                 android.R.layout.simple_list_item_1,
                 languages
         )

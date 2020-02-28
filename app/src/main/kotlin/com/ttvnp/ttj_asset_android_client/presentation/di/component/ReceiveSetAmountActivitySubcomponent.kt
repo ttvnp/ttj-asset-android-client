@@ -8,12 +8,12 @@ import com.ttvnp.ttj_asset_android_client.presentation.ui.activity.TutorialActiv
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
-@Subcomponent(modules = arrayOf(
+@Subcomponent(modules = [
         ActivityModule::class,
         DataModule::class,
         DomainModule::class
-))
+])
 interface ReceiveSetAmountActivitySubcomponent : AndroidInjector<ReceiveSetAmountActivity> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<ReceiveSetAmountActivity>() {}
+    @Subcomponent.Factory
+    interface Factory : AndroidInjector.Factory<ReceiveSetAmountActivity>
 }

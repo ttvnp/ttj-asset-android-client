@@ -7,7 +7,7 @@ import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(
+@Component(modules = [
         AndroidInjectionModule::class,
         ApplicationModule::class,
         LaunchActivityModule::class,
@@ -19,8 +19,8 @@ import javax.inject.Singleton
         SettingsNotificationActivityModule::class,
         SettingsChangePasswordActivityModule::class,
         SettingsSecurityActivityModule::class,
-        AndroidFirebaseInstanceIDServiceModule::class
-))
+        AndroidFirebaseMessagingServiceModule::class
+])
 interface ApplicationComponent {
     fun inject(androidApplication: AndroidApplication)
 }
